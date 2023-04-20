@@ -9,18 +9,20 @@ class LongButton extends StatelessWidget {
     required this.onPressed,
     required this.label,
     required this.isLoading,
+    this.height = 55,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
   final String label;
   final bool isLoading;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return SizedBox(
       width: 100.widthPercent,
-      height: 55,
+      height: height,
       child: TextButton(
         onPressed: !isLoading ? onPressed : null,
         child: Row(

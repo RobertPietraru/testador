@@ -27,11 +27,40 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       systemOverlayStyle: SystemUiOverlayStyle.light,
       automaticallyImplyLeading: showLeading && leading == null,
       leading: leading,
-      centerTitle: true,
-      title: title ?? AppLogo(color: theme.primaryColor),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      actions: trailing,
+      title: title ??
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppLogo(color: theme.primaryColor),
+              const SizedBox(width: 10),
+              Text(
+                "Pietrocka",
+                style: TextStyle(
+                  color: theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+      backgroundColor: theme.defaultBackgroundColor,
+      actions: trailing ??
+          [
+            TextButton(
+                onPressed: () {},
+                child: Text("Contact", style: theme.actionTextStyle)),
+            SizedBox(width: theme.spacing.large),
+            TextButton(
+                onPressed: () {},
+                child: Text("Descopera", style: theme.actionTextStyle)),
+            SizedBox(width: theme.spacing.large),
+            TextButton(
+                onPressed: () {},
+                child: Text("Alatura-te", style: theme.actionTextStyle)),
+            SizedBox(width: theme.spacing.large),
+            TextButton(
+                onPressed: () {},
+                child: Text("Creeaza", style: theme.actionTextStyle)),
+          ],
       bottom: bottom,
     );
   }
