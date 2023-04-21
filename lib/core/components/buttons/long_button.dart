@@ -29,17 +29,6 @@ class LongButton extends StatelessWidget {
       height: height,
       child: TextButton(
         onPressed: !isLoading ? onPressed : null,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isLoading)
-              CircularProgressIndicator(
-                color: theme.defaultBackgroundColor,
-              )
-            else
-              buildText(theme),
-          ],
-        ),
         style: ButtonStyle(
           splashFactory: InkSplash.splashFactory,
           overlayColor:
@@ -55,6 +44,17 @@ class LongButton extends StatelessWidget {
               return theme.primaryColor;
             },
           ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isLoading)
+              CircularProgressIndicator(
+                color: theme.defaultBackgroundColor,
+              )
+            else
+              buildText(theme),
+          ],
         ),
       ),
     );
