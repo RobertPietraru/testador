@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/screens/landing_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/registration_screen.dart';
+import 'package:testador/features/testing/presentation/screens/home_screen.dart';
 export 'app_router.gr.dart';
 
 @MaterialAutoRouter(
@@ -9,9 +10,10 @@ export 'app_router.gr.dart';
   routes: <AutoRoute>[
     AutoRoute(
       path: '/',
-      name: 'HomeRoute',
+      name: 'HomeWrapperRoute',
       children: [
         AutoRoute(page: RegistrationScreen, path: 'sign-up'),
+        AutoRoute(page: HomeScreen, path: 'home'),
         AutoRoute(
           path: '',
           page: LandingScreen,

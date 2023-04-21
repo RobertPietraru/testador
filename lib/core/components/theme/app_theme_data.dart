@@ -73,7 +73,22 @@ class DarkAppThemeData extends AppThemeData {
       listTileTheme: ListTileThemeData(
         textColor: primaryColor,
       ),
-      textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
+      textTheme:
+          GoogleFonts.interTextTheme(Theme.of(context).textTheme.copyWith(
+                bodyLarge: TextStyle(color: primaryColor),
+                bodyMedium: TextStyle(color: primaryColor),
+                displayLarge: TextStyle(color: primaryColor),
+                displayMedium: TextStyle(color: primaryColor),
+                displaySmall: TextStyle(color: primaryColor),
+                headlineMedium: TextStyle(color: primaryColor),
+                headlineSmall: TextStyle(color: primaryColor),
+                titleLarge: TextStyle(color: primaryColor),
+                titleMedium: TextStyle(color: primaryColor),
+                titleSmall: TextStyle(color: primaryColor),
+                labelLarge: TextStyle(color: primaryColor),
+                bodySmall: TextStyle(color: primaryColor),
+                labelSmall: TextStyle(color: primaryColor),
+              )),
       brightness: Brightness.dark,
       dividerColor: primaryColor,
       primarySwatch: primaryColor.toMaterialColor(),

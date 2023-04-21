@@ -5,7 +5,7 @@ import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 
-import '../../../../core/routing/app_router.gr.dart';
+import '../../../../core/routing/app_router.dart';
 
 class LoginDialog extends StatelessWidget {
   const LoginDialog({super.key});

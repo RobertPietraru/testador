@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/authentication/presentation/widgets/login_dialog.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -19,10 +21,17 @@ class LandingScreen extends StatelessWidget {
               Color(0xFF000AFF),
               Color(0xFFFF005A),
             ]),
-        onPressed: () => showDialog(
+        onPressed: () {
+          const isAuthenticated = true;
+          if (isAuthenticated) {
+            context.pushRoute(const HomeRoute());
+          } else {
+            showDialog(
               context: context,
               builder: (BuildContext context) => const LoginDialog(),
-            ),
+            );
+          }
+        },
         label: 'Incepe',
         isLoading: false);
     return Scaffold(

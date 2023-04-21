@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
         routerDelegate: AutoRouterDelegate.declarative(
           _appRouter,
           routes: (_) {
-            return [const HomeRoute()];
+            return [const HomeWrapperRoute()];
           },
         ),
         routeInformationParser: _appRouter.defaultRouteParser(),
