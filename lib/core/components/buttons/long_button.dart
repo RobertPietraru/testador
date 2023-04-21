@@ -11,7 +11,7 @@ class LongButton extends StatelessWidget {
     required this.onPressed,
     required this.label,
     required this.isLoading,
-    this.height = 55,
+    this.height = 45,
     this.textGradient,
   }) : super(key: key);
   final Gradient? textGradient;

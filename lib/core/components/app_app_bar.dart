@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
+import 'package:testador/core/components/theme/device_size.dart';
 
 import 'app_logo.dart';
 
@@ -24,6 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   AppBar theAppBar({
     required AppThemeData theme,
+    VoidCallback? onMenuPressed,
   }) {
     return AppBar(
       systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -46,24 +48,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
       backgroundColor: fillColor,
-      actions: trailing ??
-          [
-            TextButton(
-                onPressed: () {},
-                child: Text("Contact", style: theme.actionTextStyle)),
-            SizedBox(width: theme.spacing.large),
-            TextButton(
-                onPressed: () {},
-                child: Text("Descopera", style: theme.actionTextStyle)),
-            SizedBox(width: theme.spacing.large),
-            TextButton(
-                onPressed: () {},
-                child: Text("Alatura-te", style: theme.actionTextStyle)),
-            SizedBox(width: theme.spacing.large),
-            TextButton(
-                onPressed: () {},
-                child: Text("Creeaza", style: theme.actionTextStyle)),
-          ],
+      actions: DeviceSize.isDesktopMode
+          ? trailing ??
+              [
+                TextButton(
+                    onPressed: () {},
+                    child: Text("Contact", style: theme.actionTextStyle)),
+                SizedBox(width: theme.spacing.large),
+                TextButton(
+                    onPressed: () {},
+                    child: Text("Descopera", style: theme.actionTextStyle)),
+                SizedBox(width: theme.spacing.large),
+                TextButton(
+                    onPressed: () {},
+                    child: Text("Alatura-te", style: theme.actionTextStyle)),
+                SizedBox(width: theme.spacing.large),
+                TextButton(
+                    onPressed: () {},
+                    child: Text("Creeaza", style: theme.actionTextStyle)),
+              ]
+          : [
+              IconButton(
+                  onPressed: onMenuPressed, icon: const Icon(Icons.menu)),
+            ],
       bottom: bottom,
     );
   }
@@ -71,7 +78,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    return theAppBar(theme: theme);
+    return theAppBar(
+      theme: theme,
+      onMenuPressed: () => Scaffold.of(context).openEndDrawer(),
+    );
   }
 
   @override

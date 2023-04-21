@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 
 class TextInputField extends StatefulWidget {
-  final TextEditingController controller;
   final Function(String) onChanged;
   final String hint;
   final String? error;
@@ -10,7 +9,6 @@ class TextInputField extends StatefulWidget {
   final bool isPassword;
   const TextInputField({
     Key? key,
-    required this.controller,
     required this.onChanged,
     required this.hint,
     this.error,
@@ -23,6 +21,7 @@ class TextInputField extends StatefulWidget {
 }
 
 class _TextInputFieldState extends State<TextInputField> {
+  final TextEditingController controller = TextEditingController();
   bool isObscured = false;
   @override
   void initState() {
@@ -31,32 +30,48 @@ class _TextInputFieldState extends State<TextInputField> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    return TextFormField(
-        obscureText: isObscured,
-        decoration: InputDecoration(
-          prefixIcon: widget.leading == null
-              ? null
-              : Icon(
-                  widget.leading,
-                  color: Colors.white,
-                ),
-          label: Text(
-            widget.hint,
-            style: TextStyle(fontSize: theme.spacing.large),
-          ),
-          errorStyle: TextStyle(fontSize: theme.spacing.mediumLarge),
-          suffixIcon: widget.isPassword
-              ? IconButton(
-                  icon: Icon(
-                      isObscured ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () => setState(() => isObscured = !isObscured),
-                )
-              : null,
-          errorText: widget.error,
+    //#3a3a3a
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          widget.hint,
+          style: theme.informationTextStyle.copyWith(color: Colors.white),
         ),
-        controller: widget.controller,
-        onChanged: widget.onChanged);
+        const SizedBox(height: 5),
+        TextFormField(
+            obscureText: isObscured,
+            style: TextStyle(color: theme.primaryColor),
+            decoration: InputDecoration(
+              fillColor: const Color(0xFF3a3a3a),
+              filled: true,
+              hintText: widget.hint,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none),
+              prefixIcon: widget.leading == null ? null : Icon(widget.leading),
+              errorStyle: TextStyle(fontSize: theme.spacing.mediumLarge),
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      icon: Icon(
+                          isObscured ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () => setState(() => isObscured = !isObscured),
+                    )
+                  : null,
+              errorText: widget.error,
+            ),
+            controller: controller,
+            onChanged: widget.onChanged),
+      ],
+    );
   }
 }

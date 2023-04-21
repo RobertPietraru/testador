@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class DeviceSize {
   static late double screenWidth;
   static late double screenHeight;
+  static bool get isDesktopMode => screenWidth > 700;
 
   static void init(BuildContext context) {
     final media = MediaQuery.maybeOf(context);

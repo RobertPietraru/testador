@@ -17,8 +17,8 @@ abstract class AppThemeData {
   Color get secondaryColor;
   Color get companyColor => Colors.red;
 
-  EdgeInsets get standardPadding =>
-      EdgeInsets.symmetric(horizontal: spacing.small, vertical: spacing.xLarge);
+  EdgeInsets get standardPadding => EdgeInsets.symmetric(
+      horizontal: spacing.xLarge, vertical: spacing.xLarge);
 
   TextStyle largetitleTextStyle = const TextStyle(
     fontSize: 50,
@@ -69,6 +69,9 @@ class DarkAppThemeData extends AppThemeData {
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: primaryColor,
         unselectedItemColor: secondaryColor,
+      ),
+      listTileTheme: ListTileThemeData(
+        textColor: primaryColor,
       ),
       textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       brightness: Brightness.dark,
