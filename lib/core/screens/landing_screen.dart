@@ -13,45 +13,64 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final button =
-        LongButton(onPressed: () {}, label: 'Incepe', isLoading: false);
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      body: Center(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(),
-              SizedBox(
-                height: button.height,
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GradientText(
-                    "Pietrocka Testing",
-                    style: theme.largetitleTextStyle.copyWith(),
-                    gradient: const LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        colors: [
-                          // Color(0xFF00ff87),
-                          // Color(0xFF60efff),
-                          Color(0xFFff0f7b),
-                          Color(0xFFf89b29),
-                        ]),
-                  ),
-                  Text(
-                    "Evaluare, fara stres",
-                    style: theme.titleTextStyle
-                        .copyWith(color: theme.secondaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(width: 20.widthPercent, child: button),
-              const SizedBox(),
+    final button = LongButton(
+        textGradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: [
+              Color(0xFF000AFF),
+              Color(0xFFFF005A),
             ]),
+        onPressed: () {},
+        label: 'Incepe',
+        isLoading: false);
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [
+              Color(0xFF000AFF),
+              Color(0xFFFF005A),
+            ])),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const CustomAppBar(),
+            Center(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(),
+                    SizedBox(
+                      height: button.height,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Ajuta-ti elevi si ajuta-te pe tine",
+                          style: theme.largetitleTextStyle
+                              .copyWith(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "Evaluare, fara stres",
+                          style: theme.titleTextStyle
+                              .copyWith(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: theme.spacing.xxLarge),
+                    SizedBox(width: 20.widthPercent, child: button),
+                    const SizedBox(),
+                  ]),
+            ),
+            SizedBox(),
+          ],
+        ),
       ),
     );
   }

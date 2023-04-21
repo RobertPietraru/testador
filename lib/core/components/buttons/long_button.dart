@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/components/gradient_text.dart';
+import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 
 import '../theme/app_theme.dart';
@@ -10,7 +12,9 @@ class LongButton extends StatelessWidget {
     required this.label,
     required this.isLoading,
     this.height = 55,
+    this.textGradient,
   }) : super(key: key);
+  final Gradient? textGradient;
 
   final VoidCallback? onPressed;
   final String label;
@@ -33,9 +37,7 @@ class LongButton extends StatelessWidget {
                 color: theme.defaultBackgroundColor,
               )
             else
-              Text(label,
-                  style: theme.subtitleTextStyle
-                      .copyWith(color: theme.defaultBackgroundColor)),
+              buildText(theme),
           ],
         ),
         style: ButtonStyle(
@@ -56,5 +58,18 @@ class LongButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget buildText(AppThemeData theme) {
+    if (textGradient == null) {
+      return Text(label,
+          style: theme.subtitleTextStyle
+              .copyWith(color: theme.defaultBackgroundColor));
+    } else {
+      return GradientText(label,
+          gradient: textGradient!,
+          style: theme.subtitleTextStyle
+              .copyWith(color: theme.defaultBackgroundColor));
+    }
   }
 }

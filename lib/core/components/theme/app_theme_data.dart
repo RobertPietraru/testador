@@ -21,7 +21,7 @@ abstract class AppThemeData {
       EdgeInsets.symmetric(horizontal: spacing.small, vertical: spacing.xLarge);
 
   TextStyle largetitleTextStyle = const TextStyle(
-    fontSize: 70,
+    fontSize: 50,
     fontWeight: FontWeight.bold,
   );
   TextStyle titleTextStyle = const TextStyle(
