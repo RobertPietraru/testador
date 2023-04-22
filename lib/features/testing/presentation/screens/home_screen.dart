@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/core/components/theme/device_size.dart';
+
+import '../../../../core/components/custom_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +35,10 @@ class _HomeScreenState extends State<HomeScreen>
       appBar: const CustomAppBar(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: theme.companyColor,
-        onPressed: () {},
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => const TestTypeSelectionDialog(),
+        ),
         child: const Icon(Icons.add),
       ),
       body: Padding(
@@ -56,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen>
                     crossAxisSpacing: 10,
                     crossAxisCount: 3),
                 itemBuilder: (BuildContext context, int index) {
-                  return const RoundedImageWidget(
+                  return TestWidget(
+                      onSelect: () {},
                       imageUrl:
                           'https://img.freepik.com/premium-vector/job-exam-test-vector-illustration_138676-243.jpg',
                       label:
@@ -71,42 +78,26 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-class RoundedImageWidget extends StatelessWidget {
+class TestWidget extends StatelessWidget {
   final String imageUrl;
   final String label;
   final double width;
   final double height;
+  final VoidCallback onSelect;
 
-  const RoundedImageWidget(
+  const TestWidget(
       {super.key,
       required this.imageUrl,
       required this.label,
       this.width = 300,
-      this.height = 300});
+      this.height = 300,
+      required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return GestureDetector(
-      onSecondaryTap: () {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  actions: [
-                    TextButton(onPressed: () {}, child: Text('asddf')),
-                    TextButton(onPressed: () {}, child: Text('asddf')),
-                  ],
-                ));
-      },
-      onLongPress: () {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(actions: [
-            TextButton(onPressed: () {}, child: Text('asddf')),
-            TextButton(onPressed: () {}, child: Text('asddf')),
-          ]),
-        );
-      },
+      onLongPress: onSelect,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 10,
@@ -148,6 +139,119 @@ class RoundedImageWidget extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TestTypeSelectionDialog extends StatelessWidget {
+  const TestTypeSelectionDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return CustomDialog(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Cum preferi sa lucrezi?",
+          style: theme.titleTextStyle,
+        ),
+        SizedBox(height: theme.spacing.xLarge),
+        SelectionOptionWidget(
+          onPressed: () {},
+          title: "Creeare rapida",
+          description:
+              "Creearea testului cu ajutorul unei structuri deja definite",
+          gradient: const LinearGradient(colors: [
+            Color(0xFF028cf3),
+            Color(0xFF2feaa8),
+          ]),
+        ),
+        SizedBox(height: theme.spacing.medium),
+        SelectionOptionWidget(
+          onPressed: () {},
+          title: "Creeare cu A.I.",
+          description:
+              "Creearea testului cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza testul",
+          gradient: const LinearGradient(colors: [
+            Color(0xFF000AFF),
+            Color(0xFFFF005A),
+          ]),
+        ),
+        SizedBox(height: theme.spacing.medium),
+        SelectionOptionWidget(
+          onPressed: () {},
+          title: "Creeare personalizata",
+          description:
+              "Creeati testul avand control absolut asupra structurii, intrebarilor, etc",
+          gradient: const LinearGradient(colors: [
+            Color(0xFF0061ff),
+            Color(0xFF60efff),
+          ]),
+        ),
+        SizedBox(height: theme.spacing.large),
+        RichText(
+          text: TextSpan(children: [
+            TextSpan(
+              text: "Ai nevoie de ajutor? Contactati-ne la ",
+              style: theme.actionTextStyle,
+            ),
+            TextSpan(
+                text: "Centrul de ajutor",
+                style:
+                    theme.actionTextStyle.copyWith(color: theme.companyColor)),
+          ]),
+        )
+      ],
+    ));
+  }
+}
+
+class SelectionOptionWidget extends StatefulWidget {
+  const SelectionOptionWidget({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.gradient,
+    required this.onPressed,
+  });
+
+  final String title;
+  final String description;
+  final LinearGradient? gradient;
+  final VoidCallback onPressed;
+
+  @override
+  State<SelectionOptionWidget> createState() => _SelectionOptionWidgetState();
+}
+
+class _SelectionOptionWidgetState extends State<SelectionOptionWidget> {
+  bool isPressedOn = false;
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return GestureDetector(
+      onTapDown: (details) => setState(() => isPressedOn = true),
+      onTapUp: (details) => setState(() => isPressedOn = false),
+      onTap: widget.onPressed,
+      child: Container(
+        height: 130,
+        width: 100.widthPercent,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: widget.gradient?.scale(isPressedOn ? 0.8 : 1),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(widget.title, style: theme.titleTextStyle),
+              Text(widget.description, style: const TextStyle(fontSize: 15)),
+            ]),
       ),
     );
   }
