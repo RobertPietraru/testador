@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:testador/core/screens/landing_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/registration_screen.dart';
 import 'package:testador/features/testing/presentation/screens/home_screen.dart';
+import 'package:testador/features/testing/presentation/screens/test_screen.dart';
 export 'app_router.gr.dart';
 
 @MaterialAutoRouter(
@@ -17,6 +18,10 @@ export 'app_router.gr.dart';
         AutoRoute(
           path: '',
           page: LandingScreen,
+        ),
+        AutoRoute(
+          path: 'test-admin/:id',
+          page: TestAdminScreen,
         ),
       ],
       page: HomeWrapper,

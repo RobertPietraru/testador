@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/core/routing/app_router.dart';
 
 import '../../../../core/components/custom_dialog.dart';
 
@@ -51,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen>
             Text("Testele tale", style: theme.subtitleTextStyle),
             SizedBox(height: theme.spacing.mediumLarge),
             TabBar(controller: controller, tabs: const [
-              Tab(text: 'Creeate'),
+              Tab(text: 'Create'),
               Tab(text: 'Neterminate'),
             ]),
             SizedBox(height: theme.spacing.mediumLarge),
@@ -63,6 +65,9 @@ class _HomeScreenState extends State<HomeScreen>
                     crossAxisCount: 3),
                 itemBuilder: (BuildContext context, int index) {
                   return TestWidget(
+                      onPressed: () {
+                        context.pushRoute(TestAdminRoute(testId: 'my-id'));
+                      },
                       onSelect: () {},
                       imageUrl:
                           'https://img.freepik.com/premium-vector/job-exam-test-vector-illustration_138676-243.jpg',
@@ -84,6 +89,7 @@ class TestWidget extends StatelessWidget {
   final double width;
   final double height;
   final VoidCallback onSelect;
+  final VoidCallback onPressed;
 
   const TestWidget(
       {super.key,
@@ -91,13 +97,15 @@ class TestWidget extends StatelessWidget {
       required this.label,
       this.width = 300,
       this.height = 300,
-      required this.onSelect});
+      required this.onSelect,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return GestureDetector(
       onLongPress: onSelect,
+      onTap: onPressed,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 10,
@@ -163,8 +171,7 @@ class TestTypeSelectionDialog extends StatelessWidget {
         SelectionOptionWidget(
           onPressed: () {},
           title: "Creeare rapida",
-          description:
-              "Creearea testului cu ajutorul unei structuri deja definite",
+          description: "Creati testul cu ajutorul unei structuri deja definite",
           gradient: const LinearGradient(colors: [
             Color(0xFF028cf3),
             Color(0xFF2feaa8),
@@ -175,7 +182,7 @@ class TestTypeSelectionDialog extends StatelessWidget {
           onPressed: () {},
           title: "Creeare cu A.I.",
           description:
-              "Creearea testului cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza testul",
+              "Creati testul cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza testul",
           gradient: const LinearGradient(colors: [
             Color(0xFF000AFF),
             Color(0xFFFF005A),

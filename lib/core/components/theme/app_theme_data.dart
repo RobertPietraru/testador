@@ -17,6 +17,9 @@ abstract class AppThemeData {
   Color get secondaryColor;
   Color get companyColor => Colors.red;
 
+  Color get bad => Colors.red;
+  Color get good => Colors.green;
+
   EdgeInsets get standardPadding => EdgeInsets.symmetric(
       horizontal: spacing.xLarge, vertical: spacing.xLarge);
 
