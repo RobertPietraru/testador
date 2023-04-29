@@ -52,7 +52,7 @@ class _TextInputFieldState extends State<TextInputField> {
             obscureText: isObscured,
             style: TextStyle(color: theme.primaryColor),
             decoration: InputDecoration(
-              fillColor: const Color(0xFF3a3a3a),
+              fillColor: Color.fromARGB(255, 212, 212, 212),
               filled: true,
               hintText: widget.hint,
               border: OutlineInputBorder(

@@ -27,22 +27,22 @@ class RegistrationScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Inregistreaza-te",
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 40,
-                        color: Colors.white),
+                        color: theme.primaryColor),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: theme.spacing.mediumLarge),
-                  const Text(
+                  Text(
                     "Completeaza campurile pentru a continua",
                     style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
                         fontSize: 16,
-                        color: Colors.white),
+                        color: theme.primaryColor),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: theme.spacing.xxLarge),
@@ -71,7 +71,8 @@ class RegistrationScreen extends StatelessWidget {
                           text: TextSpan(children: [
                             TextSpan(
                               text: "Ai deja cont? ",
-                              style: theme.actionTextStyle,
+                              style: theme.actionTextStyle
+                                  .copyWith(color: theme.primaryColor),
                             ),
                             TextSpan(
                                 text: "Logheaza-te",
@@ -87,4 +88,3 @@ class RegistrationScreen extends StatelessWidget {
     );
   }
 }
-
