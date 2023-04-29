@@ -14,26 +14,27 @@ class LandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     final button = LongButton(
-        textGradient: const LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            colors: [
-              Color(0xFF000AFF),
-              Color(0xFFFF005A),
-            ]),
-        onPressed: () {
-          const isAuthenticated = true;
-          if (isAuthenticated) {
-            context.pushRoute(const HomeRoute());
-          } else {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => const LoginDialog(),
-            );
-          }
-        },
-        label: 'Incepe',
-        isLoading: false);
+      textGradient: const LinearGradient(
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+          colors: [
+            Color(0xFF000AFF),
+            Color(0xFFFF005A),
+          ]),
+      onPressed: () {
+        const isAuthenticated = true;
+        if (isAuthenticated) {
+          context.pushRoute(const HomeRoute());
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => const LoginDialog(),
+          );
+        }
+      },
+      label: 'Incepe',
+      isLoading: false,
+    );
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -61,7 +62,7 @@ class LandingScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Ajuta-ti elevi si ajuta-te pe tine",
+                          "Ajuta-ti elevii si ajuta-te pe tine",
                           style: theme.largetitleTextStyle
                               .copyWith(color: Colors.white),
                           textAlign: TextAlign.center,

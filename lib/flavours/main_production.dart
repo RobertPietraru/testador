@@ -1,13 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:testador/core/routing/app_router.gr.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/routing/route_guards.dart';
 
 import '../core/components/theme/app_theme.dart';
 import '../core/components/theme/app_theme_data.dart';
+import '../core/routing/app_router.gr.dart';
+import '../features/authentication/presentation/auth_bloc/auth_bloc.dart';
+import '../features/authentication/presentation/widgets/auth_bloc_wrapper.dart';
+import '../injection.dart';
 
-void main() async {
+void mainProduction() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  await inject();
+
+  runApp(const AuthBlocWidget(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -22,25 +29,34 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _lightTheme = LightAppThemeData();
   final _darkTheme = DarkAppThemeData();
-  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AuthBloc>().state;
+    final appRouter = AppRouter();
+//        authGuard: AuthGuard(isAuthenticated: state is AuthAuthenticatedState)
+
     return AppTheme(
       lightTheme: _lightTheme,
       darkTheme: _darkTheme,
       child: MaterialApp.router(
         routerDelegate: AutoRouterDelegate.declarative(
-          _appRouter,
+          appRouter,
           routes: (_) {
-            return [const HomeWrapperRoute()];
+            if (state is! AuthAuthenticatedState) {
+              return [
+                const UnprotectedFlowRoute(),
+              ];
+            } else {
+              return [const ProtectedFlowRoute()];
+            }
           },
         ),
-        routeInformationParser: _appRouter.defaultRouteParser(),
+        routeInformationParser: appRouter.defaultRouteParser(),
         theme: _lightTheme.materialThemeData(context),
         darkTheme: _darkTheme.materialThemeData(context),
         // themeMode: darkModePreference?.toThemeMode(),
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.light,
         supportedLocales: const [
           Locale('en', ''),
           Locale('pt', 'BR'),

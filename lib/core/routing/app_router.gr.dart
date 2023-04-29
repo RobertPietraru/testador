@@ -16,9 +16,9 @@ import 'package:flutter/material.dart' as _i7;
 
 import '../../features/authentication/presentation/screens/registration_screen.dart'
     as _i2;
-import '../../features/testing/presentation/screens/home_screen.dart' as _i3;
-import '../../features/testing/presentation/screens/test_screen.dart' as _i5;
-import '../screens/landing_screen.dart' as _i4;
+import '../../features/testing/presentation/screens/home_screen.dart' as _i5;
+import '../../features/testing/presentation/screens/test_screen.dart' as _i4;
+import '../screens/landing_screen.dart' as _i3;
 import 'app_router.dart' as _i1;
 
 class AppRouter extends _i6.RootStackRouter {
@@ -27,10 +27,22 @@ class AppRouter extends _i6.RootStackRouter {
 
   @override
   final Map<String, _i6.PageFactory> pagesMap = {
-    HomeWrapperRoute.name: (routeData) {
+    AuthenticationFlowRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i1.HomeWrapper(),
+        child: const _i1.AuthenticationFlow(),
+      );
+    },
+    UnprotectedFlowRoute.name: (routeData) {
+      return _i6.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i1.UnprotectedFlow(),
+      );
+    },
+    ProtectedFlowRoute.name: (routeData) {
+      return _i6.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i1.ProtectedFlow(),
       );
     },
     LoadingRoute.name: (routeData) {
@@ -45,16 +57,10 @@ class AppRouter extends _i6.RootStackRouter {
         child: const _i2.RegistrationScreen(),
       );
     },
-    HomeRoute.name: (routeData) {
-      return _i6.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const _i3.HomeScreen(),
-      );
-    },
     LandingRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i4.LandingScreen(),
+        child: const _i3.LandingScreen(),
       );
     },
     TestAdminRoute.name: (routeData) {
@@ -63,10 +69,16 @@ class AppRouter extends _i6.RootStackRouter {
           orElse: () => TestAdminRouteArgs(testId: pathParams.getString('id')));
       return _i6.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i5.TestAdminScreen(
+        child: _i4.TestAdminScreen(
           key: args.key,
           testId: args.testId,
         ),
+      );
+    },
+    HomeRoute.name: (routeData) {
+      return _i6.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i5.HomeScreen(),
       );
     },
   };
@@ -74,49 +86,93 @@ class AppRouter extends _i6.RootStackRouter {
   @override
   List<_i6.RouteConfig> get routes => [
         _i6.RouteConfig(
-          HomeWrapperRoute.name,
+          '/#redirect',
           path: '/',
+          redirectTo: '/protected',
+          fullMatch: true,
+        ),
+        _i6.RouteConfig(
+          AuthenticationFlowRoute.name,
+          path: '/auth',
           children: [
             _i6.RouteConfig(
               RegistrationRoute.name,
               path: 'sign-up',
-              parent: HomeWrapperRoute.name,
-            ),
-            _i6.RouteConfig(
-              HomeRoute.name,
-              path: 'home',
-              parent: HomeWrapperRoute.name,
-            ),
+              parent: AuthenticationFlowRoute.name,
+            )
+          ],
+        ),
+        _i6.RouteConfig(
+          UnprotectedFlowRoute.name,
+          path: '/unprotected',
+          children: [
             _i6.RouteConfig(
               LandingRoute.name,
               path: '',
-              parent: HomeWrapperRoute.name,
-            ),
+              parent: UnprotectedFlowRoute.name,
+            )
+          ],
+        ),
+        _i6.RouteConfig(
+          ProtectedFlowRoute.name,
+          path: '/protected',
+          children: [
             _i6.RouteConfig(
               TestAdminRoute.name,
               path: 'test-admin/:id',
-              parent: HomeWrapperRoute.name,
+              parent: ProtectedFlowRoute.name,
+            ),
+            _i6.RouteConfig(
+              HomeRoute.name,
+              path: '',
+              parent: ProtectedFlowRoute.name,
             ),
           ],
         ),
         _i6.RouteConfig(
           LoadingRoute.name,
-          path: '/loading-screen',
+          path: 'loading',
         ),
       ];
 }
 
 /// generated route for
-/// [_i1.HomeWrapper]
-class HomeWrapperRoute extends _i6.PageRouteInfo<void> {
-  const HomeWrapperRoute({List<_i6.PageRouteInfo>? children})
+/// [_i1.AuthenticationFlow]
+class AuthenticationFlowRoute extends _i6.PageRouteInfo<void> {
+  const AuthenticationFlowRoute({List<_i6.PageRouteInfo>? children})
       : super(
-          HomeWrapperRoute.name,
-          path: '/',
+          AuthenticationFlowRoute.name,
+          path: '/auth',
           initialChildren: children,
         );
 
-  static const String name = 'HomeWrapperRoute';
+  static const String name = 'AuthenticationFlowRoute';
+}
+
+/// generated route for
+/// [_i1.UnprotectedFlow]
+class UnprotectedFlowRoute extends _i6.PageRouteInfo<void> {
+  const UnprotectedFlowRoute({List<_i6.PageRouteInfo>? children})
+      : super(
+          UnprotectedFlowRoute.name,
+          path: '/unprotected',
+          initialChildren: children,
+        );
+
+  static const String name = 'UnprotectedFlowRoute';
+}
+
+/// generated route for
+/// [_i1.ProtectedFlow]
+class ProtectedFlowRoute extends _i6.PageRouteInfo<void> {
+  const ProtectedFlowRoute({List<_i6.PageRouteInfo>? children})
+      : super(
+          ProtectedFlowRoute.name,
+          path: '/protected',
+          initialChildren: children,
+        );
+
+  static const String name = 'ProtectedFlowRoute';
 }
 
 /// generated route for
@@ -125,7 +181,7 @@ class LoadingRoute extends _i6.PageRouteInfo<void> {
   const LoadingRoute()
       : super(
           LoadingRoute.name,
-          path: '/loading-screen',
+          path: 'loading',
         );
 
   static const String name = 'LoadingRoute';
@@ -144,19 +200,7 @@ class RegistrationRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.HomeScreen]
-class HomeRoute extends _i6.PageRouteInfo<void> {
-  const HomeRoute()
-      : super(
-          HomeRoute.name,
-          path: 'home',
-        );
-
-  static const String name = 'HomeRoute';
-}
-
-/// generated route for
-/// [_i4.LandingScreen]
+/// [_i3.LandingScreen]
 class LandingRoute extends _i6.PageRouteInfo<void> {
   const LandingRoute()
       : super(
@@ -168,7 +212,7 @@ class LandingRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.TestAdminScreen]
+/// [_i4.TestAdminScreen]
 class TestAdminRoute extends _i6.PageRouteInfo<TestAdminRouteArgs> {
   TestAdminRoute({
     _i7.Key? key,
@@ -200,4 +244,16 @@ class TestAdminRouteArgs {
   String toString() {
     return 'TestAdminRouteArgs{key: $key, testId: $testId}';
   }
+}
+
+/// generated route for
+/// [_i5.HomeScreen]
+class HomeRoute extends _i6.PageRouteInfo<void> {
+  const HomeRoute()
+      : super(
+          HomeRoute.name,
+          path: '',
+        );
+
+  static const String name = 'HomeRoute';
 }

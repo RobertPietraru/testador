@@ -13,6 +13,7 @@ class LongButton extends StatelessWidget {
     required this.isLoading,
     this.height = 45,
     this.textGradient,
+    this.color,
   }) : super(key: key);
   final Gradient? textGradient;
 
@@ -20,6 +21,7 @@ class LongButton extends StatelessWidget {
   final String label;
   final bool isLoading;
   final double height;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
