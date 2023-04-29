@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/classes/usecase.dart';
 import '../../domain/auth_domain.dart';
-import '../../domain/entities/auth_failure.dart';
+import '../../domain/failures/auth_failure.dart';
 import '../datasource/auth_remote_data_source.dart';
 import '../dtos/auth_failure_dto.dart';
 
@@ -23,15 +23,11 @@ class AuthRepositoryIMPL implements AuthRepository {
       final userEntity = await authRemoteDataSource.registerUser(params);
       return Right(userEntity);
     } on FirebaseAuthException catch (e) {
-      return Left(AuthFailureDto.fromFirebaseAuthException(e));
+      return Left(AuthFailureDto.fromFirebaseErrorCode(e.code));
     } on AuthFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(AuthFailureDto(
-        code: 'unknown',
-        message: null,
-        type: AuthFailureType.unknown,
-      ));
+      return Left(AuthUnknownFailure());
     }
   }
 
@@ -40,14 +36,13 @@ class AuthRepositoryIMPL implements AuthRepository {
       NoParams noParams) async {
     try {
       final response = await authRemoteDataSource.logInWithGoogle();
-
       return Right(response);
     } on FirebaseAuthException catch (e) {
-      return Left(AuthFailureDto.fromFirebaseAuthException(e));
+      return Left(AuthFailureDto.fromFirebaseErrorCode(e.code));
     } on AuthFailure catch (error) {
       return Left(error);
-    } catch (e) {
-      return Left(AuthFailureDto.unknown);
+    } catch (_) {
+      return Left(AuthUnknownFailure());
     }
   }
 
@@ -57,11 +52,11 @@ class AuthRepositoryIMPL implements AuthRepository {
       final entity = await authRemoteDataSource.loginUser(params);
       return Right(entity);
     } on FirebaseAuthException catch (e) {
-      return Left(AuthFailureDto.fromFirebaseAuthException(e));
+      return Left(AuthFailureDto.fromFirebaseErrorCode(e.code));
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthFailureDto.unknown);
+      return Left(AuthUnknownFailure());
     }
   }
 
@@ -71,11 +66,11 @@ class AuthRepositoryIMPL implements AuthRepository {
       final entity = await authRemoteDataSource.getUserById(id);
       return Right(entity);
     } on FirebaseAuthException catch (e) {
-      return Left(AuthFailureDto.fromFirebaseAuthException(e));
+      return Left(AuthFailureDto.fromFirebaseErrorCode(e.code));
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthFailureDto.unknown);
+      return Left(AuthUnknownFailure());
     }
   }
 
@@ -85,11 +80,11 @@ class AuthRepositoryIMPL implements AuthRepository {
       final response = await authRemoteDataSource.logUserOut();
       return Right(response);
     } on FirebaseAuthException catch (e) {
-      return Left(AuthFailureDto.fromFirebaseAuthException(e));
+      return Left(AuthFailureDto.fromFirebaseErrorCode(e.code));
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthFailureDto.unknown);
+      return Left(AuthUnknownFailure());
     }
   }
 
@@ -99,11 +94,11 @@ class AuthRepositoryIMPL implements AuthRepository {
       final entity = await authRemoteDataSource.getLocalUser();
       return Right(entity);
     } on FirebaseAuthException catch (e) {
-      return Left(AuthFailureDto.fromFirebaseAuthException(e));
+      return Left(AuthFailureDto.fromFirebaseErrorCode(e.code));
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthFailureDto.unknown);
+      return Left(AuthUnknownFailure());
     }
   }
 }

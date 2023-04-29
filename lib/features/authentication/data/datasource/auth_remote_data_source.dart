@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
 
 import '../../domain/auth_domain.dart';
-import '../../domain/entities/auth_failure.dart';
 import '../dtos/user_dto.dart';
 
 abstract class AuthRemoteDataSource {
@@ -28,7 +28,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
 
     final userId = userCredentials.user?.uid;
     if (userId == null) {
-      throw AuthFailures.userNotFound;
+      throw AuthUnknownFailure();
     }
 
     final userDto = UserDto(
@@ -51,7 +51,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
 
     if (!document.exists) {
       await FirebaseAuth.instance.currentUser!.delete();
-      throw AuthFailures.userNotFound;
+      throw AuthUserNotFound();
     }
 
     return UserDto.fromSnapshot(document);
@@ -65,7 +65,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
     final user = response.user;
 
     if (user == null) {
-      throw AuthFailures.userNotFound;
+      throw AuthUserNotFound();
     }
     return getUserById(user.uid);
   }
@@ -88,7 +88,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
     final user = userCredentials.user;
 
     if (user == null) {
-      throw AuthFailures.userNotFound;
+      throw AuthUserNotFound();
     }
 
     return UserDto.empty();

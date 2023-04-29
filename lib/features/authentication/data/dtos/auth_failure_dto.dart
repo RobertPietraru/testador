@@ -1,95 +1,91 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
 
-import '../../domain/entities/auth_failure.dart';
-
-class AuthFailureDto extends AuthFailure {
-  const AuthFailureDto(
-      {required super.type, required super.message, required super.code});
-  factory AuthFailureDto.fromFirebaseAuthException(
-      FirebaseAuthException firebaseAuthException) {
+class AuthFailureDto {
+  static AuthFailure fromFirebaseErrorCode(String code) {
     final failureConverter = {
-      'internal-error': AuthFailureType.backend,
-      'claims-too-large': AuthFailureType.backend,
-      'invalid-hash-algorithm': AuthFailureType.backend,
-      'invalid-hash-block-size': AuthFailureType.backend,
-      'invalid-hash-derived-key-length': AuthFailureType.backend,
-      'invalid-hash-key': AuthFailureType.backend,
-      'invalid-hash-memory-cost': AuthFailureType.backend,
-      'invalid-hash-parallelization': AuthFailureType.backend,
-      'invalid-hash-rounds': AuthFailureType.backend,
-      'invalid-hash-salt-separator': AuthFailureType.backend,
-      'insufficient-permission': AuthFailureType.unauthorised,
-      'operation-not-allowed': AuthFailureType.unauthorised,
-      'missing-android-pkg-name': AuthFailureType.backend,
-      'missing-oauth-client-secret	': AuthFailureType.unauthorised,
-      'project-not-found': AuthFailureType.backend,
-      'reserved-claims': AuthFailureType.backend,
-      'maximum-user-count-exceeded': AuthFailureType.backend,
-      'unauthorized-continue-uri': AuthFailureType.unauthorised,
-      'email-already-exists': AuthFailureType.badEmail,
-      'email-already-in-use': AuthFailureType.badEmail,
-      'invalid-email': AuthFailureType.badEmail,
-      'invalid-password': AuthFailureType.badPassword,
-      'invalid-uid': AuthFailureType.backend,
-      'invalid-phone-number': AuthFailureType.badPhone,
-      'invalid-display-name': AuthFailureType.badInput,
-      'invalid-dynamic-link-domain': AuthFailureType.backend,
-      'invalid-creation-time': AuthFailureType.backend,
-      'invalid-disabled-field': AuthFailureType.backend,
-      'invalid-email-verified': AuthFailureType.badEmail,
-      'invalid-photo-url': AuthFailureType.badInput,
-      'invalid-credential': AuthFailureType.badInput,
-      'invalid-argument': AuthFailureType.badInput,
-      'invalid-claims': AuthFailureType.badInput,
-      'invalid-continue-uri': AuthFailureType.badInput,
-      'invalid-user-import': AuthFailureType.badInput,
-      'invalid-id-token': AuthFailureType.badInput,
-      'invalid-last-sign-in-time': AuthFailureType.badInput,
-      'invalid-page-token': AuthFailureType.badInput,
-      'invalid-provider-data': AuthFailureType.badInput,
-      'invalid-provider-id': AuthFailureType.badInput,
-      'invalid-oauth-responsetype': AuthFailureType.badInput,
-      'missing-continue-uri': AuthFailureType.badInput,
-      'missing-hash-algorithm': AuthFailureType.badInput,
-      'missing-uid': AuthFailureType.badInput,
-      'phone-number-already-exists': AuthFailureType.badPassword,
-      'uid-already-exists': AuthFailureType.backend,
-      'user-not-found': AuthFailureType.badInput,
-      'invalid-session-cookie-duration': AuthFailureType.logoutRequired,
-      'session-cookie-expired': AuthFailureType.logoutRequired,
-      'session-cookie-revoked': AuthFailureType.logoutRequired,
-      'id-token-expired': AuthFailureType.logoutRequired,
-      'id-token-revoked': AuthFailureType.logoutRequired,
-      'invalid-password-hash': AuthFailureType.backend,
-      'invalid-password-salt': AuthFailureType.backend,
-      'missing-ios-bundle-id': AuthFailureType.backend,
-      'reserved-claims	': AuthFailureType.backend,
-      'wrong-password': AuthFailureType.badInput,
+      'internal-error': AuthUnknownFailure(code: code),
+      'claims-too-large': AuthUnknownFailure(code: code),
+      'invalid-hash-algorithm': AuthUnknownFailure(code: code),
+      'invalid-hash-block-size': AuthUnknownFailure(code: code),
+      'invalid-hash-derived-key-length': AuthUnknownFailure(code: code),
+      'invalid-hash-key': AuthUnknownFailure(code: code),
+      'invalid-hash-memory-cost': AuthUnknownFailure(code: code),
+      'invalid-hash-parallelization': AuthUnknownFailure(code: code),
+      'invalid-hash-rounds': AuthUnknownFailure(code: code),
+      'invalid-hash-salt-separator': AuthUnknownFailure(code: code),
+      'insufficient-permission': AuthAuthorizationFailure(code: code),
+      'operation-not-allowed': AuthAuthorizationFailure(code: code),
+      'missing-android-pkg-name': AuthUnknownFailure(code: code),
+      'missing-oauth-client-secret	': AuthUnknownFailure(code: code),
+      'project-not-found': AuthUnknownFailure(code: code),
+      'reserved-claims': AuthUnknownFailure(code: code),
+      'maximum-user-count-exceeded': AuthUnknownFailure(code: code),
+      'unauthorized-continue-uri': AuthAuthorizationFailure(code: code),
+      'email-already-exists':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
+      'email-already-in-use':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
+      'invalid-email':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
+      'invalid-password': AuthBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.password),
+      'invalid-uid': AuthAuthorizationFailure(code: code),
+      'invalid-phone-number': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-display-name': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-dynamic-link-domain':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-creation-time':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-disabled-field':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-email-verified': AuthUnknownFailure(code: code),
+      'invalid-photo-url': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-credential': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-argument': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-claims': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-continue-uri': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-user-import': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-id-token': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-last-sign-in-time': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-provider-data': AuthUnknownFailure(code: code),
+      'invalid-provider-id': AuthUnknownFailure(code: code),
+      'invalid-oauth-responsetype': AuthAuthorizationFailure(code: code),
+      'missing-continue-uri': AuthUnknownFailure(code: code),
+      'missing-hash-algorithm': AuthUnknownFailure(code: code),
+      'missing-uid': AuthAuthorizationFailure(code: code),
+      'invalid-page-token': AuthUnknownFailure(code: code),
+      'phone-number-already-exists': AuthValidationFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'uid-already-exists':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'user-not-found':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
+      'invalid-session-cookie-duration': AuthAuthorizationFailure(code: code),
+      'session-cookie-expired': AuthAuthorizationFailure(code: code),
+      'session-cookie-revoked': AuthAuthorizationFailure(code: code),
+      'id-token-expired': AuthAuthorizationFailure(code: code),
+      'id-token-revoked': AuthAuthorizationFailure(code: code),
+      'invalid-password-hash':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-password-salt':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'missing-ios-bundle-id':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'reserved-claims	':
+          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'wrong-password': AuthBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.password),
     };
-
-    final messageConverter = {
-      'email-already-exists': 'This email is already in use. Please log in',
-      'invalid-email': 'The email you provided is invalid',
-      'invalid-password': 'The password you provided is invalid',
-      'user-not-found': 'Wrong email or password. Please try again',
-      'wrong-password': 'Wrong email or password. Please try again',
-      'email-already-in-use': "Email already in use",
-    };
-    final type =
-        failureConverter[firebaseAuthException.code] ?? AuthFailureType.unknown;
-    final message = messageConverter[firebaseAuthException.code] ??
-        firebaseAuthException.message;
-
-    return AuthFailureDto(
-        type: type, message: message, code: firebaseAuthException.code);
-  }
-
-  // ignore: prefer_constructors_over_static_methods
-  static AuthFailureDto get unknown {
-    return const AuthFailureDto(
-      type: AuthFailureType.unknown,
-      message: null,
-      code: 'unknown',
-    );
+    return failureConverter[code] ?? AuthUnknownFailure(code: code);
   }
 }
