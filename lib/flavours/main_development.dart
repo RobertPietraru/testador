@@ -1,10 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/features/authentication/domain/auth_domain.dart';
 
 import '../core/components/theme/app_theme.dart';
 import '../core/components/theme/app_theme_data.dart';
 import '../core/routing/app_router.gr.dart';
+import '../core/routing/route_guards.dart';
 import '../features/authentication/presentation/auth_bloc/auth_bloc.dart';
 import '../features/authentication/presentation/widgets/auth_bloc_wrapper.dart';
 import '../injection.dart';
@@ -28,38 +29,40 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _lightTheme = LightAppThemeData();
   final _darkTheme = DarkAppThemeData();
-  final appRouter = AppRouter();
+  AppRouter? _appRouter;
+  bool isAuthenticated = true;
+
+  @override
+  void initState() {
+    _appRouter = AppRouter(
+      authGuard: AuthGuard(
+        authBloc: context.read<AuthBloc>(),
+      ),
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<AuthBloc>().state;
-//        authGuard: AuthGuard(isAuthenticated: state is AuthAuthenticatedState)
-
-    return AppTheme(
-      lightTheme: _lightTheme,
-      darkTheme: _darkTheme,
-      child: MaterialApp.router(
-        routerDelegate: AutoRouterDelegate.declarative(
-          appRouter,
-          routes: (_) {
-            if (state.userEntity == null) {
-              return [const UnprotectedFlowRoute()];
-            } else {
-              return [const ProtectedFlowRoute()];
-            }
-          },
+    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+      isAuthenticated = state is AuthAuthenticatedState;
+      return AppTheme(
+        lightTheme: _lightTheme,
+        darkTheme: _darkTheme,
+        child: MaterialApp.router(
+          routerDelegate: _appRouter!.delegate(),
+          routeInformationParser: _appRouter!.defaultRouteParser(),
+          theme: _lightTheme.materialThemeData(context),
+          darkTheme: _darkTheme.materialThemeData(context),
+          // themeMode: darkModePreference?.toThemeMode(),
+          themeMode: ThemeMode.light,
+          supportedLocales: const [
+            Locale('en', ''),
+            Locale('pt', 'BR'),
+            Locale('ro', 'RO'),
+          ],
         ),
-        routeInformationParser: appRouter.defaultRouteParser(),
-        theme: _lightTheme.materialThemeData(context),
-        darkTheme: _darkTheme.materialThemeData(context),
-        // themeMode: darkModePreference?.toThemeMode(),
-        themeMode: ThemeMode.light,
-        supportedLocales: const [
-          Locale('en', ''),
-          Locale('pt', 'BR'),
-          Locale('ro', 'RO'),
-        ],
-      ),
-    );
+      );
+    });
   }
 }

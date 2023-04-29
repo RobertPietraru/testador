@@ -23,8 +23,9 @@ class LandingScreen extends StatelessWidget {
           ]),
       onPressed: () {
         const isAuthenticated = true;
+
         if (isAuthenticated) {
-          context.pushRoute(const HomeRoute());
+          context.router.root.push(const ProtectedFlowRoute());
         } else {
           showDialog(
             context: context,

@@ -20,10 +20,15 @@ import '../../features/testing/presentation/screens/home_screen.dart' as _i5;
 import '../../features/testing/presentation/screens/test_screen.dart' as _i4;
 import '../screens/landing_screen.dart' as _i3;
 import 'app_router.dart' as _i1;
+import 'route_guards.dart' as _i8;
 
 class AppRouter extends _i6.RootStackRouter {
-  AppRouter([_i7.GlobalKey<_i7.NavigatorState>? navigatorKey])
-      : super(navigatorKey);
+  AppRouter({
+    _i7.GlobalKey<_i7.NavigatorState>? navigatorKey,
+    required this.authGuard,
+  }) : super(navigatorKey);
+
+  final _i8.AuthGuard authGuard;
 
   @override
   final Map<String, _i6.PageFactory> pagesMap = {
@@ -86,25 +91,26 @@ class AppRouter extends _i6.RootStackRouter {
   @override
   List<_i6.RouteConfig> get routes => [
         _i6.RouteConfig(
-          '/#redirect',
-          path: '/',
-          redirectTo: '/protected',
-          fullMatch: true,
-        ),
-        _i6.RouteConfig(
           AuthenticationFlowRoute.name,
           path: '/auth',
           children: [
             _i6.RouteConfig(
+              '#redirect',
+              path: '',
+              parent: AuthenticationFlowRoute.name,
+              redirectTo: 'sign-up',
+              fullMatch: true,
+            ),
+            _i6.RouteConfig(
               RegistrationRoute.name,
               path: 'sign-up',
               parent: AuthenticationFlowRoute.name,
-            )
+            ),
           ],
         ),
         _i6.RouteConfig(
           UnprotectedFlowRoute.name,
-          path: '/unprotected',
+          path: '/',
           children: [
             _i6.RouteConfig(
               LandingRoute.name,
@@ -116,6 +122,7 @@ class AppRouter extends _i6.RootStackRouter {
         _i6.RouteConfig(
           ProtectedFlowRoute.name,
           path: '/protected',
+          guards: [authGuard],
           children: [
             _i6.RouteConfig(
               TestAdminRoute.name,
@@ -155,7 +162,7 @@ class UnprotectedFlowRoute extends _i6.PageRouteInfo<void> {
   const UnprotectedFlowRoute({List<_i6.PageRouteInfo>? children})
       : super(
           UnprotectedFlowRoute.name,
-          path: '/unprotected',
+          path: '/',
           initialChildren: children,
         );
 

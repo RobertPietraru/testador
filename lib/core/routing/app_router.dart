@@ -14,12 +14,15 @@ export 'app_router.gr.dart';
       path: '/auth',
       name: 'AuthenticationFlowRoute',
       page: AuthenticationFlow,
-      children: [AutoRoute(page: RegistrationScreen, path: 'sign-up')],
+      children: [
+        AutoRoute(initial: true, page: RegistrationScreen, path: 'sign-up'),
+      ],
     ),
     AutoRoute(
-      path: '/unprotected',
+      path: '/',
       name: 'UnprotectedFlowRoute',
       page: UnprotectedFlow,
+      initial: true,
       children: [
         AutoRoute(
           initial: true,
@@ -32,7 +35,7 @@ export 'app_router.gr.dart';
       path: '/protected',
       name: 'ProtectedFlowRoute',
       page: ProtectedFlow,
-      initial: true,
+      guards: [AuthGuard],
       children: [
         AutoRoute(
           path: 'test-admin/:id',
