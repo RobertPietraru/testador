@@ -26,6 +26,7 @@ class LongButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final color = this.color ?? theme.primaryColor;
     return SizedBox(
       width: 100.widthPercent,
       height: height,
@@ -40,10 +41,10 @@ class LongButton extends StatelessWidget {
           backgroundColor: MaterialStateColor.resolveWith(
             (states) {
               if (states.contains(MaterialState.disabled)) {
-                return theme.primaryColor.withOpacity(0.2);
+                return color.withOpacity(0.2);
               }
 
-              return theme.primaryColor;
+              return color;
             },
           ),
         ),

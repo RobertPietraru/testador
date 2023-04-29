@@ -32,6 +32,7 @@ class LandingScreen extends StatelessWidget {
           );
         }
       },
+      color: theme.defaultBackgroundColor,
       label: 'Incepe',
       isLoading: false,
     );
@@ -75,7 +76,11 @@ class LandingScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: theme.spacing.xxLarge),
-                    SizedBox(width: 20.widthPercent, child: button),
+                    SizedBox(
+                        width: DeviceSize.isDesktopMode
+                            ? 20.widthPercent
+                            : 70.widthPercent,
+                        child: button),
                     const SizedBox(),
                   ]),
             ),

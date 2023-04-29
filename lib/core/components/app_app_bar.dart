@@ -36,12 +36,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppLogo(color: theme.primaryColor),
+              AppLogo(color: theme.defaultBackgroundColor),
               const SizedBox(width: 10),
               Text(
                 "Pietrocka Testing",
                 style: TextStyle(
-                  color: theme.primaryColor,
+                  color: theme.defaultBackgroundColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
