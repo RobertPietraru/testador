@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
-import 'package:testador/core/routing/app_router.dart';
+import 'package:testador/core/routing/app_router.gr.dart';
 
 import '../../../../core/components/custom_dialog.dart';
 

@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/routing/route_guards.dart';
 import 'package:testador/core/screens/landing_screen.dart';
-import 'package:testador/features/authentication/presentation/screens/registration_screen.dart';
+import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
+import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart';
 import 'package:testador/features/testing/presentation/screens/home_screen.dart';
 import 'package:testador/features/testing/presentation/screens/test_screen.dart';
-export 'app_router.gr.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',
@@ -15,7 +15,8 @@ export 'app_router.gr.dart';
       name: 'AuthenticationFlowRoute',
       page: AuthenticationFlow,
       children: [
-        AutoRoute(initial: true, page: RegistrationScreen, path: 'sign-up'),
+        AutoRoute(initial: true, page: RegistrationScreen, path: 'signup'),
+        AutoRoute(page: LoginScreen, path: 'loginin'),
       ],
     ),
     AutoRoute(

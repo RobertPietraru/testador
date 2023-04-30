@@ -4,8 +4,9 @@ import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
-import 'package:testador/core/routing/app_router.dart';
-import 'package:testador/features/authentication/presentation/widgets/login_dialog.dart';
+import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
+
+import '../routing/app_router.gr.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -22,15 +23,12 @@ class LandingScreen extends StatelessWidget {
             Color(0xFFFF005A),
           ]),
       onPressed: () {
-        const isAuthenticated = true;
+        const isAuthenticated = false;
 
         if (isAuthenticated) {
           context.router.root.push(const ProtectedFlowRoute());
         } else {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => const LoginDialog(),
-          );
+          context.router.root.push(const AuthenticationFlowRoute());
         }
       },
       color: theme.defaultBackgroundColor,
@@ -50,7 +48,9 @@ class LandingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomAppBar(),
+            CustomAppBar(
+              mainColor: theme.defaultBackgroundColor,
+            ),
             Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

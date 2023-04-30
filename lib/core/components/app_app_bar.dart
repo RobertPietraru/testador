@@ -13,6 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
   final PreferredSizeWidget? bottom;
   final Color fillColor;
+  final Color? mainColor;
   const CustomAppBar({
     Key? key,
     this.showLeading = true,
@@ -21,6 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.bottom,
     this.fillColor = Colors.transparent,
+    this.mainColor,
   }) : super(key: key);
 
   AppBar theAppBar({
@@ -30,18 +32,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       systemOverlayStyle: SystemUiOverlayStyle.light,
       elevation: fillColor == Colors.transparent ? 0 : null,
+      foregroundColor: mainColor ?? theme.primaryColor,
       automaticallyImplyLeading: showLeading && leading == null,
       leading: leading,
       title: title ??
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppLogo(color: theme.defaultBackgroundColor),
+              AppLogo(color: mainColor ?? theme.primaryColor),
               const SizedBox(width: 10),
               Text(
                 "Pietrocka Testing",
                 style: TextStyle(
-                  color: theme.defaultBackgroundColor,
+                  color: mainColor ?? theme.primaryColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -69,7 +72,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ]
           : [
               IconButton(
-                  onPressed: onMenuPressed, icon: const Icon(Icons.menu)),
+                  onPressed: onMenuPressed,
+                  icon: Icon(
+                    Icons.menu,
+                    color: mainColor ?? theme.primaryColor,
+                  )),
             ],
       bottom: bottom,
     );
