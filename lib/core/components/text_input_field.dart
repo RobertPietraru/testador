@@ -22,7 +22,7 @@ class TextInputField extends StatefulWidget {
 
 class _TextInputFieldState extends State<TextInputField> {
   final TextEditingController controller = TextEditingController();
-  bool isObscured = false;
+  bool isObscured = true;
   @override
   void initState() {
     isObscured = widget.isPassword;

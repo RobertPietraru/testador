@@ -1,4 +1,5 @@
 import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
+import 'package:testador/features/authentication/domain/failures/email_failures.dart';
 
 class AuthFailureDto {
   static AuthFailure fromFirebaseErrorCode(String code) {
@@ -21,10 +22,8 @@ class AuthFailureDto {
       'reserved-claims': AuthUnknownFailure(code: code),
       'maximum-user-count-exceeded': AuthUnknownFailure(code: code),
       'unauthorized-continue-uri': AuthAuthorizationFailure(code: code),
-      'email-already-exists': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.email),
-      'email-already-in-use': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.email),
+      'email-already-exists': const AuthEmailAlreadyExistsFailure(),
+      'email-already-in-use': const AuthEmailAlreadyExistsFailure(),
       'invalid-email': AuthInputBackendFailure(
           code: code, fieldWithIssue: FieldWithIssue.email),
       'invalid-password': AuthInputBackendFailure(

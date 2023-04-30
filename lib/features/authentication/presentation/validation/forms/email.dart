@@ -24,6 +24,7 @@ class Email extends FormzInput<String, AuthValidationFailure>
     if ((value ?? '').isEmpty) {
       return AuthEmailEmptyValidationFailure();
     }
+
     return _emailRegExp.hasMatch(value ?? '')
         ? null
         : AuthEmailInvalidFailure();

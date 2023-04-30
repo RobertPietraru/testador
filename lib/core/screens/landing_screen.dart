@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
-import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
+import 'package:testador/features/authentication/presentation/auth_bloc/auth_bloc.dart';
 
 import '../routing/app_router.gr.dart';
 
@@ -14,27 +15,7 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final button = LongButton(
-      textGradient: const LinearGradient(
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          colors: [
-            Color(0xFF000AFF),
-            Color(0xFFFF005A),
-          ]),
-      onPressed: () {
-        const isAuthenticated = false;
 
-        if (isAuthenticated) {
-          context.router.root.push(const ProtectedFlowRoute());
-        } else {
-          context.router.root.push(const AuthenticationFlowRoute());
-        }
-      },
-      color: theme.defaultBackgroundColor,
-      label: 'Incepe',
-      isLoading: false,
-    );
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -57,9 +38,6 @@ class LandingScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(),
-                    SizedBox(
-                      height: button.height,
-                    ),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -81,7 +59,28 @@ class LandingScreen extends StatelessWidget {
                         width: DeviceSize.isDesktopMode
                             ? 20.widthPercent
                             : 70.widthPercent,
-                        child: button),
+                        child: LongButton(
+                          textGradient: const LinearGradient(
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                              colors: [
+                                Color(0xFF000AFF),
+                                Color(0xFFFF005A),
+                              ]),
+                          onPressed: () {
+                            if (context.read<AuthBloc>().state
+                                is AuthAuthenticatedState) {
+                              context.router.root
+                                  .push(const ProtectedFlowRoute());
+                            } else {
+                              context.router.root
+                                  .push(const AuthenticationFlowRoute());
+                            }
+                          },
+                          color: theme.defaultBackgroundColor,
+                          label: 'Incepe',
+                          isLoading: false,
+                        )),
                     const SizedBox(),
                   ]),
             ),

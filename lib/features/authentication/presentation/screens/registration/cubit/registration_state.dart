@@ -4,7 +4,7 @@ enum RegistrationStatus { error, loading, successful, init }
 
 class RegistrationState extends Equatable {
   const RegistrationState({
-    required this.name,
+    required this.confirmedPassword,
     required this.email,
     required this.password,
     this.failure,
@@ -13,56 +13,59 @@ class RegistrationState extends Equatable {
 
   final Email email;
   final Password password;
-  final Name name;
+  final ConfirmedPassword confirmedPassword;
   final RegistrationStatus status;
   final AuthFailure? failure;
 
   @override
-  List<Object?> get props => [name, email, password, status, failure];
+  List<Object?> get props =>
+      [email, password, status, failure, confirmedPassword, validationFailure];
 
-  bool get isValid {
-    return validationFailure == null;
+  bool get isLoading {
+    return status == RegistrationStatus.loading;
   }
 
   bool get isSuccessful {
     return status == RegistrationStatus.successful;
   }
 
-  String? nameFailure(BuildContext context) {
-    return failure?.fieldWithIssue == FieldWithIssue.name
-        ? failure?.retrieveMessage(context)
-        : null;
-  }
-
   String? emailFailure(BuildContext context) {
-    return failure?.fieldWithIssue == FieldWithIssue.email
-        ? failure?.retrieveMessage(context)
-        : null;
+    if (status == RegistrationStatus.init) return null;
+    return email.error?.retrieveMessage(context) ??
+        (failure?.fieldWithIssue == FieldWithIssue.email
+            ? failure?.retrieveMessage(context)
+            : null);
   }
 
   String? passwordFailure(BuildContext context) {
-    return failure?.fieldWithIssue == FieldWithIssue.password
-        ? failure?.retrieveMessage(context)
-        : null;
+    if (status == RegistrationStatus.init) return null;
+    return password.error?.retrieveMessage(context) ??
+        (failure?.fieldWithIssue == FieldWithIssue.password
+            ? failure?.retrieveMessage(context)
+            : null);
   }
 
-  bool get isInvalid {
-    return !isValid;
+  String? confirmPasswordFailure(BuildContext context) {
+    if (status == RegistrationStatus.init) return null;
+    return confirmedPassword.error?.retrieveMessage(context) ??
+        (failure?.fieldWithIssue == FieldWithIssue.confirmedPassword
+            ? failure?.retrieveMessage(context)
+            : null);
   }
 
   AuthFailure? get validationFailure {
-    return password.error ?? email.error ?? name.error;
+    return email.error ?? password.error ?? confirmedPassword.error;
   }
 
   RegistrationState copyWith({
-    Name? name,
     Email? email,
     Password? password,
+    ConfirmedPassword? confirmedPassword,
     RegistrationStatus? status,
     AuthFailure? failure = const NoAuthFailure(),
   }) =>
       RegistrationState(
-        name: name ?? this.name,
+        confirmedPassword: confirmedPassword ?? this.confirmedPassword,
         email: email ?? this.email,
         password: password ?? this.password,
         status: status ?? this.status,

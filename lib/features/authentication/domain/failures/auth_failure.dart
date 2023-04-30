@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/classes/failure.dart';
 
-enum FieldWithIssue { email, password, name, none }
+enum FieldWithIssue { email, password, name, confirmedPassword, none }
 
 abstract class AuthFailure extends Failure {
   const AuthFailure({required super.code, required this.fieldWithIssue});

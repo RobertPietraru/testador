@@ -2,11 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:testador/features/authentication/presentation/validation/forms/confirmed_password.dart';
 import '../../../../domain/failures/auth_failure.dart';
 import '../../../../domain/usecases/register_usecase.dart';
 import '../../../auth_bloc/auth_bloc.dart';
 import '../../../validation/forms/email.dart';
-import '../../../validation/forms/name.dart';
 import '../../../validation/forms/password.dart';
 
 part 'registration_state.dart';
@@ -18,23 +18,15 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   RegistrationCubit(this.registerUsecase, {required this.authBloc})
       : super(const RegistrationState(
           status: RegistrationStatus.init,
+          confirmedPassword: ConfirmedPassword.dirty(password: ''),
           email: Email.dirty(),
           password: Password.dirty(),
-          name: Name.dirty(),
         ));
+
   void onEmailChanged(String email) {
     final newEmail = Email.dirty(email);
     emit(state.copyWith(
         email: newEmail, status: RegistrationStatus.init, failure: null));
-  }
-
-  void onNameChanged(String name) {
-    final newName = Name.dirty(name);
-    emit(state.copyWith(
-      name: newName,
-      status: RegistrationStatus.init,
-      failure: null,
-    ));
   }
 
   void onPasswordChanged(String password) {
@@ -46,27 +38,25 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     ));
   }
 
-  void validateInput() {
-    Formz.validate([state.name, state.password, state.name]);
-    final validationFailure = state.validationFailure;
-
+  void onConfirmedPasswordChanged(String confirmedPassword) {
+    final newConfirmedPassword = ConfirmedPassword.dirty(
+        password: state.password.value, value: confirmedPassword);
     emit(state.copyWith(
-      failure: validationFailure,
-      status: validationFailure != null
-          ? RegistrationStatus.error
-          : RegistrationStatus.init,
+      confirmedPassword: newConfirmedPassword,
+      status: RegistrationStatus.init,
+      failure: null,
     ));
   }
 
   Future<void> register() async {
-    validateInput();
-    if (state.isInvalid) {
+    if (state.validationFailure != null) {
+      emit(state.copyWith(status: RegistrationStatus.error));
       return;
     }
     emit(state.copyWith(status: RegistrationStatus.loading));
     final response = await registerUsecase.call(
       RegisterParams(
-        name: state.name.value,
+        name: 'noname',
         email: state.email.value,
         password: state.password.value,
       ),
