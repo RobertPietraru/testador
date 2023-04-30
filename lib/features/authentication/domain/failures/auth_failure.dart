@@ -5,16 +5,19 @@ import '../../../../core/classes/failure.dart';
 enum FieldWithIssue { email, password, name, none }
 
 abstract class AuthFailure extends Failure {
-  AuthFailure({required super.code});
+  const AuthFailure({required super.code, required this.fieldWithIssue});
+  @override
+  List<Object?> get props => [code, fieldWithIssue];
+
+  final FieldWithIssue fieldWithIssue;
 
   /// Returns the error message translated to the current language
   String retrieveMessage(BuildContext context);
 }
 
 class AuthValidationFailure extends AuthFailure {
-  final FieldWithIssue fieldWithIssue;
-  AuthValidationFailure(
-      {required super.code, this.fieldWithIssue = FieldWithIssue.none});
+  const AuthValidationFailure(
+      {required super.code, super.fieldWithIssue = FieldWithIssue.none});
 
   @override
   String retrieveMessage(BuildContext context) {
@@ -23,7 +26,8 @@ class AuthValidationFailure extends AuthFailure {
 }
 
 class AuthDatabaseFailure extends AuthFailure {
-  AuthDatabaseFailure({required super.code});
+  const AuthDatabaseFailure(
+      {required super.code, super.fieldWithIssue = FieldWithIssue.none});
 
   @override
   String retrieveMessage(BuildContext context) {
@@ -32,7 +36,8 @@ class AuthDatabaseFailure extends AuthFailure {
 }
 
 class AuthAuthorizationFailure extends AuthFailure {
-  AuthAuthorizationFailure({required super.code});
+  const AuthAuthorizationFailure(
+      {required super.code, super.fieldWithIssue = FieldWithIssue.none});
 
   @override
   String retrieveMessage(BuildContext context) {
@@ -41,7 +46,8 @@ class AuthAuthorizationFailure extends AuthFailure {
 }
 
 class AuthNetworkFailure extends AuthFailure {
-  AuthNetworkFailure({required super.code});
+  const AuthNetworkFailure(
+      {required super.code, super.fieldWithIssue = FieldWithIssue.none});
 
   @override
   String retrieveMessage(BuildContext context) {
@@ -49,10 +55,11 @@ class AuthNetworkFailure extends AuthFailure {
   }
 }
 
-class AuthBackendFailure extends AuthFailure {
-  final FieldWithIssue fieldWithIssue;
-  AuthBackendFailure(
-      {required super.code, this.fieldWithIssue = FieldWithIssue.none});
+class AuthInputBackendFailure extends AuthFailure {
+  const AuthInputBackendFailure({
+    required super.code,
+    super.fieldWithIssue = FieldWithIssue.none,
+  });
 
   @override
   String retrieveMessage(BuildContext context) {
@@ -60,12 +67,24 @@ class AuthBackendFailure extends AuthFailure {
   }
 }
 
-class AuthUserNotFound extends AuthBackendFailure {
-  AuthUserNotFound({super.code = 'user-not-found'});
+class AuthUserNotFound extends AuthInputBackendFailure {
+  const AuthUserNotFound({super.code = 'user-not-found'});
 }
 
 class AuthUnknownFailure extends AuthFailure {
-  AuthUnknownFailure({super.code = 'uknown'});
+  const AuthUnknownFailure(
+      {super.code = 'uknown', super.fieldWithIssue = FieldWithIssue.none});
+
+  @override
+  String retrieveMessage(BuildContext context) {
+    throw UnimplementedError();
+  }
+}
+
+class NoAuthFailure extends AuthFailure {
+  const NoAuthFailure(
+      {super.code = "no-auth-failure",
+      super.fieldWithIssue = FieldWithIssue.none});
 
   @override
   String retrieveMessage(BuildContext context) {

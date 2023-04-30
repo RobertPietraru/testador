@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-abstract class Failure extends Error with EquatableMixin {
+abstract class Failure with EquatableMixin {
   final String code;
-  Failure({required this.code});
+  const Failure({required this.code});
 
   @override
   List<Object?> get props => [code];

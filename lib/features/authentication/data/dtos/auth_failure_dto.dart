@@ -21,25 +21,25 @@ class AuthFailureDto {
       'reserved-claims': AuthUnknownFailure(code: code),
       'maximum-user-count-exceeded': AuthUnknownFailure(code: code),
       'unauthorized-continue-uri': AuthAuthorizationFailure(code: code),
-      'email-already-exists':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
-      'email-already-in-use':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
-      'invalid-email':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
-      'invalid-password': AuthBackendFailure(
+      'email-already-exists': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.email),
+      'email-already-in-use': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.email),
+      'invalid-email': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.email),
+      'invalid-password': AuthInputBackendFailure(
           code: code, fieldWithIssue: FieldWithIssue.password),
       'invalid-uid': AuthAuthorizationFailure(code: code),
       'invalid-phone-number': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
       'invalid-display-name': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-dynamic-link-domain':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-creation-time':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-disabled-field':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-dynamic-link-domain': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-creation-time': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-disabled-field': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
       'invalid-email-verified': AuthUnknownFailure(code: code),
       'invalid-photo-url': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
@@ -66,24 +66,24 @@ class AuthFailureDto {
       'invalid-page-token': AuthUnknownFailure(code: code),
       'phone-number-already-exists': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
-      'uid-already-exists':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
-      'user-not-found':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.email),
+      'uid-already-exists': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'user-not-found': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.email),
       'invalid-session-cookie-duration': AuthAuthorizationFailure(code: code),
       'session-cookie-expired': AuthAuthorizationFailure(code: code),
       'session-cookie-revoked': AuthAuthorizationFailure(code: code),
       'id-token-expired': AuthAuthorizationFailure(code: code),
       'id-token-revoked': AuthAuthorizationFailure(code: code),
-      'invalid-password-hash':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-password-salt':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
-      'missing-ios-bundle-id':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
-      'reserved-claims	':
-          AuthBackendFailure(code: code, fieldWithIssue: FieldWithIssue.none),
-      'wrong-password': AuthBackendFailure(
+      'invalid-password-hash': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-password-salt': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'missing-ios-bundle-id': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'reserved-claims	': AuthInputBackendFailure(
+          code: code, fieldWithIssue: FieldWithIssue.none),
+      'wrong-password': AuthInputBackendFailure(
           code: code, fieldWithIssue: FieldWithIssue.password),
     };
     return failureConverter[code] ?? AuthUnknownFailure(code: code);
