@@ -52,10 +52,15 @@ class _HomeScreenState extends State<HomeScreen>
             SizedBox(height: theme.spacing.small),
             Text("Testele tale", style: theme.subtitleTextStyle),
             SizedBox(height: theme.spacing.mediumLarge),
-            TabBar(controller: controller, tabs: const [
-              Tab(text: 'Create'),
-              Tab(text: 'Neterminate'),
-            ]),
+            TabBar(
+                controller: controller,
+                labelColor: theme.primaryColor,
+                tabs: const [
+                  Tab(
+                    text: 'Create',
+                  ),
+                  Tab(text: 'Neterminate'),
+                ]),
             SizedBox(height: theme.spacing.mediumLarge),
             Expanded(
               child: GridView.builder(
