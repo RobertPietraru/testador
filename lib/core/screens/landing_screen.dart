@@ -29,9 +29,7 @@ class LandingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomAppBar(
-              mainColor: theme.defaultBackgroundColor,
-            ),
+            const CustomAppBar(mainColor: Colors.white),
             Center(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
