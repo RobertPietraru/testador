@@ -22,6 +22,10 @@ class LoginState extends Equatable {
     return status == LoginStatus.loading;
   }
 
+  bool get isSuccessful {
+    return status == LoginStatus.successful;
+  }
+
   bool get isValid {
     return validationFailure == null;
   }

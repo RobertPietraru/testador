@@ -28,24 +28,17 @@ class LoginCubit extends Cubit<LoginState> {
         password: newPassword, status: LoginStatus.init, failure: null));
   }
 
-  void validateInput() {
-    final validationFailure = state.validationFailure;
-
-    emit(state.copyWith(
-      failure: validationFailure,
-      status: validationFailure != null ? LoginStatus.error : LoginStatus.init,
-    ));
-  }
-
   Future<void> login() async {
-    validateInput();
-    if (state.isInvalid) {
+    if (state.validationFailure != null) {
+      emit(state.copyWith(status: LoginStatus.error));
       return;
     }
     emit(state.copyWith(status: LoginStatus.loading));
+
     final response = await loginUsecase.call(
       LoginParams(email: state.email.value, password: state.password.value),
     );
+
     return response.fold((failure) {
       emit(state.copyWith(failure: failure, status: LoginStatus.error));
     }, (user) {

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:testador/features/authentication/presentation/validation/forms/confirmed_password.dart';
 import '../../../../domain/failures/auth_failure.dart';
 import '../../../../domain/usecases/register_usecase.dart';
@@ -26,7 +25,10 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   void onEmailChanged(String email) {
     final newEmail = Email.dirty(email);
     emit(state.copyWith(
-        email: newEmail, status: RegistrationStatus.init, failure: null));
+      email: newEmail,
+      status: RegistrationStatus.init,
+      failure: null,
+    ));
   }
 
   void onPasswordChanged(String password) {

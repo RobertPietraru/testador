@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/authentication/domain/auth_domain.dart';
@@ -30,7 +31,6 @@ class _MyAppState extends State<MyApp> {
   final _lightTheme = LightAppThemeData();
   final _darkTheme = DarkAppThemeData();
   AppRouter? _appRouter;
-  bool isAuthenticated = true;
 
   @override
   void initState() {
@@ -44,25 +44,21 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-      isAuthenticated = state is AuthAuthenticatedState;
-      return AppTheme(
-        lightTheme: _lightTheme,
-        darkTheme: _darkTheme,
-        child: MaterialApp.router(
-          routerDelegate: _appRouter!.delegate(),
-          routeInformationParser: _appRouter!.defaultRouteParser(),
-          theme: _lightTheme.materialThemeData(context),
-          darkTheme: _darkTheme.materialThemeData(context),
-          // themeMode: darkModePreference?.toThemeMode(),
-          themeMode: ThemeMode.light,
-          supportedLocales: const [
-            Locale('en', ''),
-            Locale('pt', 'BR'),
-            Locale('ro', 'RO'),
-          ],
-        ),
-      );
-    });
+    return AppTheme(
+      lightTheme: _lightTheme,
+      darkTheme: _darkTheme,
+      child: MaterialApp.router(
+        routerDelegate: _appRouter!.delegate(),
+        routeInformationParser: _appRouter!.defaultRouteParser(),
+        theme: _lightTheme.materialThemeData(context),
+        darkTheme: _darkTheme.materialThemeData(context),
+        themeMode: ThemeMode.light,
+        supportedLocales: const [
+          Locale('en', ''),
+          Locale('pt', 'BR'),
+          Locale('ro', 'RO'),
+        ],
+      ),
+    );
   }
 }
