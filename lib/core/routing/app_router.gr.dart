@@ -18,8 +18,8 @@ import '../../features/authentication/presentation/screens/login/login_screen.da
     as _i3;
 import '../../features/authentication/presentation/screens/registration/registration_screen.dart'
     as _i2;
-import '../../features/testing/presentation/screens/home_screen.dart' as _i6;
-import '../../features/testing/presentation/screens/test_screen.dart' as _i5;
+import '../../features/test/presentation/screens/home_screen.dart' as _i6;
+import '../../features/test/presentation/screens/test_screen.dart' as _i5;
 import '../screens/landing_screen.dart' as _i4;
 import 'app_router.dart' as _i1;
 import 'route_guards.dart' as _i9;
