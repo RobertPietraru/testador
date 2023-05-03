@@ -222,9 +222,9 @@ class TestTypeSelectionDialog extends StatelessWidget {
           title: "Creeare cu A.I.",
           description:
               "Creati testul cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza testul",
-          gradient: const LinearGradient(colors: [
-            Color(0xFF000AFF),
-            Color(0xFFFF005A),
+          gradient: LinearGradient(colors: [
+            const Color(0xFF0061ff).withOpacity(0.9),
+            const Color(0xFFFF005A).withOpacity(0.9),
           ]),
         ),
         SizedBox(height: theme.spacing.medium),
@@ -234,8 +234,8 @@ class TestTypeSelectionDialog extends StatelessWidget {
           description:
               "Creeati testul avand control absolut asupra structurii, intrebarilor, etc",
           gradient: const LinearGradient(colors: [
+            Color.fromARGB(255, 0, 200, 255),
             Color(0xFF0061ff),
-            Color(0xFF60efff),
           ]),
         ),
         SizedBox(height: theme.spacing.large),
@@ -284,7 +284,7 @@ class _SelectionOptionWidgetState extends State<SelectionOptionWidget> {
       onTapUp: (details) => setState(() => isPressedOn = false),
       onTap: widget.onPressed,
       child: Container(
-        height: 130,
+        height: DeviceSize.isDesktopMode ? 130 : null,
         width: 100.widthPercent,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -296,7 +296,9 @@ class _SelectionOptionWidgetState extends State<SelectionOptionWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(widget.title, style: theme.titleTextStyle),
-              Text(widget.description, style: const TextStyle(fontSize: 15)),
+              Text(widget.description,
+                  style: theme.informationTextStyle
+                      .copyWith(fontWeight: FontWeight.w500)),
             ]),
       ),
     );
