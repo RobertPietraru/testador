@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen>
                   itemBuilder: (context, index) => Padding(
                     padding: theme.standardPadding,
                     child: TestWidget(
-                        isPublished: false,
+                        isPublished: true,
                         onPressed: () =>
                             context.pushRoute(TestAdminRoute(testId: 'my-id')),
                         onSelect: () {},
@@ -173,17 +173,15 @@ class TestWidget extends StatelessWidget {
                           "100 elevi",
                           style: theme.informationTextStyle,
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: isPublished
-                                ? Icon(
-                                    Icons.public,
-                                    color: theme.good,
-                                  )
-                                : Icon(
-                                    Icons.public_off,
-                                    color: theme.bad,
-                                  ))
+                        isPublished
+                            ? Icon(
+                                Icons.public,
+                                color: theme.good,
+                              )
+                            : Icon(
+                                Icons.public_off,
+                                color: theme.bad,
+                              )
                       ]))
             ],
           ),
