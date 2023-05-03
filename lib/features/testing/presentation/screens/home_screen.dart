@@ -17,76 +17,68 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  late final TabController controller;
-  @override
-  void initState() {
-    controller = TabController(length: 2, vsync: this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     const name = "Bob";
     final theme = AppTheme.of(context);
     return Scaffold(
-      appBar: const CustomAppBar(),
-      endDrawer: const CustomDrawer(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.companyColor,
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const TestTypeSelectionDialog(),
+        appBar: const CustomAppBar(),
+        endDrawer: const CustomDrawer(),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: theme.companyColor,
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => const TestTypeSelectionDialog(),
+          ),
+          child: const Icon(Icons.add),
         ),
-        child: const Icon(Icons.add),
-      ),
-      body: Padding(
-        padding: theme.standardPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Bine ai venit, $name", style: theme.titleTextStyle),
-            SizedBox(height: theme.spacing.small),
-            Text("Testele tale", style: theme.subtitleTextStyle),
-            SizedBox(height: theme.spacing.mediumLarge),
-            TabBar(
-                controller: controller,
-                labelColor: theme.primaryColor,
-                tabs: const [
-                  Tab(
-                    text: 'Create',
+        body: NestedScrollView(
+          headerSliverBuilder: (context, _) {
+            return [
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Padding(
+                    padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Bine ai venit,',
+                          style: TextStyle(
+                            color: theme.secondaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: theme.spacing.large,
+                          ),
+                        ),
+                        Text(
+                          'Testele tale',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: theme.spacing.xxLarge,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Tab(text: 'Neterminate'),
                 ]),
-            SizedBox(height: theme.spacing.mediumLarge),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    crossAxisCount: 3),
-                itemBuilder: (BuildContext context, int index) {
-                  return TestWidget(
-                      onPressed: () {
-                        context.pushRoute(TestAdminRoute(testId: 'my-id'));
-                      },
-                      onSelect: () {},
-                      imageUrl:
-                          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
-                      label:
-                          'Evaluare Nationala la Limba si Literatura Romana');
-                },
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ];
+          },
+          body: ListView.builder(
+            itemCount: 30,
+            itemBuilder: (context, index) => Padding(
+              padding: theme.standardPadding,
+              child: TestWidget(
+                  onPressed: () {
+                    context.pushRoute(TestAdminRoute(testId: 'my-id'));
+                  },
+                  onSelect: () {},
+                  imageUrl:
+                      'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
+                  label: 'Evaluare Nationala la Limba si Literatura Romana'),
+            ),
+          ),
+        ));
   }
 }
 
