@@ -74,14 +74,15 @@ class _HomeScreenState extends State<HomeScreen>
                   itemBuilder: (context, index) => Padding(
                     padding: theme.standardPadding,
                     child: TestWidget(
-                        onPressed: () {
-                          context.pushRoute(TestAdminRoute(testId: 'my-id'));
-                        },
-                        onSelect: () {},
-                        imageUrl:
-                            'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
-                        label:
-                            'Evaluare Nationala la Limba si Literatura Romana'),
+                      onPressed: () {
+                        context.pushRoute(TestAdminRoute(testId: 'my-id'));
+                      },
+                      onSelect: () {},
+                      imageUrl:
+                          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
+                      label: 'Evaluare Nationala la Limba si Literatura Romana',
+                      isPublished: true,
+                    ),
                   ),
                 )
               : ListView.builder(
@@ -89,9 +90,9 @@ class _HomeScreenState extends State<HomeScreen>
                   itemBuilder: (context, index) => Padding(
                     padding: theme.standardPadding,
                     child: TestWidget(
-                        onPressed: () {
-                          context.pushRoute(TestAdminRoute(testId: 'my-id'));
-                        },
+                        isPublished: false,
+                        onPressed: () =>
+                            context.pushRoute(TestAdminRoute(testId: 'my-id')),
                         onSelect: () {},
                         imageUrl:
                             'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
@@ -110,6 +111,7 @@ class TestWidget extends StatelessWidget {
   final double height;
   final VoidCallback onSelect;
   final VoidCallback onPressed;
+  final bool isPublished;
 
   const TestWidget(
       {super.key,
@@ -118,7 +120,8 @@ class TestWidget extends StatelessWidget {
       this.width = 300,
       this.height = 300,
       required this.onSelect,
-      required this.onPressed});
+      required this.onPressed,
+      required this.isPublished});
 
   @override
   Widget build(BuildContext context) {
@@ -128,43 +131,61 @@ class TestWidget extends StatelessWidget {
       onTap: onPressed,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 10,
+        shadowColor: Colors.blue,
+        elevation: 30,
         child: Container(
           width: width,
           height: height,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(
-              image: NetworkImage(imageUrl),
-              fit: BoxFit.cover,
-            ),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.transparent,
-                Colors.black.withOpacity(0.7),
-              ],
-            ),
-          ),
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: NetworkImage(imageUrl),
+                opacity: 0.5,
+                fit: BoxFit.cover,
+              ),
+              color: theme.primaryColor),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: theme.standardPadding,
+                child: Text(
+                  label,
+                  textAlign: TextAlign.left,
+                  style: theme.titleTextStyle
+                      .copyWith(color: theme.defaultBackgroundColor),
                 ),
-                color: Colors.black.withOpacity(0.7),
               ),
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: theme.informationTextStyle,
-              ),
-            ),
+              Container(
+                  padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
+                  width: MediaQuery.of(context).size.width,
+                  height: 70,
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      color: theme.defaultBackgroundColor),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "100 elevi",
+                          style: theme.informationTextStyle,
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: isPublished
+                                ? Icon(
+                                    Icons.public,
+                                    color: theme.good,
+                                  )
+                                : Icon(
+                                    Icons.public_off,
+                                    color: theme.bad,
+                                  ))
+                      ]))
+            ],
           ),
         ),
       ),
