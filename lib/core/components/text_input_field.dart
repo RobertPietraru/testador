@@ -22,7 +22,7 @@ class TextInputField extends StatefulWidget {
 
 class _TextInputFieldState extends State<TextInputField> {
   final TextEditingController controller = TextEditingController();
-  bool isObscured = false;
+  bool isObscured = true;
   @override
   void initState() {
     isObscured = widget.isPassword;
@@ -45,14 +45,14 @@ class _TextInputFieldState extends State<TextInputField> {
       children: [
         Text(
           widget.hint,
-          style: theme.informationTextStyle.copyWith(color: Colors.white),
+          style: theme.informationTextStyle.copyWith(color: theme.primaryColor),
         ),
         const SizedBox(height: 5),
         TextFormField(
             obscureText: isObscured,
             style: TextStyle(color: theme.primaryColor),
             decoration: InputDecoration(
-              fillColor: const Color(0xFF3a3a3a),
+              fillColor: const Color.fromARGB(255, 212, 212, 212),
               filled: true,
               hintText: widget.hint,
               border: OutlineInputBorder(

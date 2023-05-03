@@ -87,10 +87,12 @@ class TheTestScreen extends StatelessWidget {
                 ],
               )
             ],
-            pinned: true,
-            expandedHeight: 200,
+            stretch: true,
+            expandedHeight: DeviceSize.isDesktopMode ? 200 : 250,
             titleSpacing: theme.standardPadding.left,
             flexibleSpace: FlexibleSpaceBar(
+              stretchModes: const [StretchMode.fadeTitle],
+              collapseMode: CollapseMode.pin,
               titlePadding: theme.standardPadding,
               background: Opacity(
                 opacity: 0.5,
@@ -99,10 +101,10 @@ class TheTestScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              title: Text(testDescription),
+              title: const Text(testDescription),
             ),
-            floating: true,
-            snap: true,
+            floating: !DeviceSize.isDesktopMode,
+            // snap: true,
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
