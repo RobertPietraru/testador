@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/app_app_bar.dart';
@@ -64,20 +66,39 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ];
           },
-          body: ListView.builder(
-            itemCount: 30,
-            itemBuilder: (context, index) => Padding(
-              padding: theme.standardPadding,
-              child: TestWidget(
-                  onPressed: () {
-                    context.pushRoute(TestAdminRoute(testId: 'my-id'));
-                  },
-                  onSelect: () {},
-                  imageUrl:
-                      'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
-                  label: 'Evaluare Nationala la Limba si Literatura Romana'),
-            ),
-          ),
+          body: DeviceSize.isDesktopMode
+              ? GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: (DeviceSize.screenHeight / 300).toInt(),
+                  ),
+                  itemBuilder: (context, index) => Padding(
+                    padding: theme.standardPadding,
+                    child: TestWidget(
+                        onPressed: () {
+                          context.pushRoute(TestAdminRoute(testId: 'my-id'));
+                        },
+                        onSelect: () {},
+                        imageUrl:
+                            'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
+                        label:
+                            'Evaluare Nationala la Limba si Literatura Romana'),
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: 30,
+                  itemBuilder: (context, index) => Padding(
+                    padding: theme.standardPadding,
+                    child: TestWidget(
+                        onPressed: () {
+                          context.pushRoute(TestAdminRoute(testId: 'my-id'));
+                        },
+                        onSelect: () {},
+                        imageUrl:
+                            'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
+                        label:
+                            'Evaluare Nationala la Limba si Literatura Romana'),
+                  ),
+                ),
         ));
   }
 }
