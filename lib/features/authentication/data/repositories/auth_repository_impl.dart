@@ -27,7 +27,7 @@ class AuthRepositoryIMPL implements AuthRepository {
     } on AuthFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return Left(AuthUnknownFailure());
+      return const Left(AuthUnknownFailure());
     }
   }
 

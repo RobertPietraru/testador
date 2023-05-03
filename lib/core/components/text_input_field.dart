@@ -45,7 +45,7 @@ class _TextInputFieldState extends State<TextInputField> {
       children: [
         Text(
           widget.hint,
-          style: theme.informationTextStyle.copyWith(color: Colors.white),
+          style: theme.informationTextStyle.copyWith(color: theme.primaryColor),
         ),
         const SizedBox(height: 5),
         TextFormField(

@@ -47,11 +47,12 @@ class AuthAuthorizationFailure extends AuthFailure {
 
 class AuthNetworkFailure extends AuthFailure {
   const AuthNetworkFailure(
-      {required super.code, super.fieldWithIssue = FieldWithIssue.none});
+      {super.code = 'network-request-failed',
+      super.fieldWithIssue = FieldWithIssue.none});
 
   @override
   String retrieveMessage(BuildContext context) {
-    throw UnimplementedError();
+    return "Nu esti conectat la internet";
   }
 }
 

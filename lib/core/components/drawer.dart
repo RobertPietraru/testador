@@ -27,20 +27,28 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
               onTap: () {},
               title: Text("Creeaza", style: theme.actionTextStyle)),
-          BlocListener<AuthBloc, AuthState>(
-
+          BlocConsumer<AuthBloc, AuthState>(
+            listenWhen: (previous, current) =>
+                previous is AuthAuthenticatedState &&
+                current is AuthUnauthenticatedState,
             listener: (context, state) {
               if (state is AuthUnauthenticatedState) {
                 context.router.popUntilRoot();
                 context.router.root.push(const UnprotectedFlowRoute());
               }
             },
-            child: ListTile(
-                onTap: () {
-                  context.read<AuthBloc>().add(const AuthUserLoggedOut());
-                },
-                title: Text("Delogheaza-te",
-                    style: theme.actionTextStyle.copyWith(color: theme.bad))),
+            builder: (context, state) => ListTile(
+                onTap: state is AuthAuthenticatedState
+                    ? () {
+                        context.read<AuthBloc>().add(const AuthUserLoggedOut());
+                      }
+                    : () {
+                        context.pushRoute(const AuthenticationFlowRoute());
+                      },
+                title: state is AuthAuthenticatedState
+                    ? Text("Delogheaza-te",
+                        style: theme.actionTextStyle.copyWith(color: theme.bad))
+                    : Text("Logheaza-te", style: theme.actionTextStyle)),
           )
         ]),
       ),

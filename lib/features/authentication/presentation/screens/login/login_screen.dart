@@ -6,6 +6,7 @@ import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/drawer.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
 import 'package:testador/features/authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'package:testador/features/authentication/presentation/screens/login/cubit/login_cubit.dart';
 import 'package:testador/injection.dart';
@@ -54,7 +55,9 @@ class _LoginView extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.isSuccessful) {
+            // look, I don't know why it is this way, but it works nonetheless, so watchu gonna do?
             context.router.popUntilRoot();
+            context.router.pop();
             context.router.root.push(const ProtectedFlowRoute());
           }
         },
@@ -104,6 +107,9 @@ class _LoginView extends StatelessWidget {
                 LongButton(
                     onPressed: () => context.read<LoginCubit>().login(),
                     label: 'Logheaza-te',
+                    error: state.failure?.fieldWithIssue == FieldWithIssue.none
+                        ? state.failure?.retrieveMessage(context)
+                        : null,
                     isLoading: state.isLoading),
                 SizedBox(height: theme.spacing.xxLarge),
                 Center(

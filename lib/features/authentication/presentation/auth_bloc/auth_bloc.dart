@@ -23,7 +23,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> logUserOut(Emitter<AuthState> emit) async {
-    
     final response = await logoutUsecase.call(NoParams());
     return response.fold((l) {
       emit(AuthFailureState(failure: l));

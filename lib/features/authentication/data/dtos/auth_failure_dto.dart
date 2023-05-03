@@ -24,6 +24,7 @@ class AuthFailureDto {
       'unauthorized-continue-uri': AuthAuthorizationFailure(code: code),
       'email-already-exists': const AuthEmailAlreadyExistsFailure(),
       'email-already-in-use': const AuthEmailAlreadyExistsFailure(),
+      'network-request-failed': const AuthNetworkFailure(),
       'invalid-email': AuthInputBackendFailure(
           code: code, fieldWithIssue: FieldWithIssue.email),
       'invalid-password': AuthInputBackendFailure(

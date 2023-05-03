@@ -35,7 +35,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     _appRouter = AppRouter(
+      authLoadingGuard: AuthLoadingGuard(
+        context: context,
+        authBloc: context.read<AuthBloc>(),
+      ),
       authGuard: AuthGuard(
+        context: context,
         authBloc: context.read<AuthBloc>(),
       ),
     );

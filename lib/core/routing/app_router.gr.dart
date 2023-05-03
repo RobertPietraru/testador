@@ -27,8 +27,11 @@ import 'route_guards.dart' as _i9;
 class AppRouter extends _i7.RootStackRouter {
   AppRouter({
     _i8.GlobalKey<_i8.NavigatorState>? navigatorKey,
+    required this.authLoadingGuard,
     required this.authGuard,
   }) : super(navigatorKey);
+
+  final _i9.AuthLoadingGuard authLoadingGuard;
 
   final _i9.AuthGuard authGuard;
 
@@ -101,6 +104,7 @@ class AppRouter extends _i7.RootStackRouter {
         _i7.RouteConfig(
           AuthenticationFlowRoute.name,
           path: '/auth',
+          guards: [authLoadingGuard],
           children: [
             _i7.RouteConfig(
               '#redirect',
@@ -124,6 +128,7 @@ class AppRouter extends _i7.RootStackRouter {
         _i7.RouteConfig(
           UnprotectedFlowRoute.name,
           path: '/',
+          guards: [authLoadingGuard],
           children: [
             _i7.RouteConfig(
               LandingRoute.name,
@@ -135,7 +140,10 @@ class AppRouter extends _i7.RootStackRouter {
         _i7.RouteConfig(
           ProtectedFlowRoute.name,
           path: '/protected',
-          guards: [authGuard],
+          guards: [
+            authGuard,
+            authLoadingGuard,
+          ],
           children: [
             _i7.RouteConfig(
               TestAdminRoute.name,

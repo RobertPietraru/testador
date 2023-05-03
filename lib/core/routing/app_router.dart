@@ -14,6 +14,7 @@ import 'package:testador/features/testing/presentation/screens/test_screen.dart'
       path: '/auth',
       name: 'AuthenticationFlowRoute',
       page: AuthenticationFlow,
+      guards: [AuthLoadingGuard],
       children: [
         AutoRoute(initial: true, page: RegistrationScreen, path: 'signup'),
         AutoRoute(page: LoginScreen, path: 'loginin'),
@@ -24,6 +25,7 @@ import 'package:testador/features/testing/presentation/screens/test_screen.dart'
       name: 'UnprotectedFlowRoute',
       page: UnprotectedFlow,
       initial: true,
+      guards: [AuthLoadingGuard],
       children: [
         AutoRoute(
           initial: true,
@@ -36,7 +38,7 @@ import 'package:testador/features/testing/presentation/screens/test_screen.dart'
       path: '/protected',
       name: 'ProtectedFlowRoute',
       page: ProtectedFlow,
-      guards: [AuthGuard],
+      guards: [AuthGuard, AuthLoadingGuard],
       children: [
         AutoRoute(
           path: 'test-admin/:id',

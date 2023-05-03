@@ -14,9 +14,11 @@ class LongButton extends StatelessWidget {
     this.height = 45,
     this.textGradient,
     this.color,
+    this.error,
   }) : super(key: key);
-  final Gradient? textGradient;
 
+  final String? error;
+  final Gradient? textGradient;
   final VoidCallback? onPressed;
   final String label;
   final bool isLoading;
@@ -27,39 +29,48 @@ class LongButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     final color = this.color ?? theme.primaryColor;
-    return SizedBox(
-      width: 100.widthPercent,
-      height: height,
-      child: TextButton(
-        onPressed: !isLoading ? onPressed : null,
-        style: ButtonStyle(
-          splashFactory: InkSplash.splashFactory,
-          overlayColor:
-              MaterialStateColor.resolveWith((states) => theme.secondaryColor),
-          shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
-          backgroundColor: MaterialStateColor.resolveWith(
-            (states) {
-              if (states.contains(MaterialState.disabled)) {
-                return color.withOpacity(0.2);
-              }
+    return Column(
+      children: [
+        SizedBox(
+          width: 100.widthPercent,
+          height: height,
+          child: TextButton(
+            onPressed: !isLoading ? onPressed : null,
+            style: ButtonStyle(
+              splashFactory: InkSplash.splashFactory,
+              overlayColor: MaterialStateColor.resolveWith(
+                  (states) => theme.secondaryColor),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100))),
+              backgroundColor: MaterialStateColor.resolveWith(
+                (states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return color.withOpacity(0.2);
+                  }
 
-              return color;
-            },
+                  return color;
+                },
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isLoading)
+                  CircularProgressIndicator(
+                    color: theme.defaultBackgroundColor,
+                  )
+                else
+                  buildText(theme),
+              ],
+            ),
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isLoading)
-              CircularProgressIndicator(
-                color: theme.defaultBackgroundColor,
-              )
-            else
-              buildText(theme),
-          ],
-        ),
-      ),
+        if (error != null)
+          Text(
+            error!,
+            style: TextStyle(color: theme.bad),
+          )
+      ],
     );
   }
 

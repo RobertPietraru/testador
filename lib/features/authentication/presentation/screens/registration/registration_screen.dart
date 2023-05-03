@@ -37,6 +37,9 @@ class _RegistrationScreen extends StatelessWidget {
       body: BlocConsumer<RegistrationCubit, RegistrationState>(
         listener: (context, state) {
           if (state.isSuccessful) {
+            // look, I don't know why it is this way, but it works nonetheless, so watchu gonna do?
+            context.router.popUntilRoot();
+            context.router.pop();
             context.router.root.push(const ProtectedFlowRoute());
           }
         },
