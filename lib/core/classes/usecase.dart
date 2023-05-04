@@ -13,3 +13,7 @@ class NoParams extends Params {}
 abstract class Params {
   const Params();
 }
+
+abstract class Response {
+  const Response();
+}
