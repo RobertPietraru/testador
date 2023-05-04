@@ -1,9 +1,10 @@
-✔| Transform the Ggridview into a listview
-✔| Make the dialog for creating test larger on mobile and figure out what colour the text should have
-✔| remove the created, unfinished thing. Add them all to the same list
-❌| create the domain for test creation and then the 
+❌ figure out how it will work
+❌ write the domain
 
-✔
+✔❌
+Plan for the system
+have a repository that does every change locally, then add a save button that writes every change to the document
+
 
 
 
