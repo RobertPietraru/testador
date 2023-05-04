@@ -1,5 +1,5 @@
 import '../../injection.dart';
-import 'data/datasource/auth_remote_data_source.dart';
+import 'data/datasources/auth_remote_data_source.dart';
 import 'data/repositories/auth_repository_impl.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/usecases/get_local_user_usecase.dart';
