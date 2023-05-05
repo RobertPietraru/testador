@@ -1,11 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
-
 import '../../domain/entities/test_entity.dart';
 
-abstract class TestRemoteDataSource {
+abstract class TestLocalDataSource {
   Future<TestEntity> createTest();
   Future<TestEntity> deleteTest();
   Future<TestEntity> saveTestToDatabase();
@@ -18,9 +13,8 @@ abstract class TestRemoteDataSource {
   Future<TestEntity> updateQuestion();
 }
 
-class TestLocalDataSourceIMPL implements TestRemoteDataSource {
+class TestLocalDataSourceIMPL implements TestLocalDataSource {
   TestLocalDataSourceIMPL();
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   
   @override
   Future<TestEntity> changeTestDescription() {

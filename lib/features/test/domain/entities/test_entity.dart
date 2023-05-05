@@ -10,7 +10,7 @@ class TestEntity extends Equatable {
     required this.title,
     required this.isPublic,
     required this.creator,
-    this.image,
+    required this.image,
     required this.id,
   });
 
