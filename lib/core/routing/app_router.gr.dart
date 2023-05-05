@@ -18,8 +18,11 @@ import '../../features/authentication/presentation/screens/login/login_screen.da
     as _i3;
 import '../../features/authentication/presentation/screens/registration/registration_screen.dart'
     as _i2;
-import '../../features/test/presentation/screens/test_list/test_list_screen.dart' as _i6;
-import '../../features/test/presentation/screens/test_screen.dart' as _i5;
+import '../../features/test/domain/entities/test_entity.dart' as _i10;
+import '../../features/test/presentation/screens/test_editor_screen.dart'
+    as _i5;
+import '../../features/test/presentation/screens/test_list/test_list_screen.dart'
+    as _i6;
 import '../screens/landing_screen.dart' as _i4;
 import 'app_router.dart' as _i1;
 import 'route_guards.dart' as _i9;
@@ -79,19 +82,18 @@ class AppRouter extends _i7.RootStackRouter {
         child: const _i4.LandingScreen(),
       );
     },
-    TestAdminRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<TestAdminRouteArgs>(
-          orElse: () => TestAdminRouteArgs(testId: pathParams.getString('id')));
+    TestEditorRoute.name: (routeData) {
+      final args = routeData.argsAs<TestEditorRouteArgs>();
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i5.TestAdminScreen(
+        child: _i5.TestEditorScreen(
           key: args.key,
           testId: args.testId,
+          entity: args.entity,
         ),
       );
     },
-    HomeRoute.name: (routeData) {
+    TestListRoute.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i6.TestListScreen(),
@@ -146,12 +148,12 @@ class AppRouter extends _i7.RootStackRouter {
           ],
           children: [
             _i7.RouteConfig(
-              TestAdminRoute.name,
+              TestEditorRoute.name,
               path: 'test-admin/:id',
               parent: ProtectedFlowRoute.name,
             ),
             _i7.RouteConfig(
-              HomeRoute.name,
+              TestListRoute.name,
               path: '',
               parent: ProtectedFlowRoute.name,
             ),
@@ -252,48 +254,53 @@ class LandingRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.TestAdminScreen]
-class TestAdminRoute extends _i7.PageRouteInfo<TestAdminRouteArgs> {
-  TestAdminRoute({
+/// [_i5.TestEditorScreen]
+class TestEditorRoute extends _i7.PageRouteInfo<TestEditorRouteArgs> {
+  TestEditorRoute({
     _i8.Key? key,
     required String testId,
+    required _i10.TestEntity entity,
   }) : super(
-          TestAdminRoute.name,
+          TestEditorRoute.name,
           path: 'test-admin/:id',
-          args: TestAdminRouteArgs(
+          args: TestEditorRouteArgs(
             key: key,
             testId: testId,
+            entity: entity,
           ),
           rawPathParams: {'id': testId},
         );
 
-  static const String name = 'TestAdminRoute';
+  static const String name = 'TestEditorRoute';
 }
 
-class TestAdminRouteArgs {
-  const TestAdminRouteArgs({
+class TestEditorRouteArgs {
+  const TestEditorRouteArgs({
     this.key,
     required this.testId,
+    required this.entity,
   });
 
   final _i8.Key? key;
 
   final String testId;
 
+  final _i10.TestEntity entity;
+
   @override
   String toString() {
-    return 'TestAdminRouteArgs{key: $key, testId: $testId}';
+    return 'TestEditorRouteArgs{key: $key, testId: $testId, entity: $entity}';
   }
 }
 
 /// generated route for
 /// [_i6.TestListScreen]
-class HomeRoute extends _i7.PageRouteInfo<void> {
-  const HomeRoute()
+class TestListRoute extends _i7.PageRouteInfo<void> {
+  const TestListRoute()
       : super(
-          HomeRoute.name,
+          TestListRoute.name,
           path: '',
         );
 
-  static const String name = 'HomeRoute';
+  static const String name = 'TestListRoute';
 }

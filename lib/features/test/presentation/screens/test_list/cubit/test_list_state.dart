@@ -17,6 +17,11 @@ class TestListRetrieved extends TestListState {
   const TestListRetrieved({required super.tests});
 }
 
+class TestListCreatedTest extends TestListState {
+  final TestEntity createdTest;
+  const TestListCreatedTest({required super.tests, required this.createdTest, });
+}
+
 class TestListError extends TestListState {
   final TestFailure failure;
 

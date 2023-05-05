@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/drawer.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
 
@@ -11,6 +12,7 @@ import '../../../../../core/components/custom_dialog.dart';
 import '../../../../../injection.dart';
 import '../../../../authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'cubit/test_list_cubit.dart';
+import 'package:testador/features/test/domain/entities/test_entity.dart';
 
 class TestListScreen extends StatelessWidget {
   const TestListScreen({super.key});
@@ -31,125 +33,132 @@ class _TestListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    return Scaffold(
-        appBar: const CustomAppBar(),
-        endDrawer: const CustomDrawer(),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: theme.companyColor,
-          onPressed: () => showDialog(
-            context: context,
-            builder: (context) => const TestTypeSelectionDialog(),
+    return BlocListener<TestListCubit, TestListState>(
+      listenWhen: (previous, current) =>
+          previous is! TestListCreatedTest && current is TestListCreatedTest,
+      listener: (context, state) {
+        state as TestListCreatedTest;
+        context.pushRoute(TestEditorRoute(
+            testId: state.createdTest.id, entity: state.createdTest));
+      },
+      child: Scaffold(
+          appBar: const CustomAppBar(),
+          endDrawer: const CustomDrawer(),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: theme.companyColor,
+            onPressed: () => showDialog(
+              context: context,
+              builder: (_) => TestTypeSelectionDialog(
+                testListCubit: context.read<TestListCubit>(),
+              ),
+            ),
+            child: const Icon(Icons.add),
           ),
-          child: const Icon(Icons.add),
-        ),
-        body: NestedScrollView(
-            headerSliverBuilder: (context, _) {
-              return [
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding:
-                          theme.standardPadding.copyWith(top: 0, bottom: 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          BlocBuilder<AuthBloc, AuthState>(
-                            builder: (context, state) {
-                              final name = state.userEntity?.name ?? '';
-                              return Text(
-                                'Bine ai venit, $name',
-                                style: TextStyle(
-                                  color: theme.secondaryColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: theme.spacing.large,
-                                ),
-                              );
-                            },
-                          ),
-                          BlocBuilder<TestListCubit, TestListState>(
-                            builder: (context, state) {
-                              if (state is! TestListEmpty) {
+          body: NestedScrollView(
+              headerSliverBuilder: (context, _) {
+                return [
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Padding(
+                        padding:
+                            theme.standardPadding.copyWith(top: 0, bottom: 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BlocBuilder<AuthBloc, AuthState>(
+                              builder: (context, state) {
+                                final name = state.userEntity?.name ?? '';
                                 return Text(
-                                  'Testele tale',
+                                  'Bine ai venit, $name',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: theme.spacing.xxLarge,
+                                    color: theme.secondaryColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: theme.spacing.large,
                                   ),
                                 );
-                              }
-                              return Container();
-                            },
-                          ),
-                        ],
+                              },
+                            ),
+                            BlocBuilder<TestListCubit, TestListState>(
+                              builder: (context, state) {
+                                if (state is! TestListEmpty) {
+                                  return Text(
+                                    'Testele tale',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: theme.spacing.xxLarge,
+                                    ),
+                                  );
+                                }
+                                return Container();
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ]),
-                ),
-              ];
-            },
-            body: BlocConsumer<TestListCubit, TestListState>(
-              listener: (context, state) {
-                if (state is TestListError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(state.failure.retrieveMessage(context))));
-                }
+                    ]),
+                  ),
+                ];
               },
-              builder: (context, state) {
-                if (state is TestListEmpty) {
-                  return Center(
-                    child: Text(
-                      "Nu ai teste\n"
-                      "¯\\_(ツ)_/¯",
-                      style: theme.largetitleTextStyle
-                          .copyWith(color: theme.secondaryColor),
-                    ),
-                  );
-                }
-                if (state is TestListLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+              body: BlocConsumer<TestListCubit, TestListState>(
+                listener: (context, state) {
+                  if (state is TestListError) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(state.failure.retrieveMessage(context))));
+                  }
+                },
+                builder: (context, state) {
+                  if (state is TestListEmpty) {
+                    return Center(
+                      child: Text(
+                        "Nu ai teste\n"
+                        "¯\\_(ツ)_/¯",
+                        style: theme.largetitleTextStyle
+                            .copyWith(color: theme.secondaryColor),
+                      ),
+                    );
+                  }
+                  if (state is TestListLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                return DeviceSize.isDesktopMode
-                    ? GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: DeviceSize.screenHeight ~/ 300,
-                        ),
-                        itemBuilder: (context, index) => Padding(
-                          padding: theme.standardPadding,
-                          child: TestWidget(
-                            onPressed: () => context
-                                .pushRoute(TestAdminRoute(testId: 'my-id')),
-                            onSelect: () {},
-                            imageUrl:
-                                'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
-                            label:
-                                'Evaluare Nationala la Limba si Literatura Romana',
-                            isPublished: true,
+                  return DeviceSize.isDesktopMode
+                      ? GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: DeviceSize.screenHeight ~/ 300,
                           ),
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: 30,
-                        itemBuilder: (context, index) => Padding(
-                          padding: theme.standardPadding,
-                          child: TestWidget(
-                              isPublished: true,
-                              onPressed: () => context
-                                  .pushRoute(TestAdminRoute(testId: 'my-id')),
-                              onSelect: () {},
-                              imageUrl:
-                                  'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
-                              label:
-                                  'Evaluare Nationala la Limba si Literatura Romana'),
-                        ),
-                      );
-              },
-            )));
+                          itemCount: state.tests.length,
+                          itemBuilder: (context, index) => buildTestWidget(
+                              theme, state.tests[index], context),
+                        )
+                      : ListView.builder(
+                          itemCount: state.tests.length,
+                          itemBuilder: (context, index) => buildTestWidget(
+                              theme, state.tests[index], context),
+                        );
+                },
+              ))),
+    );
+  }
+
+  Padding buildTestWidget(
+      AppThemeData theme, TestEntity model, BuildContext context) {
+    return Padding(
+      padding: theme.standardPadding,
+      child: TestWidget(
+          isPublished: model.isPublic,
+          onPressed: () {
+            context.pushRoute(TestEditorRoute(testId: model.id, entity: model));
+          },
+          onSelect: () {},
+          imageUrl: model.imageUrl,
+          label: 'Evaluare Nationala la Limba si Literatura Romana'),
+    );
   }
 }
 
 class TestWidget extends StatelessWidget {
-  final String imageUrl;
+  final String? imageUrl;
   final String label;
   final double width;
   final double height;
@@ -183,7 +192,7 @@ class TestWidget extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
-                image: NetworkImage(imageUrl),
+                image: NetworkImage(imageUrl ?? theme.placeholderImage),
                 opacity: 0.5,
                 fit: BoxFit.cover,
               ),
@@ -236,7 +245,8 @@ class TestWidget extends StatelessWidget {
 }
 
 class TestTypeSelectionDialog extends StatelessWidget {
-  const TestTypeSelectionDialog({super.key});
+  final TestListCubit testListCubit;
+  const TestTypeSelectionDialog({super.key, required this.testListCubit});
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +266,11 @@ class TestTypeSelectionDialog extends StatelessWidget {
         ),
         SizedBox(height: theme.spacing.xLarge),
         SelectionOptionWidget(
-          onPressed: () {},
+          onPressed: () {
+            testListCubit.createTest(
+                creatorId: context.read<AuthBloc>().state.userEntity!.id);
+            Navigator.pop(context);
+          },
           title: "Creare clasica",
           description: "Concepeti testul de la zero",
           gradient: const LinearGradient(colors: [

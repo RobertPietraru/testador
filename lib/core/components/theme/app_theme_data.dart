@@ -10,6 +10,9 @@ const _dividerThemeData = DividerThemeData(
 abstract class AppThemeData {
   ThemeData materialThemeData(BuildContext context);
 
+  String get placeholderImage =>
+      'https://www.parentmap.com/images/article/7793/iStock_000043382420_Large.jpg';
+
   final ThemeSpacing spacing = ThemeSpacing();
 
   Color get defaultBackgroundColor;

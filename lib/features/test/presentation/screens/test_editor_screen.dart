@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/features/test/domain/entities/test_entity.dart';
 
 import '../../../../core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
 
-class TestAdminScreen extends StatelessWidget {
-  const TestAdminScreen({super.key, @PathParam('id') required this.testId});
+class TestEditorScreen extends StatelessWidget {
+  const TestEditorScreen({super.key, @PathParam('id') required this.testId, required this.entity});
   final String testId;
+  final TestEntity entity;
 
   @override
   Widget build(BuildContext context) {

@@ -29,9 +29,8 @@ class TestListCubit extends Cubit<TestListState> {
     final response = await createTestUsecase
         .call(CreateTestUsecaseParams(creatorId: creatorId));
     response.fold(
-        (failure) =>
-            () => emit(TestListError(tests: state.tests, failure: failure)),
-        (r) => () =>
-            emit(TestListRetrieved(tests: [...state.tests, r.testEntity])));
+        (failure) => emit(TestListError(tests: state.tests, failure: failure)),
+        (r) => emit(TestListCreatedTest(
+            createdTest: r.testEntity, tests: [r.testEntity, ...state.tests])));
   }
 }

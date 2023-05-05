@@ -14,6 +14,7 @@ import '../injection.dart';
 void mainDevelopment() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  Hive.registerAdapter(TestDtoAdapter());
   await Hive.openBox<TestDto>(TestDto.hiveBoxName);
   await inject();
 
