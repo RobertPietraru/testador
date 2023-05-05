@@ -20,6 +20,15 @@ class TestNetworkFailure extends TestFailure {
   }
 }
 
+class TestNotFoundFailure extends TestFailure {
+  const TestNotFoundFailure({super.code = 'test-not-found'});
+
+  @override
+  String retrieveMessage(BuildContext context) {
+    return 'Testul cautat nu a fost gasit';
+  }
+}
+
 class TestUnknownFailure extends TestFailure {
   const TestUnknownFailure({super.code = 'unknown'});
 

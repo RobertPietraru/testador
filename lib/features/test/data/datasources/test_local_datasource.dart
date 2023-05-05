@@ -1,78 +1,74 @@
+import 'package:hive_flutter/adapters.dart';
+import 'package:testador/features/test/data/dtos/test/test_dto.dart';
+import 'package:testador/features/test/domain/usecases/update_test.dart';
+import 'package:uuid/uuid.dart';
+
 import '../../domain/entities/test_entity.dart';
+import '../../domain/failures/test_failures.dart';
+import '../../domain/usecases/usecases.dart';
 
 abstract class TestLocalDataSource {
-  Future<TestEntity> createTest();
-  Future<TestEntity> deleteTest();
-  Future<TestEntity> saveTestToDatabase();
-  Future<TestEntity> changeTestTitle();
-  Future<TestEntity> toggleTestPublicity();
-  Future<TestEntity> changeTestDescription();
-  Future<TestEntity> changeTestImage();
-  Future<TestEntity> insertQuestion();
-  Future<TestEntity> deleteQuestion();
-  Future<TestEntity> updateQuestion();
+  Future<TestEntity> createTest(CreateTestUsecaseParams params);
+  Future<void> deleteTest(DeleteTestUsecaseParams params);
+
+  Future<TestEntity> editTest(EditTestUsecaseParams params);
+  Future<TestEntity> insertQuestion(InsertQuestionUsecaseParams params);
+  Future<TestEntity> deleteQuestion(DeleteQuestionUsecaseParams params);
+  Future<TestEntity> updateQuestion(UpdateQuestionUsecaseParams params);
 }
 
 class TestLocalDataSourceIMPL implements TestLocalDataSource {
-  TestLocalDataSourceIMPL();
-  
+  final Box<TestDto> testsBox = Hive.box<TestDto>(TestDto.hiveBoxName);
+
   @override
-  Future<TestEntity> changeTestDescription() {
-    // TODO: implement changeTestDescription
-    throw UnimplementedError();
+  Future<TestEntity> createTest(CreateTestUsecaseParams params) async {
+    final id = const Uuid().v1();
+    final testDto = TestDto(
+      creatorId: params.creatorId,
+      id: id,
+      imageUrl: null,
+      isPublic: false,
+      title: null,
+    );
+    testsBox.put(id, testDto);
+    return testDto;
   }
-  
+
   @override
-  Future<TestEntity> changeTestImage() {
-    // TODO: implement changeTestImage
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<TestEntity> changeTestTitle() {
-    // TODO: implement changeTestTitle
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<TestEntity> createTest() {
-    // TODO: implement createTest
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<TestEntity> deleteQuestion() {
+  Future<TestEntity> deleteQuestion(DeleteQuestionUsecaseParams params) {
     // TODO: implement deleteQuestion
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<TestEntity> deleteTest() {
-    // TODO: implement deleteTest
+  Future<void> deleteTest(DeleteTestUsecaseParams params) async {
+    await testsBox.delete(params.testId);
+  }
+
+  @override
+  Future<TestEntity> insertQuestion(InsertQuestionUsecaseParams params) {
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<TestEntity> insertQuestion() {
-    // TODO: implement insertQuestion
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<TestEntity> saveTestToDatabase() {
-    // TODO: implement saveTestToDatabase
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<TestEntity> toggleTestPublicity() {
-    // TODO: implement toggleTestPublicity
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<TestEntity> updateQuestion() {
+  Future<TestEntity> updateQuestion(UpdateQuestionUsecaseParams params) {
     // TODO: implement updateQuestion
     throw UnimplementedError();
+  }
+
+  @override
+  Future<TestEntity> editTest(EditTestUsecaseParams params) async {
+    final test = testsBox.get(params.testId);
+
+    if (test == null) throw const TestNotFoundFailure();
+    final newTest = TestDto(
+      title: params.title,
+      isPublic: params.isPublic ?? test.isPublic,
+      creatorId: test.creatorId,
+      imageUrl: params.imageUrl ?? test.imageUrl,
+      id: params.testId,
+    );
+    testsBox.put(newTest.id, newTest);
+    return newTest;
   }
 }

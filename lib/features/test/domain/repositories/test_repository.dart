@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:testador/features/test/domain/usecases/update_test.dart';
 
 import '../failures/test_failures.dart';
 import '../usecases/usecases.dart';
@@ -10,14 +11,8 @@ abstract class TestRepository {
       DeleteTestUsecaseParams params);
   Future<Either<TestFailure, SaveTestToDatabaseUsecaseResult>>
       saveTestToDatabase(SaveTestToDatabaseUsecaseParams params);
-  Future<Either<TestFailure, ChangeTestTitleUsecaseResult>> changeTestTitle(
-      ChangeTestTitleUsecaseParams params);
-  Future<Either<TestFailure, ToggleTestPublicityUsecaseResult>>
-      toggleTestPublicity(ToggleTestPublicityUsecaseParams params);
-  Future<Either<TestFailure, ChangeTestDescriptionUsecaseResult>>
-      changeTestDescription(ChangeTestDescriptionUsecaseParams params);
-  Future<Either<TestFailure, ChangeTestImageUsecaseResult>> changeTestImage(
-      ChangeTestImageUsecaseParams params);
+  Future<Either<TestFailure, EditTestUsecaseResult>> updateTest(
+      EditTestUsecaseParams params);
   Future<Either<TestFailure, InsertQuestionUsecaseResult>> insertQuestion(
       InsertQuestionUsecaseParams params);
   Future<Either<TestFailure, DeleteQuestionUsecaseResult>> deleteQuestion(

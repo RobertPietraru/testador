@@ -1,12 +1,8 @@
-export 'change_test_description.dart';
-export 'change_test_image.dart';
-export 'change_test_title.dart';
 export 'create_test.dart';
 export 'delete_question.dart';
 export 'delete_test.dart';
 export 'format.dart';
 export 'insert_question.dart';
 export 'save_test_to_database.dart';
-export 'toggle_test_publicity.dart';
 export 'update_question.dart';
 export 'usecases.dart';

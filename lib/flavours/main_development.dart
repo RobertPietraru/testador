@@ -1,7 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/features/authentication/domain/auth_domain.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:testador/features/authentication/data/dtos/user_dto.dart';
 
 import '../core/components/theme/app_theme.dart';
 import '../core/components/theme/app_theme_data.dart';
@@ -13,6 +13,8 @@ import '../injection.dart';
 
 void mainDevelopment() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.openBox<UserDto>('tests');
   await inject();
 
   runApp(const AuthBlocWidget(child: MyApp()));
