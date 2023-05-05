@@ -12,6 +12,7 @@ abstract class TestLocalDataSource {
   Future<void> deleteTest(DeleteTestUsecaseParams params);
 
   Future<TestEntity> editTest(EditTestUsecaseParams params);
+  Future<List<TestEntity>> getTests(GetTestsUsecaseParams params);
   Future<TestEntity> insertQuestion(InsertQuestionUsecaseParams params);
   Future<TestEntity> deleteQuestion(DeleteQuestionUsecaseParams params);
   Future<TestEntity> updateQuestion(UpdateQuestionUsecaseParams params);
@@ -72,5 +73,12 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
     );
     testsBox.put(newTest.id, newTest);
     return newTest;
+  }
+
+  @override
+  Future<List<TestEntity>> getTests(GetTestsUsecaseParams params) async {
+    return testsBox.values
+        .where((element) => element.creatorId == params.creatorId)
+        .toList();
   }
 }

@@ -4,7 +4,7 @@ import 'package:testador/core/routing/route_guards.dart';
 import 'package:testador/core/screens/landing_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart';
-import 'package:testador/features/test/presentation/screens/home_screen.dart';
+import 'package:testador/features/test/presentation/screens/test_list/test_list_screen.dart';
 import 'package:testador/features/test/presentation/screens/test_screen.dart';
 
 @MaterialAutoRouter(
@@ -44,7 +44,7 @@ import 'package:testador/features/test/presentation/screens/test_screen.dart';
           path: 'test-admin/:id',
           page: TestAdminScreen,
         ),
-        AutoRoute(initial: true, page: HomeScreen, path: ''),
+        AutoRoute(initial: true, page: TestListScreen, path: ''),
       ],
     ),
     AutoRoute(

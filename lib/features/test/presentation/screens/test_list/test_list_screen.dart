@@ -1,27 +1,35 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/drawer.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
 
-import '../../../../core/components/custom_dialog.dart';
+import '../../../../../core/components/custom_dialog.dart';
+import '../../../../../injection.dart';
+import '../../../../authentication/presentation/auth_bloc/auth_bloc.dart';
+import 'cubit/test_list_cubit.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class TestListScreen extends StatelessWidget {
+  const TestListScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    const name = "Bob";
+    return BlocProvider(
+      create: (context) => TestListCubit(locator(), locator())
+        ..getTests(creatorId: context.read<AuthBloc>().state.userEntity!.id),
+      child: const _TestListScreen(),
+    );
+  }
+}
+
+class _TestListScreen extends StatelessWidget {
+  const _TestListScreen();
+
+  @override
+  Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return Scaffold(
         appBar: const CustomAppBar(),
@@ -35,72 +43,108 @@ class _HomeScreenState extends State<HomeScreen>
           child: const Icon(Icons.add),
         ),
         body: NestedScrollView(
-          headerSliverBuilder: (context, _) {
-            return [
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Padding(
-                    padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Bine ai venit,',
-                          style: TextStyle(
-                            color: theme.secondaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: theme.spacing.large,
+            headerSliverBuilder: (context, _) {
+              return [
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding:
+                          theme.standardPadding.copyWith(top: 0, bottom: 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, state) {
+                              final name = state.userEntity?.name ?? '';
+                              return Text(
+                                'Bine ai venit, $name',
+                                style: TextStyle(
+                                  color: theme.secondaryColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: theme.spacing.large,
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                        Text(
-                          'Testele tale',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: theme.spacing.xxLarge,
+                          BlocBuilder<TestListCubit, TestListState>(
+                            builder: (context, state) {
+                              if (state is! TestListEmpty) {
+                                return Text(
+                                  'Testele tale',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: theme.spacing.xxLarge,
+                                  ),
+                                );
+                              }
+                              return Container();
+                            },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
-              ),
-            ];
-          },
-          body: DeviceSize.isDesktopMode
-              ? GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: (DeviceSize.screenHeight / 300).toInt(),
-                  ),
-                  itemBuilder: (context, index) => Padding(
-                    padding: theme.standardPadding,
-                    child: TestWidget(
-                      onPressed: () {
-                        context.pushRoute(TestAdminRoute(testId: 'my-id'));
-                      },
-                      onSelect: () {},
-                      imageUrl:
-                          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
-                      label: 'Evaluare Nationala la Limba si Literatura Romana',
-                      isPublished: true,
-                    ),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: 30,
-                  itemBuilder: (context, index) => Padding(
-                    padding: theme.standardPadding,
-                    child: TestWidget(
-                        isPublished: true,
-                        onPressed: () =>
-                            context.pushRoute(TestAdminRoute(testId: 'my-id')),
-                        onSelect: () {},
-                        imageUrl:
-                            'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
-                        label:
-                            'Evaluare Nationala la Limba si Literatura Romana'),
-                  ),
+                  ]),
                 ),
-        ));
+              ];
+            },
+            body: BlocConsumer<TestListCubit, TestListState>(
+              listener: (context, state) {
+                if (state is TestListError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(state.failure.retrieveMessage(context))));
+                }
+              },
+              builder: (context, state) {
+                if (state is TestListEmpty) {
+                  return Center(
+                    child: Text(
+                      "Nu ai teste\n"
+                      "¯\\_(ツ)_/¯",
+                      style: theme.largetitleTextStyle
+                          .copyWith(color: theme.secondaryColor),
+                    ),
+                  );
+                }
+                if (state is TestListLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return DeviceSize.isDesktopMode
+                    ? GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: DeviceSize.screenHeight ~/ 300,
+                        ),
+                        itemBuilder: (context, index) => Padding(
+                          padding: theme.standardPadding,
+                          child: TestWidget(
+                            onPressed: () => context
+                                .pushRoute(TestAdminRoute(testId: 'my-id')),
+                            onSelect: () {},
+                            imageUrl:
+                                'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
+                            label:
+                                'Evaluare Nationala la Limba si Literatura Romana',
+                            isPublished: true,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: 30,
+                        itemBuilder: (context, index) => Padding(
+                          padding: theme.standardPadding,
+                          child: TestWidget(
+                              isPublished: true,
+                              onPressed: () => context
+                                  .pushRoute(TestAdminRoute(testId: 'my-id')),
+                              onSelect: () {},
+                              imageUrl:
+                                  'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80',
+                              label:
+                                  'Evaluare Nationala la Limba si Literatura Romana'),
+                        ),
+                      );
+              },
+            )));
   }
 }
 

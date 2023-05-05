@@ -18,7 +18,7 @@ import '../../features/authentication/presentation/screens/login/login_screen.da
     as _i3;
 import '../../features/authentication/presentation/screens/registration/registration_screen.dart'
     as _i2;
-import '../../features/test/presentation/screens/home_screen.dart' as _i6;
+import '../../features/test/presentation/screens/test_list/test_list_screen.dart' as _i6;
 import '../../features/test/presentation/screens/test_screen.dart' as _i5;
 import '../screens/landing_screen.dart' as _i4;
 import 'app_router.dart' as _i1;
@@ -94,7 +94,7 @@ class AppRouter extends _i7.RootStackRouter {
     HomeRoute.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i6.HomeScreen(),
+        child: const _i6.TestListScreen(),
       );
     },
   };
@@ -287,7 +287,7 @@ class TestAdminRouteArgs {
 }
 
 /// generated route for
-/// [_i6.HomeScreen]
+/// [_i6.TestListScreen]
 class HomeRoute extends _i7.PageRouteInfo<void> {
   const HomeRoute()
       : super(

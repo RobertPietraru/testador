@@ -5,6 +5,8 @@ import '../failures/test_failures.dart';
 import '../usecases/test_usecases.dart';
 
 abstract class TestRepository {
+  Future<Either<TestFailure, GetTestsUsecaseResult>> getTests(
+      GetTestsUsecaseParams params);
   Future<Either<TestFailure, CreateTestUsecaseResult>> createTest(
       CreateTestUsecaseParams params);
   Future<Either<TestFailure, DeleteTestUsecaseResult>> deleteTest(

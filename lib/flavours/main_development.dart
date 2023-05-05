@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:testador/features/authentication/data/dtos/user_dto.dart';
+import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 
 import '../core/components/theme/app_theme.dart';
 import '../core/components/theme/app_theme_data.dart';
@@ -14,7 +14,7 @@ import '../injection.dart';
 void mainDevelopment() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.openBox<UserDto>('tests');
+  await Hive.openBox<TestDto>(TestDto.hiveBoxName);
   await inject();
 
   runApp(const AuthBlocWidget(child: MyApp()));

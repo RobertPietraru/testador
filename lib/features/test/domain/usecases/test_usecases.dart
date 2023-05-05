@@ -6,5 +6,5 @@ export 'insert_question.dart';
 export 'save_test_to_database.dart';
 export 'update_question.dart';
 export 'test_usecases.dart';
-
+export 'get_tests_usecase.dart';
 export 'edit_test.dart';

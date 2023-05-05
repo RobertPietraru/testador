@@ -13,6 +13,7 @@ void testInject() {
     ..registerSingleton(DeleteTestUsecase(locator()))
     ..registerSingleton(SaveTestToDatabaseUsecase(locator()))
     ..registerSingleton(EditTestUsecase(locator()))
+    ..registerSingleton(GetTestsUsecase(locator()))
     ..registerSingleton(InsertQuestionUsecase(locator()))
     ..registerSingleton(DeleteQuestionUsecase(locator()))
     ..registerSingleton(UpdateQuestionUsecase(locator()));

@@ -87,4 +87,19 @@ class TestRepositoryIMPL implements TestRepository {
       return const Left(TestUnknownFailure());
     }
   }
+
+  @override
+  Future<Either<TestFailure, GetTestsUsecaseResult>> getTests(
+      GetTestsUsecaseParams params) async {
+    try {
+      final tests = await testLocalDataSource.getTests(params);
+      return Right(GetTestsUsecaseResult(testEntities: tests));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
+  }
 }
