@@ -152,7 +152,7 @@ class _TestListScreen extends StatelessWidget {
           },
           onSelect: () {},
           imageUrl: model.imageUrl,
-          label: 'Evaluare Nationala la Limba si Literatura Romana'),
+          label: model.title ?? "Test"),
     );
   }
 }
@@ -199,6 +199,7 @@ class TestWidget extends StatelessWidget {
               color: theme.primaryColor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: theme.standardPadding,
