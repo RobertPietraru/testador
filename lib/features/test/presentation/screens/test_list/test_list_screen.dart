@@ -247,23 +247,27 @@ class TestTypeSelectionDialog extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Cum preferi sa lucrezi?",
+          "Preferinte test",
           style: theme.titleTextStyle,
+        ),
+        Text(
+          "Alegeti cum preferati sa lucrati",
+          style: theme.subtitleTextStyle.copyWith(color: theme.secondaryColor),
         ),
         SizedBox(height: theme.spacing.xLarge),
         SelectionOptionWidget(
           onPressed: () {},
-          title: "Creeare rapida",
-          description: "Creati testul cu ajutorul unei structuri deja definite",
+          title: "Creare clasica",
+          description: "Concepeti testul de la zero",
           gradient: const LinearGradient(colors: [
-            Color(0xFF028cf3),
-            Color(0xFF2feaa8),
+            Color.fromARGB(255, 0, 200, 255),
+            Color(0xFF0061ff),
           ]),
         ),
         SizedBox(height: theme.spacing.medium),
         SelectionOptionWidget(
           onPressed: () {},
-          title: "Creeare cu A.I.",
+          title: "Creare cu A.I.",
           description:
               "Creati testul cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza testul",
           gradient: LinearGradient(colors: [
@@ -271,30 +275,6 @@ class TestTypeSelectionDialog extends StatelessWidget {
             const Color(0xFFFF005A).withOpacity(0.9),
           ]),
         ),
-        SizedBox(height: theme.spacing.medium),
-        SelectionOptionWidget(
-          onPressed: () {},
-          title: "Creeare personalizata",
-          description:
-              "Creeati testul avand control absolut asupra structurii, intrebarilor, etc",
-          gradient: const LinearGradient(colors: [
-            Color.fromARGB(255, 0, 200, 255),
-            Color(0xFF0061ff),
-          ]),
-        ),
-        SizedBox(height: theme.spacing.large),
-        RichText(
-          text: TextSpan(children: [
-            TextSpan(
-              text: "Ai nevoie de ajutor? Contactati-ne la ",
-              style: theme.actionTextStyle,
-            ),
-            TextSpan(
-                text: "Centrul de ajutor",
-                style:
-                    theme.actionTextStyle.copyWith(color: theme.companyColor)),
-          ]),
-        )
       ],
     ));
   }
