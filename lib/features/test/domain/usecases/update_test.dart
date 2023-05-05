@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:testador/features/test/domain/entities/test_entity.dart';
 import '../../../../core/classes/usecase.dart';
 import '../failures/test_failures.dart';
 import '../repositories/test_repository.dart';
@@ -9,7 +10,7 @@ class EditTestUsecase
   final TestRepository testRepository;
   @override
   Future<Either<TestFailure, EditTestUsecaseResult>> call(params) async {
-    return testRepository.updateTest(params);
+    return testRepository.editTest(params);
   }
 }
 
@@ -24,5 +25,7 @@ class EditTestUsecaseParams extends Params {
 }
 
 class EditTestUsecaseResult extends Response {
-  const EditTestUsecaseResult();
+  final TestEntity testEntity;
+  const EditTestUsecaseResult({required this.testEntity});
+
 }

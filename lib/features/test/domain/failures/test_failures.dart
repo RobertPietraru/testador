@@ -34,6 +34,6 @@ class TestUnknownFailure extends TestFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    throw UnimplementedError();
+    return 'A aparut o eroare. Codul: $code';
   }
 }

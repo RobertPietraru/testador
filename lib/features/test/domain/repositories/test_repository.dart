@@ -11,7 +11,7 @@ abstract class TestRepository {
       DeleteTestUsecaseParams params);
   Future<Either<TestFailure, SaveTestToDatabaseUsecaseResult>>
       saveTestToDatabase(SaveTestToDatabaseUsecaseParams params);
-  Future<Either<TestFailure, EditTestUsecaseResult>> updateTest(
+  Future<Either<TestFailure, EditTestUsecaseResult>> editTest(
       EditTestUsecaseParams params);
   Future<Either<TestFailure, InsertQuestionUsecaseResult>> insertQuestion(
       InsertQuestionUsecaseParams params);
