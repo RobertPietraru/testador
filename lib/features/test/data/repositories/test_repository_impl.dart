@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:testador/features/test/data/datasources/test_local_datasource.dart';
 import 'package:testador/features/test/domain/failures/test_failures.dart';
-import 'package:testador/features/test/domain/usecases/update_test.dart';
-import 'package:testador/features/test/domain/usecases/usecases.dart';
+import 'package:testador/features/test/domain/usecases/edit_test.dart';
+import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 import '../../domain/repositories/test_repository.dart';
 
 class TestRepositoryIMPL implements TestRepository {

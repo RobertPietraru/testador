@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:testador/features/test/domain/usecases/update_test.dart';
+import 'package:testador/features/test/domain/usecases/edit_test.dart';
 
 import '../failures/test_failures.dart';
-import '../usecases/usecases.dart';
+import '../usecases/test_usecases.dart';
 
 abstract class TestRepository {
   Future<Either<TestFailure, CreateTestUsecaseResult>> createTest(

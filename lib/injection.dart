@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:testador/features/test/test_injector.dart';
 import 'package:testador/flavours/build_environment.dart';
 import 'features/authentication/auth_injector.dart';
 import 'firebase_options.dart';
@@ -13,4 +14,5 @@ Future<void> inject() async {
       BuildEnvironment(flavour: BuildFlavour.development));
 
   authInject();
+  testInject();
 }

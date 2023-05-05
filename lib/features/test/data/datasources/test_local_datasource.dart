@@ -1,11 +1,11 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
-import 'package:testador/features/test/domain/usecases/update_test.dart';
+import 'package:testador/features/test/domain/usecases/edit_test.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/test_entity.dart';
 import '../../domain/failures/test_failures.dart';
-import '../../domain/usecases/usecases.dart';
+import '../../domain/usecases/test_usecases.dart';
 
 abstract class TestLocalDataSource {
   Future<TestEntity> createTest(CreateTestUsecaseParams params);
@@ -18,6 +18,8 @@ abstract class TestLocalDataSource {
 }
 
 class TestLocalDataSourceIMPL implements TestLocalDataSource {
+  TestLocalDataSourceIMPL();
+
   final Box<TestDto> testsBox = Hive.box<TestDto>(TestDto.hiveBoxName);
 
   @override
