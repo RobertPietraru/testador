@@ -85,6 +85,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+
     return theAppBar(
       theme: theme,
       onMenuPressed: () => Scaffold.of(context).openEndDrawer(),
@@ -92,5 +93,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => theAppBar(theme: LightAppThemeData()).preferredSize;
+  Size get preferredSize => AppBar().preferredSize;
 }

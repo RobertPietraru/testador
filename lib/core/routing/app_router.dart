@@ -11,21 +11,22 @@ import 'package:testador/features/test/presentation/screens/test_editor/test_edi
   replaceInRouteName: 'Screen,Route',
   routes: <AutoRoute>[
     AutoRoute(
-      path: '/auth',
+    page: App,
+    children: [
+      AutoRoute(
+      path: 'auth',
       name: 'AuthenticationFlowRoute',
       page: AuthenticationFlow,
-      guards: [AuthLoadingGuard],
       children: [
         AutoRoute(initial: true, page: RegistrationScreen, path: 'signup'),
         AutoRoute(page: LoginScreen, path: 'loginin'),
       ],
     ),
     AutoRoute(
-      path: '/',
+      path: '',
       name: 'UnprotectedFlowRoute',
       page: UnprotectedFlow,
       initial: true,
-      guards: [AuthLoadingGuard],
       children: [
         AutoRoute(
           initial: true,
@@ -35,10 +36,10 @@ import 'package:testador/features/test/presentation/screens/test_editor/test_edi
       ],
     ),
     AutoRoute(
-      path: '/protected',
+      path: 'protected',
       name: 'ProtectedFlowRoute',
       page: ProtectedFlow,
-      guards: [AuthGuard, AuthLoadingGuard],
+      guards: [AuthGuard],
       children: [
         AutoRoute(
           path: 'test-admin/:id',
@@ -46,6 +47,10 @@ import 'package:testador/features/test/presentation/screens/test_editor/test_edi
         ),
         AutoRoute(initial: true, page: TestListScreen, path: ''),
       ],
+    ),
+    ]
+
+
     ),
     AutoRoute(
       path: 'loading',
@@ -57,6 +62,15 @@ class $AppRouter {}
 
 class AuthenticationFlow extends StatelessWidget {
   const AuthenticationFlow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const AutoRouter();
+  }
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {

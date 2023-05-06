@@ -68,8 +68,7 @@ class LandingScreen extends StatelessWidget {
                           onPressed: () {
                             if (context.read<AuthBloc>().state
                                 is AuthAuthenticatedState) {
-                              context.router.root
-                                  .push(const ProtectedFlowRoute());
+                              context.router.push(const ProtectedFlowRoute());
                             } else {
                               context.router.root
                                   .push(const AuthenticationFlowRoute());

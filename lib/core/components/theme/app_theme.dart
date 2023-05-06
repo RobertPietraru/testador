@@ -24,7 +24,7 @@ class AppTheme extends InheritedWidget {
       oldWidget.lightTheme != lightTheme || oldWidget.darkTheme != darkTheme;
 
   static AppThemeData of(BuildContext context) {
-    DeviceSize.init(context);
+    DeviceSize.set(context);
 
     final AppTheme? inheritedTheme =
         context.dependOnInheritedWidgetOfExactType<AppTheme>();

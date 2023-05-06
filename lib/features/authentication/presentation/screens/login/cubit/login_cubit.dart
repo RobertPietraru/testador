@@ -43,6 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(failure: failure, status: LoginStatus.error));
     }, (user) {
       authBloc.add(AuthUserLoggedIn(entity: user));
+
       emit(state.copyWith(
         status: LoginStatus.successful,
       ));

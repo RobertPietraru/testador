@@ -30,7 +30,6 @@ class RegistrationScreen extends StatelessWidget {
 class _RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
     return Scaffold(
       appBar: const CustomAppBar(),
       endDrawer: const CustomDrawer(),
@@ -44,6 +43,7 @@ class _RegistrationScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          final theme = AppTheme.of(context);
           return Center(
             child: SizedBox(
               width: DeviceSize.isDesktopMode ? 50.widthPercent : null,

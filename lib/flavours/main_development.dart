@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -33,40 +34,42 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _lightTheme = LightAppThemeData();
   final _darkTheme = DarkAppThemeData();
-  AppRouter? _appRouter;
+  late AppRouter _appRouter;
 
   @override
   void initState() {
     _appRouter = AppRouter(
-      authLoadingGuard: AuthLoadingGuard(
-        context: context,
-        authBloc: context.read<AuthBloc>(),
-      ),
-      authGuard: AuthGuard(
-        context: context,
-        authBloc: context.read<AuthBloc>(),
-      ),
+      authGuard: AuthGuard(),
     );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = context.watch<AuthBloc>();
     return AppTheme(
       lightTheme: _lightTheme,
       darkTheme: _darkTheme,
-      child: MaterialApp.router(
-        routerDelegate: _appRouter!.delegate(),
-        routeInformationParser: _appRouter!.defaultRouteParser(),
-        theme: _lightTheme.materialThemeData(context),
-        darkTheme: _darkTheme.materialThemeData(context),
-        themeMode: ThemeMode.light,
-        supportedLocales: const [
-          Locale('en', ''),
-          Locale('pt', 'BR'),
-          Locale('ro', 'RO'),
-        ],
-      ),
+      child: Builder(builder: (context) {
+        return MaterialApp.router(
+          routerDelegate:
+              AutoRouterDelegate.declarative(_appRouter, routes: (_) {
+            if (authBloc is AuthUninitialisedState) {
+              return [LoadingRoute()];
+            }
+            return [App()];
+          }),
+          routeInformationParser: _appRouter.defaultRouteParser(),
+          theme: _lightTheme.materialThemeData(context),
+          darkTheme: _darkTheme.materialThemeData(context),
+          themeMode: ThemeMode.light,
+          supportedLocales: const [
+            Locale('en', ''),
+            Locale('pt', 'BR'),
+            Locale('ro', 'RO'),
+          ],
+        );
+      }),
     );
   }
 }

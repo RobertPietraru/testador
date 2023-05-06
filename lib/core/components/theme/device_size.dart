@@ -5,7 +5,7 @@ class DeviceSize {
   static late double screenHeight;
   static bool get isDesktopMode => screenWidth > 700;
 
-  static void init(BuildContext context) {
+  static void set(BuildContext context) {
     final media = MediaQuery.maybeOf(context);
     if (media == null) return;
     screenWidth = media.size.width;

@@ -30,16 +30,25 @@ import 'route_guards.dart' as _i9;
 class AppRouter extends _i7.RootStackRouter {
   AppRouter({
     _i8.GlobalKey<_i8.NavigatorState>? navigatorKey,
-    required this.authLoadingGuard,
     required this.authGuard,
   }) : super(navigatorKey);
-
-  final _i9.AuthLoadingGuard authLoadingGuard;
 
   final _i9.AuthGuard authGuard;
 
   @override
   final Map<String, _i7.PageFactory> pagesMap = {
+    App.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i1.App(),
+      );
+    },
+    LoadingRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i1.LoadingScreen(),
+      );
+    },
     AuthenticationFlowRoute.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
@@ -56,12 +65,6 @@ class AppRouter extends _i7.RootStackRouter {
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.ProtectedFlow(),
-      );
-    },
-    LoadingRoute.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const _i1.LoadingScreen(),
       );
     },
     RegistrationRoute.name: (routeData) {
@@ -83,7 +86,10 @@ class AppRouter extends _i7.RootStackRouter {
       );
     },
     TestEditorRoute.name: (routeData) {
-      final args = routeData.argsAs<TestEditorRouteArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<TestEditorRouteArgs>(
+          orElse: () =>
+              TestEditorRouteArgs(testId: pathParams.getString('id')));
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i5.TestEditorScreen(
@@ -104,58 +110,62 @@ class AppRouter extends _i7.RootStackRouter {
   @override
   List<_i7.RouteConfig> get routes => [
         _i7.RouteConfig(
-          AuthenticationFlowRoute.name,
-          path: '/auth',
-          guards: [authLoadingGuard],
+          App.name,
+          path: '/App',
           children: [
             _i7.RouteConfig(
-              '#redirect',
+              AuthenticationFlowRoute.name,
+              path: 'auth',
+              parent: App.name,
+              children: [
+                _i7.RouteConfig(
+                  '#redirect',
+                  path: '',
+                  parent: AuthenticationFlowRoute.name,
+                  redirectTo: 'signup',
+                  fullMatch: true,
+                ),
+                _i7.RouteConfig(
+                  RegistrationRoute.name,
+                  path: 'signup',
+                  parent: AuthenticationFlowRoute.name,
+                ),
+                _i7.RouteConfig(
+                  LoginRoute.name,
+                  path: 'loginin',
+                  parent: AuthenticationFlowRoute.name,
+                ),
+              ],
+            ),
+            _i7.RouteConfig(
+              UnprotectedFlowRoute.name,
               path: '',
-              parent: AuthenticationFlowRoute.name,
-              redirectTo: 'signup',
-              fullMatch: true,
+              parent: App.name,
+              children: [
+                _i7.RouteConfig(
+                  LandingRoute.name,
+                  path: '',
+                  parent: UnprotectedFlowRoute.name,
+                )
+              ],
             ),
             _i7.RouteConfig(
-              RegistrationRoute.name,
-              path: 'signup',
-              parent: AuthenticationFlowRoute.name,
-            ),
-            _i7.RouteConfig(
-              LoginRoute.name,
-              path: 'loginin',
-              parent: AuthenticationFlowRoute.name,
-            ),
-          ],
-        ),
-        _i7.RouteConfig(
-          UnprotectedFlowRoute.name,
-          path: '/',
-          guards: [authLoadingGuard],
-          children: [
-            _i7.RouteConfig(
-              LandingRoute.name,
-              path: '',
-              parent: UnprotectedFlowRoute.name,
-            )
-          ],
-        ),
-        _i7.RouteConfig(
-          ProtectedFlowRoute.name,
-          path: '/protected',
-          guards: [
-            authGuard,
-            authLoadingGuard,
-          ],
-          children: [
-            _i7.RouteConfig(
-              TestEditorRoute.name,
-              path: 'test-admin/:id',
-              parent: ProtectedFlowRoute.name,
-            ),
-            _i7.RouteConfig(
-              TestListRoute.name,
-              path: '',
-              parent: ProtectedFlowRoute.name,
+              ProtectedFlowRoute.name,
+              path: 'protected',
+              parent: App.name,
+              guards: [authGuard],
+              children: [
+                _i7.RouteConfig(
+                  TestEditorRoute.name,
+                  path: 'test-admin/:id',
+                  parent: ProtectedFlowRoute.name,
+                ),
+                _i7.RouteConfig(
+                  TestListRoute.name,
+                  path: '',
+                  parent: ProtectedFlowRoute.name,
+                ),
+              ],
             ),
           ],
         ),
@@ -167,42 +177,16 @@ class AppRouter extends _i7.RootStackRouter {
 }
 
 /// generated route for
-/// [_i1.AuthenticationFlow]
-class AuthenticationFlowRoute extends _i7.PageRouteInfo<void> {
-  const AuthenticationFlowRoute({List<_i7.PageRouteInfo>? children})
+/// [_i1.App]
+class App extends _i7.PageRouteInfo<void> {
+  const App({List<_i7.PageRouteInfo>? children})
       : super(
-          AuthenticationFlowRoute.name,
-          path: '/auth',
+          App.name,
+          path: '/App',
           initialChildren: children,
         );
 
-  static const String name = 'AuthenticationFlowRoute';
-}
-
-/// generated route for
-/// [_i1.UnprotectedFlow]
-class UnprotectedFlowRoute extends _i7.PageRouteInfo<void> {
-  const UnprotectedFlowRoute({List<_i7.PageRouteInfo>? children})
-      : super(
-          UnprotectedFlowRoute.name,
-          path: '/',
-          initialChildren: children,
-        );
-
-  static const String name = 'UnprotectedFlowRoute';
-}
-
-/// generated route for
-/// [_i1.ProtectedFlow]
-class ProtectedFlowRoute extends _i7.PageRouteInfo<void> {
-  const ProtectedFlowRoute({List<_i7.PageRouteInfo>? children})
-      : super(
-          ProtectedFlowRoute.name,
-          path: '/protected',
-          initialChildren: children,
-        );
-
-  static const String name = 'ProtectedFlowRoute';
+  static const String name = 'App';
 }
 
 /// generated route for
@@ -215,6 +199,45 @@ class LoadingRoute extends _i7.PageRouteInfo<void> {
         );
 
   static const String name = 'LoadingRoute';
+}
+
+/// generated route for
+/// [_i1.AuthenticationFlow]
+class AuthenticationFlowRoute extends _i7.PageRouteInfo<void> {
+  const AuthenticationFlowRoute({List<_i7.PageRouteInfo>? children})
+      : super(
+          AuthenticationFlowRoute.name,
+          path: 'auth',
+          initialChildren: children,
+        );
+
+  static const String name = 'AuthenticationFlowRoute';
+}
+
+/// generated route for
+/// [_i1.UnprotectedFlow]
+class UnprotectedFlowRoute extends _i7.PageRouteInfo<void> {
+  const UnprotectedFlowRoute({List<_i7.PageRouteInfo>? children})
+      : super(
+          UnprotectedFlowRoute.name,
+          path: '',
+          initialChildren: children,
+        );
+
+  static const String name = 'UnprotectedFlowRoute';
+}
+
+/// generated route for
+/// [_i1.ProtectedFlow]
+class ProtectedFlowRoute extends _i7.PageRouteInfo<void> {
+  const ProtectedFlowRoute({List<_i7.PageRouteInfo>? children})
+      : super(
+          ProtectedFlowRoute.name,
+          path: 'protected',
+          initialChildren: children,
+        );
+
+  static const String name = 'ProtectedFlowRoute';
 }
 
 /// generated route for
@@ -259,7 +282,7 @@ class TestEditorRoute extends _i7.PageRouteInfo<TestEditorRouteArgs> {
   TestEditorRoute({
     _i8.Key? key,
     required String testId,
-    required _i10.TestEntity entity,
+    _i10.TestEntity? entity,
   }) : super(
           TestEditorRoute.name,
           path: 'test-admin/:id',
@@ -278,14 +301,14 @@ class TestEditorRouteArgs {
   const TestEditorRouteArgs({
     this.key,
     required this.testId,
-    required this.entity,
+    this.entity,
   });
 
   final _i8.Key? key;
 
   final String testId;
 
-  final _i10.TestEntity entity;
+  final _i10.TestEntity? entity;
 
   @override
   String toString() {
