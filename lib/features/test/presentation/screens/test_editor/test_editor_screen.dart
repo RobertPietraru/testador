@@ -1,180 +1,55 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
+import 'package:testador/features/test/presentation/screens/test_editor/test_editor_retrival/test_editor_retrival_widget.dart';
 
-import '../../../../core/components/theme/app_theme.dart';
+import '../../../../../core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
 
 class TestEditorScreen extends StatelessWidget {
-  const TestEditorScreen({super.key, @PathParam('id') required this.testId, required this.entity});
+  const TestEditorScreen(
+      {super.key, @PathParam('id') required this.testId, this.entity});
   final String testId;
-  final TestEntity entity;
+  final TestEntity? entity;
 
   @override
   Widget build(BuildContext context) {
-    return const TheTestScreen();
+    return TestEditorRetrivalWidget(
+      testId: testId,
+      entity: entity,
+      builder: (state) => _TestScreen(testEntity: state.entity),
+    );
   }
 }
 
-class TheTestScreen extends StatelessWidget {
-  const TheTestScreen({super.key});
+class _TestScreen extends StatelessWidget {
+  final TestEntity testEntity;
 
+  const _TestScreen({required this.testEntity});
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    const String testTitle = "Evaluare Nationala la Limba si Literatura Romana";
-    const String testDescription =
-        "Un test cu scopul de a verifica cunostintele pe care le are cineva la romana";
-    const String imageUrl = 'https://picsum.photos/800/600?grayscale';
-    const bool isPublic = false;
     return Scaffold(
       backgroundColor: theme.defaultBackgroundColor.withOpacity(0.9),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: const Text(testTitle),
-            actions: [
-              PopupMenuButton(
-                icon: isPublic
-                    ? Icon(
-                        Icons.public_off,
-                        color: theme.bad,
-                      )
-                    : Icon(Icons.public, color: theme.good),
-                tooltip: 'Privat/Public',
-                itemBuilder: (context) => [
-                  isPublic
-                      ? PopupMenuItem(
-                          child: MenuItem(
-                            title: 'Fa privat',
-                            icon: Icons.public_off,
-                            color: theme.bad,
-                          ),
-                          onTap: () {},
-                        )
-                      : PopupMenuItem(
-                          onTap: () {},
-                          child: MenuItem(
-                            title: 'Fa public',
-                            icon: Icons.public,
-                            color: theme.good,
-                          ),
-                        ),
-                ],
-              ),
-              PopupMenuButton(
-                tooltip: 'Meniu',
-                icon: const Icon(Icons.menu),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    onTap: () {
-                      Share.shareWithResult('text');
-                      // Share.share('asdfasdf');
-                    },
-                    child: const MenuItem(
-                      title: 'Impartaseste',
-                      icon: Icons.share,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    onTap: () {},
-                    child: const MenuItem(
-                      title: 'Schimba imaginea',
-                      icon: Icons.image,
-                    ),
-                  )
-                ],
-              )
-            ],
-            stretch: true,
-            expandedHeight: DeviceSize.isDesktopMode ? 200 : 250,
-            titleSpacing: theme.standardPadding.left,
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: const [StretchMode.fadeTitle],
-              collapseMode: CollapseMode.pin,
-              titlePadding: theme.standardPadding,
-              background: Opacity(
-                opacity: 0.5,
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              title: const Text(testDescription),
-            ),
-            floating: !DeviceSize.isDesktopMode,
-            // snap: true,
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: theme.standardPadding,
-                      child: Container(
-                          color: theme.defaultBackgroundColor,
-                          padding: theme.standardPadding,
-                          child: QuestionWidget(
-                              isEditMode: false,
-                              index: index,
-                              question: 'Care e sensul vietii',
-                              type: QuestionType.multipleChoice,
-                              options: [
-                                MultipleChoiceOption(
-                                    answer: "Sa imparti", isRight: true),
-                                MultipleChoiceOption(
-                                    answer: "Sa daruiesti", isRight: true),
-                                MultipleChoiceOption(
-                                    answer: "Sa dormi", isRight: false),
-                                MultipleChoiceOption(
-                                    answer: "Toate de mai sus", isRight: false),
-                              ])),
-                    ),
-                    FloatingActionButton(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (ctx) => QuestionCreationDialog());
-                        },
-                        child: const Icon(Icons.add))
-                  ],
-                );
-              },
-              childCount: 40,
-            ),
-          ),
-          // SliverFillRemaining(
-          //   child: ListView.separated(
-          //       padding: EdgeInsets.zero,
-          //       separatorBuilder: (context, index) => FloatingActionButton(
-          //           onPressed: () {}, child: const Icon(Icons.add)),
-          //       itemCount: 50,
-          //       itemBuilder: (context, index) => Padding(
-          //             padding: theme.standardPadding,
-          //             child: Container(
-          //                 color: theme.defaultBackgroundColor,
-          //                 padding: theme.standardPadding,
-          //                 child: QuestionWidget(
-          //                     isEditMode: false,
-          //                     index: index,
-          //                     question: 'Care e sensul vietii',
-          //                     type: QuestionType.multipleChoice,
-          //                     options: [
-          //                       MultipleChoiceOption(
-          //                           answer: "Sa imparti", isRight: true),
-          //                       MultipleChoiceOption(
-          //                           answer: "Sa daruiesti", isRight: true),
-          //                       MultipleChoiceOption(
-          //                           answer: "Sa dormi", isRight: false),
-          //                       MultipleChoiceOption(
-          //                           answer: "Toate de mai sus", isRight: false),
-          //                     ])),
-          //           )),
-          // ),
+      appBar: CustomAppBar(
+        title: Container(),
+        trailing: [],
+      ),
+      body: Column(
+        children: [
+          Text('asdf'),
+          FilledButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(theme.good),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ))),
+            onPressed: () {},
+            child: Text('Save'),
+          )
         ],
       ),
     );

@@ -8,6 +8,7 @@ import '../../domain/failures/test_failures.dart';
 import '../../domain/usecases/test_usecases.dart';
 
 abstract class TestLocalDataSource {
+  Future<TestEntity> getTestById(GetTestByIdUsecaseParams params);
   Future<TestEntity> createTest(CreateTestUsecaseParams params);
   Future<void> deleteTest(DeleteTestUsecaseParams params);
 
@@ -80,5 +81,14 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
     return testsBox.values
         .where((element) => element.creatorId == params.creatorId)
         .toList();
+  }
+
+  @override
+  Future<TestEntity> getTestById(GetTestByIdUsecaseParams params) async {
+    final test = testsBox.get(params.testId);
+    if (test == null) {
+      throw const TestNotFoundFailure();
+    }
+    return test;
   }
 }

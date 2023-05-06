@@ -51,33 +51,33 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
       backgroundColor: fillColor,
-      actions: DeviceSize.isDesktopMode
-          ? trailing ??
-              [
-                TextButton(
-                    onPressed: () {},
-                    child: Text("Contact", style: theme.actionTextStyle)),
-                SizedBox(width: theme.spacing.large),
-                TextButton(
-                    onPressed: () {},
-                    child: Text("Descopera", style: theme.actionTextStyle)),
-                SizedBox(width: theme.spacing.large),
-                TextButton(
-                    onPressed: () {},
-                    child: Text("Alatura-te", style: theme.actionTextStyle)),
-                SizedBox(width: theme.spacing.large),
-                TextButton(
-                    onPressed: () {},
-                    child: Text("Creeaza", style: theme.actionTextStyle)),
-              ]
-          : [
-              IconButton(
-                  onPressed: onMenuPressed,
-                  icon: Icon(
-                    Icons.menu,
-                    color: mainColor ?? theme.primaryColor,
-                  )),
-            ],
+      actions: trailing ??
+          (DeviceSize.isDesktopMode
+              ? [
+                  TextButton(
+                      onPressed: () {},
+                      child: Text("Contact", style: theme.actionTextStyle)),
+                  SizedBox(width: theme.spacing.large),
+                  TextButton(
+                      onPressed: () {},
+                      child: Text("Descopera", style: theme.actionTextStyle)),
+                  SizedBox(width: theme.spacing.large),
+                  TextButton(
+                      onPressed: () {},
+                      child: Text("Alatura-te", style: theme.actionTextStyle)),
+                  SizedBox(width: theme.spacing.large),
+                  TextButton(
+                      onPressed: () {},
+                      child: Text("Creeaza", style: theme.actionTextStyle)),
+                ]
+              : [
+                  IconButton(
+                      onPressed: onMenuPressed,
+                      icon: Icon(
+                        Icons.menu,
+                        color: mainColor ?? theme.primaryColor,
+                      )),
+                ]),
       bottom: bottom,
     );
   }

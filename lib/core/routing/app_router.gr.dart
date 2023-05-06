@@ -19,7 +19,7 @@ import '../../features/authentication/presentation/screens/login/login_screen.da
 import '../../features/authentication/presentation/screens/registration/registration_screen.dart'
     as _i2;
 import '../../features/test/domain/entities/test_entity.dart' as _i10;
-import '../../features/test/presentation/screens/test_editor_screen.dart'
+import '../../features/test/presentation/screens/test_editor/test_editor_screen.dart'
     as _i5;
 import '../../features/test/presentation/screens/test_list/test_list_screen.dart'
     as _i6;

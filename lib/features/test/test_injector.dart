@@ -16,5 +16,6 @@ void testInject() {
     ..registerSingleton(GetTestsUsecase(locator()))
     ..registerSingleton(InsertQuestionUsecase(locator()))
     ..registerSingleton(DeleteQuestionUsecase(locator()))
-    ..registerSingleton(UpdateQuestionUsecase(locator()));
+    ..registerSingleton(UpdateQuestionUsecase(locator()))
+    ..registerSingleton(GetTestByIdUsecase(locator()));
 }

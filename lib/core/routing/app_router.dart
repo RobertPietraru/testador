@@ -5,7 +5,7 @@ import 'package:testador/core/screens/landing_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart';
 import 'package:testador/features/test/presentation/screens/test_list/test_list_screen.dart';
-import 'package:testador/features/test/presentation/screens/test_editor_screen.dart';
+import 'package:testador/features/test/presentation/screens/test_editor/test_editor_screen.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',
