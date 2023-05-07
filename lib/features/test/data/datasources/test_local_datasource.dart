@@ -1,6 +1,6 @@
 import 'package:hive_flutter/adapters.dart';
+import 'package:testador/features/test/data/dtos/test/question_dto.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
-import 'package:testador/features/test/domain/usecases/edit_test.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/test_entity.dart';
@@ -40,9 +40,22 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   }
 
   @override
-  Future<TestEntity> deleteQuestion(DeleteQuestionUsecaseParams params) {
-    // TODO: implement deleteQuestion
-    throw UnimplementedError();
+  Future<TestEntity> deleteQuestion(DeleteQuestionUsecaseParams params) async {
+    final questions =
+        params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+
+    questions.removeAt(params.index);
+
+    final dto = TestDto(
+      questions: questions,
+      title: params.test.title,
+      isPublic: params.test.isPublic,
+      creatorId: params.test.creatorId,
+      imageUrl: params.test.imageUrl,
+      id: params.test.id,
+    );
+    dto.save();
+    return dto.toEntity();
   }
 
   @override
@@ -51,14 +64,42 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   }
 
   @override
-  Future<TestEntity> insertQuestion(InsertQuestionUsecaseParams params) {
-    throw UnimplementedError();
+  Future<TestEntity> insertQuestion(InsertQuestionUsecaseParams params) async {
+    final questions =
+        params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+
+    questions.insert(params.index, QuestionDto.fromEntity(params.question));
+
+    final dto = TestDto(
+      questions: questions,
+      title: params.test.title,
+      isPublic: params.test.isPublic,
+      creatorId: params.test.creatorId,
+      imageUrl: params.test.imageUrl,
+      id: params.test.id,
+    );
+    dto.save();
+    return dto.toEntity();
   }
 
   @override
-  Future<TestEntity> updateQuestion(UpdateQuestionUsecaseParams params) {
-    // TODO: implement updateQuestion
-    throw UnimplementedError();
+  Future<TestEntity> updateQuestion(UpdateQuestionUsecaseParams params) async {
+    final questions =
+        params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+
+    questions[params.index] =
+        QuestionDto.fromEntity(params.replacementQuestion);
+
+    final dto = TestDto(
+      questions: questions,
+      title: params.test.title,
+      isPublic: params.test.isPublic,
+      creatorId: params.test.creatorId,
+      imageUrl: params.test.imageUrl,
+      id: params.test.id,
+    );
+    dto.save();
+    return dto.toEntity();
   }
 
   @override
@@ -72,7 +113,9 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       creatorId: test.creatorId,
       imageUrl: params.imageUrl ?? test.imageUrl,
       id: params.testId,
-      questions: [],
+      questions:
+          params.questions?.map((e) => QuestionDto.fromEntity(e)).toList() ??
+              test.questions,
     );
     testsBox.put(newTest.id, newTest);
     return newTest.toEntity();

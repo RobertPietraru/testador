@@ -31,9 +31,17 @@ class TestRepositoryIMPL implements TestRepository {
 
   @override
   Future<Either<TestFailure, DeleteQuestionUsecaseResult>> deleteQuestion(
-      DeleteQuestionUsecaseParams params) {
-    // TODO: implement deleteQuestion
-    throw UnimplementedError();
+      DeleteQuestionUsecaseParams params) async {
+    try {
+      final testEntity = await testLocalDataSource.deleteQuestion(params);
+      return const Right(DeleteQuestionUsecaseResult());
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
   }
 
   @override
@@ -53,9 +61,17 @@ class TestRepositoryIMPL implements TestRepository {
 
   @override
   Future<Either<TestFailure, InsertQuestionUsecaseResult>> insertQuestion(
-      InsertQuestionUsecaseParams params) {
-    // TODO: implement insertQuestion
-    throw UnimplementedError();
+      InsertQuestionUsecaseParams params) async {
+    try {
+      final testEntity = await testLocalDataSource.insertQuestion(params);
+      return Right(InsertQuestionUsecaseResult(test: testEntity));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
   }
 
   @override
@@ -67,9 +83,17 @@ class TestRepositoryIMPL implements TestRepository {
 
   @override
   Future<Either<TestFailure, UpdateQuestionUsecaseResult>> updateQuestion(
-      UpdateQuestionUsecaseParams params) {
-    // TODO: implement updateQuestion
-    throw UnimplementedError();
+      UpdateQuestionUsecaseParams params) async {
+    try {
+      final testEntity = await testLocalDataSource.updateQuestion(params);
+      return Right(UpdateQuestionUsecaseResult(testEntity: testEntity));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
   }
 
   @override

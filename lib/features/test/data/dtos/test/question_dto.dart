@@ -53,6 +53,33 @@ class QuestionDto {
     );
   }
 
+  factory QuestionDto.fromEntity(QuestionEntity entity) {
+    if (entity is MultipleChoiceQuestionEntity) {
+      return QuestionDto(
+          options: entity.options
+              .map((e) => MultipleChoiceOptionDto.fromEntity(e))
+              .toList(),
+          acceptedAnswers: null,
+          id: entity.id,
+          testId: entity.testId,
+          type: entity.type);
+    } else if (entity is TextInputQuestionEntity) {
+      return QuestionDto(
+          options: null,
+          acceptedAnswers: entity.acceptedAnswers,
+          id: entity.id,
+          testId: entity.testId,
+          type: entity.type);
+    }
+    return QuestionDto(
+      options: null,
+      acceptedAnswers: null,
+      id: entity.id,
+      testId: entity.testId,
+      type: entity.type,
+    );
+  }
+
   QuestionEntity toEntity() {
     if (type == QuestionType.answer) {
       return MultipleChoiceQuestionEntity(
@@ -88,6 +115,14 @@ class MultipleChoiceOptionDto {
     return MultipleChoiceOptionEntity(
       text: text,
       isCorrect: isCorrect,
+    );
+  }
+
+  factory MultipleChoiceOptionDto.fromEntity(
+      MultipleChoiceOptionEntity entity) {
+    return MultipleChoiceOptionDto(
+      text: entity.text,
+      isCorrect: entity.isCorrect,
     );
   }
 

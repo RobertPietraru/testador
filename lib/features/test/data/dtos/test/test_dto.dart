@@ -11,6 +11,9 @@ class TestDto with HiveObjectMixin {
   @HiveField(0)
   final String id;
 
+  @override
+  get key => id;
+
   @HiveField(1)
   final String? title;
 
@@ -73,6 +76,18 @@ class TestDto with HiveObjectMixin {
       creatorId: map[creatorField],
       imageUrl: map[imageField],
       id: map[idField],
+    );
+  }
+
+  factory TestDto.fromEntity(TestEntity entity) {
+    return TestDto(
+      creatorId: entity.creatorId,
+      id: entity.id,
+      imageUrl: entity.imageUrl,
+      isPublic: entity.isPublic,
+      questions:
+          entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),
+      title: entity.title,
     );
   }
 }

@@ -1,3 +1,6 @@
+import 'package:testador/features/test/domain/entities/question_entity.dart';
+import 'package:testador/features/test/domain/entities/test_entity.dart';
+
 import '../failures/test_failures.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/classes/usecase.dart';
@@ -14,9 +17,16 @@ class UpdateQuestionUsecase
 }
 
 class UpdateQuestionUsecaseParams extends Params {
-  const UpdateQuestionUsecaseParams();
+  final TestEntity test;
+  final QuestionEntity replacementQuestion;
+  final int index;
+  const UpdateQuestionUsecaseParams(
+      {required this.test,
+      required this.replacementQuestion,
+      required this.index});
 }
 
 class UpdateQuestionUsecaseResult extends Response {
-  const UpdateQuestionUsecaseResult();
+  final TestEntity testEntity;
+  const UpdateQuestionUsecaseResult({required this.testEntity});
 }
