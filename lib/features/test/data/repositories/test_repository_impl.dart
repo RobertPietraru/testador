@@ -34,7 +34,7 @@ class TestRepositoryIMPL implements TestRepository {
       DeleteQuestionUsecaseParams params) async {
     try {
       final testEntity = await testLocalDataSource.deleteQuestion(params);
-      return const Right(DeleteQuestionUsecaseResult());
+      return Right(DeleteQuestionUsecaseResult(testEntity: testEntity));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -63,8 +63,8 @@ class TestRepositoryIMPL implements TestRepository {
   Future<Either<TestFailure, InsertQuestionUsecaseResult>> insertQuestion(
       InsertQuestionUsecaseParams params) async {
     try {
-      final testEntity = await testLocalDataSource.insertQuestion(params);
-      return Right(InsertQuestionUsecaseResult(test: testEntity));
+      final response = await testLocalDataSource.insertQuestion(params);
+      return Right(InsertQuestionUsecaseResult(test: response));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -132,6 +132,21 @@ class TestRepositoryIMPL implements TestRepository {
     try {
       final test = await testLocalDataSource.getTestById(params);
       return Right(GetTestByIdUsecaseResult(testEntity: test));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<TestFailure, MoveQuestionUsecaseResult>> moveQuestion(
+      MoveQuestionUsecaseParams params) async {
+    try {
+      final test = await testLocalDataSource.moveQuestion(params);
+      return Right(MoveQuestionUsecaseResult(test: test));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {

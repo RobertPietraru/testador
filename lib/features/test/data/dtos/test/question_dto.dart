@@ -3,16 +3,36 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 part "question_dto.g.dart";
+
+@HiveType(typeId: 4)
+enum QuestionTypeDto {
+  @HiveField(0)
+  multipleChoice,
+  @HiveField(1)
+  answer;
+
+  QuestionType toType() =>
+      {
+        QuestionTypeDto.answer: QuestionType.answer,
+        QuestionTypeDto.multipleChoice: QuestionType.multipleChoice
+      }[this] ??
+      QuestionType.multipleChoice;
+
+  static QuestionTypeDto fromType(QuestionType type) =>
+      {
+        QuestionType.answer: QuestionTypeDto.answer,
+        QuestionType.multipleChoice: QuestionTypeDto.multipleChoice
+      }[type] ??
+      QuestionTypeDto.multipleChoice;
+}
+
 @HiveType(typeId: 2)
 class QuestionDto {
-  @HiveField(0)
-  final String id;
-
   @HiveField(1)
   final String testId;
 
   @HiveField(2)
-  final QuestionType type;
+  final QuestionTypeDto typeDto;
 
   @HiveField(3)
   final String? image;
@@ -23,7 +43,6 @@ class QuestionDto {
   @HiveField(5)
   final List<String>? acceptedAnswers;
 
-  static const idField = 'id';
   static const testIdField = 'testId';
   static const typeField = 'type';
   static const imageField = 'image';
@@ -34,9 +53,8 @@ class QuestionDto {
     this.image,
     required this.options,
     required this.acceptedAnswers,
-    required this.id,
     required this.testId,
-    required this.type,
+    required this.typeDto,
   });
 
   factory QuestionDto.fromMap(Map<dynamic, dynamic> map) {
@@ -46,9 +64,8 @@ class QuestionDto {
 
     return QuestionDto(
       acceptedAnswers: map[acceptedAnswersField],
-      id: map[idField],
       testId: map[testIdField],
-      type: map[typeField],
+      typeDto: map[typeField],
       options: optionDtos,
     );
   }
@@ -56,41 +73,38 @@ class QuestionDto {
   factory QuestionDto.fromEntity(QuestionEntity entity) {
     if (entity is MultipleChoiceQuestionEntity) {
       return QuestionDto(
-          options: entity.options
-              .map((e) => MultipleChoiceOptionDto.fromEntity(e))
-              .toList(),
-          acceptedAnswers: null,
-          id: entity.id,
-          testId: entity.testId,
-          type: entity.type);
+        options: entity.options
+            .map((e) => MultipleChoiceOptionDto.fromEntity(e))
+            .toList(),
+        acceptedAnswers: null,
+        testId: entity.testId,
+        typeDto: QuestionTypeDto.fromType(entity.type),
+      );
     } else if (entity is TextInputQuestionEntity) {
       return QuestionDto(
-          options: null,
-          acceptedAnswers: entity.acceptedAnswers,
-          id: entity.id,
-          testId: entity.testId,
-          type: entity.type);
+        options: null,
+        acceptedAnswers: entity.acceptedAnswers,
+        testId: entity.testId,
+        typeDto: QuestionTypeDto.fromType(entity.type),
+      );
     }
     return QuestionDto(
       options: null,
       acceptedAnswers: null,
-      id: entity.id,
       testId: entity.testId,
-      type: entity.type,
+      typeDto: QuestionTypeDto.fromType(entity.type),
     );
   }
 
   QuestionEntity toEntity() {
-    if (type == QuestionType.answer) {
+    if (typeDto == QuestionType.answer) {
       return MultipleChoiceQuestionEntity(
-          id: id,
           testId: testId,
           options: options?.map((e) => e.toEntity()).toList() ?? []);
     }
     return TextInputQuestionEntity(
-        id: id,
         testId: testId,
-        type: type,
+        type: typeDto.toType(),
         acceptedAnswers: acceptedAnswers ?? []);
   }
 }

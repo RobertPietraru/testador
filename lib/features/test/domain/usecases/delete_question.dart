@@ -21,5 +21,6 @@ class DeleteQuestionUsecaseParams extends Params {
 }
 
 class DeleteQuestionUsecaseResult extends Response {
-  const DeleteQuestionUsecaseResult();
+  final TestEntity testEntity;
+  const DeleteQuestionUsecaseResult({required this.testEntity});
 }

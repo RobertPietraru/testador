@@ -20,22 +20,19 @@ class QuestionDtoAdapter extends TypeAdapter<QuestionDto> {
       image: fields[3] as String?,
       options: (fields[4] as List?)?.cast<MultipleChoiceOptionDto>(),
       acceptedAnswers: (fields[5] as List?)?.cast<String>(),
-      id: fields[0] as String,
       testId: fields[1] as String,
-      type: fields[2] as QuestionType,
+      typeDto: fields[2] as QuestionTypeDto,
     );
   }
 
   @override
   void write(BinaryWriter writer, QuestionDto obj) {
     writer
-      ..writeByte(6)
-      ..writeByte(0)
-      ..write(obj.id)
+      ..writeByte(5)
       ..writeByte(1)
       ..write(obj.testId)
       ..writeByte(2)
-      ..write(obj.type)
+      ..write(obj.typeDto)
       ..writeByte(3)
       ..write(obj.image)
       ..writeByte(4)
@@ -89,6 +86,45 @@ class MultipleChoiceOptionDtoAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is MultipleChoiceOptionDtoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class QuestionTypeDtoAdapter extends TypeAdapter<QuestionTypeDto> {
+  @override
+  final int typeId = 4;
+
+  @override
+  QuestionTypeDto read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return QuestionTypeDto.multipleChoice;
+      case 1:
+        return QuestionTypeDto.answer;
+      default:
+        return QuestionTypeDto.multipleChoice;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, QuestionTypeDto obj) {
+    switch (obj) {
+      case QuestionTypeDto.multipleChoice:
+        writer.writeByte(0);
+        break;
+      case QuestionTypeDto.answer:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QuestionTypeDtoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

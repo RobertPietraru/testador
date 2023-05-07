@@ -2,10 +2,100 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
+import 'package:testador/features/test/domain/failures/test_editor/deleting_the_only_question_failure.dart';
 import 'package:testador/features/test/domain/failures/test_failures.dart';
+import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 
 part 'test_editor_state.dart';
 
 class TestEditorCubit extends Cubit<TestEditorState> {
-  TestEditorCubit(super.initialState);
+  final InsertQuestionUsecase insertQuestionUsecase;
+  final UpdateQuestionUsecase updateQuestionUsecase;
+  final DeleteQuestionUsecase deleteQuestionUsecase;
+
+  TestEditorCubit(this.insertQuestionUsecase, this.updateQuestionUsecase,
+      this.deleteQuestionUsecase, {required TestEntity initialTest})
+      : super(TestEditorState(
+            currentQuestion: initialTest.questions.first,
+            lastSavedTest: initialTest,
+            test: initialTest,
+            failure: null,
+            status: TestEditorStatus.loaded));
+
+  Future<void> insertQuestion(
+      {required int index, required QuestionEntity question}) async {
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    final response =
+        await insertQuestionUsecase.call(InsertQuestionUsecaseParams(
+      test: state.test,
+      question: question,
+      index: index,
+    ));
+    response.fold(
+      (l) => emit(state.copyWith(
+        failure: l,
+        status: TestEditorStatus.failed,
+        updateError: true,
+      )),
+      (r) => emit(state.copyWith(
+        failure: null,
+        status: TestEditorStatus.loaded,
+        test: r.test,
+        currentQuestion: question,
+      )),
+    );
+  }
+
+  Future<void> deleteQuestion({required int index}) async {
+    int newIndex = index;
+    // if we'ere deleting the only question, stop
+    if (state.test.questions.length == 1) {
+      emit(state.copyWith(
+        updateError: true,
+        failure: DeletingTheOnlyQuestionTestFailure(),
+        status: TestEditorStatus.failed,
+      ));
+      return;
+    }
+    // if we're deleting the current question and it's the last one, we can't leave the same index cause it will be out of bounds
+    // we subtract one
+    if (state.currentQuestionIndex == index) {
+      newIndex = index - 1;
+    }
+
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    final response = await deleteQuestionUsecase
+        .call(DeleteQuestionUsecaseParams(test: state.test, index: index));
+    response.fold(
+      (l) => emit(state.copyWith(
+        failure: l,
+        status: TestEditorStatus.failed,
+        updateError: true,
+      )),
+      (r) => emit(state.copyWith(
+        failure: null,
+        status: TestEditorStatus.loaded,
+        test: r.testEntity,
+        currentQuestion: state.test.questions[newIndex],
+      )),
+    );
+  }
+
+  Future<void> updateQuestion(
+      {required int index, required QuestionEntity replacementQuestion}) async {
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+
+    final response = await deleteQuestionUsecase
+        .call(DeleteQuestionUsecaseParams(test: state.test, index: index));
+
+    response.fold(
+      (l) => emit(state.copyWith(
+          failure: l, status: TestEditorStatus.failed, updateError: true)),
+      (r) => emit(state.copyWith(
+          failure: null,
+          status: TestEditorStatus.loaded,
+          test: r.testEntity,
+          currentQuestion: replacementQuestion)),
+    );
+  }
 }

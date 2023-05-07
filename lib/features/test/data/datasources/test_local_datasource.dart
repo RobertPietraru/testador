@@ -1,6 +1,7 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:testador/features/test/data/dtos/test/question_dto.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
+import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/test_entity.dart';
@@ -9,6 +10,7 @@ import '../../domain/usecases/test_usecases.dart';
 
 abstract class TestLocalDataSource {
   Future<TestEntity> getTestById(GetTestByIdUsecaseParams params);
+  Future<TestEntity> moveQuestion(MoveQuestionUsecaseParams params);
   Future<TestEntity> createTest(CreateTestUsecaseParams params);
   Future<void> deleteTest(DeleteTestUsecaseParams params);
 
@@ -33,7 +35,13 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       imageUrl: null,
       isPublic: false,
       title: null,
-      questions: [],
+      questions: [
+        QuestionDto(
+            options: null,
+            acceptedAnswers: null,
+            testId: id,
+            typeDto: QuestionTypeDto.multipleChoice)
+      ],
     );
     testsBox.put(id, testDto);
     return testDto.toEntity();
@@ -54,7 +62,7 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       imageUrl: params.test.imageUrl,
       id: params.test.id,
     );
-    dto.save();
+    testsBox.put(dto.id, dto);
     return dto.toEntity();
   }
 
@@ -78,7 +86,7 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       imageUrl: params.test.imageUrl,
       id: params.test.id,
     );
-    dto.save();
+    testsBox.put(dto.id, dto);
     return dto.toEntity();
   }
 
@@ -98,7 +106,7 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       imageUrl: params.test.imageUrl,
       id: params.test.id,
     );
-    dto.save();
+    testsBox.put(dto.id, dto);
     return dto.toEntity();
   }
 
@@ -136,5 +144,25 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       throw const TestNotFoundFailure();
     }
     return test.toEntity();
+  }
+
+  @override
+  Future<TestEntity> moveQuestion(MoveQuestionUsecaseParams params) async {
+    final questions =
+        params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+    final questionAtOldIndex = questions[params.oldIndex];
+    questions.removeAt(params.oldIndex);
+    questions.insert(params.newIndex, questionAtOldIndex);
+
+    final dto = TestDto(
+      questions: questions,
+      title: params.test.title,
+      isPublic: params.test.isPublic,
+      creatorId: params.test.creatorId,
+      imageUrl: params.test.imageUrl,
+      id: params.test.id,
+    );
+    testsBox.put(dto.id, dto);
+    return dto.toEntity();
   }
 }
