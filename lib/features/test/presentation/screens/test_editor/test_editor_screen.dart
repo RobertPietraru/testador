@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/custom_dialog.dart';
+import 'package:testador/core/components/text_input_field.dart';
+import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
@@ -55,6 +57,7 @@ class _TestScreen extends StatelessWidget {
         child: const Icon(Icons.bolt),
       ),
       backgroundColor: theme.defaultBackgroundColor.withOpacity(0.9),
+      resizeToAvoidBottomInset: true,
       bottomSheet: BlocBuilder<TestEditorCubit, TestEditorState>(
         builder: (context, state) {
           final test = state.test;
@@ -77,7 +80,7 @@ class _TestScreen extends StatelessWidget {
         },
       ),
       appBar: CustomAppBar(
-        title: Container(),
+        title: const Text("Editor test"),
         trailing: [
           IconButton(
             onPressed: () {},
@@ -109,8 +112,57 @@ class _TestScreen extends StatelessWidget {
           return Stack(
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: theme.standardPadding,
+                    child: buildQuestionNavigationBar(state, theme),
+                  ),
+                  Padding(
+                    padding: theme.standardPadding,
+                    child: TextInputField(
+                      maxLines: 3,
+                      onChanged: (e) {},
+                      hint: 'Intrebarea',
+                    ),
+                  ),
+                  Flexible(
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      children: [
+                        const MultipleChoiceOptionWidget(
+                          entity: MultipleChoiceOptionEntity(
+                            isCorrect: true,
+                            text: 'This is my thing',
+                          ),
+                          index: 0,
+                        ),
+                        MultipleChoiceOptionWidget(
+                          entity: MultipleChoiceOptionEntity(
+                            isCorrect: true,
+                            text: 'This is my thing',
+                          ),
+                          index: 1,
+                        ),
+                        MultipleChoiceOptionWidget(
+                          entity: MultipleChoiceOptionEntity(
+                            isCorrect: true,
+                            text: 'This is my thing',
+                          ),
+                          index: 2,
+                        ),
+                        MultipleChoiceOptionWidget(
+                          entity: MultipleChoiceOptionEntity(
+                            isCorrect: true,
+                            text: 'This is my thing',
+                          ),
+                          index: 3,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(),
+                ],
               ),
               if (state.status == TestEditorStatus.loading)
                 BackdropFilter(
@@ -122,6 +174,104 @@ class _TestScreen extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Row buildQuestionNavigationBar(TestEditorState state, AppThemeData theme) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Expanded(
+        child: Text(
+          "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.type != QuestionType.answer ? "Intrebare cu raspuns liber" : "Intrebare cu selectare raspuns corect"}",
+          style: theme.subtitleTextStyle,
+        ),
+      ),
+      FilledButton(
+          onPressed: () {},
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all(const CircleBorder())),
+          child: const Icon(Icons.more_vert)),
+    ]);
+  }
+}
+
+class MultipleChoiceOptionWidget extends StatelessWidget {
+  final int index;
+  final MultipleChoiceOptionEntity entity;
+  const MultipleChoiceOptionWidget({
+    super.key,
+    required this.index,
+    required this.entity,
+  });
+
+  Color goodColor(int index) {
+    return [
+      Colors.red,
+      Colors.blue,
+      Colors.yellow,
+      Colors.green,
+      Colors.pink,
+      Colors.purple
+    ][index];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isEnabled = entity.text != null;
+    final theme = AppTheme.of(context);
+
+    return Card(
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => CustomDialog(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextInputField(
+                  onChanged: (e) {},
+                  showLabel: false,
+                  hint: 'Apasa pentru a edita raspunsul',
+                  backgroundColor: Colors.transparent,
+                ),
+                CheckboxListTile(
+                  value: false,
+                  onChanged: (e) {},
+                  title: const Text("Este corect?"),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FilledButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(theme.good),
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ))),
+                      onPressed: () {},
+                      child: const Text('Salveaza'),
+                    )
+                  ],
+                )
+              ],
+            )),
+          );
+        },
+        child: Ink(
+          color: isEnabled ? goodColor(index) : null,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Center(
+            child: Text(
+              entity.text ?? "Raspunsul nr ${index + 1}",
+              style: TextStyle(
+                  color: isEnabled ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
       ),
     );
   }

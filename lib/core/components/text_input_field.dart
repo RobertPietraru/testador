@@ -7,13 +7,19 @@ class TextInputField extends StatefulWidget {
   final String? error;
   final IconData? leading;
   final bool isPassword;
+  final int maxLines;
+  final bool showLabel;
+  final Color? backgroundColor;
   const TextInputField({
     Key? key,
     required this.onChanged,
     required this.hint,
+    this.maxLines = 1,
     this.error,
     this.leading,
     this.isPassword = false,
+    this.showLabel = true,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -43,16 +49,24 @@ class _TextInputFieldState extends State<TextInputField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          widget.hint,
-          style: theme.informationTextStyle.copyWith(color: theme.primaryColor),
-        ),
-        const SizedBox(height: 5),
+        if (widget.showLabel)
+          Column(
+            children: [
+              Text(
+                widget.hint,
+                style: theme.informationTextStyle
+                    .copyWith(color: theme.primaryColor),
+              ),
+              const SizedBox(height: 5),
+            ],
+          ),
         TextFormField(
+            maxLines: widget.maxLines,
             obscureText: isObscured,
             style: TextStyle(color: theme.primaryColor),
             decoration: InputDecoration(
-              fillColor: const Color.fromARGB(255, 212, 212, 212),
+              fillColor: widget.backgroundColor ??
+                  const Color.fromARGB(255, 212, 212, 212),
               filled: true,
               hintText: widget.hint,
               border: OutlineInputBorder(

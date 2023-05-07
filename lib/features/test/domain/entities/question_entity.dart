@@ -46,10 +46,10 @@ class TextInputQuestionEntity extends QuestionEntity {
 }
 
 class MultipleChoiceOptionEntity extends Equatable {
-  final String text;
+  final String? text;
   final bool isCorrect;
   const MultipleChoiceOptionEntity(
-      {required this.text, required this.isCorrect});
+      {required this.text, this.isCorrect = false});
   @override
   List<Object?> get props => [text, isCorrect];
 }

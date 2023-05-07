@@ -126,7 +126,7 @@ class QuestionDto {
 @HiveType(typeId: 3)
 class MultipleChoiceOptionDto {
   @HiveField(0)
-  final String text;
+  final String? text;
 
   @HiveField(1)
   final bool isCorrect;
