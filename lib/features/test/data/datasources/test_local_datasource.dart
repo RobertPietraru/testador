@@ -1,7 +1,6 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:testador/features/test/data/dtos/test/question_dto.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
-import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/test_entity.dart';
@@ -37,6 +36,7 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       title: null,
       questions: [
         QuestionDto(
+            text: '',
             options: null,
             acceptedAnswers: null,
             testId: id,

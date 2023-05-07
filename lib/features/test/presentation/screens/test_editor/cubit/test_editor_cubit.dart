@@ -22,6 +22,10 @@ class TestEditorCubit extends Cubit<TestEditorState> {
             failure: null,
             status: TestEditorStatus.loaded));
 
+  void navigateToIndex(int index) {
+    emit(state.copyWith(currentQuestion: state.test.questions[index]));
+  }
+
   Future<void> insertQuestion(
       {required int index, required QuestionEntity question}) async {
     emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
@@ -42,6 +46,34 @@ class TestEditorCubit extends Cubit<TestEditorState> {
         status: TestEditorStatus.loaded,
         test: r.test,
         currentQuestion: question,
+      )),
+    );
+  }
+
+  Future<void> addNewQuestion(
+      {required int index, required QuestionType type}) async {
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    final response =
+        await insertQuestionUsecase.call(InsertQuestionUsecaseParams(
+      test: state.test,
+      question: type == QuestionType.answer
+          ? TextInputQuestionEntity(testId: state.test.id)
+          : MultipleChoiceQuestionEntity(testId: state.test.id),
+      index: index + 1,
+    ));
+    response.fold(
+      (l) => emit(state.copyWith(
+        failure: l,
+        status: TestEditorStatus.failed,
+        updateError: true,
+      )),
+      (r) => emit(state.copyWith(
+        failure: null,
+        status: TestEditorStatus.loaded,
+        test: r.test,
+        currentQuestion: type == QuestionType.answer
+            ? TextInputQuestionEntity(testId: state.test.id)
+            : MultipleChoiceQuestionEntity(testId: state.test.id),
       )),
     );
   }

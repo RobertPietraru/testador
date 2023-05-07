@@ -6,8 +6,10 @@ abstract class QuestionEntity extends Equatable {
   final String testId;
   final QuestionType type;
   final String? image;
+  final String? text;
 
   const QuestionEntity({
+    required this.text,
     this.image,
     required this.testId,
     required this.type,
@@ -20,8 +22,9 @@ class MultipleChoiceQuestionEntity extends QuestionEntity {
   const MultipleChoiceQuestionEntity({
     required super.testId,
     super.type = QuestionType.multipleChoice,
-     this.options = const [],
+    this.options = const [],
     super.image,
+    super.text,
   });
   final List<MultipleChoiceOptionEntity> options;
   @override
@@ -31,8 +34,9 @@ class MultipleChoiceQuestionEntity extends QuestionEntity {
 class TextInputQuestionEntity extends QuestionEntity {
   const TextInputQuestionEntity({
     required super.testId,
-    required super.type,
-    required this.acceptedAnswers,
+    super.type = QuestionType.answer,
+    this.acceptedAnswers = const [],
+    super.text,
   });
 
   final List<String> acceptedAnswers;

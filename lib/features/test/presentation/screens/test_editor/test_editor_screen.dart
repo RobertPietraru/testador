@@ -1,13 +1,18 @@
+import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
+import 'package:testador/features/test/presentation/screens/test_editor/cubit/test_editor_cubit.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/test_editor_retrival/test_editor_retrival_widget.dart';
+import 'package:testador/injection.dart';
 
 import '../../../../../core/components/theme/app_theme.dart';
-import 'package:testador/core/components/theme/app_theme_data.dart';
 
 class TestEditorScreen extends StatelessWidget {
   const TestEditorScreen(
@@ -20,37 +25,211 @@ class TestEditorScreen extends StatelessWidget {
     return TestEditorRetrivalWidget(
       testId: testId,
       entity: entity,
-      builder: (state) => _TestScreen(testEntity: state.entity),
+      builder: (state) => BlocProvider(
+        create: (context) => TestEditorCubit(locator(), locator(), locator(),
+            initialTest: state.entity),
+        child: const _TestScreen(),
+      ),
     );
   }
 }
 
 class _TestScreen extends StatelessWidget {
-  final TestEntity testEntity;
-
-  const _TestScreen({required this.testEntity});
+  const _TestScreen();
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: theme.primaryColor,
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (_) => QuestionCreationBottomSheet(
+                    cubit: context.read<TestEditorCubit>(),
+                  ),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+              ));
+        },
+        child: const Icon(Icons.bolt),
+      ),
       backgroundColor: theme.defaultBackgroundColor.withOpacity(0.9),
+      bottomSheet: BlocBuilder<TestEditorCubit, TestEditorState>(
+        builder: (context, state) {
+          final test = state.test;
+          return SizedBox(
+              height: 100,
+              child: ListView.separated(
+                separatorBuilder: (context, index) => SizedBox(
+                  width: theme.spacing.small,
+                ),
+                scrollDirection: Axis.horizontal,
+                itemCount: test.questions.length,
+                itemBuilder: (context, index) => QuestionListTile(
+                  onPressed: () {
+                    context.read<TestEditorCubit>().navigateToIndex(index);
+                  },
+                  index: index,
+                  question: test.questions[index],
+                ),
+              ));
+        },
+      ),
       appBar: CustomAppBar(
         title: Container(),
-        trailing: [],
-      ),
-      body: Column(
-        children: [
-          Text('asdf'),
-          FilledButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(theme.good),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ))),
+        trailing: [
+          IconButton(
             onPressed: () {},
-            child: Text('Save'),
-          )
+            icon: const Icon(Icons.settings),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FilledButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(theme.good),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ))),
+              onPressed: () {},
+              child: const Text('Salveaza'),
+            ),
+          ),
         ],
+      ),
+      body: BlocConsumer<TestEditorCubit, TestEditorState>(
+        listener: (context, state) {
+          if (state.status == TestEditorStatus.failed &&
+              state.failure != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.failure!.retrieveMessage(context))));
+          }
+        },
+        builder: (context, state) {
+          return Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [],
+              ),
+              if (state.status == TestEditorStatus.loading)
+                BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                        color: theme.defaultBackgroundColor.withOpacity(0.7),
+                        child:
+                            const Center(child: CircularProgressIndicator()))),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class QuestionCreationBottomSheet extends StatelessWidget {
+  final TestEditorCubit cubit;
+  const QuestionCreationBottomSheet({
+    super.key,
+    required this.cubit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return Container(
+      padding: theme.standardPadding,
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Column(
+          children: [
+            ListTile(
+              onTap: () {
+                cubit.addNewQuestion(
+                    index: cubit.state.currentQuestionIndex,
+                    type: QuestionType.multipleChoice);
+                Navigator.pop(context);
+              },
+              title: const Text("Adauga intrebare ABC"),
+              leading: const Icon(Icons.abc),
+            ),
+            ListTile(
+              onTap: () {
+                cubit.addNewQuestion(
+                    index: cubit.state.currentQuestionIndex,
+                    type: QuestionType.answer);
+                Navigator.pop(context);
+              },
+              title: const Text("Adauga intrebare cu raspuns amplu"),
+              leading: const Icon(Icons.edit),
+            ),
+          ],
+        ),
+        ListTile(
+          onTap: () {},
+          title: Text(
+              "Sugereaza o intrebare si niste raspunsuri cu inteligenta artificiala"),
+          leading: Icon(
+            Icons.diversity_2,
+            color: theme.primaryColor,
+          ),
+        )
+      ]),
+    );
+  }
+}
+
+class QuestionListTile extends StatelessWidget {
+  final int index;
+  final QuestionEntity question;
+  final VoidCallback onPressed;
+  const QuestionListTile({
+    super.key,
+    required this.index,
+    required this.question,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return Card(
+      color: Colors.blue,
+      child: InkWell(
+        onTap: onPressed,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          width: 100,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 84,
+                child: Text(
+                  question.text ?? 'Nu are intrebare',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(color: Colors.white),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(height: theme.spacing.small),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(
+                              question.image ?? theme.placeholderImage))),
+                ),
+              ),
+              Text(
+                (index + 1).toString(),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -78,13 +257,6 @@ class QuestionCreationDialog extends StatelessWidget {
           ChoiceWidget(
             icon: Icons.edit,
             label: 'Raspuns',
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          ChoiceWidget(
-            icon: Icons.school,
-            label: 'Adevarat/Falst',
             onPressed: () {
               Navigator.pop(context);
             },
@@ -147,218 +319,6 @@ class _ChoiceWidgetState extends State<ChoiceWidget> {
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           )
         ],
-      ),
-    );
-  }
-}
-
-enum QuestionType {
-  multipleChoice,
-  answer,
-  trueOrFalse,
-}
-
-class MultipleChoiceOption {
-  final String answer;
-  final bool isRight;
-
-  MultipleChoiceOption({required this.answer, required this.isRight});
-}
-
-class QuestionWidget extends StatefulWidget {
-  final int index;
-  final QuestionType type;
-  final String question;
-  final List<MultipleChoiceOption>? options;
-  final bool isEditMode;
-  const QuestionWidget({
-    super.key,
-    required this.index,
-    required this.type,
-    required this.question,
-    this.options,
-    required this.isEditMode,
-  });
-
-  @override
-  State<QuestionWidget> createState() => _QuestionWidgetState();
-}
-
-class _QuestionWidgetState extends State<QuestionWidget> {
-  late final List<MultipleChoiceOption> _options;
-  @override
-  void initState() {
-    _options = widget.options ?? [];
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
-
-    return Column(
-      children: [
-        buildQuestionAndOptions(widget.index, widget.question, theme),
-        buildAnswerSection(
-          theme: theme,
-          onDelete: (option) {},
-        ),
-      ],
-    );
-  }
-
-  Widget buildAnswerSection({
-    required AppThemeData theme,
-    Function(MultipleChoiceOption option)? onDelete,
-  }) {
-    switch (widget.type) {
-      case QuestionType.answer:
-        return const Text("sadf");
-      case QuestionType.multipleChoice:
-        if (widget.isEditMode) {
-          return ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _options.length + 1,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return buildOption(_options[index], index, theme);
-            },
-          );
-        } else {
-          return buildReorderableList(theme);
-        }
-
-      default:
-        return Container();
-    }
-  }
-
-  ReorderableListView buildReorderableList(AppThemeData theme) {
-    return ReorderableListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        final option = _options[index];
-        return buildOption(option, index, theme);
-      },
-      itemCount: _options.length,
-      onReorder: (oldIndex, newIndex) {
-        print(oldIndex);
-        final temp = _options[oldIndex];
-        _options.removeAt(oldIndex);
-        if (oldIndex < newIndex) {
-          _options.insert(newIndex - 1, temp);
-        } else {
-          _options.insert(newIndex, temp);
-        }
-        setState(() {});
-      },
-    );
-  }
-
-  ListTile buildOption(
-    MultipleChoiceOption option,
-    int index,
-    AppThemeData theme, {
-    Function(MultipleChoiceOption option)? onDelete,
-    Function(MultipleChoiceOption option)? onEdit,
-  }) {
-    return ListTile(
-      trailing: widget.isEditMode
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                    onPressed: () => onEdit?.call(option),
-                    icon: const Icon(
-                      Icons.edit,
-                    )),
-                IconButton(
-                    onPressed: () => onDelete?.call(option),
-                    icon: Icon(
-                      Icons.delete,
-                      color: theme.bad,
-                    )),
-              ],
-            )
-          : null,
-      key: ValueKey(option),
-      leading: IconButton(
-          onPressed: () => setState(() => _options[index] =
-              MultipleChoiceOption(
-                  answer: option.answer, isRight: !option.isRight)),
-          icon: option.isRight
-              ? Icon(Icons.done, color: theme.good)
-              : Icon(Icons.close, color: theme.bad)),
-      title: Text(option.answer),
-    );
-  }
-
-  Row buildQuestionAndOptions(int index, String question, AppThemeData theme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "#${index + 1} $question",
-          style: theme.informationTextStyle,
-        ),
-        PopupMenuButton(
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              onTap: () {},
-              child: MenuItem(title: 'Muta mai sus', icon: Icons.arrow_upward),
-            ),
-            PopupMenuItem(
-              onTap: () {},
-              child:
-                  MenuItem(title: 'Muta mai jos', icon: Icons.arrow_downward),
-            ),
-            PopupMenuItem(
-              onTap: () {},
-              child: MenuItem(title: 'Modifica', icon: Icons.edit),
-            ),
-            PopupMenuItem(
-              onTap: () {},
-              child: MenuItem(
-                icon: Icons.delete,
-                title: 'Sterge',
-                color: Colors.red,
-              ),
-            )
-          ],
-          child: const Icon(Icons.more_vert),
-        ),
-      ],
-    );
-  }
-}
-
-class MenuItem extends StatelessWidget {
-  const MenuItem({
-    super.key,
-    required this.title,
-    required this.icon,
-    this.color,
-  });
-
-  final String title;
-  final IconData icon;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: null,
-      dense: true,
-      horizontalTitleGap: 0,
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(
-        icon,
-        color: color,
-      ),
-      title: Text(
-        title,
-        style: TextStyle(color: color),
       ),
     );
   }

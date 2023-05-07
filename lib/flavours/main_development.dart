@@ -19,6 +19,7 @@ void mainDevelopment() async {
   Hive.registerAdapter(TestDtoAdapter());
   Hive.registerAdapter(QuestionDtoAdapter());
   Hive.registerAdapter(MultipleChoiceOptionDtoAdapter());
+  Hive.registerAdapter(QuestionTypeDtoAdapter());
   print((await Hive.openBox<TestDto>(TestDto.hiveBoxName)).values.length);
   await inject();
 

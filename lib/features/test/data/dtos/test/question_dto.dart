@@ -43,13 +43,17 @@ class QuestionDto {
   @HiveField(5)
   final List<String>? acceptedAnswers;
 
+  @HiveField(6)
+  final String? text;
   static const testIdField = 'testId';
   static const typeField = 'type';
   static const imageField = 'image';
   static const optionsField = 'options';
   static const acceptedAnswersField = 'acceptedAnswers';
+  static const textField = 'text';
 
   const QuestionDto({
+    required this.text,
     this.image,
     required this.options,
     required this.acceptedAnswers,
@@ -63,6 +67,8 @@ class QuestionDto {
         .toList();
 
     return QuestionDto(
+      text: map[textField],
+      image: map[imageField],
       acceptedAnswers: map[acceptedAnswersField],
       testId: map[testIdField],
       typeDto: map[typeField],
@@ -73,6 +79,8 @@ class QuestionDto {
   factory QuestionDto.fromEntity(QuestionEntity entity) {
     if (entity is MultipleChoiceQuestionEntity) {
       return QuestionDto(
+        text: entity.text,
+        image: entity.image,
         options: entity.options
             .map((e) => MultipleChoiceOptionDto.fromEntity(e))
             .toList(),
@@ -82,6 +90,8 @@ class QuestionDto {
       );
     } else if (entity is TextInputQuestionEntity) {
       return QuestionDto(
+        text: entity.text,
+        image: entity.image,
         options: null,
         acceptedAnswers: entity.acceptedAnswers,
         testId: entity.testId,
@@ -89,6 +99,8 @@ class QuestionDto {
       );
     }
     return QuestionDto(
+      text: entity.text,
+      image: entity.image,
       options: null,
       acceptedAnswers: null,
       testId: entity.testId,
@@ -100,12 +112,14 @@ class QuestionDto {
     if (typeDto == QuestionType.answer) {
       return MultipleChoiceQuestionEntity(
           testId: testId,
-          options: options?.map((e) => e.toEntity()).toList() ?? []);
+          options: options?.map((e) => e.toEntity()).toList() ?? [],
+          text: text);
     }
     return TextInputQuestionEntity(
         testId: testId,
         type: typeDto.toType(),
-        acceptedAnswers: acceptedAnswers ?? []);
+        acceptedAnswers: acceptedAnswers ?? [],
+        text: text);
   }
 }
 
