@@ -7,27 +7,27 @@ class TestEditorState extends Equatable {
   final TestEntity test;
   final TestFailure? failure;
   final TestEditorStatus status;
-  final QuestionEntity currentQuestion;
+  final int currentQuestionIndex;
 
   const TestEditorState({
-    required this.currentQuestion,
+    required this.currentQuestionIndex,
     this.status = TestEditorStatus.loading,
     required this.lastSavedTest,
     required this.test,
     this.failure,
   });
 
-  int get currentQuestionIndex => test.questions.indexOf(currentQuestion);
+  QuestionEntity get currentQuestion => test.questions[currentQuestionIndex];
 
   TestEditorState copyWith(
       {TestEntity? lastSavedTest,
       TestEntity? test,
       TestFailure? failure,
       TestEditorStatus? status,
-      QuestionEntity? currentQuestion,
+      int? currentQuestionIndex,
       bool updateError = false}) {
     return TestEditorState(
-      currentQuestion: currentQuestion ?? this.currentQuestion,
+      currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
       status: status ?? this.status,
       lastSavedTest: lastSavedTest ?? this.lastSavedTest,
       test: test ?? this.test,
@@ -36,6 +36,12 @@ class TestEditorState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [lastSavedTest, test, failure, status, currentQuestion];
+  List<Object?> get props => [
+        currentQuestionIndex,
+        currentQuestion,
+        lastSavedTest,
+        test,
+        failure,
+        status
+      ];
 }

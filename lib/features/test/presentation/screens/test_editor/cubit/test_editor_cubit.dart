@@ -16,14 +16,14 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   TestEditorCubit(this.insertQuestionUsecase, this.updateQuestionUsecase,
       this.deleteQuestionUsecase, {required TestEntity initialTest})
       : super(TestEditorState(
-            currentQuestion: initialTest.questions.first,
+            currentQuestionIndex: 0,
             lastSavedTest: initialTest,
             test: initialTest,
             failure: null,
             status: TestEditorStatus.loaded));
 
   void navigateToIndex(int index) {
-    emit(state.copyWith(currentQuestion: state.test.questions[index]));
+    emit(state.copyWith(currentQuestionIndex: index));
   }
 
   Future<void> insertQuestion(
@@ -42,11 +42,10 @@ class TestEditorCubit extends Cubit<TestEditorState> {
         updateError: true,
       )),
       (r) => emit(state.copyWith(
-        failure: null,
-        status: TestEditorStatus.loaded,
-        test: r.test,
-        currentQuestion: question,
-      )),
+          failure: null,
+          status: TestEditorStatus.loaded,
+          test: r.test,
+          currentQuestionIndex: index)),
     );
   }
 
@@ -68,13 +67,10 @@ class TestEditorCubit extends Cubit<TestEditorState> {
         updateError: true,
       )),
       (r) => emit(state.copyWith(
-        failure: null,
-        status: TestEditorStatus.loaded,
-        test: r.test,
-        currentQuestion: type == QuestionType.answer
-            ? TextInputQuestionEntity(testId: state.test.id)
-            : MultipleChoiceQuestionEntity(testId: state.test.id),
-      )),
+          failure: null,
+          status: TestEditorStatus.loaded,
+          test: r.test,
+          currentQuestionIndex: index + 1)),
     );
   }
 
@@ -108,7 +104,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
         failure: null,
         status: TestEditorStatus.loaded,
         test: r.testEntity,
-        currentQuestion: state.test.questions[newIndex],
+        currentQuestionIndex: newIndex,
       )),
     );
   }
@@ -127,7 +123,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
           failure: null,
           status: TestEditorStatus.loaded,
           test: r.testEntity,
-          currentQuestion: replacementQuestion)),
+          currentQuestionIndex: index)),
     );
   }
 }
