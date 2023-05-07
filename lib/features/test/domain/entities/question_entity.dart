@@ -2,12 +2,14 @@ import 'package:equatable/equatable.dart';
 
 enum QuestionType { multipleChoice, answer }
 
-class QuestionEntity extends Equatable {
+abstract class QuestionEntity extends Equatable {
   final String id;
   final String testId;
   final QuestionType type;
+  final String? image;
 
   const QuestionEntity({
+    this.image,
     required this.id,
     required this.testId,
     required this.type,
@@ -20,20 +22,12 @@ class MultipleChoiceQuestionEntity extends QuestionEntity {
   const MultipleChoiceQuestionEntity({
     required super.id,
     required super.testId,
-    required super.type,
+    super.type = QuestionType.multipleChoice,
     required this.options,
   });
-  final List<MultipleChoiceOption> options;
+  final List<MultipleChoiceOptionEntity> options;
   @override
   List<Object?> get props => [id, testId, type, ...options];
-}
-
-class MultipleChoiceOption extends Equatable {
-  final String text;
-  final bool isCorrect;
-  const MultipleChoiceOption({required this.text, required this.isCorrect});
-  @override
-  List<Object?> get props => [text, isCorrect];
 }
 
 class TextInputQuestionEntity extends QuestionEntity {
@@ -48,4 +42,13 @@ class TextInputQuestionEntity extends QuestionEntity {
 
   @override
   List<Object?> get props => [id, testId, type, ...acceptedAnswers];
+}
+
+class MultipleChoiceOptionEntity extends Equatable {
+  final String text;
+  final bool isCorrect;
+  const MultipleChoiceOptionEntity(
+      {required this.text, required this.isCorrect});
+  @override
+  List<Object?> get props => [text, isCorrect];
 }

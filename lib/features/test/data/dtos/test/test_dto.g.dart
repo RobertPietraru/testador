@@ -17,6 +17,7 @@ class TestDtoAdapter extends TypeAdapter<TestDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TestDto(
+      questions: (fields[5] as List?)?.cast<QuestionDto>(),
       title: fields[1] as String?,
       isPublic: fields[2] as bool,
       creatorId: fields[3] as String,
@@ -28,7 +29,7 @@ class TestDtoAdapter extends TypeAdapter<TestDto> {
   @override
   void write(BinaryWriter writer, TestDto obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class TestDtoAdapter extends TypeAdapter<TestDto> {
       ..writeByte(3)
       ..write(obj.creatorId)
       ..writeByte(4)
-      ..write(obj.imageUrl);
+      ..write(obj.imageUrl)
+      ..writeByte(5)
+      ..write(obj.questions);
   }
 
   @override

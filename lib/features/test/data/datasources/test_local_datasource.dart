@@ -33,9 +33,10 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       imageUrl: null,
       isPublic: false,
       title: null,
+      questions: [],
     );
     testsBox.put(id, testDto);
-    return testDto;
+    return testDto.toEntity();
   }
 
   @override
@@ -71,15 +72,17 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       creatorId: test.creatorId,
       imageUrl: params.imageUrl ?? test.imageUrl,
       id: params.testId,
+      questions: [],
     );
     testsBox.put(newTest.id, newTest);
-    return newTest;
+    return newTest.toEntity();
   }
 
   @override
   Future<List<TestEntity>> getTests(GetTestsUsecaseParams params) async {
     return testsBox.values
         .where((element) => element.creatorId == params.creatorId)
+        .map((e) => e.toEntity())
         .toList();
   }
 
@@ -89,6 +92,6 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
     if (test == null) {
       throw const TestNotFoundFailure();
     }
-    return test;
+    return test.toEntity();
   }
 }

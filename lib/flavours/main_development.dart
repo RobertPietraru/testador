@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:testador/features/test/data/dtos/test/question_dto.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 
 import '../core/components/theme/app_theme.dart';
@@ -16,7 +17,9 @@ void mainDevelopment() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(TestDtoAdapter());
-  await Hive.openBox<TestDto>(TestDto.hiveBoxName);
+  Hive.registerAdapter(QuestionDtoAdapter());
+  Hive.registerAdapter(MultipleChoiceOptionDtoAdapter());
+  print((await Hive.openBox<TestDto>(TestDto.hiveBoxName)).values.length);
   await inject();
 
   runApp(const AuthBlocWidget(child: MyApp()));
