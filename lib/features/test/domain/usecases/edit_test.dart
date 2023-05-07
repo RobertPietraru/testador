@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 import '../../../../core/classes/usecase.dart';
 import '../failures/test_failures.dart';
@@ -19,13 +20,17 @@ class EditTestUsecaseParams extends Params {
   final String? title;
   final bool? isPublic;
   final String? imageUrl;
+  final List<QuestionEntity>? questions;
 
   const EditTestUsecaseParams(
-      {required this.testId, this.title, this.isPublic, this.imageUrl});
+      {required this.testId,
+      this.title,
+      this.isPublic,
+      this.imageUrl,
+      this.questions});
 }
 
 class EditTestUsecaseResult extends Response {
   final TestEntity testEntity;
   const EditTestUsecaseResult({required this.testEntity});
-
 }

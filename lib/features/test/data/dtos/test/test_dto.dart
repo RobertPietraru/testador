@@ -5,21 +5,6 @@ import 'package:testador/features/test/data/dtos/test/question_dto.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 part 'test_dto.g.dart';
 
-// class TestDtoAdapter extends TypeAdapter<TestDto> {
-//
-//   TestDto read(BinaryReader reader) {
-//     return TestDto.fromMap(reader.readMap());
-//   }
-
-//
-//   int get typeId => 0;
-
-//
-//   void write(BinaryWriter writer, TestDto obj) {
-//     writer.writeMap(obj.toMap());
-//   }
-// }
-
 @HiveType(typeId: 1)
 class TestDto with HiveObjectMixin {
   static const hiveBoxName = 'tests';
