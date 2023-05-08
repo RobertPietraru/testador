@@ -116,7 +116,7 @@ class _TestScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: theme.standardPadding,
-                    child: buildQuestionNavigationBar(state, theme),
+                    child: buildQuestionNavigationBar(state, theme, context),
                   ),
                   Padding(
                     padding: theme.standardPadding,
@@ -178,7 +178,8 @@ class _TestScreen extends StatelessWidget {
     );
   }
 
-  Row buildQuestionNavigationBar(TestEditorState state, AppThemeData theme) {
+  Row buildQuestionNavigationBar(
+      TestEditorState state, AppThemeData theme, BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Expanded(
         child: Text(
@@ -187,7 +188,17 @@ class _TestScreen extends StatelessWidget {
         ),
       ),
       FilledButton(
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (_) => QuestionSettingsBottomSheet(
+                      cubit: context.read<TestEditorCubit>(),
+                    ),
+                shape: const RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.0)),
+                ));
+          },
           style: ButtonStyle(
               shape: MaterialStateProperty.all(const CircleBorder())),
           child: const Icon(Icons.more_vert)),
@@ -325,6 +336,43 @@ class QuestionCreationBottomSheet extends StatelessWidget {
           ),
         )
       ]),
+    );
+  }
+}
+
+class QuestionSettingsBottomSheet extends StatelessWidget {
+  final TestEditorCubit cubit;
+  const QuestionSettingsBottomSheet({
+    super.key,
+    required this.cubit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return Container(
+      padding: theme.standardPadding,
+      child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ListTile(
+              onTap: () {
+                cubit.deleteQuestion(
+                  index: cubit.state.currentQuestionIndex,
+                );
+                Navigator.pop(context);
+              },
+              title: Text(
+                "Sterge intrebarea",
+                style: TextStyle(color: theme.bad, fontWeight: FontWeight.bold),
+              ),
+              leading: Icon(
+                Icons.delete,
+                color: theme.bad,
+              ),
+            ),
+          ]),
     );
   }
 }

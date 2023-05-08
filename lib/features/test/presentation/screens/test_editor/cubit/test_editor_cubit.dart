@@ -87,7 +87,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     }
     // if we're deleting the current question and it's the last one, we can't leave the same index cause it will be out of bounds
     // we subtract one
-    if (state.currentQuestionIndex == index) {
+    if (state.test.questions.length - 1 == index) {
       newIndex = index - 1;
     }
 
