@@ -57,7 +57,10 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       test: state.test,
       question: type == QuestionType.answer
           ? TextInputQuestionEntity(testId: state.test.id)
-          : MultipleChoiceQuestionEntity(testId: state.test.id),
+          : MultipleChoiceQuestionEntity(testId: state.test.id, options: const [
+              MultipleChoiceOptionEntity(text: null),
+              MultipleChoiceOptionEntity(text: null),
+            ]),
       index: index + 1,
     ));
     response.fold(
@@ -71,6 +74,44 @@ class TestEditorCubit extends Cubit<TestEditorState> {
           status: TestEditorStatus.loaded,
           test: r.test,
           currentQuestionIndex: index + 1)),
+    );
+  }
+
+  Future<void> addAnotherRowOfOptions({
+    required int questionIndex,
+  }) async {
+    final question = state.currentQuestion as MultipleChoiceQuestionEntity;
+    if (question.options.length >= 6) {
+      //TODO error message
+      return;
+    }
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+
+    final response =
+        await updateQuestionUsecase.call(UpdateQuestionUsecaseParams(
+      test: state.test,
+      replacementQuestion: MultipleChoiceQuestionEntity(
+          testId: question.testId,
+          image: question.image,
+          options: [
+            ...question.options,
+            const MultipleChoiceOptionEntity(text: null),
+            const MultipleChoiceOptionEntity(text: null),
+          ]),
+      index: questionIndex,
+    ));
+
+    response.fold(
+      (l) => emit(state.copyWith(
+        failure: l,
+        status: TestEditorStatus.failed,
+        updateError: true,
+      )),
+      (r) => emit(state.copyWith(
+        failure: null,
+        status: TestEditorStatus.loaded,
+        test: r.testEntity,
+      )),
     );
   }
 

@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -118,53 +117,36 @@ class _TestScreen extends StatelessWidget {
                     padding: theme.standardPadding,
                     child: buildQuestionNavigationBar(state, theme, context),
                   ),
-                  state.currentQuestion.type == QuestionType.multipleChoice
-                      ? Flexible(
-                          child: GridView.count(
-                            childAspectRatio: 2,
-                            crossAxisCount: 2,
-                            children: const [
-                              MultipleChoiceOptionWidget(
-                                entity: MultipleChoiceOptionEntity(
-                                  isCorrect: true,
-                                  text: 'This is my thing',
-                                ),
-                                index: 0,
-                              ),
-                              MultipleChoiceOptionWidget(
-                                entity: MultipleChoiceOptionEntity(
-                                  isCorrect: true,
-                                  text: 'This is my thing',
-                                ),
-                                index: 1,
-                              ),
-                              MultipleChoiceOptionWidget(
-                                entity: MultipleChoiceOptionEntity(
-                                  isCorrect: true,
-                                  text: 'This is my thing',
-                                ),
-                                index: 2,
-                              ),
-                              MultipleChoiceOptionWidget(
-                                entity: MultipleChoiceOptionEntity(
-                                  isCorrect: true,
-                                  text: 'This is my thing',
-                                ),
-                                index: 3,
-                              ),
-                            ],
-                          ),
-                        )
-                      : buildAnswer(
-                          theme,
-                          const TextInputQuestionEntity(
-                              testId: 'asdf',
-                              acceptedAnswers: [
-                                'asdf',
-                                'asdf',
-                                'asdfasdf',
-                                'asdfasdf'
-                              ])),
+                  if (state.currentQuestion is MultipleChoiceQuestionEntity)
+                    Flexible(
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemCount: (state.currentQuestion
+                                as MultipleChoiceQuestionEntity)
+                            .options
+                            .length,
+                        itemBuilder: (context, index) =>
+                            MultipleChoiceOptionWidget(
+                                index: index,
+                                entity: (state.currentQuestion
+                                        as MultipleChoiceQuestionEntity)
+                                    .options[index]),
+                      ),
+                    )
+                  else
+                    buildAnswer(
+                        theme,
+                        const TextInputQuestionEntity(
+                            testId: 'asdf',
+                            acceptedAnswers: [
+                              'asdf',
+                              'asdf',
+                              'asdfasdf',
+                              'asdfasdf'
+                            ])),
                   const SizedBox(),
                 ],
               ),
@@ -232,7 +214,9 @@ class _TestScreen extends StatelessWidget {
             showModalBottomSheet(
                 context: context,
                 builder: (_) => QuestionSettingsBottomSheet(
+                      questionIndex: state.currentQuestionIndex,
                       cubit: context.read<TestEditorCubit>(),
+                      entity: state.currentQuestion,
                     ),
                 shape: const RoundedRectangleBorder(
                   borderRadius:
@@ -289,6 +273,7 @@ class MultipleChoiceOptionWidget extends StatelessWidget {
                   onChanged: (e) {},
                   hint: 'Apasa pentru a edita raspunsul',
                   backgroundColor: Colors.transparent,
+                  showLabel: false,
                 ),
                 CheckboxListTile(
                   value: false,
@@ -320,7 +305,7 @@ class MultipleChoiceOptionWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
             child: Text(
-              entity.text ?? "Raspunsul nr ${index + 1}",
+              entity.text ?? "Optiunea ${index + 1}",
               style: TextStyle(
                   color: isEnabled ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold),
@@ -476,9 +461,13 @@ class ModifyAnswerOptionDialog extends StatelessWidget {
 
 class QuestionSettingsBottomSheet extends StatelessWidget {
   final TestEditorCubit cubit;
+  final QuestionEntity entity;
+  final int questionIndex;
   const QuestionSettingsBottomSheet({
     super.key,
     required this.cubit,
+    required this.entity,
+    required this.questionIndex,
   });
 
   @override
@@ -490,6 +479,32 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            ListTile(
+              onTap: () {
+                cubit.deleteQuestion(
+                  index: cubit.state.currentQuestionIndex,
+                );
+                Navigator.pop(context);
+              },
+              title: const Text(
+                "Sugereaza continutul cu A.I.",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              leading: const Icon(Icons.diversity_2),
+            ),
+            if (entity.type == QuestionType.multipleChoice)
+              ListTile(
+                onTap: () {
+                  cubit.addAnotherRowOfOptions(questionIndex: questionIndex);
+
+                  Navigator.pop(context);
+                },
+                title: const Text(
+                  "Adauga un rand de optiuni",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                leading: const Icon(Icons.add),
+              ),
             ListTile(
               onTap: () {
                 cubit.deleteQuestion(

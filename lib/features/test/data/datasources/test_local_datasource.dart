@@ -37,7 +37,10 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
       questions: [
         QuestionDto(
             text: '',
-            options: null,
+            options: [
+              const MultipleChoiceOptionDto(text: null, isCorrect: false),
+              const MultipleChoiceOptionDto(text: null, isCorrect: false),
+            ],
             acceptedAnswers: null,
             testId: id,
             typeDto: QuestionTypeDto.multipleChoice)
