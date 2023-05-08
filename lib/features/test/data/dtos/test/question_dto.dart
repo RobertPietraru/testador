@@ -109,7 +109,7 @@ class QuestionDto {
   }
 
   QuestionEntity toEntity() {
-    if (typeDto == QuestionType.answer) {
+    if (typeDto == QuestionTypeDto.multipleChoice) {
       return MultipleChoiceQuestionEntity(
           testId: testId,
           options: options?.map((e) => e.toEntity()).toList() ?? [],
