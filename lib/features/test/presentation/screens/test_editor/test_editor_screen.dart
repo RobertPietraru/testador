@@ -118,49 +118,53 @@ class _TestScreen extends StatelessWidget {
                     padding: theme.standardPadding,
                     child: buildQuestionNavigationBar(state, theme, context),
                   ),
-                  Padding(
-                    padding: theme.standardPadding,
-                    child: TextInputField(
-                      maxLines: 3,
-                      onChanged: (e) {},
-                      hint: 'Intrebarea',
-                    ),
-                  ),
-                  Flexible(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      children: [
-                        const MultipleChoiceOptionWidget(
-                          entity: MultipleChoiceOptionEntity(
-                            isCorrect: true,
-                            text: 'This is my thing',
+                  state.currentQuestion.type == QuestionType.multipleChoice
+                      ? Flexible(
+                          child: GridView.count(
+                            childAspectRatio: 2,
+                            crossAxisCount: 2,
+                            children: const [
+                              MultipleChoiceOptionWidget(
+                                entity: MultipleChoiceOptionEntity(
+                                  isCorrect: true,
+                                  text: 'This is my thing',
+                                ),
+                                index: 0,
+                              ),
+                              MultipleChoiceOptionWidget(
+                                entity: MultipleChoiceOptionEntity(
+                                  isCorrect: true,
+                                  text: 'This is my thing',
+                                ),
+                                index: 1,
+                              ),
+                              MultipleChoiceOptionWidget(
+                                entity: MultipleChoiceOptionEntity(
+                                  isCorrect: true,
+                                  text: 'This is my thing',
+                                ),
+                                index: 2,
+                              ),
+                              MultipleChoiceOptionWidget(
+                                entity: MultipleChoiceOptionEntity(
+                                  isCorrect: true,
+                                  text: 'This is my thing',
+                                ),
+                                index: 3,
+                              ),
+                            ],
                           ),
-                          index: 0,
-                        ),
-                        MultipleChoiceOptionWidget(
-                          entity: MultipleChoiceOptionEntity(
-                            isCorrect: true,
-                            text: 'This is my thing',
-                          ),
-                          index: 1,
-                        ),
-                        MultipleChoiceOptionWidget(
-                          entity: MultipleChoiceOptionEntity(
-                            isCorrect: true,
-                            text: 'This is my thing',
-                          ),
-                          index: 2,
-                        ),
-                        MultipleChoiceOptionWidget(
-                          entity: MultipleChoiceOptionEntity(
-                            isCorrect: true,
-                            text: 'This is my thing',
-                          ),
-                          index: 3,
-                        ),
-                      ],
-                    ),
-                  ),
+                        )
+                      : buildAnswer(
+                          theme,
+                          const TextInputQuestionEntity(
+                              testId: 'asdf',
+                              acceptedAnswers: [
+                                'asdf',
+                                'asdf',
+                                'asdfasdf',
+                                'asdfasdf'
+                              ])),
                   const SizedBox(),
                 ],
               ),
@@ -178,13 +182,49 @@ class _TestScreen extends StatelessWidget {
     );
   }
 
+  Expanded buildAnswer(AppThemeData theme, TextInputQuestionEntity question) {
+    return Expanded(
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(),
+        itemCount: question.acceptedAnswers.length,
+        itemBuilder: (context, index) => Padding(
+          padding: theme.standardPadding.copyWith(bottom: 0),
+          child: ListTile(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => const ModifyAnswerOptionDialog(),
+              );
+            },
+            leading: const Icon(Icons.lightbulb_outline_sharp),
+            title: Text(question.acceptedAnswers[index]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String getPlaceholderMessage(QuestionType type) {
+    return type != QuestionType.answer
+        ? "Intrebare cu raspuns liber"
+        : "Intrebare cu selectare raspuns corect";
+  }
+
   Row buildQuestionNavigationBar(
       TestEditorState state, AppThemeData theme, BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Expanded(
-        child: Text(
-          "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.type != QuestionType.answer ? "Intrebare cu raspuns liber" : "Intrebare cu selectare raspuns corect"}",
-          style: theme.subtitleTextStyle,
+        child: InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) => const EditQuestionNameDialog(),
+            );
+          },
+          child: Text(
+            "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.text ?? getPlaceholderMessage(state.currentQuestion.type)}",
+            style: theme.subtitleTextStyle,
+          ),
         ),
       ),
       FilledButton(
@@ -200,7 +240,8 @@ class _TestScreen extends StatelessWidget {
                 ));
           },
           style: ButtonStyle(
-              shape: MaterialStateProperty.all(const CircleBorder())),
+            shape: MaterialStateProperty.all(const CircleBorder()),
+          ),
           child: const Icon(Icons.more_vert)),
     ]);
   }
@@ -219,7 +260,7 @@ class MultipleChoiceOptionWidget extends StatelessWidget {
     return [
       Colors.red,
       Colors.blue,
-      Colors.yellow,
+      Colors.orange,
       Colors.green,
       Colors.pink,
       Colors.purple
@@ -232,6 +273,10 @@ class MultipleChoiceOptionWidget extends StatelessWidget {
     final theme = AppTheme.of(context);
 
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide.none,
+      ),
       child: InkWell(
         onTap: () {
           showDialog(
@@ -242,7 +287,6 @@ class MultipleChoiceOptionWidget extends StatelessWidget {
               children: [
                 TextInputField(
                   onChanged: (e) {},
-                  showLabel: false,
                   hint: 'Apasa pentru a edita raspunsul',
                   backgroundColor: Colors.transparent,
                 ),
@@ -328,7 +372,7 @@ class QuestionCreationBottomSheet extends StatelessWidget {
         ),
         ListTile(
           onTap: () {},
-          title: Text(
+          title: const Text(
               "Sugereaza o intrebare si niste raspunsuri cu inteligenta artificiala"),
           leading: Icon(
             Icons.diversity_2,
@@ -336,6 +380,96 @@ class QuestionCreationBottomSheet extends StatelessWidget {
           ),
         )
       ]),
+    );
+  }
+}
+
+class EditQuestionNameDialog extends StatelessWidget {
+  const EditQuestionNameDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return CustomDialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          TextInputField(
+            onChanged: (e) {},
+            hint: 'Apasa pentru a modifica intrebarea',
+            showLabel: true,
+          ),
+          SizedBox(height: theme.spacing.medium),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FilledButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(theme.good),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ))),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Salveaza'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ModifyAnswerOptionDialog extends StatelessWidget {
+  const ModifyAnswerOptionDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return CustomDialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          TextInputField(
+            onChanged: (e) {},
+            hint: 'Apasa pentru a modifica intrebarea',
+            showLabel: false,
+          ),
+          SizedBox(height: theme.spacing.medium),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FilledButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(theme.bad),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ))),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Sterge'),
+              ),
+              SizedBox(width: theme.spacing.small),
+              FilledButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(theme.good),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ))),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Salveaza'),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -440,7 +574,6 @@ class QuestionCreationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
     return CustomDialog(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
