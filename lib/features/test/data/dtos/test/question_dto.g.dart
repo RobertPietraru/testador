@@ -67,7 +67,7 @@ class MultipleChoiceOptionDtoAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MultipleChoiceOptionDto(
-      text: fields[0] as String,
+      text: fields[0] as String?,
       isCorrect: fields[1] as bool,
     );
   }
