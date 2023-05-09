@@ -24,11 +24,13 @@ abstract class QuestionEntity extends Equatable {
     QuestionType? type,
     String? image = mockValueForDefault,
     String? text = mockValueForDefault,
+    List<String>? acceptedAnswers,
+    List<MultipleChoiceOptionEntity>? options,
   }) {
     final old = this;
     if (old is MultipleChoiceQuestionEntity) {
       return MultipleChoiceQuestionEntity(
-        options: old.options,
+        options: options ?? old.options,
         testId: testId ?? this.testId,
         text: text == mockValueForDefault ? this.text : text,
         type: type ?? this.type,
@@ -37,7 +39,7 @@ abstract class QuestionEntity extends Equatable {
     }
     if (old is TextInputQuestionEntity) {
       return TextInputQuestionEntity(
-        acceptedAnswers: old.acceptedAnswers,
+        acceptedAnswers: acceptedAnswers ?? old.acceptedAnswers,
         testId: testId ?? this.testId,
         text: text == mockValueForDefault ? this.text : text,
         type: type ?? this.type,

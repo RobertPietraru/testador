@@ -1,4 +1,4 @@
-❌ Edit question title
+✔ Edit question title
 ❌ Switch question type
 
 ❌ Add option to input question

@@ -130,7 +130,7 @@ class _TestScreen extends StatelessWidget {
                         itemBuilder: (context, index) =>
                             MultipleChoiceOptionWidget(
                                 index: index,
-                                entity: (state.currentQuestion
+                                option: (state.currentQuestion
                                         as MultipleChoiceQuestionEntity)
                                     .options[index]),
                       ),
@@ -186,16 +186,23 @@ class _TestScreen extends StatelessWidget {
   }
 }
 
-class MultipleChoiceOptionWidget extends StatelessWidget {
+class MultipleChoiceOptionWidget extends StatefulWidget {
   final int index;
-  final MultipleChoiceOptionEntity entity;
+  final MultipleChoiceOptionEntity option;
   const MultipleChoiceOptionWidget({
     super.key,
     required this.index,
-    required this.entity,
+    required this.option,
   });
 
-  Color goodColor(int index) {
+  @override
+  State<MultipleChoiceOptionWidget> createState() =>
+      _MultipleChoiceOptionWidgetState();
+}
+
+class _MultipleChoiceOptionWidgetState
+    extends State<MultipleChoiceOptionWidget> {
+  Color getColor(int index) {
     return [
       Colors.red,
       Colors.blue,
@@ -208,7 +215,7 @@ class MultipleChoiceOptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isEnabled = entity.text != null;
+    final bool isEnabled = widget.option.text != null;
     final theme = AppTheme.of(context);
 
     return Card(
@@ -220,55 +227,120 @@ class MultipleChoiceOptionWidget extends StatelessWidget {
         onTap: () {
           showDialog(
             context: context,
-            builder: (context) => CustomDialog(
-                child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextInputField(
-                  onChanged: (e) {},
-                  hint: 'Apasa pentru a edita raspunsul',
-                  backgroundColor: Colors.transparent,
-                  showLabel: false,
-                ),
-                CheckboxListTile(
-                  value: false,
-                  onChanged: (e) {},
-                  title: const Text("Este corect?"),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FilledButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(theme.good),
-                          shape:
-                              MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ))),
-                      onPressed: () {},
-                      child: const Text('Salveaza'),
-                    )
-                  ],
-                )
-              ],
-            )),
+            builder: (_) => BlocProvider.value(
+              value: context.read<TestEditorCubit>(),
+              child: _MultipleChoiceOptionEditDialog(
+                entity: widget.option,
+                index: widget.index,
+              ),
+            ),
           );
         },
         child: Ink(
-          color: isEnabled ? goodColor(index) : null,
+          color: isEnabled ? getColor(widget.index) : theme.secondaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Center(
-            child: Text(
-              entity.text ?? "Optiunea ${index + 1}",
-              style: TextStyle(
-                  color: isEnabled ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () => context
+                          .read<TestEditorCubit>()
+                          .updateCurrentQuestionOption(
+                              optionIndex: widget.index,
+                              newOption: MultipleChoiceOptionEntity(
+                                  text: widget.option.text,
+                                  isCorrect: !widget.option.isCorrect)),
+                      icon: Icon(
+                          widget.option.isCorrect ? Icons.done : Icons.close,
+                          color: Colors.white)),
+                ],
+              ),
+              Center(
+                child: Text(
+                  widget.option.text ?? "Optiunea ${widget.index + 1}",
+                  style: TextStyle(
+                      color: isEnabled ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(),
+              const SizedBox(),
+            ],
           ),
         ),
       ),
     );
+  }
+}
+
+class _MultipleChoiceOptionEditDialog extends StatefulWidget {
+  final MultipleChoiceOptionEntity entity;
+  final int index;
+  const _MultipleChoiceOptionEditDialog(
+      {required this.entity, required this.index});
+
+  @override
+  State<_MultipleChoiceOptionEditDialog> createState() =>
+      _MultipleChoiceOptionEditDialogState();
+}
+
+class _MultipleChoiceOptionEditDialogState
+    extends State<_MultipleChoiceOptionEditDialog> {
+  late String value;
+  late bool isCorrect;
+
+  @override
+  void initState() {
+    value = widget.entity.text ?? '';
+    isCorrect = widget.entity.isCorrect;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return CustomDialog(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextInputField(
+          initialValue: value,
+          onChanged: (e) => setState(() => value = e),
+          hint: 'Apasa pentru a edita raspunsul',
+          backgroundColor: Colors.transparent,
+          showLabel: false,
+        ),
+        CheckboxListTile(
+          value: isCorrect,
+          onChanged: (e) => setState(() => isCorrect = !isCorrect),
+          title: const Text("Este corect?"),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FilledButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(theme.good),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ))),
+              onPressed: () {
+                context.read<TestEditorCubit>().updateCurrentQuestionOption(
+                    optionIndex: widget.index,
+                    newOption: MultipleChoiceOptionEntity(
+                        text: value.isEmpty ? null : value,
+                        isCorrect: isCorrect));
+                Navigator.pop(context);
+              },
+              child: const Text('Salveaza'),
+            )
+          ],
+        )
+      ],
+    ));
   }
 }
 

@@ -81,7 +81,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     required int questionIndex,
   }) async {
     final question = state.currentQuestion as MultipleChoiceQuestionEntity;
-    if (question.options.length >= 6) {
+    if (question.options.length >= 4) {
       //TODO error message
       return;
     }
@@ -169,6 +169,18 @@ class TestEditorCubit extends Cubit<TestEditorState> {
           test: r.testEntity,
           currentQuestionIndex: index)),
     );
+  }
+
+  Future<void> updateCurrentQuestionOption(
+      {required int optionIndex,
+      required MultipleChoiceOptionEntity newOption}) async {
+    final question = state.currentQuestion;
+    if (question is! MultipleChoiceQuestionEntity) return;
+    final options = question.options.toList();
+    options[optionIndex] = newOption;
+    await updateQuestion(
+        index: state.currentQuestionIndex,
+        replacementQuestion: question.copyWith(options: options));
   }
 
   Future<void> updateCurrentQuestionText({required String? newText}) async {
