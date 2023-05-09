@@ -119,7 +119,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     required int questionIndex,
   }) async {
     final question = state.currentQuestion as MultipleChoiceQuestionEntity;
-    if (question.options.isEmpty) {
+    if (question.options.length <= 2) {
       //TODO error message
       return;
     }
