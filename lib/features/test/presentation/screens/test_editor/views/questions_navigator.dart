@@ -76,17 +76,12 @@ class TestQuestionWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: InkWell(
-                  onTap: () {
-                    showDialog(
+                  onTap: () => showDialog(
                       context: context,
                       builder: (_) => BlocProvider.value(
-                        value: BlocProvider.of<TestEditorCubit>(context),
-                        child: EditQuestionDialog(
-                          initialValue: state.currentQuestion.text ?? '',
-                        ),
-                      ),
-                    );
-                  },
+                          value: BlocProvider.of<TestEditorCubit>(context),
+                          child: EditQuestionDialog(
+                              initialValue: state.currentQuestion.text ?? ''))),
                   child: Text(
                     "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.text ?? "Apasa pentru a modifica intrebarea"}",
                     style: theme.subtitleTextStyle,
@@ -94,19 +89,19 @@ class TestQuestionWidget extends StatelessWidget {
                 ),
               ),
               FilledButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (_) => QuestionSettingsBottomSheet(
+                  onPressed: () => showModalBottomSheet(
+                      context: context,
+                      builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<TestEditorCubit>(context),
+                            child: QuestionSettingsBottomSheet(
                               questionIndex: state.currentQuestionIndex,
-                              cubit: context.read<TestEditorCubit>(),
                               entity: state.currentQuestion,
                             ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20.0)),
-                        ));
-                  },
+                          ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20.0)),
+                      )),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(const CircleBorder()),
                   ),
