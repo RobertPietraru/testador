@@ -28,7 +28,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
 
     final userId = userCredentials.user?.uid;
     if (userId == null) {
-      throw AuthUnknownFailure();
+      throw const AuthUnknownFailure();
     }
 
     final userDto = UserDto(

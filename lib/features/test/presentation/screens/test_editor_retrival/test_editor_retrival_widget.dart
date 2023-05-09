@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../core/routing/app_router.gr.dart';
 import '../../../../../../injection.dart';
-import '../../../../domain/entities/test_entity.dart';
+import '../../../domain/entities/test_entity.dart';
 import 'cubit/test_editor_retrival_cubit.dart';
 
 class TestEditorRetrivalWidget extends StatelessWidget {
