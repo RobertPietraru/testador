@@ -18,11 +18,6 @@ class _AcceptedAnswerCreationDialogState
     extends State<AcceptedAnswerCreationDialog> {
   String value = "";
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return CustomDialog(
@@ -32,7 +27,7 @@ class _AcceptedAnswerCreationDialogState
         TextInputField(
           initialValue: value,
           onChanged: (e) => setState(() => value = e),
-          hint: 'Apasa pentru a edita raspunsul',
+          hint: 'Raspuns acceptat',
           backgroundColor: Colors.transparent,
           showLabel: false,
         ),
