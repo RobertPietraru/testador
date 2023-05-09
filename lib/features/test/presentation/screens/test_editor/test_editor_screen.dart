@@ -6,7 +6,6 @@ import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
-import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/cubit/test_editor_cubit.dart';
@@ -68,7 +67,7 @@ class _TestScreen extends StatelessWidget {
                 ),
                 scrollDirection: Axis.horizontal,
                 itemCount: test.questions.length,
-                itemBuilder: (context, index) => QuestionListTile(
+                itemBuilder: (context, index) => QuestionNavigatorListTile(
                   onPressed: () {
                     context.read<TestEditorCubit>().navigateToIndex(index);
                   },
@@ -115,7 +114,7 @@ class _TestScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: theme.standardPadding,
-                    child: buildQuestionNavigationBar(state, theme, context),
+                    child: const TestQuestionWidget(),
                   ),
                   if (state.currentQuestion is MultipleChoiceQuestionEntity)
                     Flexible(
@@ -184,50 +183,6 @@ class _TestScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getPlaceholderMessage(QuestionType type) {
-    return type != QuestionType.answer
-        ? "Intrebare cu raspuns liber"
-        : "Intrebare cu selectare raspuns corect";
-  }
-
-  Row buildQuestionNavigationBar(
-      TestEditorState state, AppThemeData theme, BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Expanded(
-        child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (_) => const EditQuestionNameDialog(),
-            );
-          },
-          child: Text(
-            "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.text ?? getPlaceholderMessage(state.currentQuestion.type)}",
-            style: theme.subtitleTextStyle,
-          ),
-        ),
-      ),
-      FilledButton(
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (_) => QuestionSettingsBottomSheet(
-                      questionIndex: state.currentQuestionIndex,
-                      cubit: context.read<TestEditorCubit>(),
-                      entity: state.currentQuestion,
-                    ),
-                shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(20.0)),
-                ));
-          },
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(const CircleBorder()),
-          ),
-          child: const Icon(Icons.more_vert)),
-    ]);
   }
 }
 
@@ -369,8 +324,21 @@ class QuestionCreationBottomSheet extends StatelessWidget {
   }
 }
 
-class EditQuestionNameDialog extends StatelessWidget {
-  const EditQuestionNameDialog({super.key});
+class EditQuestionDialog extends StatefulWidget {
+  final String initialValue;
+  const EditQuestionDialog({super.key, required this.initialValue});
+
+  @override
+  State<EditQuestionDialog> createState() => _EditQuestionDialogState();
+}
+
+class _EditQuestionDialogState extends State<EditQuestionDialog> {
+  late String value;
+  @override
+  void initState() {
+    value = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -381,7 +349,8 @@ class EditQuestionNameDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           TextInputField(
-            onChanged: (e) {},
+            onChanged: (e) => setState(() => value = e),
+            initialValue: value,
             hint: 'Apasa pentru a modifica intrebarea',
             showLabel: true,
           ),
@@ -396,6 +365,15 @@ class EditQuestionNameDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ))),
                 onPressed: () {
+                  if (value.isEmpty) {
+                    context
+                        .read<TestEditorCubit>()
+                        .updateCurrentQuestionText(newText: null);
+                  } else {
+                    context
+                        .read<TestEditorCubit>()
+                        .updateCurrentQuestionText(newText: value);
+                  }
                   Navigator.pop(context);
                 },
                 child: const Text('Salveaza'),
@@ -421,7 +399,7 @@ class ModifyAnswerOptionDialog extends StatelessWidget {
         children: [
           TextInputField(
             onChanged: (e) {},
-            hint: 'Apasa pentru a modifica intrebarea',
+            hint: 'Apasa pentru a modifica optiunea',
             showLabel: false,
           ),
           SizedBox(height: theme.spacing.medium),
@@ -526,11 +504,11 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
   }
 }
 
-class QuestionListTile extends StatelessWidget {
+class QuestionNavigatorListTile extends StatelessWidget {
   final int index;
   final QuestionEntity question;
   final VoidCallback onPressed;
-  const QuestionListTile({
+  const QuestionNavigatorListTile({
     super.key,
     required this.index,
     required this.question,
@@ -582,90 +560,56 @@ class QuestionListTile extends StatelessWidget {
   }
 }
 
-class QuestionCreationDialog extends StatelessWidget {
-  const QuestionCreationDialog({
-    super.key,
-  });
+class TestQuestionWidget extends StatelessWidget {
+  const TestQuestionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CustomDialog(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ChoiceWidget(
-            icon: Icons.done,
-            label: 'Bifat',
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          ChoiceWidget(
-            icon: Icons.edit,
-            label: 'Raspuns',
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ChoiceWidget extends StatefulWidget {
-  const ChoiceWidget({
-    super.key,
-    required this.label,
-    required this.icon,
-    required this.onPressed,
-  });
-
-  final String label;
-  final IconData icon;
-  final Function() onPressed;
-
-  @override
-  State<ChoiceWidget> createState() => _ChoiceWidgetState();
-}
-
-class _ChoiceWidgetState extends State<ChoiceWidget> {
-  bool isPressed = false;
-  @override
-  Widget build(BuildContext context) {
-    final double size = 10.widthPercent;
     final theme = AppTheme.of(context);
-
-    return GestureDetector(
-      onTap: widget.onPressed,
-      onTapDown: (details) => setState(() => isPressed = true),
-      onTapUp: (details) => setState(() => isPressed = false),
-      onTapCancel: () => setState(() => isPressed = false),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: isPressed
-                  ? theme.primaryColor.withOpacity(0.8)
-                  : theme.primaryColor,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              widget.icon,
-              color: theme.defaultBackgroundColor,
-              size: size / 2,
-            ),
-          ),
-          SizedBox(height: theme.spacing.small),
-          Text(
-            widget.label,
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
+    return BlocBuilder<TestEditorCubit, TestEditorState>(
+      builder: (context, state) {
+        return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => BlocProvider.value(
+                        value: BlocProvider.of<TestEditorCubit>(context),
+                        child: EditQuestionDialog(
+                          initialValue: state.currentQuestion.text ?? '',
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.text ?? "Apasa pentru a modifica intrebarea"}",
+                    style: theme.subtitleTextStyle,
+                  ),
+                ),
+              ),
+              FilledButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (_) => QuestionSettingsBottomSheet(
+                              questionIndex: state.currentQuestionIndex,
+                              cubit: context.read<TestEditorCubit>(),
+                              entity: state.currentQuestion,
+                            ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20.0)),
+                        ));
+                  },
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(const CircleBorder()),
+                  ),
+                  child: const Icon(Icons.more_vert)),
+            ]);
+      },
     );
   }
 }

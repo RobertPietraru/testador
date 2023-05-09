@@ -10,6 +10,7 @@ class TextInputField extends StatefulWidget {
   final int maxLines;
   final bool showLabel;
   final Color? backgroundColor;
+  final String? initialValue;
   const TextInputField({
     Key? key,
     required this.onChanged,
@@ -20,6 +21,7 @@ class TextInputField extends StatefulWidget {
     this.isPassword = false,
     this.showLabel = true,
     this.backgroundColor,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,7 @@ class _TextInputFieldState extends State<TextInputField> {
   bool isObscured = true;
   @override
   void initState() {
+    controller.text = widget.initialValue ?? '';
     isObscured = widget.isPassword;
     super.initState();
   }
@@ -52,11 +55,9 @@ class _TextInputFieldState extends State<TextInputField> {
         if (widget.showLabel)
           Column(
             children: [
-              Text(
-                widget.hint,
-                style: theme.informationTextStyle
-                    .copyWith(color: theme.primaryColor),
-              ),
+              Text(widget.hint,
+                  style: theme.informationTextStyle
+                      .copyWith(color: theme.primaryColor)),
               const SizedBox(height: 5),
             ],
           ),

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+const mockValueForDefault = 'nothing-to-see-here!@#^';
+
 enum QuestionType { multipleChoice, answer }
 
 abstract class QuestionEntity extends Equatable {
@@ -16,6 +18,40 @@ abstract class QuestionEntity extends Equatable {
   });
   @override
   List<Object?> get props => [testId, type];
+
+  QuestionEntity copyWith({
+    String? testId,
+    QuestionType? type,
+    String? image = mockValueForDefault,
+    String? text = mockValueForDefault,
+  }) {
+    final old = this;
+    if (old is MultipleChoiceQuestionEntity) {
+      return MultipleChoiceQuestionEntity(
+        options: old.options,
+        testId: testId ?? this.testId,
+        text: text == mockValueForDefault ? this.text : text,
+        type: type ?? this.type,
+        image: image == mockValueForDefault ? this.image : image,
+      );
+    }
+    if (old is TextInputQuestionEntity) {
+      return TextInputQuestionEntity(
+        acceptedAnswers: old.acceptedAnswers,
+        testId: testId ?? this.testId,
+        text: text == mockValueForDefault ? this.text : text,
+        type: type ?? this.type,
+        image: image == mockValueForDefault ? this.image : image,
+      );
+    }
+
+    return MultipleChoiceQuestionEntity(
+      testId: testId ?? this.testId,
+      text: text == mockValueForDefault ? this.text : text,
+      type: type ?? this.type,
+      image: image == mockValueForDefault ? this.image : image,
+    );
+  }
 }
 
 class MultipleChoiceQuestionEntity extends QuestionEntity {
@@ -37,6 +73,7 @@ class TextInputQuestionEntity extends QuestionEntity {
     super.type = QuestionType.answer,
     this.acceptedAnswers = const [],
     super.text,
+    super.image,
   });
 
   final List<String> acceptedAnswers;

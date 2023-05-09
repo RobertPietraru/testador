@@ -154,8 +154,11 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       {required int index, required QuestionEntity replacementQuestion}) async {
     emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
 
-    final response = await deleteQuestionUsecase
-        .call(DeleteQuestionUsecaseParams(test: state.test, index: index));
+    final response = await updateQuestionUsecase.call(
+        UpdateQuestionUsecaseParams(
+            test: state.test,
+            index: index,
+            replacementQuestion: replacementQuestion));
 
     response.fold(
       (l) => emit(state.copyWith(
@@ -165,6 +168,15 @@ class TestEditorCubit extends Cubit<TestEditorState> {
           status: TestEditorStatus.loaded,
           test: r.testEntity,
           currentQuestionIndex: index)),
+    );
+  }
+
+  Future<void> updateCurrentQuestionText({required String? newText}) async {
+    updateQuestion(
+      index: state.currentQuestionIndex,
+      replacementQuestion: state.currentQuestion.copyWith(
+        text: newText,
+      ),
     );
   }
 }
