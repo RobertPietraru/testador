@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
@@ -191,4 +192,41 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       ),
     );
   }
+
+  Future<void> addAcceptedAnswer({required String answer}) async {
+    final question = state.currentQuestion;
+    if (question is! TextInputQuestionEntity) return;
+
+    await updateQuestion(
+        index: state.currentQuestionIndex,
+        replacementQuestion: question
+            .copyWith(acceptedAnswers: [...question.acceptedAnswers, answer]));
+  }
+
+  Future<void> removeAcceptedAnswer({required int index}) async {
+    final question = state.currentQuestion;
+    if (question is! TextInputQuestionEntity) return;
+
+    final answers = question.acceptedAnswers.toList();
+    answers.removeAt(index);
+
+    await updateQuestion(
+        index: state.currentQuestionIndex,
+        replacementQuestion: question.copyWith(acceptedAnswers: answers));
+  }
+
+  Future<void> updateAcceptedAnswer(
+      {required int index, required String answer}) async {
+    final question = state.currentQuestion;
+    if (question is! TextInputQuestionEntity) return;
+
+    final answers = question.acceptedAnswers.toList();
+    answers[index] = answer;
+
+    await updateQuestion(
+        index: state.currentQuestionIndex,
+        replacementQuestion: question.copyWith(acceptedAnswers: answers));
+  }
+
+  //ModifyAnswerOptionDialog
 }

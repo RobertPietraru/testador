@@ -5,7 +5,7 @@
 ❌ Remove option from input question
 
 ✔ Add row to multiple choice question
-❌ Edit multiple choice question
+✔ Edit multiple choice question
 ❌ Clean the code
 
 ❌✔

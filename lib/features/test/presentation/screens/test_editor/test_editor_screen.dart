@@ -116,6 +116,27 @@ class _TestScreen extends StatelessWidget {
                     padding: theme.standardPadding,
                     child: const TestQuestionWidget(),
                   ),
+                  if (state.currentQuestion is TextInputQuestionEntity)
+                    Padding(
+                      padding: theme.standardPadding.copyWith(top: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FilledButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => BlocProvider.value(
+                                        value: context.read<TestEditorCubit>(),
+                                        child:
+                                            const AcceptedAnswerCreationDialog(),
+                                      ));
+                            },
+                            child: const Text("Adauga optiune"),
+                          ),
+                        ],
+                      ),
+                    ),
                   if (state.currentQuestion is MultipleChoiceQuestionEntity)
                     Flexible(
                       child: GridView.builder(
@@ -136,16 +157,8 @@ class _TestScreen extends StatelessWidget {
                       ),
                     )
                   else
-                    buildAnswer(
-                        theme,
-                        const TextInputQuestionEntity(
-                            testId: 'asdf',
-                            acceptedAnswers: [
-                              'asdf',
-                              'asdf',
-                              'asdfasdf',
-                              'asdfasdf'
-                            ])),
+                    buildAnswers(theme,
+                        state.currentQuestion as TextInputQuestionEntity),
                   const SizedBox(),
                 ],
               ),
@@ -163,8 +176,13 @@ class _TestScreen extends StatelessWidget {
     );
   }
 
-  Expanded buildAnswer(AppThemeData theme, TextInputQuestionEntity question) {
-    return Expanded(
+  Widget buildAnswers(AppThemeData theme, TextInputQuestionEntity question) {
+    if (question.acceptedAnswers.isEmpty) {
+      return const Expanded(
+          child: Center(child: Text('Nu ai adaugat nicio optiune de raspuns')));
+    }
+
+    return Flexible(
       child: ListView.separated(
         separatorBuilder: (context, index) => const Divider(),
         itemCount: question.acceptedAnswers.length,
@@ -174,7 +192,13 @@ class _TestScreen extends StatelessWidget {
             onTap: () {
               showDialog(
                 context: context,
-                builder: (_) => const ModifyAnswerOptionDialog(),
+                builder: (_) => BlocProvider.value(
+                  value: context.read<TestEditorCubit>(),
+                  child: ModifyAnswerOptionDialog(
+                    initialValue: question.acceptedAnswers[index],
+                    index: index,
+                  ),
+                ),
               );
             },
             leading: const Icon(Icons.lightbulb_outline_sharp),
@@ -183,6 +207,62 @@ class _TestScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AcceptedAnswerCreationDialog extends StatefulWidget {
+  const AcceptedAnswerCreationDialog({super.key});
+
+  @override
+  State<AcceptedAnswerCreationDialog> createState() =>
+      _AcceptedAnswerCreationDialogState();
+}
+
+class _AcceptedAnswerCreationDialogState
+    extends State<AcceptedAnswerCreationDialog> {
+  String value = "";
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    return CustomDialog(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextInputField(
+          initialValue: value,
+          onChanged: (e) => setState(() => value = e),
+          hint: 'Apasa pentru a edita raspunsul',
+          backgroundColor: Colors.transparent,
+          showLabel: false,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FilledButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(theme.good),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ))),
+              onPressed: () {
+                if (value.isNotEmpty) {
+                  context
+                      .read<TestEditorCubit>()
+                      .addAcceptedAnswer(answer: value);
+                }
+                Navigator.pop(context);
+              },
+              child: const Text('Salveaza'),
+            )
+          ],
+        )
+      ],
+    ));
   }
 }
 
@@ -458,8 +538,24 @@ class _EditQuestionDialogState extends State<EditQuestionDialog> {
   }
 }
 
-class ModifyAnswerOptionDialog extends StatelessWidget {
-  const ModifyAnswerOptionDialog({super.key});
+class ModifyAnswerOptionDialog extends StatefulWidget {
+  final String initialValue;
+  final int index;
+  const ModifyAnswerOptionDialog(
+      {super.key, required this.initialValue, required this.index});
+
+  @override
+  State<ModifyAnswerOptionDialog> createState() =>
+      _ModifyAnswerOptionDialogState();
+}
+
+class _ModifyAnswerOptionDialogState extends State<ModifyAnswerOptionDialog> {
+  late String value;
+  @override
+  void initState() {
+    value = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -470,7 +566,12 @@ class ModifyAnswerOptionDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           TextInputField(
-            onChanged: (e) {},
+            onChanged: (e) {
+              setState(() {
+                value = e;
+              });
+            },
+            initialValue: widget.initialValue,
             hint: 'Apasa pentru a modifica optiunea',
             showLabel: false,
           ),
@@ -485,6 +586,9 @@ class ModifyAnswerOptionDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ))),
                 onPressed: () {
+                  context
+                      .read<TestEditorCubit>()
+                      .removeAcceptedAnswer(index: widget.index);
                   Navigator.pop(context);
                 },
                 child: const Text('Sterge'),
@@ -497,6 +601,9 @@ class ModifyAnswerOptionDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ))),
                 onPressed: () {
+                  context
+                      .read<TestEditorCubit>()
+                      .updateAcceptedAnswer(index: widget.index, answer: value);
                   Navigator.pop(context);
                 },
                 child: const Text('Salveaza'),
