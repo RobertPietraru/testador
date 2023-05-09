@@ -86,14 +86,21 @@ class _TestScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FilledButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(theme.good),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ))),
-              onPressed: () {},
-              child: const Text('Salveaza'),
+            child: BlocBuilder<TestEditorCubit, TestEditorState>(
+              builder: (context, state) {
+                return FilledButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          state.test != state.lastSavedTest
+                              ? theme.good
+                              : theme.secondaryColor),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ))),
+                  onPressed: state.test != state.lastSavedTest ? () {} : null,
+                  child: const Text('Salveaza'),
+                );
+              },
             ),
           ),
         ],
@@ -436,42 +443,31 @@ class QuestionCreationBottomSheet extends StatelessWidget {
     final theme = AppTheme.of(context);
     return Container(
       padding: theme.standardPadding,
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Column(
-          children: [
-            ListTile(
-              onTap: () {
-                cubit.addNewQuestion(
-                    index: cubit.state.currentQuestionIndex,
-                    type: QuestionType.multipleChoice);
-                Navigator.pop(context);
-              },
-              title: const Text("Adauga intrebare ABC"),
-              leading: const Icon(Icons.abc),
-            ),
-            ListTile(
-              onTap: () {
-                cubit.addNewQuestion(
-                    index: cubit.state.currentQuestionIndex,
-                    type: QuestionType.answer);
-                Navigator.pop(context);
-              },
-              title: const Text("Adauga intrebare cu raspuns amplu"),
-              leading: const Icon(Icons.edit),
-            ),
-          ],
-        ),
-        ListTile(
-          onTap: () {},
-          title: const Text(
-              "Sugereaza o intrebare si niste raspunsuri cu inteligenta artificiala"),
-          leading: Icon(
-            Icons.diversity_2,
-            color: theme.primaryColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            onTap: () {
+              cubit.addNewQuestion(
+                  index: cubit.state.currentQuestionIndex,
+                  type: QuestionType.multipleChoice);
+              Navigator.pop(context);
+            },
+            title: const Text("Adauga intrebare ABC"),
+            leading: const Icon(Icons.abc),
           ),
-        )
-      ]),
+          ListTile(
+            onTap: () {
+              cubit.addNewQuestion(
+                  index: cubit.state.currentQuestionIndex,
+                  type: QuestionType.answer);
+              Navigator.pop(context);
+            },
+            title: const Text("Adauga intrebare cu raspuns amplu"),
+            leading: const Icon(Icons.edit),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -666,7 +662,6 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
               ListTile(
                 onTap: () {
                   cubit.removeRowOfOptions(questionIndex: questionIndex);
-
                   Navigator.pop(context);
                 },
                 title: const Text(
@@ -677,9 +672,7 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
               ),
             ListTile(
               onTap: () {
-                cubit.deleteQuestion(
-                  index: cubit.state.currentQuestionIndex,
-                );
+                cubit.deleteQuestion(index: cubit.state.currentQuestionIndex);
                 Navigator.pop(context);
               },
               title: Text(

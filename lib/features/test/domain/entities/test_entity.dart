@@ -19,5 +19,6 @@ class TestEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, title, isPublic, creatorId, imageUrl];
+  List<Object?> get props =>
+      [id, title, isPublic, creatorId, imageUrl, ...questions];
 }
