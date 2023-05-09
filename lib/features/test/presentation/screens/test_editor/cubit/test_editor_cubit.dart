@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
@@ -99,6 +98,41 @@ class TestEditorCubit extends Cubit<TestEditorState> {
             const MultipleChoiceOptionEntity(text: null),
             const MultipleChoiceOptionEntity(text: null),
           ]),
+      index: questionIndex,
+    ));
+
+    response.fold(
+      (l) => emit(state.copyWith(
+        failure: l,
+        status: TestEditorStatus.failed,
+        updateError: true,
+      )),
+      (r) => emit(state.copyWith(
+        failure: null,
+        status: TestEditorStatus.loaded,
+        test: r.testEntity,
+      )),
+    );
+  }
+
+  Future<void> removeRowOfOptions({
+    required int questionIndex,
+  }) async {
+    final question = state.currentQuestion as MultipleChoiceQuestionEntity;
+    if (question.options.isEmpty) {
+      //TODO error message
+      return;
+    }
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    final questions = question.options.toList();
+    questions.removeLast();
+    questions.removeLast();
+
+    final response =
+        await updateQuestionUsecase.call(UpdateQuestionUsecaseParams(
+      test: state.test,
+      replacementQuestion: MultipleChoiceQuestionEntity(
+          testId: question.testId, image: question.image, options: questions),
       index: questionIndex,
     ));
 

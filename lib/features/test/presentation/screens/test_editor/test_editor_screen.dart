@@ -662,6 +662,19 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                 ),
                 leading: const Icon(Icons.add),
               ),
+            if (entity.type == QuestionType.multipleChoice)
+              ListTile(
+                onTap: () {
+                  cubit.removeRowOfOptions(questionIndex: questionIndex);
+
+                  Navigator.pop(context);
+                },
+                title: const Text(
+                  "Inlatura un rand de optiuni",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                leading: const Icon(Icons.remove),
+              ),
             ListTile(
               onTap: () {
                 cubit.deleteQuestion(
