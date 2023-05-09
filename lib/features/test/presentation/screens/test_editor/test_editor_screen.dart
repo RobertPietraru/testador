@@ -141,7 +141,7 @@ class _TestScreen extends StatelessWidget {
                                     child: const AcceptedAnswerCreationDialog(),
                                   ));
                         },
-                        child: const Text("Adauga optiune"),
+                        child: const Text("Adauga un raspuns acceptat"),
                       ),
                     ],
                   ),
