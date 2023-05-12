@@ -75,7 +75,7 @@ class LandingScreen extends StatelessWidget {
                             }
                           },
                           color: theme.defaultBackgroundColor,
-                          label: 'Incepe',
+                          label: 'Testador',
                           isLoading: false,
                         )),
                     const SizedBox(),
