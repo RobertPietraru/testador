@@ -6,8 +6,10 @@ import '../../../../domain/entities/question_entity.dart';
 import '../cubit/test_editor_cubit.dart';
 
 class QuestionCreationBottomSheet extends StatelessWidget {
+  final ScrollController scrollController;
   const QuestionCreationBottomSheet({
     super.key,
+    required this.scrollController,
   });
 
   @override
@@ -25,8 +27,10 @@ class QuestionCreationBottomSheet extends StatelessWidget {
               ListTile(
                 onTap: () {
                   cubit.addNewQuestion(
-                      index: state.currentQuestionIndex,
-                      type: QuestionType.multipleChoice);
+                    index: state.currentQuestionIndex,
+                    type: QuestionType.multipleChoice,
+                  );
+                  scrollController.jumpTo(0);
                   Navigator.pop(context);
                 },
                 title: const Text("Adauga intrebare ABC"),
@@ -37,6 +41,7 @@ class QuestionCreationBottomSheet extends StatelessWidget {
                   cubit.addNewQuestion(
                       index: state.currentQuestionIndex,
                       type: QuestionType.answer);
+                  scrollController.jumpTo(0);
                   Navigator.pop(context);
                 },
                 title: const Text("Adauga intrebare cu raspuns amplu"),

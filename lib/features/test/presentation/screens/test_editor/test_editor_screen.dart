@@ -34,25 +34,33 @@ class TestEditorScreen extends StatelessWidget {
   }
 }
 
-class _TestScreen extends StatelessWidget {
+class _TestScreen extends StatefulWidget {
   const _TestScreen();
+
+  @override
+  State<_TestScreen> createState() => _TestScreenState();
+}
+
+class _TestScreenState extends State<_TestScreen> {
+  final ScrollController controller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: theme.primaryColor,
-          onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (_) => BlocProvider.value(
+            backgroundColor: theme.primaryColor,
+            onPressed: () => showModalBottomSheet(
+                context: context,
+                builder: (_) => BlocProvider.value(
                     value: context.read<TestEditorCubit>(),
-                    child: const QuestionCreationBottomSheet(),
-                  ),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-              )),
-          child: const Icon(Icons.add),
-        ),
+                    child: QuestionCreationBottomSheet(
+                      scrollController: controller,
+                    )),
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20.0)))),
+            child: const Icon(Icons.add)),
         backgroundColor: theme.defaultBackgroundColor.withOpacity(0.9),
         resizeToAvoidBottomInset: true,
         bottomSheet: BlocBuilder<TestEditorCubit, TestEditorState>(
@@ -64,9 +72,11 @@ class _TestScreen extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: state.test.questions.length,
                   itemBuilder: (context, index) => QuestionNavigatorListTile(
-                      onPressed: () => context
-                          .read<TestEditorCubit>()
-                          .navigateToIndex(index),
+                      isSelected: state.currentQuestionIndex == index,
+                      onPressed: () {
+                        context.read<TestEditorCubit>().navigateToIndex(index);
+                        controller.jumpTo(0);
+                      },
                       index: index,
                       question: state.test.questions[index]))),
         ),
@@ -100,11 +110,12 @@ class _TestScreen extends StatelessWidget {
           },
           builder: (context, state) {
             return NestedScrollView(
+                controller: controller,
                 headerSliverBuilder: (context, _) {
                   return [
                     SliverList(
-                      delegate: SliverChildListDelegate([
-                        Padding(
+                        delegate: SliverChildListDelegate([
+                      Padding(
                           padding:
                               theme.standardPadding.copyWith(top: 0, bottom: 0),
                           child: Column(
@@ -120,13 +131,11 @@ class _TestScreen extends StatelessWidget {
                                       FilledButton(
                                           onPressed: () => showDialog(
                                               context: context,
-                                              builder: (_) =>
-                                                  BlocProvider.value(
-                                                    value: context.read<
-                                                        TestEditorCubit>(),
-                                                    child:
-                                                        const AcceptedAnswerCreationDialog(),
-                                                  )),
+                                              builder: (_) => BlocProvider.value(
+                                                  value: context
+                                                      .read<TestEditorCubit>(),
+                                                  child:
+                                                      const AcceptedAnswerCreationDialog())),
                                           child: const Text(
                                               "Adauga un raspuns acceptat"))
                                     ]),
@@ -146,10 +155,8 @@ class _TestScreen extends StatelessWidget {
                                 ),
                               SizedBox(height: theme.spacing.medium),
                             ],
-                          ),
-                        ),
-                      ]),
-                    ),
+                          ))
+                    ]))
                   ];
                 },
                 body: state.currentQuestion.type == QuestionType.multipleChoice

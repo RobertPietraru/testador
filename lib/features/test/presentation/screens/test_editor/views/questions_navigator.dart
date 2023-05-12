@@ -11,18 +11,20 @@ class QuestionNavigatorListTile extends StatelessWidget {
   final int index;
   final QuestionEntity question;
   final VoidCallback onPressed;
+  final bool isSelected;
   const QuestionNavigatorListTile({
     super.key,
     required this.index,
     required this.question,
     required this.onPressed,
+    required this.isSelected,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return Card(
-      color: Colors.blue,
+      color: isSelected ? Colors.blue[900] : Colors.blue,
       child: InkWell(
         onTap: onPressed,
         child: Container(

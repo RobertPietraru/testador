@@ -207,15 +207,13 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       (l) => emit(state.copyWith(
           failure: l, status: TestEditorStatus.failed, updateError: true)),
       (r) {
-        final newState = state.copyWith(
+        emit(state.copyWith(
             failure: null,
             status: TestEditorStatus.loaded,
             test: r.testEntity,
-            currentQuestionIndex: index);
-        emit(newState);
+            currentQuestionIndex: index));
       },
     );
-    print(state.test.questions);
   }
 
   Future<void> updateCurrentQuestionOption(
