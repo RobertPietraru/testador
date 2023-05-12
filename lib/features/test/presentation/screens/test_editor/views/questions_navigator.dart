@@ -64,50 +64,46 @@ class QuestionNavigatorListTile extends StatelessWidget {
 }
 
 class TestQuestionWidget extends StatelessWidget {
-  const TestQuestionWidget({super.key});
+  final TestEditorState state;
+  const TestQuestionWidget({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    return BlocBuilder<TestEditorCubit, TestEditorState>(
-      builder: (context, state) {
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () => showDialog(
-                      context: context,
-                      builder: (_) => BlocProvider.value(
-                          value: BlocProvider.of<TestEditorCubit>(context),
-                          child: EditQuestionDialog(
-                              initialValue: state.currentQuestion.text ?? ''))),
-                  child: Text(
-                    "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.text ?? "Apasa pentru a modifica intrebarea"}",
-                    style: theme.subtitleTextStyle,
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Expanded(
+        child: InkWell(
+          onTap: () => showDialog(
+              context: context,
+              builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<TestEditorCubit>(context),
+                  child: EditQuestionDialog(
+                      initialValue: state.currentQuestion.text ?? ''))),
+          child: Text(
+            "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.text ?? "Apasa pentru a modifica intrebarea"}",
+            style: theme.subtitleTextStyle,
+          ),
+        ),
+      ),
+      InkWell(
+          onTap: () => showModalBottomSheet(
+              context: context,
+              builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<TestEditorCubit>(context),
+                    child: QuestionSettingsBottomSheet(
+                      questionIndex: state.currentQuestionIndex,
+                      entity: state.currentQuestion,
+                    ),
                   ),
-                ),
-              ),
-              FilledButton(
-                  onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<TestEditorCubit>(context),
-                            child: QuestionSettingsBottomSheet(
-                              questionIndex: state.currentQuestionIndex,
-                              entity: state.currentQuestion,
-                            ),
-                          ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20.0)),
-                      )),
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(const CircleBorder()),
-                  ),
-                  child: const Icon(Icons.more_vert)),
-            ]);
-      },
-    );
+              shape: const RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.0)))),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle, color: Colors.black),
+            child: const Icon(Icons.more_vert, color: Colors.white),
+          ))
+    ]);
   }
 }

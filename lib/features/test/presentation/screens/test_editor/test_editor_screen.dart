@@ -12,8 +12,6 @@ import 'package:testador/features/test/presentation/screens/test_editor/widgets/
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/option_widget.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/question_creation_bottom_sheet.dart';
 import 'package:testador/injection.dart';
-
-import '../../../../../core/components/loading_wrapper.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../test_editor_retrival/test_editor_retrival_widget.dart';
 
@@ -93,67 +91,81 @@ class _TestScreen extends StatelessWidget {
               }))
         ]),
         body: BlocConsumer<TestEditorCubit, TestEditorState>(
-            listener: (context, state) {
-              if (state.status == TestEditorStatus.failed &&
-                  state.failure != null) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.failure!.retrieveMessage(context))));
-              }
-            },
-            builder: (context, state) => LoadingWrapper(
-                isLoading: state.status == TestEditorStatus.loading,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                          padding: theme.standardPadding,
-                          child: const TestQuestionWidget()),
-                      if (state.currentQuestion.type == QuestionType.answer)
+          listener: (context, state) {
+            if (state.status == TestEditorStatus.failed &&
+                state.failure != null) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.failure!.retrieveMessage(context))));
+            }
+          },
+          builder: (context, state) {
+            return NestedScrollView(
+                headerSliverBuilder: (context, _) {
+                  return [
+                    SliverList(
+                      delegate: SliverChildListDelegate([
                         Padding(
-                            padding: theme.standardPadding.copyWith(top: 0),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  FilledButton(
-                                      onPressed: () => showDialog(
-                                          context: context,
-                                          builder: (_) => BlocProvider.value(
-                                                value: context
-                                                    .read<TestEditorCubit>(),
-                                                child:
-                                                    const AcceptedAnswerCreationDialog(),
-                                              )),
-                                      child: const Text(
-                                          "Adauga un raspuns acceptat"))
-                                ])),
-                      if (state.currentQuestion.image != null)
-                        Container(
-                          width: 300,
-                          height: 250, // Adjust this value to fit your layout
-                          color: theme.secondaryColor,
-                          child: AspectRatio(
-                            aspectRatio: 1.0,
-                            child: Image.network(state.currentQuestion.image!,
-                                fit: BoxFit.contain),
+                          padding:
+                              theme.standardPadding.copyWith(top: 0, bottom: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TestQuestionWidget(state: state),
+                              SizedBox(height: theme.spacing.medium),
+                              if (state.currentQuestion.type ==
+                                  QuestionType.answer)
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      FilledButton(
+                                          onPressed: () => showDialog(
+                                              context: context,
+                                              builder: (_) =>
+                                                  BlocProvider.value(
+                                                    value: context.read<
+                                                        TestEditorCubit>(),
+                                                    child:
+                                                        const AcceptedAnswerCreationDialog(),
+                                                  )),
+                                          child: const Text(
+                                              "Adauga un raspuns acceptat"))
+                                    ]),
+                              SizedBox(height: theme.spacing.medium),
+                              if (state.currentQuestion.image != null)
+                                Center(
+                                  child: Container(
+                                    height: 220,
+                                    color: theme.secondaryColor,
+                                    child: AspectRatio(
+                                      aspectRatio: 1.0,
+                                      child: Image.network(
+                                          state.currentQuestion.image!,
+                                          fit: BoxFit.contain),
+                                    ),
+                                  ),
+                                ),
+                              SizedBox(height: theme.spacing.medium),
+                            ],
                           ),
                         ),
-                      if (state.currentQuestion.type ==
-                          QuestionType.multipleChoice)
-                        Flexible(
-                            child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemCount: state.currentQuestion.options.length,
-                          itemBuilder: (context, index) => OptionWidget(
-                              index: index,
-                              option: state.currentQuestion.options[index]),
-                        ))
-                      else
-                        buildAnswers(theme, state.currentQuestion),
-                      const SizedBox(),
-                    ]))));
+                      ]),
+                    ),
+                  ];
+                },
+                body: state.currentQuestion.type == QuestionType.multipleChoice
+                    ? GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemCount: state.currentQuestion.options.length,
+                        itemBuilder: (context, index) => OptionWidget(
+                            index: index,
+                            option: state.currentQuestion.options[index]),
+                      )
+                    : buildAnswers(theme, state.currentQuestion));
+          },
+        ));
   }
 
   Widget buildAnswers(AppThemeData theme, QuestionEntity question) {
@@ -162,23 +174,22 @@ class _TestScreen extends StatelessWidget {
           child: Center(child: Text('Nu ai adaugat nicio optiune de raspuns')));
     }
 
-    return Flexible(
-        child: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: question.acceptedAnswers.length,
-            itemBuilder: (context, index) => Padding(
-                padding: theme.standardPadding.copyWith(bottom: 0),
-                child: ListTile(
-                  onTap: () => showDialog(
-                      context: context,
-                      builder: (_) => BlocProvider.value(
-                          value: context.read<TestEditorCubit>(),
-                          child: EditAcceptedAnswerDialog(
-                            initialValue: question.acceptedAnswers[index],
-                            index: index,
-                          ))),
-                  leading: const Icon(Icons.lightbulb_outline_sharp),
-                  title: Text(question.acceptedAnswers[index]),
-                ))));
+    return ListView.separated(
+        separatorBuilder: (context, index) => const Divider(),
+        itemCount: question.acceptedAnswers.length,
+        itemBuilder: (context, index) => Padding(
+            padding: theme.standardPadding.copyWith(bottom: 0),
+            child: ListTile(
+              onTap: () => showDialog(
+                  context: context,
+                  builder: (_) => BlocProvider.value(
+                      value: context.read<TestEditorCubit>(),
+                      child: EditAcceptedAnswerDialog(
+                        initialValue: question.acceptedAnswers[index],
+                        index: index,
+                      ))),
+              leading: const Icon(Icons.lightbulb_outline_sharp),
+              title: Text(question.acceptedAnswers[index]),
+            )));
   }
 }
