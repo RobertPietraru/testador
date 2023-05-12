@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path/path.dart';
@@ -14,6 +16,7 @@ abstract class TestDataSource {
   Future<TestEntity> moveQuestion(MoveQuestionUsecaseParams params);
   Future<TestEntity> createTest(CreateTestUsecaseParams params);
   Future<void> deleteTest(DeleteTestUsecaseParams params);
+  Future<TestEntity> updateTestImage(UpdateTestImageUsecaseParams params);
 
   Future<TestEntity> editTest(EditTestUsecaseParams params);
   Future<List<TestEntity>> getTests(GetTestsUsecaseParams params);
@@ -120,21 +123,8 @@ class TestLocalDataSourceIMPL implements TestDataSource {
 
   @override
   Future<TestEntity> editTest(EditTestUsecaseParams params) async {
-    final test = testsBox.get(params.testId);
-
-    if (test == null) throw const TestNotFoundFailure();
-    final newTest = TestDto(
-      title: params.title,
-      isPublic: params.isPublic ?? test.isPublic,
-      creatorId: test.creatorId,
-      imageUrl: params.imageUrl ?? test.imageUrl,
-      id: params.testId,
-      questions:
-          params.questions?.map((e) => QuestionDto.fromEntity(e)).toList() ??
-              test.questions,
-    );
-    testsBox.put(newTest.id, newTest);
-    return newTest.toEntity();
+    testsBox.put(params.testId, TestDto.fromEntity(params.test));
+    return params.test;
   }
 
   @override
@@ -186,12 +176,8 @@ class TestLocalDataSourceIMPL implements TestDataSource {
       UpdateQuestionImageUsecaseParams params) async {
     final questions = params.test.questions.toList();
     // final questions = params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
-    final fileExtension = basename(params.image.path).split('.').last;
-
-    final path =
-        '${params.test.creatorId}/${params.test.id}/${const Uuid().v1()}.$fileExtension';
-    final snap = await storage.ref(path).putFile(params.image);
-    final url = await snap.ref.getDownloadURL();
+    String url =
+        await uploadImage(params.test.creatorId, params.test.id, params.image);
     questions[params.index] = questions[params.index].copyWith(image: url);
 
     final entity = TestEntity(
@@ -203,5 +189,26 @@ class TestLocalDataSourceIMPL implements TestDataSource {
         id: params.test.id);
     await testsBox.put(entity.id, TestDto.fromEntity(entity));
     return entity;
+  }
+
+  Future<String> uploadImage(
+      String creatorId, String testId, File image) async {
+    final fileExtension = basename(image.path).split('.').last;
+    final path = '$creatorId/$testId/${const Uuid().v1()}.$fileExtension';
+
+    final snap = await storage.ref(path).putFile(image);
+    final url = await snap.ref.getDownloadURL();
+
+    return url;
+  }
+
+  @override
+  Future<TestEntity> updateTestImage(
+      UpdateTestImageUsecaseParams params) async {
+    final imageUrl =
+        await uploadImage(params.test.creatorId, params.test.id, params.image);
+    final test = params.test.copyWith(imageUrl: imageUrl);
+    testsBox.put(test.id, TestDto.fromEntity(test));
+    return test;
   }
 }

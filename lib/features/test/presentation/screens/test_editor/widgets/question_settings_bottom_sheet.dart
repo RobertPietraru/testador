@@ -74,7 +74,13 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                         context: context,
                         builder: (_) => BlocProvider.value(
                               value: context.read<TestEditorCubit>(),
-                              child: const ImageRetrivalDialog(),
+                              child: ImageRetrivalDialog(
+                                onImageRetrived: (imageFile) {
+                                  context
+                                      .read<TestEditorCubit>()
+                                      .updateQuestionImage(image: imageFile);
+                                },
+                              ),
                             ));
                   },
                   title: Text(

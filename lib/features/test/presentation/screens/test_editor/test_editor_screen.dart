@@ -6,13 +6,13 @@ import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/cubit/test_editor_cubit.dart';
+import 'package:testador/features/test/presentation/screens/test_editor/test_settings_screen.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/views/questions_navigator.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/add_accepted_answer_dialog.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/edit_accepted_answer.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/option_widget.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/question_creation_bottom_sheet.dart';
 import 'package:testador/injection.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../test_editor_retrival/test_editor_retrival_widget.dart';
 
@@ -28,7 +28,7 @@ class TestEditorScreen extends StatelessWidget {
         testId: testId,
         entity: entity,
         builder: (state) => BlocProvider(
-            create: (context) => TestEditorCubit(
+            create: (context) => TestEditorCubit(locator(), locator(),
                 locator(), locator(), locator(), locator(), locator(),
                 initialTest: state.entity),
             child: const _TestScreen()));
@@ -90,7 +90,18 @@ class _TestScreenState extends State<_TestScreen> {
               )),
         ),
         appBar: CustomAppBar(title: const Text("Editor test"), trailing: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<TestEditorCubit>(),
+                        child: const TestSettingsScreen(),
+                      ),
+                    ));
+              },
+              icon: const Icon(Icons.settings)),
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: BlocBuilder<TestEditorCubit, TestEditorState>(

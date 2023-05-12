@@ -101,7 +101,7 @@ class TestRepositoryIMPL implements TestRepository {
       EditTestUsecaseParams params) async {
     try {
       final testEntity = await testLocalDataSource.editTest(params);
-      return Right(EditTestUsecaseResult(testEntity: testEntity));
+      return Right(EditTestUsecaseResult(test: testEntity));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -162,6 +162,21 @@ class TestRepositoryIMPL implements TestRepository {
     try {
       final test = await testLocalDataSource.updateQuestionImage(params);
       return Right(UpdateQuestionImageUsecaseResult(test: test));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<TestFailure, UpdateTestImageUsecaseResult>> updateTestImage(
+      UpdateTestImageUsecaseParams params) async {
+    try {
+      final test = await testLocalDataSource.updateTestImage(params);
+      return Right(UpdateTestImageUsecaseResult(test: test));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {

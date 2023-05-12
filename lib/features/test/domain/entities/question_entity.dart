@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:testador/core/globals.dart';
 
-const mockValueForDefault = 'nothing-to-see-here!@#^';
 
 enum QuestionType { multipleChoice, answer }
 

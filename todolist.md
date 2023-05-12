@@ -1,12 +1,4 @@
-✔ Edit question title
-❌ Switch question type
-
-✔ Add option to input question
-✔ Remove option from input question
-
-✔ Add row to multiple choice question
-✔ Edit multiple choice question
-❌ Clean the code
+❌ Add description to test
 
 ❌✔
 Plan for the system

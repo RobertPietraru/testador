@@ -8,7 +8,10 @@ abstract class TestRepository {
       GetTestByIdUsecaseParams params);
   Future<Either<TestFailure, GetTestsUsecaseResult>> getTests(
       GetTestsUsecaseParams params);
-  Future<Either<TestFailure, UpdateQuestionImageUsecaseResult>> updateQuestionImage(UpdateQuestionImageUsecaseParams params);
+  Future<Either<TestFailure, UpdateQuestionImageUsecaseResult>>
+      updateQuestionImage(UpdateQuestionImageUsecaseParams params);
+  Future<Either<TestFailure, UpdateTestImageUsecaseResult>> updateTestImage(
+      UpdateTestImageUsecaseParams params);
 
   Future<Either<TestFailure, CreateTestUsecaseResult>> createTest(
       CreateTestUsecaseParams params);

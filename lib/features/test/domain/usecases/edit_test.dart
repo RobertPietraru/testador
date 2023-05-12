@@ -17,20 +17,12 @@ class EditTestUsecase
 
 class EditTestUsecaseParams extends Params {
   final String testId;
-  final String? title;
-  final bool? isPublic;
-  final String? imageUrl;
-  final List<QuestionEntity>? questions;
+  final TestEntity test;
 
-  const EditTestUsecaseParams(
-      {required this.testId,
-      this.title,
-      this.isPublic,
-      this.imageUrl,
-      this.questions});
+  const EditTestUsecaseParams({required this.testId, required this.test});
 }
 
 class EditTestUsecaseResult extends Response {
-  final TestEntity testEntity;
-  const EditTestUsecaseResult({required this.testEntity});
+  final TestEntity test;
+  const EditTestUsecaseResult({required this.test});
 }

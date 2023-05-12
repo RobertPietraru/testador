@@ -17,6 +17,8 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   final DeleteQuestionUsecase deleteQuestionUsecase;
   final UpdateQuestionImageUsecase updateQuestionImageUsecase;
   final MoveQuestionUsecase moveQuestionUsecase;
+  final UpdateTestImageUsecase updateTestImageUsecase;
+  final EditTestUsecase editTestUsecase;
 
   TestEditorCubit(
       this.insertQuestionUsecase,
@@ -24,6 +26,8 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       this.deleteQuestionUsecase,
       this.updateQuestionImageUsecase,
       this.moveQuestionUsecase,
+      this.updateTestImageUsecase,
+      this.editTestUsecase,
       {required TestEntity initialTest})
       : super(TestEditorState(
             currentQuestionIndex: 0,
@@ -322,6 +326,66 @@ class TestEditorCubit extends Cubit<TestEditorState> {
           updateError: true,
         ));
       },
+    );
+  }
+
+  Future<void> updateTestImage({required File newImage}) async {
+    emit(state.copyWith(
+        status: TestEditorStatus.loading, failure: null, updateError: true));
+
+    final response = await updateTestImageUsecase
+        .call(UpdateTestImageUsecaseParams(test: state.test, image: newImage));
+
+    response.fold(
+      (l) {
+        emit(state.copyWith(
+            failure: l, status: TestEditorStatus.failed, updateError: true));
+      },
+      (r) {
+        emit(state.copyWith(
+            failure: null,
+            status: TestEditorStatus.loaded,
+            test: r.test,
+            updateError: true));
+      },
+    );
+  }
+
+  Future<void> togglePublicity() async {
+    emit(state.copyWith(
+        status: TestEditorStatus.loading, failure: null, updateError: true));
+
+    final response = await editTestUsecase.call(EditTestUsecaseParams(
+        test: state.test.copyWith(isPublic: !state.test.isPublic),
+        testId: state.test.id));
+
+    response.fold(
+      (l) => emit(state.copyWith(
+          failure: l, status: TestEditorStatus.failed, updateError: true)),
+      (r) => emit(state.copyWith(
+          failure: null,
+          status: TestEditorStatus.loaded,
+          test: r.test,
+          updateError: true)),
+    );
+  }
+
+  Future<void> updateTestTitle(String title) async {
+    emit(state.copyWith(
+        status: TestEditorStatus.loading, failure: null, updateError: true));
+
+
+    final response = await editTestUsecase.call(EditTestUsecaseParams(
+        test: state.test.copyWith(title: title), testId: state.test.id));
+
+    response.fold(
+      (l) => emit(state.copyWith(
+          failure: l, status: TestEditorStatus.failed, updateError: true)),
+      (r) => emit(state.copyWith(
+          failure: null,
+          status: TestEditorStatus.loaded,
+          test: r.test,
+          updateError: true)),
     );
   }
 }
