@@ -12,6 +12,7 @@ import 'package:testador/features/test/presentation/screens/test_editor/widgets/
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/option_widget.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/question_creation_bottom_sheet.dart';
 import 'package:testador/injection.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../test_editor_retrival/test_editor_retrival_widget.dart';
 
@@ -28,7 +29,7 @@ class TestEditorScreen extends StatelessWidget {
         entity: entity,
         builder: (state) => BlocProvider(
             create: (context) => TestEditorCubit(
-                locator(), locator(), locator(), locator(),
+                locator(), locator(), locator(), locator(), locator(),
                 initialTest: state.entity),
             child: const _TestScreen()));
   }
@@ -66,19 +67,27 @@ class _TestScreenState extends State<_TestScreen> {
         bottomSheet: BlocBuilder<TestEditorCubit, TestEditorState>(
           builder: (context, state) => SizedBox(
               height: 100,
-              child: ListView.separated(
-                  separatorBuilder: (context, index) =>
-                      SizedBox(width: theme.spacing.small),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.test.questions.length,
-                  itemBuilder: (context, index) => QuestionNavigatorListTile(
-                      isSelected: state.currentQuestionIndex == index,
-                      onPressed: () {
-                        context.read<TestEditorCubit>().navigateToIndex(index);
-                        controller.jumpTo(0);
-                      },
-                      index: index,
-                      question: state.test.questions[index]))),
+              child: ReorderableListView(
+                onReorder: (oldIndex, newIndex) {
+                  context
+                      .read<TestEditorCubit>()
+                      .moveQuestion(oldIndex: oldIndex, newIndex: newIndex);
+                },
+                scrollDirection: Axis.horizontal,
+                children: List.generate(
+                    state.test.questions.length,
+                    (index) => QuestionNavigatorListTile(
+                        key: ValueKey('$index'),
+                        isSelected: state.currentQuestionIndex == index,
+                        onPressed: () {
+                          context
+                              .read<TestEditorCubit>()
+                              .navigateToIndex(index);
+                          controller.jumpTo(0);
+                        },
+                        index: index,
+                        question: state.test.questions[index])),
+              )),
         ),
         appBar: CustomAppBar(title: const Text("Editor test"), trailing: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
@@ -168,8 +177,7 @@ class _TestScreenState extends State<_TestScreen> {
                         itemCount: state.currentQuestion.options.length,
                         itemBuilder: (context, index) => OptionWidget(
                             index: index,
-                            option: state.currentQuestion.options[index]),
-                      )
+                            option: state.currentQuestion.options[index]))
                     : buildAnswers(theme, state.currentQuestion));
           },
         ));
@@ -192,9 +200,8 @@ class _TestScreenState extends State<_TestScreen> {
                   builder: (_) => BlocProvider.value(
                       value: context.read<TestEditorCubit>(),
                       child: EditAcceptedAnswerDialog(
-                        initialValue: question.acceptedAnswers[index],
-                        index: index,
-                      ))),
+                          initialValue: question.acceptedAnswers[index],
+                          index: index))),
               leading: const Icon(Icons.lightbulb_outline_sharp),
               title: Text(question.acceptedAnswers[index]),
             )));

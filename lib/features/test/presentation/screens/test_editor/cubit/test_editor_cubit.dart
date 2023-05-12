@@ -7,6 +7,7 @@ import 'package:testador/features/test/domain/entities/test_entity.dart';
 import 'package:testador/features/test/domain/failures/test_editor/deleting_the_only_question_failure.dart';
 import 'package:testador/features/test/domain/failures/test_failures.dart';
 import 'package:testador/features/test/domain/usecases/test_usecases.dart';
+import 'package:uuid/uuid.dart';
 
 part 'test_editor_state.dart';
 
@@ -15,9 +16,14 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   final UpdateQuestionUsecase updateQuestionUsecase;
   final DeleteQuestionUsecase deleteQuestionUsecase;
   final UpdateQuestionImageUsecase updateQuestionImageUsecase;
+  final MoveQuestionUsecase moveQuestionUsecase;
 
-  TestEditorCubit(this.insertQuestionUsecase, this.updateQuestionUsecase,
-      this.deleteQuestionUsecase, this.updateQuestionImageUsecase,
+  TestEditorCubit(
+      this.insertQuestionUsecase,
+      this.updateQuestionUsecase,
+      this.deleteQuestionUsecase,
+      this.updateQuestionImageUsecase,
+      this.moveQuestionUsecase,
       {required TestEntity initialTest})
       : super(TestEditorState(
             currentQuestionIndex: 0,
@@ -32,7 +38,8 @@ class TestEditorCubit extends Cubit<TestEditorState> {
 
   Future<void> insertQuestion(
       {required int index, required QuestionEntity question}) async {
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(
+        status: TestEditorStatus.loading, failure: null, updateError: true));
     final response =
         await insertQuestionUsecase.call(InsertQuestionUsecaseParams(
       test: state.test,
@@ -48,6 +55,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       (r) => emit(state.copyWith(
           failure: null,
           status: TestEditorStatus.loaded,
+          updateError: true,
           test: r.test,
           currentQuestionIndex: index)),
     );
@@ -60,6 +68,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       InsertQuestionUsecaseParams(
         test: state.test,
         question: QuestionEntity(
+          id: const Uuid().v1(),
           testId: state.test.id,
           acceptedAnswers: [],
           options: type == QuestionType.multipleChoice
@@ -84,6 +93,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       (r) => emit(state.copyWith(
           failure: null,
           status: TestEditorStatus.loaded,
+          updateError: true,
           test: r.test,
           currentQuestionIndex: index + 1)),
     );
@@ -119,6 +129,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       (r) => emit(state.copyWith(
         failure: null,
         status: TestEditorStatus.loaded,
+        updateError: true,
         test: r.testEntity,
       )),
     );
@@ -153,6 +164,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       (r) => emit(state.copyWith(
         failure: null,
         status: TestEditorStatus.loaded,
+        updateError: true,
         test: r.testEntity,
       )),
     );
@@ -285,5 +297,31 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     final newQuestion = question.copyWith(acceptedAnswers: answers);
     await updateQuestion(
         index: state.currentQuestionIndex, replacementQuestion: newQuestion);
+  }
+
+  Future<void> moveQuestion(
+      {required int oldIndex, required int newIndex}) async {
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    final response = await moveQuestionUsecase.call(MoveQuestionUsecaseParams(
+        newIndex: newIndex, oldIndex: oldIndex, test: state.test));
+
+    response.fold(
+      (l) {
+        emit(state.copyWith(
+          failure: l,
+          status: TestEditorStatus.failed,
+          updateError: true,
+        ));
+      },
+      (r) {
+        emit(state.copyWith(
+          failure: null,
+          status: TestEditorStatus.loaded,
+          test: r.test,
+          currentQuestionIndex: r.test.questions.indexOf(state.currentQuestion),
+          updateError: true,
+        ));
+      },
+    );
   }
 }

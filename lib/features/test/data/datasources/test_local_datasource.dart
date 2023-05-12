@@ -41,7 +41,8 @@ class TestLocalDataSourceIMPL implements TestDataSource {
       title: null,
       questions: [
         QuestionDto(
-            text: '',
+            id: const Uuid().v1(),
+            text: null,
             options: [
               const MultipleChoiceOptionDto(text: null, isCorrect: false),
               const MultipleChoiceOptionDto(text: null, isCorrect: false),
@@ -157,9 +158,16 @@ class TestLocalDataSourceIMPL implements TestDataSource {
   Future<TestEntity> moveQuestion(MoveQuestionUsecaseParams params) async {
     final questions =
         params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
-    final questionAtOldIndex = questions[params.oldIndex];
-    questions.removeAt(params.oldIndex);
-    questions.insert(params.newIndex, questionAtOldIndex);
+
+    final question = questions[params.oldIndex];
+
+    if (params.oldIndex < params.newIndex) {
+      questions.insert(params.newIndex, question);
+      questions.removeAt(params.oldIndex);
+    } else {
+      questions.removeAt(params.oldIndex);
+      questions.insert(params.newIndex, question);
+    }
 
     final dto = TestDto(
       questions: questions,
@@ -185,7 +193,6 @@ class TestLocalDataSourceIMPL implements TestDataSource {
     final snap = await storage.ref(path).putFile(params.image);
     final url = await snap.ref.getDownloadURL();
     questions[params.index] = questions[params.index].copyWith(image: url);
-
 
     final entity = TestEntity(
         questions: questions.toList(),

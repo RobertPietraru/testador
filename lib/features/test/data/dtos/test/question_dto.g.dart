@@ -17,6 +17,7 @@ class QuestionDtoAdapter extends TypeAdapter<QuestionDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return QuestionDto(
+      id: fields[7] as String,
       text: fields[6] as String?,
       image: fields[3] as String?,
       options: (fields[4] as List?)?.cast<MultipleChoiceOptionDto>(),
@@ -29,7 +30,7 @@ class QuestionDtoAdapter extends TypeAdapter<QuestionDto> {
   @override
   void write(BinaryWriter writer, QuestionDto obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(1)
       ..write(obj.testId)
       ..writeByte(2)
@@ -41,7 +42,9 @@ class QuestionDtoAdapter extends TypeAdapter<QuestionDto> {
       ..writeByte(5)
       ..write(obj.acceptedAnswers)
       ..writeByte(6)
-      ..write(obj.text);
+      ..write(obj.text)
+      ..writeByte(7)
+      ..write(obj.id);
   }
 
   @override

@@ -45,14 +45,19 @@ class QuestionDto {
 
   @HiveField(6)
   final String? text;
+
+  @HiveField(7)
+  final String id;
   static const testIdField = 'testId';
   static const typeField = 'type';
   static const imageField = 'image';
   static const optionsField = 'options';
   static const acceptedAnswersField = 'acceptedAnswers';
   static const textField = 'text';
+  static const idField = 'id';
 
   const QuestionDto({
+    required this.id, 
     required this.text,
     this.image,
     required this.options,
@@ -67,6 +72,7 @@ class QuestionDto {
         .toList();
 
     return QuestionDto(
+      id: map[idField],
       text: map[textField],
       image: map[imageField],
       acceptedAnswers: map[acceptedAnswersField],
@@ -78,6 +84,7 @@ class QuestionDto {
 
   factory QuestionDto.fromEntity(QuestionEntity entity) {
     return QuestionDto(
+      id: entity.id,
       text: entity.text,
       image: entity.image,
       options: entity.options
@@ -91,6 +98,7 @@ class QuestionDto {
 
   QuestionEntity toEntity() {
     return QuestionEntity(
+      id: id,
         image: image,
         testId: testId,
         type: typeDto.toType(),

@@ -82,7 +82,7 @@ class TestQuestionWidget extends StatelessWidget {
                   child: EditQuestionDialog(
                       initialValue: state.currentQuestion.text ?? ''))),
           child: Text(
-            "${(state.currentQuestionIndex + 1).toString()}# ${state.currentQuestion.text ?? "Apasa pentru a modifica intrebarea"}",
+            "#${(state.currentQuestionIndex + 1).toString()} ${state.currentQuestion.text ?? "Apasa pentru a modifica intrebarea"}",
             style: theme.subtitleTextStyle,
           ),
         ),

@@ -5,6 +5,7 @@ const mockValueForDefault = 'nothing-to-see-here!@#^';
 enum QuestionType { multipleChoice, answer }
 
 class QuestionEntity extends Equatable {
+  final String id;
   final String testId;
   final QuestionType type;
   final String? image;
@@ -13,6 +14,7 @@ class QuestionEntity extends Equatable {
   final List<String> acceptedAnswers;
 
   const QuestionEntity({
+    required this.id,
     this.options = const [],
     this.acceptedAnswers = const [],
     required this.text,
@@ -21,9 +23,18 @@ class QuestionEntity extends Equatable {
     required this.type,
   });
   @override
-  List<Object?> get props => [testId, type];
+  List<Object?> get props => [
+        id,
+        testId,
+        type,
+        image,
+        text,
+        ...options,
+        ...acceptedAnswers,
+      ];
 
   QuestionEntity copyWith({
+    String? id,
     String? testId,
     QuestionType? type,
     String? image = mockValueForDefault,
@@ -38,6 +49,7 @@ class QuestionEntity extends Equatable {
       text: text == mockValueForDefault ? this.text : text,
       type: type ?? this.type,
       image: image == mockValueForDefault ? this.image : image,
+      id: id ?? this.id,
     );
   }
 }
