@@ -1,4 +1,6 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:path/path.dart';
 import 'package:testador/features/test/data/dtos/test/question_dto.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 import 'package:uuid/uuid.dart';
@@ -7,7 +9,7 @@ import '../../domain/entities/test_entity.dart';
 import '../../domain/failures/test_failures.dart';
 import '../../domain/usecases/test_usecases.dart';
 
-abstract class TestLocalDataSource {
+abstract class TestDataSource {
   Future<TestEntity> getTestById(GetTestByIdUsecaseParams params);
   Future<TestEntity> moveQuestion(MoveQuestionUsecaseParams params);
   Future<TestEntity> createTest(CreateTestUsecaseParams params);
@@ -18,12 +20,15 @@ abstract class TestLocalDataSource {
   Future<TestEntity> insertQuestion(InsertQuestionUsecaseParams params);
   Future<TestEntity> deleteQuestion(DeleteQuestionUsecaseParams params);
   Future<TestEntity> updateQuestion(UpdateQuestionUsecaseParams params);
+  Future<TestEntity> updateQuestionImage(
+      UpdateQuestionImageUsecaseParams params);
 }
 
-class TestLocalDataSourceIMPL implements TestLocalDataSource {
+class TestLocalDataSourceIMPL implements TestDataSource {
   TestLocalDataSourceIMPL();
 
   final Box<TestDto> testsBox = Hive.box<TestDto>(TestDto.hiveBoxName);
+  final storage = FirebaseStorage.instance;
 
   @override
   Future<TestEntity> createTest(CreateTestUsecaseParams params) async {
@@ -97,12 +102,11 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   Future<TestEntity> updateQuestion(UpdateQuestionUsecaseParams params) async {
     final questions =
         params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
-
     questions[params.index] =
         QuestionDto.fromEntity(params.replacementQuestion);
 
     final dto = TestDto(
-      questions: questions,
+      questions: questions.toList(),
       title: params.test.title,
       isPublic: params.test.isPublic,
       creatorId: params.test.creatorId,
@@ -167,5 +171,30 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
     );
     testsBox.put(dto.id, dto);
     return dto.toEntity();
+  }
+
+  @override
+  Future<TestEntity> updateQuestionImage(
+      UpdateQuestionImageUsecaseParams params) async {
+    final questions = params.test.questions.toList();
+    // final questions = params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+    final fileExtension = basename(params.image.path).split('.').last;
+
+    final path =
+        '${params.test.creatorId}/${params.test.id}/${const Uuid().v1()}.$fileExtension';
+    final snap = await storage.ref(path).putFile(params.image);
+    final url = await snap.ref.getDownloadURL();
+    questions[params.index] = questions[params.index].copyWith(image: url);
+
+
+    final entity = TestEntity(
+        questions: questions.toList(),
+        title: params.test.title,
+        isPublic: params.test.isPublic,
+        creatorId: params.test.creatorId,
+        imageUrl: params.test.imageUrl,
+        id: params.test.id);
+    await testsBox.put(entity.id, TestDto.fromEntity(entity));
+    return entity;
   }
 }

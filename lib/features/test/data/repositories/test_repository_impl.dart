@@ -12,7 +12,7 @@ class TestRepositoryIMPL implements TestRepository {
     this.testLocalDataSource,
   );
 
-  final TestLocalDataSource testLocalDataSource;
+  final TestDataSource testLocalDataSource;
 
   @override
   Future<Either<TestFailure, CreateTestUsecaseResult>> createTest(
@@ -147,6 +147,21 @@ class TestRepositoryIMPL implements TestRepository {
     try {
       final test = await testLocalDataSource.moveQuestion(params);
       return Right(MoveQuestionUsecaseResult(test: test));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<TestFailure, UpdateQuestionImageUsecaseResult>>
+      updateQuestionImage(UpdateQuestionImageUsecaseParams params) async {
+    try {
+      final test = await testLocalDataSource.updateQuestionImage(params);
+      return Right(UpdateQuestionImageUsecaseResult(test: test));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {

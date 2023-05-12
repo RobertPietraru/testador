@@ -7,7 +7,7 @@ import 'domain/usecases/test_usecases.dart';
 
 void testInject() {
   locator
-    ..registerSingleton<TestLocalDataSource>(TestLocalDataSourceIMPL())
+    ..registerSingleton<TestDataSource>(TestLocalDataSourceIMPL())
     ..registerSingleton<TestRepository>(TestRepositoryIMPL(locator()))
     ..registerSingleton(CreateTestUsecase(locator()))
     ..registerSingleton(DeleteTestUsecase(locator()))
@@ -17,5 +17,6 @@ void testInject() {
     ..registerSingleton(InsertQuestionUsecase(locator()))
     ..registerSingleton(DeleteQuestionUsecase(locator()))
     ..registerSingleton(UpdateQuestionUsecase(locator()))
+    ..registerSingleton(UpdateQuestionImageUsecase(locator()))
     ..registerSingleton(GetTestByIdUsecase(locator()));
 }

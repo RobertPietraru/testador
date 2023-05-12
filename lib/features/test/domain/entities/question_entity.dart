@@ -4,13 +4,17 @@ const mockValueForDefault = 'nothing-to-see-here!@#^';
 
 enum QuestionType { multipleChoice, answer }
 
-abstract class QuestionEntity extends Equatable {
+class QuestionEntity extends Equatable {
   final String testId;
   final QuestionType type;
   final String? image;
   final String? text;
+  final List<MultipleChoiceOptionEntity> options;
+  final List<String> acceptedAnswers;
 
   const QuestionEntity({
+    this.options = const [],
+    this.acceptedAnswers = const [],
     required this.text,
     this.image,
     required this.testId,
@@ -27,61 +31,15 @@ abstract class QuestionEntity extends Equatable {
     List<String>? acceptedAnswers,
     List<MultipleChoiceOptionEntity>? options,
   }) {
-    final old = this;
-    if (old is MultipleChoiceQuestionEntity) {
-      return MultipleChoiceQuestionEntity(
-        options: options ?? old.options,
-        testId: testId ?? this.testId,
-        text: text == mockValueForDefault ? this.text : text,
-        type: type ?? this.type,
-        image: image == mockValueForDefault ? this.image : image,
-      );
-    }
-    if (old is TextInputQuestionEntity) {
-      return TextInputQuestionEntity(
-        acceptedAnswers: acceptedAnswers ?? old.acceptedAnswers,
-        testId: testId ?? this.testId,
-        text: text == mockValueForDefault ? this.text : text,
-        type: type ?? this.type,
-        image: image == mockValueForDefault ? this.image : image,
-      );
-    }
-
-    return MultipleChoiceQuestionEntity(
+    return QuestionEntity(
+      options: options ?? this.options,
+      acceptedAnswers: acceptedAnswers ?? this.acceptedAnswers,
       testId: testId ?? this.testId,
       text: text == mockValueForDefault ? this.text : text,
       type: type ?? this.type,
       image: image == mockValueForDefault ? this.image : image,
     );
   }
-}
-
-class MultipleChoiceQuestionEntity extends QuestionEntity {
-  const MultipleChoiceQuestionEntity({
-    required super.testId,
-    super.type = QuestionType.multipleChoice,
-    this.options = const [],
-    super.image,
-    super.text,
-  });
-  final List<MultipleChoiceOptionEntity> options;
-  @override
-  List<Object?> get props => [testId, type, ...options];
-}
-
-class TextInputQuestionEntity extends QuestionEntity {
-  const TextInputQuestionEntity({
-    required super.testId,
-    super.type = QuestionType.answer,
-    this.acceptedAnswers = const [],
-    super.text,
-    super.image,
-  });
-
-  final List<String> acceptedAnswers;
-
-  @override
-  List<Object?> get props => [testId, type, ...acceptedAnswers];
 }
 
 class MultipleChoiceOptionEntity extends Equatable {

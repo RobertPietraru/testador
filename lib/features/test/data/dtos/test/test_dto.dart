@@ -85,8 +85,7 @@ class TestDto with HiveObjectMixin {
       id: entity.id,
       imageUrl: entity.imageUrl,
       isPublic: entity.isPublic,
-      questions:
-          entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),
+      questions: entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),
       title: entity.title,
     );
   }

@@ -51,7 +51,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
 
     if (!document.exists) {
       await FirebaseAuth.instance.currentUser!.delete();
-      throw AuthUserNotFound();
+      throw const AuthUserNotFound();
     }
 
     return UserDto.fromSnapshot(document);
@@ -65,7 +65,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
     final user = response.user;
 
     if (user == null) {
-      throw AuthUserNotFound();
+      throw const AuthUserNotFound();
     }
     return getUserById(user.uid);
   }
@@ -88,7 +88,7 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
     final user = userCredentials.user;
 
     if (user == null) {
-      throw AuthUserNotFound();
+      throw const AuthUserNotFound();
     }
 
     return UserDto.empty();

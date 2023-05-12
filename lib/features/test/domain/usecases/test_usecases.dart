@@ -10,3 +10,4 @@ export 'get_tests_usecase.dart';
 export 'edit_test.dart';
 export 'get_test_by_id.dart';
 export 'move_question.dart';
+export 'update_question_image.dart';

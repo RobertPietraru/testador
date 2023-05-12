@@ -77,49 +77,26 @@ class QuestionDto {
   }
 
   factory QuestionDto.fromEntity(QuestionEntity entity) {
-    if (entity is MultipleChoiceQuestionEntity) {
-      return QuestionDto(
-        text: entity.text,
-        image: entity.image,
-        options: entity.options
-            .map((e) => MultipleChoiceOptionDto.fromEntity(e))
-            .toList(),
-        acceptedAnswers: null,
-        testId: entity.testId,
-        typeDto: QuestionTypeDto.fromType(entity.type),
-      );
-    } else if (entity is TextInputQuestionEntity) {
-      return QuestionDto(
-        text: entity.text,
-        image: entity.image,
-        options: null,
-        acceptedAnswers: entity.acceptedAnswers,
-        testId: entity.testId,
-        typeDto: QuestionTypeDto.fromType(entity.type),
-      );
-    }
     return QuestionDto(
       text: entity.text,
       image: entity.image,
-      options: null,
-      acceptedAnswers: null,
+      options: entity.options
+          .map((e) => MultipleChoiceOptionDto.fromEntity(e))
+          .toList(),
+      acceptedAnswers: entity.acceptedAnswers,
       testId: entity.testId,
       typeDto: QuestionTypeDto.fromType(entity.type),
     );
   }
 
   QuestionEntity toEntity() {
-    if (typeDto == QuestionTypeDto.multipleChoice) {
-      return MultipleChoiceQuestionEntity(
-          testId: testId,
-          options: options?.map((e) => e.toEntity()).toList() ?? [],
-          text: text);
-    }
-    return TextInputQuestionEntity(
+    return QuestionEntity(
+        image: image,
         testId: testId,
         type: typeDto.toType(),
         acceptedAnswers: acceptedAnswers ?? [],
-        text: text);
+        text: text,
+        options: (options ?? []).map((e) => e.toEntity()).toList());
   }
 }
 

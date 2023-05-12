@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/components/theme/app_theme.dart';
 import '../../../../domain/entities/question_entity.dart';
 import '../cubit/test_editor_cubit.dart';
+import 'image_retrival_dialog.dart';
 
 class QuestionSettingsBottomSheet extends StatelessWidget {
   final QuestionEntity entity;
@@ -68,6 +69,24 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                   ),
                 ListTile(
                   onTap: () {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (_) => BlocProvider.value(
+                              value: context.read<TestEditorCubit>(),
+                              child: const ImageRetrivalDialog(),
+                            ));
+                  },
+                  title: Text(
+                    state.currentQuestion.image == null
+                        ? "Adauga o imagine"
+                        : "Schimba imaginea",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  leading: const Icon(Icons.image),
+                ),
+                ListTile(
+                  onTap: () {
                     context
                         .read<TestEditorCubit>()
                         .deleteQuestion(index: state.currentQuestionIndex);
@@ -78,11 +97,8 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                     style: TextStyle(
                         color: theme.bad, fontWeight: FontWeight.bold),
                   ),
-                  leading: Icon(
-                    Icons.delete,
-                    color: theme.bad,
-                  ),
-                ),
+                  leading: Icon(Icons.delete, color: theme.bad),
+                )
               ]),
         );
       },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
@@ -12,9 +14,11 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   final InsertQuestionUsecase insertQuestionUsecase;
   final UpdateQuestionUsecase updateQuestionUsecase;
   final DeleteQuestionUsecase deleteQuestionUsecase;
+  final UpdateQuestionImageUsecase updateQuestionImageUsecase;
 
   TestEditorCubit(this.insertQuestionUsecase, this.updateQuestionUsecase,
-      this.deleteQuestionUsecase, {required TestEntity initialTest})
+      this.deleteQuestionUsecase, this.updateQuestionImageUsecase,
+      {required TestEntity initialTest})
       : super(TestEditorState(
             currentQuestionIndex: 0,
             lastSavedTest: initialTest,
@@ -52,17 +56,25 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   Future<void> addNewQuestion(
       {required int index, required QuestionType type}) async {
     emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
-    final response =
-        await insertQuestionUsecase.call(InsertQuestionUsecaseParams(
-      test: state.test,
-      question: type == QuestionType.answer
-          ? TextInputQuestionEntity(testId: state.test.id)
-          : MultipleChoiceQuestionEntity(testId: state.test.id, options: const [
-              MultipleChoiceOptionEntity(text: null),
-              MultipleChoiceOptionEntity(text: null),
-            ]),
-      index: index + 1,
-    ));
+    final response = await insertQuestionUsecase.call(
+      InsertQuestionUsecaseParams(
+        test: state.test,
+        question: QuestionEntity(
+          testId: state.test.id,
+          acceptedAnswers: [],
+          options: type == QuestionType.multipleChoice
+              ? const [
+                  MultipleChoiceOptionEntity(text: null),
+                  MultipleChoiceOptionEntity(text: null)
+                ]
+              : [],
+          text: null,
+          type: type,
+          image: null,
+        ),
+        index: index + 1,
+      ),
+    );
     response.fold(
       (l) => emit(state.copyWith(
         failure: l,
@@ -80,7 +92,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   Future<void> addAnotherRowOfOptions({
     required int questionIndex,
   }) async {
-    final question = state.currentQuestion as MultipleChoiceQuestionEntity;
+    final question = state.currentQuestion;
     if (question.options.length >= 4) {
       //TODO error message
       return;
@@ -90,14 +102,11 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     final response =
         await updateQuestionUsecase.call(UpdateQuestionUsecaseParams(
       test: state.test,
-      replacementQuestion: MultipleChoiceQuestionEntity(
-          testId: question.testId,
-          image: question.image,
-          options: [
-            ...question.options,
-            const MultipleChoiceOptionEntity(text: null),
-            const MultipleChoiceOptionEntity(text: null),
-          ]),
+      replacementQuestion: question.copyWith(options: [
+        ...question.options,
+        const MultipleChoiceOptionEntity(text: null),
+        const MultipleChoiceOptionEntity(text: null),
+      ]),
       index: questionIndex,
     ));
 
@@ -118,7 +127,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   Future<void> removeRowOfOptions({
     required int questionIndex,
   }) async {
-    final question = state.currentQuestion as MultipleChoiceQuestionEntity;
+    final question = state.currentQuestion;
     if (question.options.length <= 2) {
       //TODO error message
       return;
@@ -131,8 +140,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     final response =
         await updateQuestionUsecase.call(UpdateQuestionUsecaseParams(
       test: state.test,
-      replacementQuestion: MultipleChoiceQuestionEntity(
-          testId: question.testId, image: question.image, options: questions),
+      replacementQuestion: state.currentQuestion.copyWith(options: questions),
       index: questionIndex,
     ));
 
@@ -198,19 +206,22 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     response.fold(
       (l) => emit(state.copyWith(
           failure: l, status: TestEditorStatus.failed, updateError: true)),
-      (r) => emit(state.copyWith(
-          failure: null,
-          status: TestEditorStatus.loaded,
-          test: r.testEntity,
-          currentQuestionIndex: index)),
+      (r) {
+        final newState = state.copyWith(
+            failure: null,
+            status: TestEditorStatus.loaded,
+            test: r.testEntity,
+            currentQuestionIndex: index);
+        emit(newState);
+      },
     );
+    print(state.test.questions);
   }
 
   Future<void> updateCurrentQuestionOption(
       {required int optionIndex,
       required MultipleChoiceOptionEntity newOption}) async {
     final question = state.currentQuestion;
-    if (question is! MultipleChoiceQuestionEntity) return;
     final options = question.options.toList();
     options[optionIndex] = newOption;
     await updateQuestion(
@@ -218,18 +229,36 @@ class TestEditorCubit extends Cubit<TestEditorState> {
         replacementQuestion: question.copyWith(options: options));
   }
 
-  Future<void> updateCurrentQuestionText({required String? newText}) async {
-    updateQuestion(
-      index: state.currentQuestionIndex,
-      replacementQuestion: state.currentQuestion.copyWith(
-        text: newText,
-      ),
+  Future<void> updateCurrentQuestionText({required String? newText}) async =>
+      await updateQuestion(
+        index: state.currentQuestionIndex,
+        replacementQuestion: state.currentQuestion.copyWith(
+          text: newText,
+        ),
+      );
+
+  Future<void> updateQuestionImage({required File image}) async {
+    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    final response = await updateQuestionImageUsecase.call(
+        UpdateQuestionImageUsecaseParams(
+            test: state.test, image: image, index: state.currentQuestionIndex));
+    response.fold(
+      (l) {
+        emit(state.copyWith(
+          failure: l,
+          status: TestEditorStatus.failed,
+          updateError: true,
+        ));
+      },
+      (r) {
+        emit(state.copyWith(
+            failure: null, status: TestEditorStatus.loaded, test: r.test));
+      },
     );
   }
 
   Future<void> addAcceptedAnswer({required String answer}) async {
     final question = state.currentQuestion;
-    if (question is! TextInputQuestionEntity) return;
 
     await updateQuestion(
         index: state.currentQuestionIndex,
@@ -239,7 +268,6 @@ class TestEditorCubit extends Cubit<TestEditorState> {
 
   Future<void> removeAcceptedAnswer({required int index}) async {
     final question = state.currentQuestion;
-    if (question is! TextInputQuestionEntity) return;
 
     final answers = question.acceptedAnswers.toList();
     answers.removeAt(index);
@@ -252,15 +280,12 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   Future<void> updateAcceptedAnswer(
       {required int index, required String answer}) async {
     final question = state.currentQuestion;
-    if (question is! TextInputQuestionEntity) return;
 
     final answers = question.acceptedAnswers.toList();
     answers[index] = answer;
 
+    final newQuestion = question.copyWith(acceptedAnswers: answers);
     await updateQuestion(
-        index: state.currentQuestionIndex,
-        replacementQuestion: question.copyWith(acceptedAnswers: answers));
+        index: state.currentQuestionIndex, replacementQuestion: newQuestion);
   }
-
-  //ModifyAnswerOptionDialog
 }
