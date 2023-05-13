@@ -4,35 +4,35 @@ import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 
-abstract class TestRemoteDataSource {
-  Future<void> syncToDatabase(SyncTestUsecaseParams params);
-  Future<TestEntity> getTestById(GetTestByIdUsecaseParams params);
-  Future<List<TestEntity>> getTests(GetTestsUsecaseParams params);
+abstract class QuizRemoteDataSource {
+  Future<void> syncToDatabase(SyncQuizUsecaseParams params);
+  Future<QuizEntity> getQuizById(GetQuizByIdUsecaseParams params);
+  Future<List<QuizEntity>> getQuizs(GetQuizsUsecaseParams params);
 }
 
-class TestRemoteDataSourceIMPL implements TestRemoteDataSource {
+class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   final db = FirebaseFirestore.instance;
 
   @override
-  Future<void> syncToDatabase(SyncTestUsecaseParams params) async {
+  Future<void> syncToDatabase(SyncQuizUsecaseParams params) async {
     //TODO: fix
-    final test = DraftDto.fromEntity(params.draft);
+    final quiz = DraftDto.fromEntity(params.draft);
 
-    await db.collection('tests').doc(test.id).set(test.toMap());
+    await db.collection('tests').doc(quiz.id).set(quiz.toMap());
   }
 
   @override
-  Future<TestEntity> getTestById(GetTestByIdUsecaseParams params) {
-    // TODO: implement getTestById
+  Future<QuizEntity> getQuizById(GetQuizByIdUsecaseParams params) {
+    // TODO: implement getQuizById
     throw UnimplementedError();
   }
 
   @override
-  Future<List<TestEntity>> getTests(GetTestsUsecaseParams params) async {
+  Future<List<QuizEntity>> getQuizs(GetQuizsUsecaseParams params) async {
     final snap = await db
-        .collection(TestDto.collection)
-        .where(TestDto.creatorField, isEqualTo: params.creatorId)
+        .collection(QuizDto.collection)
+        .where(QuizDto.creatorField, isEqualTo: params.creatorId)
         .get();
-    return snap.docs.map((e) => TestDto.fromMap(e.data()).toEntity()).toList();
+    return snap.docs.map((e) => QuizDto.fromMap(e.data()).toEntity()).toList();
   }
 }

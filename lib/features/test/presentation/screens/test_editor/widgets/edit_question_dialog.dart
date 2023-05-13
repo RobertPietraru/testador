@@ -47,7 +47,7 @@ class _EditQuestionDialogState extends State<EditQuestionDialog> {
                       borderRadius: BorderRadius.circular(8),
                     ))),
                 onPressed: () {
-                  context.read<TestEditorCubit>().updateCurrentQuestionText(
+                  context.read<QuizEditorCubit>().updateCurrentQuestionText(
                       newText: value.isEmpty ? null : value);
                   Navigator.pop(context);
                 },

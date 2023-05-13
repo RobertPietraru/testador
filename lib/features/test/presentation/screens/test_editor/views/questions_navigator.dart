@@ -65,9 +65,9 @@ class QuestionNavigatorListTile extends StatelessWidget {
   }
 }
 
-class TestQuestionWidget extends StatelessWidget {
-  final TestEditorState state;
-  const TestQuestionWidget({super.key, required this.state});
+class QuizQuestionWidget extends StatelessWidget {
+  final QuizEditorState state;
+  const QuizQuestionWidget({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class TestQuestionWidget extends StatelessWidget {
           onTap: () => showDialog(
               context: context,
               builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<TestEditorCubit>(context),
+                  value: BlocProvider.of<QuizEditorCubit>(context),
                   child: EditQuestionDialog(
                       initialValue: state.currentQuestion.text ?? ''))),
           child: Text(
@@ -91,7 +91,7 @@ class TestQuestionWidget extends StatelessWidget {
           onTap: () => showModalBottomSheet(
               context: context,
               builder: (_) => BlocProvider.value(
-                    value: BlocProvider.of<TestEditorCubit>(context),
+                    value: BlocProvider.of<QuizEditorCubit>(context),
                     child: QuestionSettingsBottomSheet(
                       questionIndex: state.currentQuestionIndex,
                       entity: state.currentQuestion,

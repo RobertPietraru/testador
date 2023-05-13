@@ -20,26 +20,26 @@ import 'package:testador/injection.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../test_editor_retrival/test_editor_retrival_widget.dart';
 
-class TestEditorScreen extends StatelessWidget {
-  const TestEditorScreen(
+class QuizEditorScreen extends StatelessWidget {
+  const QuizEditorScreen(
       {super.key,
-      @PathParam('id') required this.testId,
-      this.test,
-      this.testListCubit,
+      @PathParam('id') required this.quizId,
+      this.quiz,
+      this.quizListCubit,
       this.draft});
-  final String testId;
-  final TestEntity? test;
+  final String quizId;
+  final QuizEntity? quiz;
   final DraftEntity? draft;
-  final TestListCubit? testListCubit;
+  final QuizListCubit? quizListCubit;
 
   @override
   Widget build(BuildContext context) {
-    return TestEditorRetrivalWidget(
-        testId: testId,
-        entity: test,
+    return QuizEditorRetrivalWidget(
+        quizId: quizId,
+        entity: quiz,
         builder: (state) {
           return BlocProvider(
-              create: (context) => TestEditorCubit(
+              create: (context) => QuizEditorCubit(
                     locator(),
                     locator(),
                     locator(),
@@ -50,22 +50,22 @@ class TestEditorScreen extends StatelessWidget {
                     locator(),
                     locator(),
                     initialDraft: draft,
-                    testListCubit: testListCubit,
-                    initialTest: state.entity,
+                    quizListCubit: quizListCubit,
+                    initialQuiz: state.entity,
                   ),
-              child: const _TestScreen());
+              child: const _QuizScreen());
         });
   }
 }
 
-class _TestScreen extends StatefulWidget {
-  const _TestScreen();
+class _QuizScreen extends StatefulWidget {
+  const _QuizScreen();
 
   @override
-  State<_TestScreen> createState() => _TestScreenState();
+  State<_QuizScreen> createState() => _QuizScreenState();
 }
 
-class _TestScreenState extends State<_TestScreen> {
+class _QuizScreenState extends State<_QuizScreen> {
   final ScrollController controller = ScrollController();
 
   @override
@@ -73,7 +73,7 @@ class _TestScreenState extends State<_TestScreen> {
     final theme = AppTheme.of(context);
     return WillPopScope(
       onWillPop: () async {
-        final cubit = context.read<TestEditorCubit>();
+        final cubit = context.read<QuizEditorCubit>();
         if (!cubit.state.needsSync) {
           return true;
         }
@@ -87,9 +87,9 @@ class _TestScreenState extends State<_TestScreen> {
         }
 
         if (gottaSave) {
-          await context.read<TestEditorCubit>().save();
+          await context.read<QuizEditorCubit>().save();
         } else {
-          context.read<TestEditorCubit>().deleteDraft();
+          context.read<QuizEditorCubit>().deleteDraft();
         }
         return true;
       },
@@ -99,7 +99,7 @@ class _TestScreenState extends State<_TestScreen> {
               onPressed: () => showModalBottomSheet(
                   context: context,
                   builder: (_) => BlocProvider.value(
-                      value: context.read<TestEditorCubit>(),
+                      value: context.read<QuizEditorCubit>(),
                       child: QuestionCreationBottomSheet(
                         scrollController: controller,
                       )),
@@ -109,13 +109,13 @@ class _TestScreenState extends State<_TestScreen> {
               child: const Icon(Icons.add)),
           backgroundColor: theme.defaultBackgroundColor.withOpacity(0.9),
           resizeToAvoidBottomInset: true,
-          bottomSheet: BlocBuilder<TestEditorCubit, TestEditorState>(
+          bottomSheet: BlocBuilder<QuizEditorCubit, QuizEditorState>(
             builder: (context, state) => SizedBox(
                 height: 100,
                 child: ReorderableListView(
                   onReorder: (oldIndex, newIndex) {
                     context
-                        .read<TestEditorCubit>()
+                        .read<QuizEditorCubit>()
                         .moveQuestion(oldIndex: oldIndex, newIndex: newIndex);
                   },
                   scrollDirection: Axis.horizontal,
@@ -126,7 +126,7 @@ class _TestScreenState extends State<_TestScreen> {
                           isSelected: state.currentQuestionIndex == index,
                           onPressed: () {
                             context
-                                .read<TestEditorCubit>()
+                                .read<QuizEditorCubit>()
                                 .navigateToIndex(index);
                             controller.jumpTo(0);
                           },
@@ -134,25 +134,25 @@ class _TestScreenState extends State<_TestScreen> {
                           question: state.draft.questions[index])),
                 )),
           ),
-          appBar: CustomAppBar(title: const Text("Editor test"), trailing: [
+          appBar: CustomAppBar(title: const Text("Editor quiz"), trailing: [
             IconButton(
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                          value: context.read<TestEditorCubit>(),
-                          child: const TestSettingsScreen(),
+                          value: context.read<QuizEditorCubit>(),
+                          child: const QuizSettingsScreen(),
                         ),
                       ));
                 },
                 icon: const Icon(Icons.settings)),
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: BlocBuilder<TestEditorCubit, TestEditorState>(
+                child: BlocBuilder<QuizEditorCubit, QuizEditorState>(
                     builder: (context, state) {
                   return LoadingWrapper(
-                    isLoading: state.status == TestEditorStatus.loading,
+                    isLoading: state.status == QuizEditorStatus.loading,
                     child: FilledButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
@@ -164,16 +164,16 @@ class _TestScreenState extends State<_TestScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ))),
                       onPressed: state.needsSync
-                          ? () => context.read<TestEditorCubit>().save()
+                          ? () => context.read<QuizEditorCubit>().save()
                           : null,
                       child: const Text('Salveaza'),
                     ),
                   );
                 }))
           ]),
-          body: BlocConsumer<TestEditorCubit, TestEditorState>(
+          body: BlocConsumer<QuizEditorCubit, QuizEditorState>(
             listener: (context, state) {
-              if (state.status == TestEditorStatus.failed &&
+              if (state.status == QuizEditorStatus.failed &&
                   state.failure != null) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.failure!.retrieveMessage(context))));
@@ -192,7 +192,7 @@ class _TestScreenState extends State<_TestScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TestQuestionWidget(state: state),
+                                QuizQuestionWidget(state: state),
                                 SizedBox(height: theme.spacing.medium),
                                 if (state.currentQuestion.type ==
                                     QuestionType.answer)
@@ -204,7 +204,7 @@ class _TestScreenState extends State<_TestScreen> {
                                                 context: context,
                                                 builder: (_) => BlocProvider.value(
                                                     value: context.read<
-                                                        TestEditorCubit>(),
+                                                        QuizEditorCubit>(),
                                                     child:
                                                         const AcceptedAnswerCreationDialog())),
                                             child: const Text(
@@ -262,7 +262,7 @@ class _TestScreenState extends State<_TestScreen> {
               onTap: () => showDialog(
                   context: context,
                   builder: (_) => BlocProvider.value(
-                      value: context.read<TestEditorCubit>(),
+                      value: context.read<QuizEditorCubit>(),
                       child: EditAcceptedAnswerDialog(
                           initialValue: question.acceptedAnswers[index],
                           index: index))),

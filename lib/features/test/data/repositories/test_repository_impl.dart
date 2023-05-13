@@ -9,217 +9,217 @@ import 'package:testador/features/test/domain/usecases/draft/delete_draft_by_id.
 import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 import '../../domain/repositories/test_repository.dart';
 
-class TestRepositoryIMPL implements TestRepository {
-  const TestRepositoryIMPL(
-    this.testLocalDataSource,
-    this.testRemoteDataSource,
+class QuizRepositoryIMPL implements QuizRepository {
+  const QuizRepositoryIMPL(
+    this.quizLocalDataSource,
+    this.quizRemoteDataSource,
   );
 
-  final TestLocalDataSource testLocalDataSource;
-  final TestRemoteDataSource testRemoteDataSource;
+  final QuizLocalDataSource quizLocalDataSource;
+  final QuizRemoteDataSource quizRemoteDataSource;
 
   @override
-  Future<Either<TestFailure, CreateDraftUsecaseResult>> createTest(
+  Future<Either<QuizFailure, CreateDraftUsecaseResult>> createQuiz(
       CreateDraftUsecaseParams params) async {
     try {
-      final testEntity = await testLocalDataSource.createDraft(params);
-      return Right(CreateDraftUsecaseResult(draft: testEntity));
+      final quizEntity = await quizLocalDataSource.createDraft(params);
+      return Right(CreateDraftUsecaseResult(draft: quizEntity));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, DeleteQuestionUsecaseResult>> deleteQuestion(
+  Future<Either<QuizFailure, DeleteQuestionUsecaseResult>> deleteQuestion(
       DeleteQuestionUsecaseParams params) async {
     try {
-      final testEntity = await testLocalDataSource.deleteQuestion(params);
-      return Right(DeleteQuestionUsecaseResult(testEntity: testEntity));
+      final quizEntity = await quizLocalDataSource.deleteQuestion(params);
+      return Right(DeleteQuestionUsecaseResult(quizEntity: quizEntity));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, InsertQuestionUsecaseResult>> insertQuestion(
+  Future<Either<QuizFailure, InsertQuestionUsecaseResult>> insertQuestion(
       InsertQuestionUsecaseParams params) async {
     try {
-      final response = await testLocalDataSource.insertQuestion(params);
+      final response = await quizLocalDataSource.insertQuestion(params);
       return Right(InsertQuestionUsecaseResult(draft: response));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, UpdateQuestionUsecaseResult>> updateQuestion(
+  Future<Either<QuizFailure, UpdateQuestionUsecaseResult>> updateQuestion(
       UpdateQuestionUsecaseParams params) async {
     try {
-      final testEntity = await testLocalDataSource.updateQuestion(params);
-      return Right(UpdateQuestionUsecaseResult(testEntity: testEntity));
+      final quizEntity = await quizLocalDataSource.updateQuestion(params);
+      return Right(UpdateQuestionUsecaseResult(quizEntity: quizEntity));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, EditTestUsecaseResult>> editTest(
-      UpdateTestUsecaseParams params) async {
+  Future<Either<QuizFailure, EditQuizUsecaseResult>> editQuiz(
+      UpdateQuizUsecaseParams params) async {
     try {
-      final testEntity = await testLocalDataSource.updateTest(params);
-      return Right(EditTestUsecaseResult(test: testEntity));
+      final quizEntity = await quizLocalDataSource.updateQuiz(params);
+      return Right(EditQuizUsecaseResult(quiz: quizEntity));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, GetTestsUsecaseResult>> getTests(
-      GetTestsUsecaseParams params) async {
+  Future<Either<QuizFailure, GetQuizsUsecaseResult>> getQuizs(
+      GetQuizsUsecaseParams params) async {
     try {
-      final tests = await testRemoteDataSource.getTests(params);
-      final drafts = await testLocalDataSource.getDrafts(params);
+      final quizs = await quizRemoteDataSource.getQuizs(params);
+      final drafts = await quizLocalDataSource.getDrafts(params);
 
-      return Right(GetTestsUsecaseResult(
-          pairs: tests.map((test) {
-        final index = drafts.indexWhere((draft) => draft.id == test.id);
+      return Right(GetQuizsUsecaseResult(
+          pairs: quizs.map((quiz) {
+        final index = drafts.indexWhere((draft) => draft.id == quiz.id);
 
-        return TestDraftPair(
-            test: test, draft: index == -1 ? null : drafts[index]);
+        return QuizDraftPair(
+            quiz: quiz, draft: index == -1 ? null : drafts[index]);
       }).toList()));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } on Error catch (_) {
       print(_);
       print(_.stackTrace);
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, GetDraftByIdUsecaseResult>> getDraftById(
+  Future<Either<QuizFailure, GetDraftByIdUsecaseResult>> getDraftById(
       GetDraftByIdUsecaseParams params) async {
     try {
-      final test = await testLocalDataSource.getDraftById(params);
-      return Right(GetDraftByIdUsecaseResult(draft: test));
+      final quiz = await quizLocalDataSource.getDraftById(params);
+      return Right(GetDraftByIdUsecaseResult(draft: quiz));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, MoveQuestionUsecaseResult>> moveQuestion(
+  Future<Either<QuizFailure, MoveQuestionUsecaseResult>> moveQuestion(
       MoveQuestionUsecaseParams params) async {
     try {
-      final test = await testLocalDataSource.moveQuestion(params);
-      return Right(MoveQuestionUsecaseResult(test: test));
+      final quiz = await quizLocalDataSource.moveQuestion(params);
+      return Right(MoveQuestionUsecaseResult(quiz: quiz));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, UpdateQuestionImageUsecaseResult>>
+  Future<Either<QuizFailure, UpdateQuestionImageUsecaseResult>>
       updateQuestionImage(UpdateQuestionImageUsecaseParams params) async {
     try {
-      final test = await testLocalDataSource.updateQuestionImage(params);
-      return Right(UpdateQuestionImageUsecaseResult(test: test));
+      final quiz = await quizLocalDataSource.updateQuestionImage(params);
+      return Right(UpdateQuestionImageUsecaseResult(quiz: quiz));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, UpdateTestImageUsecaseResult>> updateTestImage(
-      UpdateTestImageUsecaseParams params) async {
+  Future<Either<QuizFailure, UpdateQuizImageUsecaseResult>> updateQuizImage(
+      UpdateQuizImageUsecaseParams params) async {
     try {
-      final test = await testLocalDataSource.updateTestImage(params);
-      return Right(UpdateTestImageUsecaseResult(test: test));
+      final quiz = await quizLocalDataSource.updateQuizImage(params);
+      return Right(UpdateQuizImageUsecaseResult(quiz: quiz));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, SyncTestUsecaseResult>> syncTest(
-      SyncTestUsecaseParams params) async {
+  Future<Either<QuizFailure, SyncQuizUsecaseResult>> syncQuiz(
+      SyncQuizUsecaseParams params) async {
     try {
-      testRemoteDataSource.syncToDatabase(params);
-      return const Right(SyncTestUsecaseResult());
+      quizRemoteDataSource.syncToDatabase(params);
+      return const Right(SyncQuizUsecaseResult());
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, GetTestByIdUsecaseResult>> getTestById(
-      GetTestByIdUsecaseParams params) async {
+  Future<Either<QuizFailure, GetQuizByIdUsecaseResult>> getQuizById(
+      GetQuizByIdUsecaseParams params) async {
     try {
-      final test = await testRemoteDataSource.getTestById(params);
-      return Right(GetTestByIdUsecaseResult(testEntity: test));
+      final quiz = await quizRemoteDataSource.getQuizById(params);
+      return Right(GetQuizByIdUsecaseResult(quizEntity: quiz));
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, DeleteDraftByIdUsecaseResult>> deleteDraftById(
+  Future<Either<QuizFailure, DeleteDraftByIdUsecaseResult>> deleteDraftById(
       DeleteDraftByIdUsecaseParams params) async {
     try {
-      await testLocalDataSource.deleteDraftById(params);
+      await quizLocalDataSource.deleteDraftById(params);
       return const Right(DeleteDraftByIdUsecaseResult());
     } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return const Left(TestUnknownFailure());
+      return const Left(QuizUnknownFailure());
     }
   }
 }

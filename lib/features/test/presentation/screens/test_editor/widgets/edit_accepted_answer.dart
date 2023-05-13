@@ -55,7 +55,7 @@ class _EditAcceptedAnswerDialogState extends State<EditAcceptedAnswerDialog> {
                     ))),
                 onPressed: () {
                   context
-                      .read<TestEditorCubit>()
+                      .read<QuizEditorCubit>()
                       .removeAcceptedAnswer(index: widget.index);
                   Navigator.pop(context);
                 },
@@ -70,7 +70,7 @@ class _EditAcceptedAnswerDialogState extends State<EditAcceptedAnswerDialog> {
                     ))),
                 onPressed: () {
                   context
-                      .read<TestEditorCubit>()
+                      .read<QuizEditorCubit>()
                       .updateAcceptedAnswer(index: widget.index, answer: value);
                   Navigator.pop(context);
                 },

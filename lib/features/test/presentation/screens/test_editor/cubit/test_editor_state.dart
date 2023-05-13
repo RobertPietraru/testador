@@ -1,37 +1,37 @@
 part of 'test_editor_cubit.dart';
 
-enum TestEditorStatus { loading, loaded, failed }
+enum QuizEditorStatus { loading, loaded, failed }
 
-class TestEditorState extends Equatable {
-  final TestEntity lastSavedTest;
+class QuizEditorState extends Equatable {
+  final QuizEntity lastSavedQuiz;
   final DraftEntity draft;
-  final TestFailure? failure;
-  final TestEditorStatus status;
+  final QuizFailure? failure;
+  final QuizEditorStatus status;
   final int currentQuestionIndex;
 
-  const TestEditorState({
+  const QuizEditorState({
     required this.currentQuestionIndex,
-    this.status = TestEditorStatus.loading,
-    required this.lastSavedTest,
+    this.status = QuizEditorStatus.loading,
+    required this.lastSavedQuiz,
     required this.draft,
     this.failure,
   });
 
   QuestionEntity get currentQuestion => draft.questions[currentQuestionIndex];
 
-  bool get needsSync => draft.toTest() != lastSavedTest;
+  bool get needsSync => draft.toQuiz() != lastSavedQuiz;
 
-  TestEditorState copyWith(
-      {TestEntity? lastSavedTest,
+  QuizEditorState copyWith(
+      {QuizEntity? lastSavedQuiz,
       DraftEntity? draft,
-      TestFailure? failure,
-      TestEditorStatus? status,
+      QuizFailure? failure,
+      QuizEditorStatus? status,
       int? currentQuestionIndex,
       bool updateError = false}) {
-    return TestEditorState(
+    return QuizEditorState(
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
       status: status ?? this.status,
-      lastSavedTest: lastSavedTest ?? this.lastSavedTest,
+      lastSavedQuiz: lastSavedQuiz ?? this.lastSavedQuiz,
       draft: draft ?? this.draft,
       failure: updateError ? failure : this.failure,
     );
@@ -41,7 +41,7 @@ class TestEditorState extends Equatable {
   List<Object?> get props => [
         currentQuestionIndex,
         currentQuestion,
-        lastSavedTest,
+        lastSavedQuiz,
         draft,
         failure,
         status

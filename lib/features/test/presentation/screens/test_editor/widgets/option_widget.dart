@@ -46,7 +46,7 @@ class _OptionWidgetState extends State<OptionWidget> {
           showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
-              value: context.read<TestEditorCubit>(),
+              value: context.read<QuizEditorCubit>(),
               child: EditOptionDialog(
                 entity: widget.option,
                 index: widget.index,
@@ -65,7 +65,7 @@ class _OptionWidgetState extends State<OptionWidget> {
                 children: [
                   IconButton(
                       onPressed: () => context
-                          .read<TestEditorCubit>()
+                          .read<QuizEditorCubit>()
                           .updateCurrentQuestionOption(
                               optionIndex: widget.index,
                               newOption: MultipleChoiceOptionEntity(

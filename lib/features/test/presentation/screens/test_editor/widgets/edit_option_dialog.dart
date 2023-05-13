@@ -57,7 +57,7 @@ class _EditOptionDialogState extends State<EditOptionDialog> {
                     borderRadius: BorderRadius.circular(8),
                   ))),
               onPressed: () {
-                context.read<TestEditorCubit>().updateCurrentQuestionOption(
+                context.read<QuizEditorCubit>().updateCurrentQuestionOption(
                     optionIndex: widget.index,
                     newOption: MultipleChoiceOptionEntity(
                         text: value.isEmpty ? null : value,

@@ -5,24 +5,24 @@ import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 
 part 'test_editor_retrival_state.dart';
 
-class TestEditorRetrivalCubit extends Cubit<TestEditorRetrivalState> {
-  final GetTestByIdUsecase getTestByIdUsecase;
+class QuizEditorRetrivalCubit extends Cubit<QuizEditorRetrivalState> {
+  final GetQuizByIdUsecase getQuizByIdUsecase;
 
-  TestEditorRetrivalCubit(this.getTestByIdUsecase)
-      : super(TestEditorRetrivalLoading());
+  QuizEditorRetrivalCubit(this.getQuizByIdUsecase)
+      : super(QuizEditorRetrivalLoading());
 
   void initialize(
-      {required TestEntity? testEntity, required String testId}) async {
-    if (testEntity != null) {
-      emit(TestEditorRetrivalSuccessful(entity: testEntity));
+      {required QuizEntity? quizEntity, required String quizId}) async {
+    if (quizEntity != null) {
+      emit(QuizEditorRetrivalSuccessful(entity: quizEntity));
       return;
     }
     final response =
-        await getTestByIdUsecase.call(GetTestByIdUsecaseParams(testId: testId));
+        await getQuizByIdUsecase.call(GetQuizByIdUsecaseParams(quizId: quizId));
 
     response.fold(
-      (l) => emit(TestEditorRetrivalFailed()),
-      (r) => emit(TestEditorRetrivalSuccessful(entity: r.testEntity)),
+      (l) => emit(QuizEditorRetrivalFailed()),
+      (r) => emit(QuizEditorRetrivalSuccessful(entity: r.quizEntity)),
     );
   }
 }

@@ -5,18 +5,17 @@ import 'package:testador/features/test/domain/entities/test_entity.dart';
 
 import 'package:dartz/dartz.dart';
 
-
 import '../../../../../core/classes/usecase.dart';
 import '../../failures/test_failures.dart';
 import '../../repositories/test_repository.dart';
 
 class InsertQuestionUsecase
     extends UseCase<InsertQuestionUsecaseResult, InsertQuestionUsecaseParams> {
-  const InsertQuestionUsecase(this.testRepository);
-  final TestRepository testRepository;
+  const InsertQuestionUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, InsertQuestionUsecaseResult>> call(params) async {
-    return testRepository.insertQuestion(params);
+  Future<Either<QuizFailure, InsertQuestionUsecaseResult>> call(params) async {
+    return quizRepository.insertQuestion(params);
   }
 }
 

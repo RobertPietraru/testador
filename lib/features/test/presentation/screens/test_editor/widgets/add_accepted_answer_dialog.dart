@@ -43,7 +43,7 @@ class _AcceptedAnswerCreationDialogState
               onPressed: () {
                 if (value.isNotEmpty) {
                   context
-                      .read<TestEditorCubit>()
+                      .read<QuizEditorCubit>()
                       .addAcceptedAnswer(answer: value);
                 }
                 Navigator.pop(context);

@@ -7,21 +7,21 @@ import 'package:testador/features/test/domain/entities/draft_entity.dart';
 
 class DeleteQuestionUsecase
     extends UseCase<DeleteQuestionUsecaseResult, DeleteQuestionUsecaseParams> {
-  const DeleteQuestionUsecase(this.testRepository);
-  final TestRepository testRepository;
+  const DeleteQuestionUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, DeleteQuestionUsecaseResult>> call(params) async {
-    return testRepository.deleteQuestion(params);
+  Future<Either<QuizFailure, DeleteQuestionUsecaseResult>> call(params) async {
+    return quizRepository.deleteQuestion(params);
   }
 }
 
 class DeleteQuestionUsecaseParams extends Params {
-  final DraftEntity test;
+  final DraftEntity quiz;
   final int index;
-  const DeleteQuestionUsecaseParams({required this.test, required this.index});
+  const DeleteQuestionUsecaseParams({required this.quiz, required this.index});
 }
 
 class DeleteQuestionUsecaseResult extends Response {
-  final DraftEntity testEntity;
-  const DeleteQuestionUsecaseResult({required this.testEntity});
+  final DraftEntity quizEntity;
+  const DeleteQuestionUsecaseResult({required this.quizEntity});
 }

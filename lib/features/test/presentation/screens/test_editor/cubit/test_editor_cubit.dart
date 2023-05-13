@@ -17,38 +17,38 @@ import '../../test_list/cubit/test_list_cubit.dart';
 
 part 'test_editor_state.dart';
 
-class TestEditorCubit extends Cubit<TestEditorState> {
+class QuizEditorCubit extends Cubit<QuizEditorState> {
   final InsertQuestionUsecase insertQuestionUsecase;
   final UpdateQuestionUsecase updateQuestionUsecase;
   final DeleteQuestionUsecase deleteQuestionUsecase;
   final UpdateQuestionImageUsecase updateQuestionImageUsecase;
   final MoveQuestionUsecase moveQuestionUsecase;
-  final UpdateTestImageUsecase updateTestImageUsecase;
-  final UpdateTestUsecase editTestUsecase;
-  final SyncTestUsecase syncTestUsecase;
+  final UpdateQuizImageUsecase updateQuizImageUsecase;
+  final UpdateQuizUsecase editQuizUsecase;
+  final SyncQuizUsecase syncQuizUsecase;
   final DeleteDraftByIdUsecase deleteDraftByIdUsecase;
 
-  final TestListCubit? testListCubit;
+  final QuizListCubit? quizListCubit;
 
-  TestEditorCubit(
-    this.syncTestUsecase,
+  QuizEditorCubit(
+    this.syncQuizUsecase,
     this.insertQuestionUsecase,
     this.updateQuestionUsecase,
     this.deleteQuestionUsecase,
     this.updateQuestionImageUsecase,
     this.moveQuestionUsecase,
-    this.updateTestImageUsecase,
-    this.editTestUsecase,
+    this.updateQuizImageUsecase,
+    this.editQuizUsecase,
     this.deleteDraftByIdUsecase, {
-    required TestEntity initialTest,
+    required QuizEntity initialQuiz,
     DraftEntity? initialDraft,
-    required this.testListCubit,
-  }) : super(TestEditorState(
+    required this.quizListCubit,
+  }) : super(QuizEditorState(
             currentQuestionIndex: 0,
-            lastSavedTest: initialTest,
-            draft: initialDraft ?? DraftEntity.fromEntity(initialTest),
+            lastSavedQuiz: initialQuiz,
+            draft: initialDraft ?? DraftEntity.fromEntity(initialQuiz),
             failure: null,
-            status: TestEditorStatus.loaded));
+            status: QuizEditorStatus.loaded));
 
   void navigateToIndex(int index) {
     emit(state.copyWith(currentQuestionIndex: index));
@@ -57,7 +57,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   Future<void> insertQuestion(
       {required int index, required QuestionEntity question}) async {
     emit(state.copyWith(
-        status: TestEditorStatus.loading, failure: null, updateError: true));
+        status: QuizEditorStatus.loading, failure: null, updateError: true));
     final response =
         await insertQuestionUsecase.call(InsertQuestionUsecaseParams(
       draft: state.draft,
@@ -67,12 +67,12 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     response.fold(
       (l) => emit(state.copyWith(
         failure: l,
-        status: TestEditorStatus.failed,
+        status: QuizEditorStatus.failed,
         updateError: true,
       )),
       (r) => emit(state.copyWith(
           failure: null,
-          status: TestEditorStatus.loaded,
+          status: QuizEditorStatus.loaded,
           updateError: true,
           draft: r.draft,
           currentQuestionIndex: index)),
@@ -81,13 +81,13 @@ class TestEditorCubit extends Cubit<TestEditorState> {
 
   Future<void> addNewQuestion(
       {required int index, required QuestionType type}) async {
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final response = await insertQuestionUsecase.call(
       InsertQuestionUsecaseParams(
         draft: state.draft,
         question: QuestionEntity(
           id: const Uuid().v1(),
-          testId: state.draft.id,
+          quizId: state.draft.id,
           acceptedAnswers: [],
           options: type == QuestionType.multipleChoice
               ? const [
@@ -105,12 +105,12 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     response.fold(
       (l) => emit(state.copyWith(
         failure: l,
-        status: TestEditorStatus.failed,
+        status: QuizEditorStatus.failed,
         updateError: true,
       )),
       (r) => emit(state.copyWith(
           failure: null,
-          status: TestEditorStatus.loaded,
+          status: QuizEditorStatus.loaded,
           updateError: true,
           draft: r.draft,
           currentQuestionIndex: index + 1)),
@@ -125,7 +125,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       //TODO error message
       return;
     }
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
 
     final response =
         await updateQuestionUsecase.call(UpdateQuestionUsecaseParams(
@@ -141,14 +141,14 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     response.fold(
       (l) => emit(state.copyWith(
         failure: l,
-        status: TestEditorStatus.failed,
+        status: QuizEditorStatus.failed,
         updateError: true,
       )),
       (r) => emit(state.copyWith(
         failure: null,
-        status: TestEditorStatus.loaded,
+        status: QuizEditorStatus.loaded,
         updateError: true,
-        draft: r.testEntity,
+        draft: r.quizEntity,
       )),
     );
   }
@@ -161,7 +161,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       //TODO error message
       return;
     }
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final questions = question.options.toList();
     questions.removeLast();
     questions.removeLast();
@@ -176,14 +176,14 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     response.fold(
       (l) => emit(state.copyWith(
         failure: l,
-        status: TestEditorStatus.failed,
+        status: QuizEditorStatus.failed,
         updateError: true,
       )),
       (r) => emit(state.copyWith(
         failure: null,
-        status: TestEditorStatus.loaded,
+        status: QuizEditorStatus.loaded,
         updateError: true,
-        draft: r.testEntity,
+        draft: r.quizEntity,
       )),
     );
   }
@@ -194,8 +194,8 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     if (state.draft.questions.length == 1) {
       emit(state.copyWith(
         updateError: true,
-        failure: DeletingTheOnlyQuestionTestFailure(),
-        status: TestEditorStatus.failed,
+        failure: DeletingTheOnlyQuestionQuizFailure(),
+        status: QuizEditorStatus.failed,
       ));
       return;
     }
@@ -205,19 +205,19 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       newIndex = index - 1;
     }
 
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final response = await deleteQuestionUsecase
-        .call(DeleteQuestionUsecaseParams(test: state.draft, index: index));
+        .call(DeleteQuestionUsecaseParams(quiz: state.draft, index: index));
     response.fold(
       (l) => emit(state.copyWith(
         failure: l,
-        status: TestEditorStatus.failed,
+        status: QuizEditorStatus.failed,
         updateError: true,
       )),
       (r) => emit(state.copyWith(
         failure: null,
-        status: TestEditorStatus.loaded,
-        draft: r.testEntity,
+        status: QuizEditorStatus.loaded,
+        draft: r.quizEntity,
         currentQuestionIndex: newIndex,
       )),
     );
@@ -225,7 +225,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
 
   Future<void> updateQuestion(
       {required int index, required QuestionEntity replacementQuestion}) async {
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
 
     final response = await updateQuestionUsecase.call(
         UpdateQuestionUsecaseParams(
@@ -235,12 +235,12 @@ class TestEditorCubit extends Cubit<TestEditorState> {
 
     response.fold(
       (l) => emit(state.copyWith(
-          failure: l, status: TestEditorStatus.failed, updateError: true)),
+          failure: l, status: QuizEditorStatus.failed, updateError: true)),
       (r) {
         emit(state.copyWith(
             failure: null,
-            status: TestEditorStatus.loaded,
-            draft: r.testEntity,
+            status: QuizEditorStatus.loaded,
+            draft: r.quizEntity,
             currentQuestionIndex: index));
       },
     );
@@ -266,7 +266,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       );
 
   Future<void> updateQuestionImage({required File image}) async {
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final response = await updateQuestionImageUsecase.call(
         UpdateQuestionImageUsecaseParams(
             draft: state.draft,
@@ -276,13 +276,13 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       (l) {
         emit(state.copyWith(
           failure: l,
-          status: TestEditorStatus.failed,
+          status: QuizEditorStatus.failed,
           updateError: true,
         ));
       },
       (r) {
         emit(state.copyWith(
-            failure: null, status: TestEditorStatus.loaded, draft: r.test));
+            failure: null, status: QuizEditorStatus.loaded, draft: r.quiz));
       },
     );
   }
@@ -321,7 +321,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
 
   Future<void> moveQuestion(
       {required int oldIndex, required int newIndex}) async {
-    emit(state.copyWith(status: TestEditorStatus.loading, failure: null));
+    emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final response = await moveQuestionUsecase.call(MoveQuestionUsecaseParams(
         newIndex: newIndex, oldIndex: oldIndex, draft: state.draft));
 
@@ -329,39 +329,39 @@ class TestEditorCubit extends Cubit<TestEditorState> {
       (l) {
         emit(state.copyWith(
           failure: l,
-          status: TestEditorStatus.failed,
+          status: QuizEditorStatus.failed,
           updateError: true,
         ));
       },
       (r) {
         emit(state.copyWith(
           failure: null,
-          status: TestEditorStatus.loaded,
-          draft: r.test,
-          currentQuestionIndex: r.test.questions.indexOf(state.currentQuestion),
+          status: QuizEditorStatus.loaded,
+          draft: r.quiz,
+          currentQuestionIndex: r.quiz.questions.indexOf(state.currentQuestion),
           updateError: true,
         ));
       },
     );
   }
 
-  Future<void> updateTestImage({required File newImage}) async {
+  Future<void> updateQuizImage({required File newImage}) async {
     emit(state.copyWith(
-        status: TestEditorStatus.loading, failure: null, updateError: true));
+        status: QuizEditorStatus.loading, failure: null, updateError: true));
 
-    final response = await updateTestImageUsecase
-        .call(UpdateTestImageUsecaseParams(test: state.draft, image: newImage));
+    final response = await updateQuizImageUsecase
+        .call(UpdateQuizImageUsecaseParams(quiz: state.draft, image: newImage));
 
     response.fold(
       (l) {
         emit(state.copyWith(
-            failure: l, status: TestEditorStatus.failed, updateError: true));
+            failure: l, status: QuizEditorStatus.failed, updateError: true));
       },
       (r) {
         emit(state.copyWith(
             failure: null,
-            status: TestEditorStatus.loaded,
-            draft: r.test,
+            status: QuizEditorStatus.loaded,
+            draft: r.quiz,
             updateError: true));
       },
     );
@@ -369,58 +369,58 @@ class TestEditorCubit extends Cubit<TestEditorState> {
 
   Future<void> togglePublicity() async {
     emit(state.copyWith(
-        status: TestEditorStatus.loading, failure: null, updateError: true));
+        status: QuizEditorStatus.loading, failure: null, updateError: true));
 
-    final response = await editTestUsecase.call(UpdateTestUsecaseParams(
-        test: state.draft.copyWith(isPublic: !state.draft.isPublic),
-        testId: state.draft.id));
+    final response = await editQuizUsecase.call(UpdateQuizUsecaseParams(
+        quiz: state.draft.copyWith(isPublic: !state.draft.isPublic),
+        quizId: state.draft.id));
 
     response.fold(
       (l) => emit(state.copyWith(
-          failure: l, status: TestEditorStatus.failed, updateError: true)),
+          failure: l, status: QuizEditorStatus.failed, updateError: true)),
       (r) => emit(state.copyWith(
           failure: null,
-          status: TestEditorStatus.loaded,
-          draft: r.test,
+          status: QuizEditorStatus.loaded,
+          draft: r.quiz,
           updateError: true)),
     );
   }
 
-  Future<void> updateTestTitle(String title) async {
+  Future<void> updateQuizTitle(String title) async {
     emit(state.copyWith(
-        status: TestEditorStatus.loading, failure: null, updateError: true));
+        status: QuizEditorStatus.loading, failure: null, updateError: true));
 
-    final response = await editTestUsecase.call(UpdateTestUsecaseParams(
-        test: state.draft.copyWith(title: title), testId: state.draft.id));
+    final response = await editQuizUsecase.call(UpdateQuizUsecaseParams(
+        quiz: state.draft.copyWith(title: title), quizId: state.draft.id));
 
     response.fold(
       (l) => emit(state.copyWith(
-          failure: l, status: TestEditorStatus.failed, updateError: true)),
+          failure: l, status: QuizEditorStatus.failed, updateError: true)),
       (r) => emit(state.copyWith(
           failure: null,
-          status: TestEditorStatus.loaded,
-          draft: r.test,
+          status: QuizEditorStatus.loaded,
+          draft: r.quiz,
           updateError: true)),
     );
   }
 
   Future<void> save() async {
     emit(state.copyWith(
-        status: TestEditorStatus.loading, failure: null, updateError: true));
+        status: QuizEditorStatus.loading, failure: null, updateError: true));
     final response =
-        await syncTestUsecase.call(SyncTestUsecaseParams(draft: state.draft));
+        await syncQuizUsecase.call(SyncQuizUsecaseParams(draft: state.draft));
     response.fold((l) {
       emit(state.copyWith(
         failure: l,
-        status: TestEditorStatus.failed,
+        status: QuizEditorStatus.failed,
         updateError: true,
       ));
     }, (r) {
-      testListCubit?.updateTest(draft: state.draft);
+      quizListCubit?.updateQuiz(draft: state.draft);
       emit(state.copyWith(
         failure: null,
-        status: TestEditorStatus.loaded,
-        lastSavedTest: state.draft.toTest(),
+        status: QuizEditorStatus.loaded,
+        lastSavedQuiz: state.draft.toQuiz(),
         updateError: true,
       ));
     });
@@ -429,6 +429,6 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   void deleteDraft() async {
     await deleteDraftByIdUsecase
         .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
-    testListCubit?.removeDraft(state.draft);
+    quizListCubit?.removeDraft(state.draft);
   }
 }

@@ -6,21 +6,21 @@ import 'package:dartz/dartz.dart';
 import '../../../../../core/classes/usecase.dart';
 import '../../repositories/test_repository.dart';
 
-class SyncTestUsecase
-    extends UseCase<SyncTestUsecaseResult, SyncTestUsecaseParams> {
-  const SyncTestUsecase(this.testRepository);
-  final TestRepository testRepository;
+class SyncQuizUsecase
+    extends UseCase<SyncQuizUsecaseResult, SyncQuizUsecaseParams> {
+  const SyncQuizUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, SyncTestUsecaseResult>> call(params) async {
-    return testRepository.syncTest(params);
+  Future<Either<QuizFailure, SyncQuizUsecaseResult>> call(params) async {
+    return quizRepository.syncQuiz(params);
   }
 }
 
-class SyncTestUsecaseParams extends Params {
+class SyncQuizUsecaseParams extends Params {
   final DraftEntity draft;
-  const SyncTestUsecaseParams({required this.draft});
+  const SyncQuizUsecaseParams({required this.draft});
 }
 
-class SyncTestUsecaseResult extends Response {
-  const SyncTestUsecaseResult();
+class SyncQuizUsecaseResult extends Response {
+  const SyncQuizUsecaseResult();
 }

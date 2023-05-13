@@ -67,8 +67,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '40369619488',
     projectId: 'skeleton-a3bd2',
     storageBucket: 'skeleton-a3bd2.appspot.com',
-    iosClientId: '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
-    iosBundleId: 'com.example.testador',
+    iosClientId:
+        '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
+    iosBundleId: 'com.example.quizador',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '40369619488',
     projectId: 'skeleton-a3bd2',
     storageBucket: 'skeleton-a3bd2.appspot.com',
-    iosClientId: '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
-    iosBundleId: 'com.example.testador',
+    iosClientId:
+        '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
+    iosBundleId: 'com.example.quizador',
   );
 }

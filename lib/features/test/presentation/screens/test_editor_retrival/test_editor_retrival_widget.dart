@@ -7,28 +7,28 @@ import '../../../../../../injection.dart';
 import '../../../domain/entities/test_entity.dart';
 import 'cubit/test_editor_retrival_cubit.dart';
 
-class TestEditorRetrivalWidget extends StatelessWidget {
-  const TestEditorRetrivalWidget({
+class QuizEditorRetrivalWidget extends StatelessWidget {
+  const QuizEditorRetrivalWidget({
     super.key,
-    required this.testId,
+    required this.quizId,
     required this.entity,
     required this.builder,
   });
 
-  final Widget Function(TestEditorRetrivalSuccessful state) builder;
+  final Widget Function(QuizEditorRetrivalSuccessful state) builder;
 
-  final String testId;
-  final TestEntity? entity;
+  final String quizId;
+  final QuizEntity? entity;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TestEditorRetrivalCubit(locator())
-        ..initialize(testId: testId, testEntity: entity),
+      create: (context) => QuizEditorRetrivalCubit(locator())
+        ..initialize(quizId: quizId, quizEntity: entity),
       child: Builder(builder: (context) {
-        return BlocConsumer<TestEditorRetrivalCubit, TestEditorRetrivalState>(
+        return BlocConsumer<QuizEditorRetrivalCubit, QuizEditorRetrivalState>(
           listener: (context, state) {
-            if (state is TestEditorRetrivalFailed) {
+            if (state is QuizEditorRetrivalFailed) {
               //TODO: not found page;
 
               context.popRoute();
@@ -39,10 +39,10 @@ class TestEditorRetrivalWidget extends StatelessWidget {
           buildWhen: (previous, current) =>
               previous.runtimeType != current.runtimeType,
           builder: (context, state) {
-            if (state is TestEditorRetrivalLoading) {
+            if (state is QuizEditorRetrivalLoading) {
               return const Scaffold(
                   body: Center(child: CircularProgressIndicator()));
-            } else if (state is TestEditorRetrivalSuccessful) {
+            } else if (state is QuizEditorRetrivalSuccessful) {
               return builder(state);
             }
             return const Scaffold(

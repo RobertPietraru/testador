@@ -18,7 +18,7 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    return BlocBuilder<TestEditorCubit, TestEditorState>(
+    return BlocBuilder<QuizEditorCubit, QuizEditorState>(
       builder: (context, state) {
         return Container(
           padding: theme.standardPadding,
@@ -29,7 +29,7 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                 ListTile(
                   onTap: () {
                     context
-                        .read<TestEditorCubit>()
+                        .read<QuizEditorCubit>()
                         .deleteQuestion(index: state.currentQuestionIndex);
                     Navigator.pop(context);
                   },
@@ -43,7 +43,7 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                   ListTile(
                     onTap: () {
                       context
-                          .read<TestEditorCubit>()
+                          .read<QuizEditorCubit>()
                           .addAnotherRowOfOptions(questionIndex: questionIndex);
                       Navigator.pop(context);
                     },
@@ -57,7 +57,7 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                   ListTile(
                     onTap: () {
                       context
-                          .read<TestEditorCubit>()
+                          .read<QuizEditorCubit>()
                           .removeRowOfOptions(questionIndex: questionIndex);
                       Navigator.pop(context);
                     },
@@ -69,7 +69,7 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                   ),
                 ListTile(
                   onTap: () {
-                    final cubit = context.read<TestEditorCubit>();
+                    final cubit = context.read<QuizEditorCubit>();
 
                     showDialog(
                         context: context,
@@ -91,7 +91,7 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                 ListTile(
                   onTap: () {
                     context
-                        .read<TestEditorCubit>()
+                        .read<QuizEditorCubit>()
                         .deleteQuestion(index: state.currentQuestionIndex);
                     Navigator.pop(context);
                   },

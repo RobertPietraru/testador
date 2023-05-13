@@ -8,17 +8,17 @@ import 'package:dartz/dartz.dart';
 
 class GetDraftByIdUsecase
     extends UseCase<GetDraftByIdUsecaseResult, GetDraftByIdUsecaseParams> {
-  const GetDraftByIdUsecase(this.testRepository);
-  final TestRepository testRepository;
+  const GetDraftByIdUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, GetDraftByIdUsecaseResult>> call(params) async {
-    return testRepository.getDraftById(params);
+  Future<Either<QuizFailure, GetDraftByIdUsecaseResult>> call(params) async {
+    return quizRepository.getDraftById(params);
   }
 }
 
 class GetDraftByIdUsecaseParams extends Params {
-  final String testId;
-  const GetDraftByIdUsecaseParams({required this.testId});
+  final String quizId;
+  const GetDraftByIdUsecaseParams({required this.quizId});
 }
 
 class GetDraftByIdUsecaseResult extends Response {

@@ -8,11 +8,11 @@ import 'package:dartz/dartz.dart';
 
 class DeleteDraftByIdUsecase extends UseCase<DeleteDraftByIdUsecaseResult,
     DeleteDraftByIdUsecaseParams> {
-  const DeleteDraftByIdUsecase(this.testRepository);
-  final TestRepository testRepository;
+  const DeleteDraftByIdUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, DeleteDraftByIdUsecaseResult>> call(params) async {
-    return testRepository.deleteDraftById(params);
+  Future<Either<QuizFailure, DeleteDraftByIdUsecaseResult>> call(params) async {
+    return quizRepository.deleteDraftById(params);
   }
 }
 

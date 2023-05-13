@@ -9,17 +9,17 @@ import '../../../../../../../core/components/theme/app_theme.dart';
 import '../../../../../../../core/routing/app_router.gr.dart';
 import '../../cubit/test_list_cubit.dart';
 
-class TestWidget extends StatelessWidget {
+class QuizWidget extends StatelessWidget {
   final double width;
   final double height;
-  final TestEntity test;
+  final QuizEntity quiz;
   final DraftEntity? draft;
 
-  const TestWidget(
+  const QuizWidget(
       {super.key,
       this.width = 300,
       this.height = 300,
-      required this.test,
+      required this.quiz,
       this.draft});
 
   @override
@@ -30,11 +30,11 @@ class TestWidget extends StatelessWidget {
         onLongPress: () {},
         onTap: () {
           context.pushRoute(
-            TestEditorRoute(
-              testId: test.id,
-              entity: test,
+            QuizEditorRoute(
+              quizId: quiz.id,
+              entity: quiz,
               draft: draft,
-              testListCubit: context.read<TestListCubit>(),
+              quizListCubit: context.read<QuizListCubit>(),
             ),
           );
         },
@@ -49,7 +49,7 @@ class TestWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
-                  image: NetworkImage(test.imageUrl ?? theme.placeholderImage),
+                  image: NetworkImage(quiz.imageUrl ?? theme.placeholderImage),
                   opacity: 0.5,
                   fit: BoxFit.cover,
                 ),
@@ -66,7 +66,7 @@ class TestWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          test.title ?? 'Fara titlu',
+                          quiz.title ?? 'Fara titlu',
                           textAlign: TextAlign.left,
                           style: theme.titleTextStyle
                               .copyWith(color: theme.defaultBackgroundColor),
@@ -106,7 +106,7 @@ class TestWidget extends StatelessWidget {
                             "100 elevi",
                             style: theme.informationTextStyle,
                           ),
-                          test.isPublic
+                          quiz.isPublic
                               ? Icon(
                                   Icons.public,
                                   color: theme.good,
@@ -126,6 +126,6 @@ class TestWidget extends StatelessWidget {
 
   bool hasToSync() {
     if (draft == null) return false;
-    return test != draft?.toTest();
+    return quiz != draft?.toQuiz();
   }
 }

@@ -6,22 +6,22 @@ import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/cubit/test_editor_cubit.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/image_retrival_dialog.dart';
 
-class TestSettingsScreen extends StatefulWidget {
-  const TestSettingsScreen({
+class QuizSettingsScreen extends StatefulWidget {
+  const QuizSettingsScreen({
     super.key,
   });
 
   @override
-  State<TestSettingsScreen> createState() => _TestSettingsScreenState();
+  State<QuizSettingsScreen> createState() => _QuizSettingsScreenState();
 }
 
-class _TestSettingsScreenState extends State<TestSettingsScreen> {
+class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
   late String title;
   late String initialTitle;
   @override
   void initState() {
-    final test = context.read<TestEditorCubit>().state.draft;
-    title = test.title ?? '';
+    final quiz = context.read<QuizEditorCubit>().state.draft;
+    title = quiz.title ?? '';
     initialTitle = title;
     super.initState();
   }
@@ -38,13 +38,13 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
           return true;
         }
 
-        context.read<TestEditorCubit>().updateTestTitle(title);
+        context.read<QuizEditorCubit>().updateQuizTitle(title);
 
         return true;
       },
       child: Scaffold(
         appBar: const CustomAppBar(trailing: []),
-        body: BlocBuilder<TestEditorCubit, TestEditorState>(
+        body: BlocBuilder<QuizEditorCubit, QuizEditorState>(
           builder: (context, state) {
             return Padding(
               padding: theme.standardPadding,
@@ -54,12 +54,12 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
                       onTap: () => showDialog(
                           context: context,
                           builder: (_) => BlocProvider.value(
-                              value: context.read<TestEditorCubit>(),
+                              value: context.read<QuizEditorCubit>(),
                               child: ImageRetrivalDialog(
                                   onImageRetrived: (imageFile) {
                                 context
-                                    .read<TestEditorCubit>()
-                                    .updateTestImage(newImage: imageFile);
+                                    .read<QuizEditorCubit>()
+                                    .updateQuizImage(newImage: imageFile);
                               }))),
                       child: Ink(
                           width: 200,
@@ -97,7 +97,7 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
                       state.draft.isPublic ? Icons.public : Icons.public_off,
                       color: state.draft.isPublic ? theme.good : theme.bad),
                   onTap: () {
-                    context.read<TestEditorCubit>().togglePublicity();
+                    context.read<QuizEditorCubit>().togglePublicity();
                   },
                   title: Text(
                     state.draft.isPublic ? "Public" : "Privat",

@@ -10,11 +10,11 @@ import '../../repositories/test_repository.dart';
 
 class MoveQuestionUsecase
     extends UseCase<MoveQuestionUsecaseResult, MoveQuestionUsecaseParams> {
-  const MoveQuestionUsecase(this.testRepository);
-  final TestRepository testRepository;
+  const MoveQuestionUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, MoveQuestionUsecaseResult>> call(params) async {
-    return testRepository.moveQuestion(params);
+  Future<Either<QuizFailure, MoveQuestionUsecaseResult>> call(params) async {
+    return quizRepository.moveQuestion(params);
   }
 }
 
@@ -30,6 +30,6 @@ class MoveQuestionUsecaseParams extends Params {
 }
 
 class MoveQuestionUsecaseResult extends Response {
-  final DraftEntity test;
-  const MoveQuestionUsecaseResult({required this.test});
+  final DraftEntity quiz;
+  const MoveQuestionUsecaseResult({required this.quiz});
 }

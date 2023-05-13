@@ -13,14 +13,14 @@ import '../../domain/failures/test_failures.dart';
 import '../../domain/usecases/test_usecases.dart';
 import '../dtos/question/question_dto.dart';
 
-abstract class TestLocalDataSource {
+abstract class QuizLocalDataSource {
   Future<DraftEntity> getDraftById(GetDraftByIdUsecaseParams params);
   Future<DraftEntity> moveQuestion(MoveQuestionUsecaseParams params);
   Future<DraftEntity> createDraft(CreateDraftUsecaseParams params);
-  Future<DraftEntity> updateTestImage(UpdateTestImageUsecaseParams params);
+  Future<DraftEntity> updateQuizImage(UpdateQuizImageUsecaseParams params);
 
-  Future<DraftEntity> updateTest(UpdateTestUsecaseParams params);
-  Future<List<DraftEntity>> getDrafts(GetTestsUsecaseParams params);
+  Future<DraftEntity> updateQuiz(UpdateQuizUsecaseParams params);
+  Future<List<DraftEntity>> getDrafts(GetQuizsUsecaseParams params);
   Future<DraftEntity> insertQuestion(InsertQuestionUsecaseParams params);
   Future<DraftEntity> deleteQuestion(DeleteQuestionUsecaseParams params);
   Future<DraftEntity> updateQuestion(UpdateQuestionUsecaseParams params);
@@ -30,8 +30,8 @@ abstract class TestLocalDataSource {
   Future<void> deleteDraftById(DeleteDraftByIdUsecaseParams params);
 }
 
-class TestLocalDataSourceIMPL implements TestLocalDataSource {
-  TestLocalDataSourceIMPL();
+class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
+  QuizLocalDataSourceIMPL();
 
   final Box<DraftDto> draftsBox = Hive.box<DraftDto>(DraftDto.hiveBoxName);
   final storage = FirebaseStorage.instance;
@@ -54,7 +54,7 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
               const MultipleChoiceOptionDto(text: null, isCorrect: false),
             ],
             acceptedAnswers: null,
-            testId: id,
+            quizId: id,
             type: QuestionTypeDto.multipleChoice)
       ],
     );
@@ -65,17 +65,17 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   @override
   Future<DraftEntity> deleteQuestion(DeleteQuestionUsecaseParams params) async {
     final questions =
-        params.test.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+        params.quiz.questions.map((e) => QuestionDto.fromEntity(e)).toList();
 
     questions.removeAt(params.index);
 
     final dto = DraftDto(
       questions: questions,
-      title: params.test.title,
-      isPublic: params.test.isPublic,
-      creatorId: params.test.creatorId,
-      imageUrl: params.test.imageUrl,
-      id: params.test.id,
+      title: params.quiz.title,
+      isPublic: params.quiz.isPublic,
+      creatorId: params.quiz.creatorId,
+      imageUrl: params.quiz.imageUrl,
+      id: params.quiz.id,
     );
     draftsBox.put(dto.id, dto);
     return dto.toEntity();
@@ -114,13 +114,13 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   }
 
   @override
-  Future<DraftEntity> updateTest(UpdateTestUsecaseParams params) async {
-    draftsBox.put(params.testId, DraftDto.fromEntity(params.test));
-    return params.test;
+  Future<DraftEntity> updateQuiz(UpdateQuizUsecaseParams params) async {
+    draftsBox.put(params.quizId, DraftDto.fromEntity(params.quiz));
+    return params.quiz;
   }
 
   @override
-  Future<List<DraftEntity>> getDrafts(GetTestsUsecaseParams params) async {
+  Future<List<DraftEntity>> getDrafts(GetQuizsUsecaseParams params) async {
     return draftsBox.values
         .where((element) => element.creatorId == params.creatorId)
         .map((e) => e.toEntity())
@@ -129,11 +129,11 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
 
   @override
   Future<DraftEntity> getDraftById(GetDraftByIdUsecaseParams params) async {
-    final test = draftsBox.get(params.testId);
-    if (test == null) {
-      throw const TestNotFoundFailure();
+    final quiz = draftsBox.get(params.quizId);
+    if (quiz == null) {
+      throw const QuizNotFoundFailure();
     }
-    return test.toEntity();
+    return quiz.toEntity();
   }
 
   @override
@@ -174,9 +174,9 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   }
 
   Future<String> uploadImage(
-      String creatorId, String testId, File image) async {
+      String creatorId, String quizId, File image) async {
     final fileExtension = basename(image.path).split('.').last;
-    final path = '$creatorId/$testId/${const Uuid().v1()}.$fileExtension';
+    final path = '$creatorId/$quizId/${const Uuid().v1()}.$fileExtension';
 
     final snap = await storage.ref(path).putFile(image);
     final url = await snap.ref.getDownloadURL();
@@ -185,13 +185,13 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   }
 
   @override
-  Future<DraftEntity> updateTestImage(
-      UpdateTestImageUsecaseParams params) async {
+  Future<DraftEntity> updateQuizImage(
+      UpdateQuizImageUsecaseParams params) async {
     final imageUrl =
-        await uploadImage(params.test.creatorId, params.test.id, params.image);
-    final test = params.test.copyWith(imageUrl: imageUrl);
-    draftsBox.put(test.id, DraftDto.fromEntity(test));
-    return test;
+        await uploadImage(params.quiz.creatorId, params.quiz.id, params.image);
+    final quiz = params.quiz.copyWith(imageUrl: imageUrl);
+    draftsBox.put(quiz.id, DraftDto.fromEntity(quiz));
+    return quiz;
   }
 
   @override

@@ -15,9 +15,9 @@ class QuestionCreationBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final cubit = context.read<TestEditorCubit>();
+    final cubit = context.read<QuizEditorCubit>();
 
-    return BlocBuilder<TestEditorCubit, TestEditorState>(
+    return BlocBuilder<QuizEditorCubit, QuizEditorState>(
       builder: (context, state) {
         return Container(
           padding: theme.standardPadding,

@@ -17,12 +17,12 @@ import '../injection.dart';
 void mainDevelopment() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(TestDtoAdapter());
+  Hive.registerAdapter(QuizDtoAdapter());
   Hive.registerAdapter(DraftDtoAdapter());
   Hive.registerAdapter(QuestionDtoAdapter());
   Hive.registerAdapter(MultipleChoiceOptionDtoAdapter());
   Hive.registerAdapter(QuestionTypeDtoAdapter());
-  await Hive.openBox<TestDto>(TestDto.collection);
+  await Hive.openBox<QuizDto>(QuizDto.collection);
   await Hive.openBox<DraftDto>(DraftDto.hiveBoxName);
   await inject();
 

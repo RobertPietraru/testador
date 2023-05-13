@@ -13,36 +13,36 @@ import '../../../../../injection.dart';
 import '../../../../authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'cubit/test_list_cubit.dart';
 
-class TestListScreen extends StatelessWidget {
-  const TestListScreen({super.key});
+class QuizListScreen extends StatelessWidget {
+  const QuizListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TestListCubit(locator(), locator(), locator())
-        ..getTests(creatorId: context.read<AuthBloc>().state.userEntity!.id),
-      child: const _TestListScreen(),
+      create: (context) => QuizListCubit(locator(), locator(), locator())
+        ..getQuizs(creatorId: context.read<AuthBloc>().state.userEntity!.id),
+      child: const _QuizListScreen(),
     );
   }
 }
 
-class _TestListScreen extends StatelessWidget {
-  const _TestListScreen();
+class _QuizListScreen extends StatelessWidget {
+  const _QuizListScreen();
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    return BlocListener<TestListCubit, TestListState>(
+    return BlocListener<QuizListCubit, QuizListState>(
       listenWhen: (previous, current) =>
-          previous is! TestListCreatedDraft && current is TestListCreatedDraft,
+          previous is! QuizListCreatedDraft && current is QuizListCreatedDraft,
       listener: (context, state) {
-        state as TestListCreatedDraft;
+        state as QuizListCreatedDraft;
 
-        context.pushRoute(TestEditorRoute(
+        context.pushRoute(QuizEditorRoute(
             draft: state.createdDraft,
-            testListCubit: context.read<TestListCubit>(),
-            testId: state.createdDraft.id,
-            entity: state.createdDraft.toTest()));
+            quizListCubit: context.read<QuizListCubit>(),
+            quizId: state.createdDraft.id,
+            entity: state.createdDraft.toQuiz()));
       },
       child: Scaffold(
           appBar: const CustomAppBar(),
@@ -51,8 +51,8 @@ class _TestListScreen extends StatelessWidget {
             backgroundColor: theme.companyColor,
             onPressed: () => showDialog(
               context: context,
-              builder: (_) => TestTypeSelectionDialog(
-                testListCubit: context.read<TestListCubit>(),
+              builder: (_) => QuizTypeSelectionDialog(
+                quizListCubit: context.read<QuizListCubit>(),
               ),
             ),
             child: const Icon(Icons.add),
@@ -81,11 +81,11 @@ class _TestListScreen extends StatelessWidget {
                                 );
                               },
                             ),
-                            BlocBuilder<TestListCubit, TestListState>(
+                            BlocBuilder<QuizListCubit, QuizListState>(
                               builder: (context, state) {
-                                if (state is! TestListEmpty) {
+                                if (state is! QuizListEmpty) {
                                   return Text(
-                                    'Testele tale',
+                                    'Quizele tale',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: theme.spacing.xxLarge,
@@ -102,25 +102,25 @@ class _TestListScreen extends StatelessWidget {
                   ),
                 ];
               },
-              body: BlocConsumer<TestListCubit, TestListState>(
+              body: BlocConsumer<QuizListCubit, QuizListState>(
                 listener: (context, state) {
-                  if (state is TestListError) {
+                  if (state is QuizListError) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(state.failure.retrieveMessage(context))));
                   }
                 },
                 builder: (context, state) {
-                  if (state is TestListEmpty) {
+                  if (state is QuizListEmpty) {
                     return Center(
                       child: Text(
-                        "Nu ai teste\n"
+                        "Nu ai quize\n"
                         "¯\\_(ツ)_/¯",
                         style: theme.largetitleTextStyle
                             .copyWith(color: theme.secondaryColor),
                       ),
                     );
                   }
-                  if (state is TestListLoading) {
+                  if (state is QuizListLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
@@ -133,13 +133,13 @@ class _TestListScreen extends StatelessWidget {
                           itemCount: state.pairs.length,
                           itemBuilder: (context, index) => Padding(
                               padding: theme.standardPadding,
-                              child: TestWidget(test: state.pairs[index].test)))
+                              child: QuizWidget(quiz: state.pairs[index].quiz)))
                       : ListView.builder(
                           itemCount: state.pairs.length,
                           itemBuilder: (context, index) => Padding(
                               padding: theme.standardPadding,
-                              child: TestWidget(
-                                test: state.pairs[index].test,
+                              child: QuizWidget(
+                                quiz: state.pairs[index].quiz,
                                 draft: state.pairs[index].draft,
                               )));
                 },
@@ -148,9 +148,9 @@ class _TestListScreen extends StatelessWidget {
   }
 }
 
-class TestTypeSelectionDialog extends StatelessWidget {
-  final TestListCubit testListCubit;
-  const TestTypeSelectionDialog({super.key, required this.testListCubit});
+class QuizTypeSelectionDialog extends StatelessWidget {
+  final QuizListCubit quizListCubit;
+  const QuizTypeSelectionDialog({super.key, required this.quizListCubit});
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +161,7 @@ class TestTypeSelectionDialog extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Preferinte test",
+          "Preferinte quiz",
           style: theme.titleTextStyle,
         ),
         Text(
@@ -171,12 +171,12 @@ class TestTypeSelectionDialog extends StatelessWidget {
         SizedBox(height: theme.spacing.xLarge),
         SelectionOptionWidget(
           onPressed: () {
-            testListCubit.createTest(
+            quizListCubit.createQuiz(
                 creatorId: context.read<AuthBloc>().state.userEntity!.id);
             Navigator.pop(context);
           },
           title: "Creare clasica",
-          description: "Concepeti testul de la zero",
+          description: "Concepeti quizul de la zero",
           gradient: const LinearGradient(colors: [
             Color.fromARGB(255, 0, 200, 255),
             Color(0xFF0061ff),
@@ -187,7 +187,7 @@ class TestTypeSelectionDialog extends StatelessWidget {
           onPressed: () {},
           title: "Creare cu A.I.",
           description:
-              "Creati testul cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza testul",
+              "Creati quizul cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza quizul",
           gradient: LinearGradient(colors: [
             const Color(0xFF0061ff).withOpacity(0.9),
             const Color(0xFFFF005A).withOpacity(0.9),

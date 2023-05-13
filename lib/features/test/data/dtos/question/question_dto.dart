@@ -31,7 +31,7 @@ enum QuestionTypeDto {
 @HiveType(typeId: 2)
 class QuestionDto {
   @HiveField(1)
-  final String testId;
+  final String quizId;
 
   @HiveField(2)
   final QuestionTypeDto type;
@@ -50,7 +50,7 @@ class QuestionDto {
 
   @HiveField(7)
   final String id;
-  static const testIdField = 'testId';
+  static const quizIdField = 'quizId';
   static const typeField = 'type';
   static const imageField = 'image';
   static const optionsField = 'options';
@@ -64,7 +64,7 @@ class QuestionDto {
     this.image,
     required this.options,
     required this.acceptedAnswers,
-    required this.testId,
+    required this.quizId,
     required this.type,
   });
 
@@ -79,7 +79,7 @@ class QuestionDto {
       image: map[imageField],
       acceptedAnswers:
           (map[acceptedAnswersField] as List).map((e) => e.toString()).toList(),
-      testId: map[testIdField],
+      quizId: map[quizIdField],
       type: QuestionTypeDto.values[map[typeField] as int],
       options: optionDtos,
     );
@@ -94,7 +94,7 @@ class QuestionDto {
           .map((e) => MultipleChoiceOptionDto.fromEntity(e))
           .toList(),
       acceptedAnswers: entity.acceptedAnswers,
-      testId: entity.testId,
+      quizId: entity.quizId,
       type: QuestionTypeDto.fromType(entity.type),
     );
   }
@@ -103,7 +103,7 @@ class QuestionDto {
     return QuestionEntity(
         id: id,
         image: image,
-        testId: testId,
+        quizId: quizId,
         type: type.toType(),
         acceptedAnswers: acceptedAnswers ?? [],
         text: text,
@@ -112,7 +112,7 @@ class QuestionDto {
 
   Map<String, dynamic> toMap() {
     return {
-      testIdField: testId,
+      quizIdField: quizId,
       typeField: type.index,
       imageField: image,
       optionsField: options?.map((e) => e.toMap()).toList(),
@@ -124,7 +124,7 @@ class QuestionDto {
 
   QuestionDto fromMap(Map<String, dynamic> map) {
     return QuestionDto(
-      testId: map[testIdField],
+      quizId: map[quizIdField],
       type: QuestionTypeDto.values[map[typeField] as int],
       image: map[imageField],
       options: (map[optionsField] as List<Map<String, dynamic>>)
@@ -138,7 +138,7 @@ class QuestionDto {
 
   QuestionDto copyWith({
     String? id,
-    String? testId,
+    String? quizId,
     QuestionTypeDto? type,
     String? image = mockValueForDefault,
     String? text = mockValueForDefault,
@@ -148,7 +148,7 @@ class QuestionDto {
     return QuestionDto(
       options: options ?? this.options,
       acceptedAnswers: acceptedAnswers ?? this.acceptedAnswers,
-      testId: testId ?? this.testId,
+      quizId: quizId ?? this.quizId,
       text: text == mockValueForDefault ? this.text : text,
       type: type ?? this.type,
       image: image == mockValueForDefault ? this.image : image,

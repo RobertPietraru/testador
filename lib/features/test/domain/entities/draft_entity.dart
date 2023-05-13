@@ -22,14 +22,14 @@ class DraftEntity extends Equatable {
     required this.id,
   });
 
-  factory DraftEntity.fromEntity(TestEntity test) {
+  factory DraftEntity.fromEntity(QuizEntity quiz) {
     return DraftEntity(
-      questions: test.questions,
-      title: test.title,
-      isPublic: test.isPublic,
-      creatorId: test.creatorId,
-      imageUrl: test.imageUrl,
-      id: test.id,
+      questions: quiz.questions,
+      title: quiz.title,
+      isPublic: quiz.isPublic,
+      creatorId: quiz.creatorId,
+      imageUrl: quiz.imageUrl,
+      id: quiz.id,
     );
   }
   @override
@@ -53,8 +53,8 @@ class DraftEntity extends Equatable {
     );
   }
 
-  TestEntity toTest() {
-    return TestEntity(
+  QuizEntity toQuiz() {
+    return QuizEntity(
       questions: questions,
       title: title,
       isPublic: isPublic,

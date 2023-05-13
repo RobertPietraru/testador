@@ -7,23 +7,23 @@ import '../../injection.dart';
 import 'data/datasources/test_remote_datasource.dart';
 import 'domain/usecases/test_usecases.dart';
 
-void testInject() {
+void quizInject() {
   locator
-    ..registerSingleton<TestLocalDataSource>(TestLocalDataSourceIMPL())
-    ..registerSingleton<TestRemoteDataSource>(TestRemoteDataSourceIMPL())
-    ..registerSingleton<TestRepository>(
-        TestRepositoryIMPL(locator(), locator()))
+    ..registerSingleton<QuizLocalDataSource>(QuizLocalDataSourceIMPL())
+    ..registerSingleton<QuizRemoteDataSource>(QuizRemoteDataSourceIMPL())
+    ..registerSingleton<QuizRepository>(
+        QuizRepositoryIMPL(locator(), locator()))
     ..registerSingleton(CreateDraftUsecase(locator()))
     ..registerSingleton(DeleteDraftByIdUsecase(locator()))
-    ..registerSingleton(UpdateTestUsecase(locator()))
-    ..registerSingleton(GetTestsUsecase(locator()))
+    ..registerSingleton(UpdateQuizUsecase(locator()))
+    ..registerSingleton(GetQuizsUsecase(locator()))
     ..registerSingleton(InsertQuestionUsecase(locator()))
     ..registerSingleton(DeleteQuestionUsecase(locator()))
     ..registerSingleton(UpdateQuestionUsecase(locator()))
     ..registerSingleton(UpdateQuestionImageUsecase(locator()))
     ..registerSingleton(MoveQuestionUsecase(locator()))
-    ..registerSingleton(UpdateTestImageUsecase(locator()))
-    ..registerSingleton(SyncTestUsecase(locator()))
-    ..registerSingleton(GetTestByIdUsecase(locator()))
+    ..registerSingleton(UpdateQuizImageUsecase(locator()))
+    ..registerSingleton(SyncQuizUsecase(locator()))
+    ..registerSingleton(GetQuizByIdUsecase(locator()))
     ..registerSingleton(GetDraftByIdUsecase(locator()));
 }

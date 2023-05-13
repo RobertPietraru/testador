@@ -10,48 +10,43 @@ import 'package:testador/features/test/presentation/screens/test_editor/test_edi
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',
   routes: <AutoRoute>[
-    AutoRoute(
-    page: App,
-    children: [
+    AutoRoute(page: App, children: [
       AutoRoute(
-      path: 'auth',
-      name: 'AuthenticationFlowRoute',
-      page: AuthenticationFlow,
-      children: [
-        AutoRoute(initial: true, page: RegistrationScreen, path: 'signup'),
-        AutoRoute(page: LoginScreen, path: 'loginin'),
-      ],
-    ),
-    AutoRoute(
-      path: '',
-      name: 'UnprotectedFlowRoute',
-      page: UnprotectedFlow,
-      initial: true,
-      children: [
-        AutoRoute(
-          initial: true,
-          path: '',
-          page: LandingScreen,
-        ),
-      ],
-    ),
-    AutoRoute(
-      path: 'protected',
-      name: 'ProtectedFlowRoute',
-      page: ProtectedFlow,
-      guards: [AuthGuard],
-      children: [
-        AutoRoute(
-          path: 'test-admin/:id',
-          page: TestEditorScreen,
-        ),
-        AutoRoute(initial: true, page: TestListScreen, path: ''),
-      ],
-    ),
-    ]
-
-
-    ),
+        path: 'auth',
+        name: 'AuthenticationFlowRoute',
+        page: AuthenticationFlow,
+        children: [
+          AutoRoute(initial: true, page: RegistrationScreen, path: 'signup'),
+          AutoRoute(page: LoginScreen, path: 'loginin'),
+        ],
+      ),
+      AutoRoute(
+        path: '',
+        name: 'UnprotectedFlowRoute',
+        page: UnprotectedFlow,
+        initial: true,
+        children: [
+          AutoRoute(
+            initial: true,
+            path: '',
+            page: LandingScreen,
+          ),
+        ],
+      ),
+      AutoRoute(
+        path: 'protected',
+        name: 'ProtectedFlowRoute',
+        page: ProtectedFlow,
+        guards: [AuthGuard],
+        children: [
+          AutoRoute(
+            path: 'quiz-admin/:id',
+            page: QuizEditorScreen,
+          ),
+          AutoRoute(initial: true, page: QuizListScreen, path: ''),
+        ],
+      ),
+    ]),
     AutoRoute(
       path: 'loading',
       page: LoadingScreen,

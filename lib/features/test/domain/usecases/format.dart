@@ -4,11 +4,11 @@
 // import '../repositories/test_repository.dart';
 
 // class ${2}Usecase extends UseCase<${2}UsecaseResult, ${2}UsecaseParams> {
-//   const ${2}Usecase(this.testRepository);
-//   final TestRepository testRepository;
+//   const ${2}Usecase(this.quizRepository);
+//   final QuizRepository quizRepository;
 //   @override
-//   Future<Either<TestFailure, ${2}UsecaseResult>> call(params) async {
-//     return testRepository.${3}(params);
+//   Future<Either<QuizFailure, ${2}UsecaseResult>> call(params) async {
+//     return quizRepository.${3}(params);
 //   }
 // }
 

@@ -7,7 +7,7 @@ import '../question/question_dto.dart';
 part 'test_dto.g.dart';
 
 @HiveType(typeId: 1)
-class TestDto with HiveObjectMixin {
+class QuizDto with HiveObjectMixin {
   static const collection = 'tests';
   @HiveField(0)
   final String id;
@@ -30,7 +30,7 @@ class TestDto with HiveObjectMixin {
   @HiveField(5)
   final List<QuestionDto>? questions;
 
-  TestDto({
+  QuizDto({
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -57,8 +57,8 @@ class TestDto with HiveObjectMixin {
     };
   }
 
-  TestEntity toEntity() {
-    return TestEntity(
+  QuizEntity toEntity() {
+    return QuizEntity(
         questions: (questions ?? []).map((e) => e.toEntity()).toList(),
         title: title,
         isPublic: isPublic,
@@ -67,13 +67,13 @@ class TestDto with HiveObjectMixin {
         id: id);
   }
 
-  factory TestDto.fromMap(Map<String, dynamic> map) {
+  factory QuizDto.fromMap(Map<String, dynamic> map) {
     print(map[questionsField].runtimeType);
     final x = (map[questionsField] as List);
     final y = x.map((e) => QuestionDto.fromMap(e));
     final z = y.toList();
 
-    return TestDto(
+    return QuizDto(
       questions: z,
       title: map[titleField],
       isPublic: map[isPublicField],
@@ -83,8 +83,8 @@ class TestDto with HiveObjectMixin {
     );
   }
 
-  factory TestDto.fromEntity(TestEntity entity) {
-    return TestDto(
+  factory QuizDto.fromEntity(QuizEntity entity) {
+    return QuizDto(
       creatorId: entity.creatorId,
       id: entity.id,
       imageUrl: entity.imageUrl,

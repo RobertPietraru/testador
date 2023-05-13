@@ -5,22 +5,22 @@ import '../../repositories/test_repository.dart';
 
 import 'package:dartz/dartz.dart';
 
-class GetTestByIdUsecase
-    extends UseCase<GetTestByIdUsecaseResult, GetTestByIdUsecaseParams> {
-  const GetTestByIdUsecase(this.testRepository);
-  final TestRepository testRepository;
+class GetQuizByIdUsecase
+    extends UseCase<GetQuizByIdUsecaseResult, GetQuizByIdUsecaseParams> {
+  const GetQuizByIdUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, GetTestByIdUsecaseResult>> call(params) async {
-    return testRepository.getTestById(params);
+  Future<Either<QuizFailure, GetQuizByIdUsecaseResult>> call(params) async {
+    return quizRepository.getQuizById(params);
   }
 }
 
-class GetTestByIdUsecaseParams extends Params {
-  final String testId;
-  const GetTestByIdUsecaseParams({required this.testId});
+class GetQuizByIdUsecaseParams extends Params {
+  final String quizId;
+  const GetQuizByIdUsecaseParams({required this.quizId});
 }
 
-class GetTestByIdUsecaseResult extends Response {
-  final TestEntity testEntity;
-  const GetTestByIdUsecaseResult({required this.testEntity});
+class GetQuizByIdUsecaseResult extends Response {
+  final QuizEntity quizEntity;
+  const GetQuizByIdUsecaseResult({required this.quizEntity});
 }

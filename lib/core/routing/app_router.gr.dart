@@ -88,26 +88,26 @@ class AppRouter extends _i7.RootStackRouter {
         child: const _i4.LandingScreen(),
       );
     },
-    TestEditorRoute.name: (routeData) {
+    QuizEditorRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<TestEditorRouteArgs>(
+      final args = routeData.argsAs<QuizEditorRouteArgs>(
           orElse: () =>
-              TestEditorRouteArgs(testId: pathParams.getString('id')));
+              QuizEditorRouteArgs(quizId: pathParams.getString('id')));
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i5.TestEditorScreen(
+        child: _i5.QuizEditorScreen(
           key: args.key,
-          testId: args.testId,
-          test: args.entity,
-          testListCubit: args.testListCubit,
+          quizId: args.quizId,
+          quiz: args.entity,
+          quizListCubit: args.quizListCubit,
           draft: args.draft,
         ),
       );
     },
-    TestListRoute.name: (routeData) {
+    QuizListRoute.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i6.TestListScreen(),
+        child: const _i6.QuizListScreen(),
       );
     },
   };
@@ -161,12 +161,12 @@ class AppRouter extends _i7.RootStackRouter {
               guards: [authGuard],
               children: [
                 _i7.RouteConfig(
-                  TestEditorRoute.name,
-                  path: 'test-admin/:id',
+                  QuizEditorRoute.name,
+                  path: 'quiz-admin/:id',
                   parent: ProtectedFlowRoute.name,
                 ),
                 _i7.RouteConfig(
-                  TestListRoute.name,
+                  QuizListRoute.name,
                   path: '',
                   parent: ProtectedFlowRoute.name,
                 ),
@@ -282,63 +282,63 @@ class LandingRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.TestEditorScreen]
-class TestEditorRoute extends _i7.PageRouteInfo<TestEditorRouteArgs> {
-  TestEditorRoute({
+/// [_i5.QuizEditorScreen]
+class QuizEditorRoute extends _i7.PageRouteInfo<QuizEditorRouteArgs> {
+  QuizEditorRoute({
     _i8.Key? key,
-    required String testId,
-    _i10.TestEntity? entity,
-    _i11.TestListCubit? testListCubit,
+    required String quizId,
+    _i10.QuizEntity? entity,
+    _i11.QuizListCubit? quizListCubit,
     _i12.DraftEntity? draft,
   }) : super(
-          TestEditorRoute.name,
-          path: 'test-admin/:id',
-          args: TestEditorRouteArgs(
+          QuizEditorRoute.name,
+          path: 'quiz-admin/:id',
+          args: QuizEditorRouteArgs(
             key: key,
-            testId: testId,
+            quizId: quizId,
             entity: entity,
-            testListCubit: testListCubit,
+            quizListCubit: quizListCubit,
             draft: draft,
           ),
-          rawPathParams: {'id': testId},
+          rawPathParams: {'id': quizId},
         );
 
-  static const String name = 'TestEditorRoute';
+  static const String name = 'QuizEditorRoute';
 }
 
-class TestEditorRouteArgs {
-  const TestEditorRouteArgs({
+class QuizEditorRouteArgs {
+  const QuizEditorRouteArgs({
     this.key,
-    required this.testId,
+    required this.quizId,
     this.entity,
-    this.testListCubit,
+    this.quizListCubit,
     this.draft,
   });
 
   final _i8.Key? key;
 
-  final String testId;
+  final String quizId;
 
-  final _i10.TestEntity? entity;
+  final _i10.QuizEntity? entity;
 
-  final _i11.TestListCubit? testListCubit;
+  final _i11.QuizListCubit? quizListCubit;
 
   final _i12.DraftEntity? draft;
 
   @override
   String toString() {
-    return 'TestEditorRouteArgs{key: $key, testId: $testId, entity: $entity, testListCubit: $testListCubit, draft: $draft}';
+    return 'QuizEditorRouteArgs{key: $key, quizId: $quizId, entity: $entity, quizListCubit: $quizListCubit, draft: $draft}';
   }
 }
 
 /// generated route for
-/// [_i6.TestListScreen]
-class TestListRoute extends _i7.PageRouteInfo<void> {
-  const TestListRoute()
+/// [_i6.QuizListScreen]
+class QuizListRoute extends _i7.PageRouteInfo<void> {
+  const QuizListRoute()
       : super(
-          TestListRoute.name,
+          QuizListRoute.name,
           path: '',
         );
 
-  static const String name = 'TestListRoute';
+  static const String name = 'QuizListRoute';
 }

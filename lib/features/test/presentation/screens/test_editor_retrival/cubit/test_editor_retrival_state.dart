@@ -1,20 +1,20 @@
 part of 'test_editor_retrival_cubit.dart';
 
-abstract class TestEditorRetrivalState extends Equatable {
-  const TestEditorRetrivalState();
+abstract class QuizEditorRetrivalState extends Equatable {
+  const QuizEditorRetrivalState();
 
   @override
   List<Object> get props => [];
 }
 
-class TestEditorRetrivalLoading extends TestEditorRetrivalState {}
+class QuizEditorRetrivalLoading extends QuizEditorRetrivalState {}
 
-class TestEditorRetrivalFailed extends TestEditorRetrivalState {}
+class QuizEditorRetrivalFailed extends QuizEditorRetrivalState {}
 
-class TestEditorRetrivalSuccessful extends TestEditorRetrivalState {
-  final TestEntity entity;
+class QuizEditorRetrivalSuccessful extends QuizEditorRetrivalState {
+  final QuizEntity entity;
 
-  const TestEditorRetrivalSuccessful({required this.entity});
+  const QuizEditorRetrivalSuccessful({required this.entity});
   @override
   List<Object> get props => [entity];
 }

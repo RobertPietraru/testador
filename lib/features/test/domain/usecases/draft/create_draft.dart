@@ -9,11 +9,11 @@ import '../../repositories/test_repository.dart';
 
 class CreateDraftUsecase
     extends UseCase<CreateDraftUsecaseResult, CreateDraftUsecaseParams> {
-  const CreateDraftUsecase(this.testRepository);
-  final TestRepository testRepository;
+  const CreateDraftUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, CreateDraftUsecaseResult>> call(params) async {
-    return testRepository.createTest(params);
+  Future<Either<QuizFailure, CreateDraftUsecaseResult>> call(params) async {
+    return quizRepository.createQuiz(params);
   }
 }
 
@@ -25,6 +25,6 @@ class CreateDraftUsecaseParams extends Params {
 }
 
 class CreateDraftUsecaseResult extends Response {
-  final  DraftEntity draft;
+  final DraftEntity draft;
   const CreateDraftUsecaseResult({required this.draft});
 }

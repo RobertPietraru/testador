@@ -8,32 +8,32 @@ import '../../../../../core/classes/usecase.dart';
 import '../../failures/test_failures.dart';
 import '../../repositories/test_repository.dart';
 
-class GetTestsUsecase
-    extends UseCase<GetTestsUsecaseResult, GetTestsUsecaseParams> {
-  const GetTestsUsecase(this.testRepository);
-  final TestRepository testRepository;
+class GetQuizsUsecase
+    extends UseCase<GetQuizsUsecaseResult, GetQuizsUsecaseParams> {
+  const GetQuizsUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, GetTestsUsecaseResult>> call(params) async {
-    return testRepository.getTests(params);
+  Future<Either<QuizFailure, GetQuizsUsecaseResult>> call(params) async {
+    return quizRepository.getQuizs(params);
   }
 }
 
-class GetTestsUsecaseParams extends Params {
+class GetQuizsUsecaseParams extends Params {
   final String creatorId;
-  const GetTestsUsecaseParams({required this.creatorId});
+  const GetQuizsUsecaseParams({required this.creatorId});
 }
 
-class GetTestsUsecaseResult extends Response {
-  final List<TestDraftPair> pairs;
-  const GetTestsUsecaseResult({required this.pairs});
+class GetQuizsUsecaseResult extends Response {
+  final List<QuizDraftPair> pairs;
+  const GetQuizsUsecaseResult({required this.pairs});
 }
 
-class TestDraftPair extends Equatable {
-  final TestEntity test;
+class QuizDraftPair extends Equatable {
+  final QuizEntity quiz;
   final DraftEntity? draft;
 
-  const TestDraftPair({required this.test, this.draft});
+  const QuizDraftPair({required this.quiz, this.draft});
 
   @override
-  List<Object?> get props => [test, draft];
+  List<Object?> get props => [quiz, draft];
 }

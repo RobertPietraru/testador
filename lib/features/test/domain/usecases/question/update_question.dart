@@ -9,11 +9,11 @@ import '../../repositories/test_repository.dart';
 
 class UpdateQuestionUsecase
     extends UseCase<UpdateQuestionUsecaseResult, UpdateQuestionUsecaseParams> {
-  const UpdateQuestionUsecase(this.testRepository);
-  final TestRepository testRepository;
+  const UpdateQuestionUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, UpdateQuestionUsecaseResult>> call(params) async {
-    return testRepository.updateQuestion(params);
+  Future<Either<QuizFailure, UpdateQuestionUsecaseResult>> call(params) async {
+    return quizRepository.updateQuestion(params);
   }
 }
 
@@ -28,6 +28,6 @@ class UpdateQuestionUsecaseParams extends Params {
 }
 
 class UpdateQuestionUsecaseResult extends Response {
-  final DraftEntity testEntity;
-  const UpdateQuestionUsecaseResult({required this.testEntity});
+  final DraftEntity quizEntity;
+  const UpdateQuestionUsecaseResult({required this.quizEntity});
 }

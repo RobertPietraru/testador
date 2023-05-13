@@ -1,25 +1,25 @@
 part of 'test_list_cubit.dart';
 
-abstract class TestListState extends Equatable {
-  final List<TestDraftPair> pairs;
+abstract class QuizListState extends Equatable {
+  final List<QuizDraftPair> pairs;
 
-  const TestListState({required this.pairs});
+  const QuizListState({required this.pairs});
 
   @override
   List<Object> get props => [pairs];
 }
 
-class TestListLoading extends TestListState {
-  const TestListLoading({required super.pairs});
+class QuizListLoading extends QuizListState {
+  const QuizListLoading({required super.pairs});
 }
 
-class TestListRetrieved extends TestListState {
-  const TestListRetrieved({required super.pairs});
+class QuizListRetrieved extends QuizListState {
+  const QuizListRetrieved({required super.pairs});
 }
 
-class TestListCreatedDraft extends TestListState {
+class QuizListCreatedDraft extends QuizListState {
   final DraftEntity createdDraft;
-  const TestListCreatedDraft({
+  const QuizListCreatedDraft({
     required super.pairs,
     required this.createdDraft,
   });
@@ -27,14 +27,14 @@ class TestListCreatedDraft extends TestListState {
   List<Object> get props => [createdDraft, ...super.props];
 }
 
-class TestListError extends TestListState {
-  final TestFailure failure;
+class QuizListError extends QuizListState {
+  final QuizFailure failure;
 
-  const TestListError({required super.pairs, required this.failure});
+  const QuizListError({required super.pairs, required this.failure});
   @override
   List<Object> get props => [failure, ...super.props];
 }
 
-class TestListEmpty extends TestListState {
-  const TestListEmpty({super.pairs = const []});
+class QuizListEmpty extends QuizListState {
+  const QuizListEmpty({super.pairs = const []});
 }

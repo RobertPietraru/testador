@@ -14,5 +14,5 @@ Future<void> inject() async {
       BuildEnvironment(flavour: BuildFlavour.development));
 
   authInject();
-  testInject();
+  quizInject();
 }

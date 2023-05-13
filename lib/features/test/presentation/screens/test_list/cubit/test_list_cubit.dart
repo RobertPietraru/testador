@@ -6,43 +6,43 @@ import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 
 part 'test_list_state.dart';
 
-class TestListCubit extends Cubit<TestListState> {
+class QuizListCubit extends Cubit<QuizListState> {
   final CreateDraftUsecase createDraftUsecase;
   final GetDraftByIdUsecase getDraftByIdUsecase;
-  final GetTestsUsecase getTestsUsecase;
+  final GetQuizsUsecase getQuizsUsecase;
 
-  TestListCubit(
-      this.createDraftUsecase, this.getTestsUsecase, this.getDraftByIdUsecase)
-      : super(const TestListLoading(pairs: []));
+  QuizListCubit(
+      this.createDraftUsecase, this.getQuizsUsecase, this.getDraftByIdUsecase)
+      : super(const QuizListLoading(pairs: []));
 
-  void getTests({required String creatorId}) async {
+  void getQuizs({required String creatorId}) async {
     final response =
-        await getTestsUsecase.call(GetTestsUsecaseParams(creatorId: creatorId));
+        await getQuizsUsecase.call(GetQuizsUsecaseParams(creatorId: creatorId));
     response.fold((failure) {
-      emit(TestListError(pairs: state.pairs, failure: failure));
+      emit(QuizListError(pairs: state.pairs, failure: failure));
     }, (result) {
       result.pairs.isEmpty
-          ? emit(const TestListEmpty())
-          : emit(TestListRetrieved(pairs: result.pairs));
+          ? emit(const QuizListEmpty())
+          : emit(QuizListRetrieved(pairs: result.pairs));
     });
   }
 
-  void createTest({required String creatorId}) async {
+  void createQuiz({required String creatorId}) async {
     final response = await createDraftUsecase
         .call(CreateDraftUsecaseParams(creatorId: creatorId));
     response.fold(
-        (failure) => emit(TestListError(pairs: state.pairs, failure: failure)),
-        (r) => emit(TestListCreatedDraft(createdDraft: r.draft, pairs: [
-              TestDraftPair(test: r.draft.toTest(), draft: r.draft),
+        (failure) => emit(QuizListError(pairs: state.pairs, failure: failure)),
+        (r) => emit(QuizListCreatedDraft(createdDraft: r.draft, pairs: [
+              QuizDraftPair(quiz: r.draft.toQuiz(), draft: r.draft),
               ...state.pairs
             ])));
   }
 
-  void updateTest({required DraftEntity draft}) {
+  void updateQuiz({required DraftEntity draft}) {
     final pairs = state.pairs.toList();
-    final index = pairs.indexWhere((pair) => pair.test.id == draft.id);
-    pairs[index] = TestDraftPair(test: draft.toTest(), draft: draft);
-    emit(TestListRetrieved(pairs: pairs));
+    final index = pairs.indexWhere((pair) => pair.quiz.id == draft.id);
+    pairs[index] = QuizDraftPair(quiz: draft.toQuiz(), draft: draft);
+    emit(QuizListRetrieved(pairs: pairs));
   }
 
   void removeDraft(DraftEntity draft) {
@@ -51,7 +51,7 @@ class TestListCubit extends Cubit<TestListState> {
     if (index == -1) return;
     final pairs = state.pairs.toList();
 
-    pairs[index] = TestDraftPair(test: pairs[index].test, draft: null);
-    emit(TestListRetrieved(pairs: pairs));
+    pairs[index] = QuizDraftPair(quiz: pairs[index].quiz, draft: null);
+    emit(QuizListRetrieved(pairs: pairs));
   }
 }

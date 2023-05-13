@@ -3,29 +3,28 @@ import 'package:testador/features/test/domain/entities/draft_entity.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 
-
 import '../../../../../core/classes/usecase.dart';
 import '../../failures/test_failures.dart';
 import '../../repositories/test_repository.dart';
 
-class UpdateTestUsecase
-    extends UseCase<EditTestUsecaseResult, UpdateTestUsecaseParams> {
-  const UpdateTestUsecase(this.testRepository);
-  final TestRepository testRepository;
+class UpdateQuizUsecase
+    extends UseCase<EditQuizUsecaseResult, UpdateQuizUsecaseParams> {
+  const UpdateQuizUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, EditTestUsecaseResult>> call(params) async {
-    return testRepository.editTest(params);
+  Future<Either<QuizFailure, EditQuizUsecaseResult>> call(params) async {
+    return quizRepository.editQuiz(params);
   }
 }
 
-class UpdateTestUsecaseParams extends Params {
-  final String testId;
-  final DraftEntity test;
+class UpdateQuizUsecaseParams extends Params {
+  final String quizId;
+  final DraftEntity quiz;
 
-  const UpdateTestUsecaseParams({required this.testId, required this.test});
+  const UpdateQuizUsecaseParams({required this.quizId, required this.quiz});
 }
 
-class EditTestUsecaseResult extends Response {
-  final DraftEntity test;
-  const EditTestUsecaseResult({required this.test});
+class EditQuizUsecaseResult extends Response {
+  final DraftEntity quiz;
+  const EditQuizUsecaseResult({required this.quiz});
 }

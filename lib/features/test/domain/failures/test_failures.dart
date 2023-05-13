@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/classes/failure.dart';
 
-abstract class TestFailure extends Failure {
-  const TestFailure({required super.code});
+abstract class QuizFailure extends Failure {
+  const QuizFailure({required super.code});
   @override
   List<Object?> get props => [code];
 
@@ -11,8 +11,8 @@ abstract class TestFailure extends Failure {
   String retrieveMessage(BuildContext context);
 }
 
-class TestNetworkFailure extends TestFailure {
-  const TestNetworkFailure({super.code = 'network-request-failed'});
+class QuizNetworkFailure extends QuizFailure {
+  const QuizNetworkFailure({super.code = 'network-request-failed'});
 
   @override
   String retrieveMessage(BuildContext context) {
@@ -20,17 +20,17 @@ class TestNetworkFailure extends TestFailure {
   }
 }
 
-class TestNotFoundFailure extends TestFailure {
-  const TestNotFoundFailure({super.code = 'test-not-found'});
+class QuizNotFoundFailure extends QuizFailure {
+  const QuizNotFoundFailure({super.code = 'test-not-found'});
 
   @override
   String retrieveMessage(BuildContext context) {
-    return 'Testul cautat nu a fost gasit';
+    return 'Quizul cautat nu a fost gasit';
   }
 }
 
-class TestUnknownFailure extends TestFailure {
-  const TestUnknownFailure({super.code = 'unknown'});
+class QuizUnknownFailure extends QuizFailure {
+  const QuizUnknownFailure({super.code = 'unknown'});
 
   @override
   String retrieveMessage(BuildContext context) {

@@ -6,23 +6,23 @@ import 'package:dartz/dartz.dart';
 import '../../../../../core/classes/usecase.dart';
 import '../../repositories/test_repository.dart';
 
-class UpdateTestImageUsecase extends UseCase<UpdateTestImageUsecaseResult,
-    UpdateTestImageUsecaseParams> {
-  const UpdateTestImageUsecase(this.testRepository);
-  final TestRepository testRepository;
+class UpdateQuizImageUsecase extends UseCase<UpdateQuizImageUsecaseResult,
+    UpdateQuizImageUsecaseParams> {
+  const UpdateQuizImageUsecase(this.quizRepository);
+  final QuizRepository quizRepository;
   @override
-  Future<Either<TestFailure, UpdateTestImageUsecaseResult>> call(params) async {
-    return testRepository.updateTestImage(params);
+  Future<Either<QuizFailure, UpdateQuizImageUsecaseResult>> call(params) async {
+    return quizRepository.updateQuizImage(params);
   }
 }
 
-class UpdateTestImageUsecaseParams extends Params {
-  final DraftEntity test;
+class UpdateQuizImageUsecaseParams extends Params {
+  final DraftEntity quiz;
   final File image;
-  const UpdateTestImageUsecaseParams({required this.test, required this.image});
+  const UpdateQuizImageUsecaseParams({required this.quiz, required this.image});
 }
 
-class UpdateTestImageUsecaseResult extends Response {
-  final DraftEntity test;
-  const UpdateTestImageUsecaseResult({required this.test});
+class UpdateQuizImageUsecaseResult extends Response {
+  final DraftEntity quiz;
+  const UpdateQuizImageUsecaseResult({required this.quiz});
 }

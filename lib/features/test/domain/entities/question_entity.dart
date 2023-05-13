@@ -1,12 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:testador/core/globals.dart';
 
-
 enum QuestionType { multipleChoice, answer }
 
 class QuestionEntity extends Equatable {
   final String id;
-  final String testId;
+  final String quizId;
   final QuestionType type;
   final String? image;
   final String? text;
@@ -19,13 +18,13 @@ class QuestionEntity extends Equatable {
     this.acceptedAnswers = const [],
     required this.text,
     this.image,
-    required this.testId,
+    required this.quizId,
     required this.type,
   });
   @override
   List<Object?> get props => [
         id,
-        testId,
+        quizId,
         type,
         image,
         text,
@@ -35,7 +34,7 @@ class QuestionEntity extends Equatable {
 
   QuestionEntity copyWith({
     String? id,
-    String? testId,
+    String? quizId,
     QuestionType? type,
     String? image = mockValueForDefault,
     String? text = mockValueForDefault,
@@ -45,7 +44,7 @@ class QuestionEntity extends Equatable {
     return QuestionEntity(
       options: options ?? this.options,
       acceptedAnswers: acceptedAnswers ?? this.acceptedAnswers,
-      testId: testId ?? this.testId,
+      quizId: quizId ?? this.quizId,
       text: text == mockValueForDefault ? this.text : text,
       type: type ?? this.type,
       image: image == mockValueForDefault ? this.image : image,
