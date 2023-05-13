@@ -4,11 +4,11 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 
 import '../question/question_dto.dart';
-part 'test_dto.g.dart';
+part 'draft_dto.g.dart';
 
-@HiveType(typeId: 1)
-class TestDto with HiveObjectMixin {
-  static const hiveBoxName = 'tests';
+@HiveType(typeId: 5)
+class DraftDto with HiveObjectMixin {
+  static const hiveBoxName = 'drafts';
   @HiveField(0)
   final String id;
 
@@ -30,7 +30,7 @@ class TestDto with HiveObjectMixin {
   @HiveField(5)
   final List<QuestionDto>? questions;
 
-  TestDto({
+  DraftDto({
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -67,8 +67,8 @@ class TestDto with HiveObjectMixin {
         id: id);
   }
 
-  factory TestDto.fromMap(Map<dynamic, dynamic> map) {
-    return TestDto(
+  factory DraftDto.fromMap(Map<dynamic, dynamic> map) {
+    return DraftDto(
       questions: (map[questionsField] as List<Map<dynamic, dynamic>>)
           .map((e) => QuestionDto.fromMap(map[questionsField]))
           .toList(),
@@ -80,8 +80,8 @@ class TestDto with HiveObjectMixin {
     );
   }
 
-  factory TestDto.fromEntity(TestEntity entity) {
-    return TestDto(
+  factory DraftDto.fromEntity(TestEntity entity) {
+    return DraftDto(
       creatorId: entity.creatorId,
       id: entity.id,
       imageUrl: entity.imageUrl,

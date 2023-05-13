@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'test_dto.dart';
+part of 'draft_dto.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TestDtoAdapter extends TypeAdapter<TestDto> {
+class DraftDtoAdapter extends TypeAdapter<DraftDto> {
   @override
-  final int typeId = 1;
+  final int typeId = 5;
 
   @override
-  TestDto read(BinaryReader reader) {
+  DraftDto read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TestDto(
+    return DraftDto(
       questions: (fields[5] as List?)?.cast<QuestionDto>(),
       title: fields[1] as String?,
       isPublic: fields[2] as bool,
@@ -27,7 +27,7 @@ class TestDtoAdapter extends TypeAdapter<TestDto> {
   }
 
   @override
-  void write(BinaryWriter writer, TestDto obj) {
+  void write(BinaryWriter writer, DraftDto obj) {
     writer
       ..writeByte(6)
       ..writeByte(0)
@@ -50,7 +50,7 @@ class TestDtoAdapter extends TypeAdapter<TestDto> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TestDtoAdapter &&
+      other is DraftDtoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
