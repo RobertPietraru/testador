@@ -17,11 +17,10 @@ class SyncTestUsecase
 }
 
 class SyncTestUsecaseParams extends Params {
-  final DraftEntity test;
-  const SyncTestUsecaseParams({required this.test});
+  final DraftEntity draft;
+  const SyncTestUsecaseParams({required this.draft});
 }
 
 class SyncTestUsecaseResult extends Response {
-
   const SyncTestUsecaseResult();
 }

@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:testador/features/test/data/dtos/draft/draft_dto.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 import 'package:testador/features/test/domain/entities/draft_entity.dart';
+import 'package:testador/features/test/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/failures/test_failures.dart';
@@ -16,16 +17,17 @@ abstract class TestLocalDataSource {
   Future<DraftEntity> getDraftById(GetDraftByIdUsecaseParams params);
   Future<DraftEntity> moveQuestion(MoveQuestionUsecaseParams params);
   Future<DraftEntity> createDraft(CreateDraftUsecaseParams params);
-  Future<void> deleteTest(DeleteTestUsecaseParams params);
   Future<DraftEntity> updateTestImage(UpdateTestImageUsecaseParams params);
 
   Future<DraftEntity> updateTest(UpdateTestUsecaseParams params);
-  Future<List<DraftEntity>> getTests(GetTestsUsecaseParams params);
+  Future<List<DraftEntity>> getDrafts(GetTestsUsecaseParams params);
   Future<DraftEntity> insertQuestion(InsertQuestionUsecaseParams params);
   Future<DraftEntity> deleteQuestion(DeleteQuestionUsecaseParams params);
   Future<DraftEntity> updateQuestion(UpdateQuestionUsecaseParams params);
   Future<DraftEntity> updateQuestionImage(
       UpdateQuestionImageUsecaseParams params);
+
+  Future<void> deleteDraftById(DeleteDraftByIdUsecaseParams params);
 }
 
 class TestLocalDataSourceIMPL implements TestLocalDataSource {
@@ -80,11 +82,6 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   }
 
   @override
-  Future<void> deleteTest(DeleteTestUsecaseParams params) async {
-    await draftsBox.delete(params.testId);
-  }
-
-  @override
   Future<DraftEntity> insertQuestion(InsertQuestionUsecaseParams params) async {
     final questions =
         params.draft.questions.map((e) => QuestionDto.fromEntity(e)).toList();
@@ -123,7 +120,7 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
   }
 
   @override
-  Future<List<DraftEntity>> getTests(GetTestsUsecaseParams params) async {
+  Future<List<DraftEntity>> getDrafts(GetTestsUsecaseParams params) async {
     return draftsBox.values
         .where((element) => element.creatorId == params.creatorId)
         .map((e) => e.toEntity())
@@ -195,5 +192,10 @@ class TestLocalDataSourceIMPL implements TestLocalDataSource {
     final test = params.test.copyWith(imageUrl: imageUrl);
     draftsBox.put(test.id, DraftDto.fromEntity(test));
     return test;
+  }
+
+  @override
+  Future<void> deleteDraftById(DeleteDraftByIdUsecaseParams params) async {
+    await draftsBox.delete(params.draftId);
   }
 }

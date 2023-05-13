@@ -1,6 +1,7 @@
 import 'package:testador/features/test/data/datasources/test_local_datasource.dart';
 import 'package:testador/features/test/data/repositories/test_repository_impl.dart';
 import 'package:testador/features/test/domain/repositories/test_repository.dart';
+import 'package:testador/features/test/domain/usecases/draft/delete_draft_by_id.dart';
 
 import '../../injection.dart';
 import 'data/datasources/test_remote_datasource.dart';
@@ -13,7 +14,7 @@ void testInject() {
     ..registerSingleton<TestRepository>(
         TestRepositoryIMPL(locator(), locator()))
     ..registerSingleton(CreateDraftUsecase(locator()))
-    ..registerSingleton(DeleteTestUsecase(locator()))
+    ..registerSingleton(DeleteDraftByIdUsecase(locator()))
     ..registerSingleton(UpdateTestUsecase(locator()))
     ..registerSingleton(GetTestsUsecase(locator()))
     ..registerSingleton(InsertQuestionUsecase(locator()))

@@ -18,6 +18,7 @@ import '../../features/authentication/presentation/screens/login/login_screen.da
     as _i3;
 import '../../features/authentication/presentation/screens/registration/registration_screen.dart'
     as _i2;
+import '../../features/test/domain/entities/draft_entity.dart' as _i12;
 import '../../features/test/domain/entities/test_entity.dart' as _i10;
 import '../../features/test/presentation/screens/test_editor/test_editor_screen.dart'
     as _i5;
@@ -97,8 +98,9 @@ class AppRouter extends _i7.RootStackRouter {
         child: _i5.TestEditorScreen(
           key: args.key,
           testId: args.testId,
-          entity: args.entity,
+          test: args.entity,
           testListCubit: args.testListCubit,
+          draft: args.draft,
         ),
       );
     },
@@ -287,6 +289,7 @@ class TestEditorRoute extends _i7.PageRouteInfo<TestEditorRouteArgs> {
     required String testId,
     _i10.TestEntity? entity,
     _i11.TestListCubit? testListCubit,
+    _i12.DraftEntity? draft,
   }) : super(
           TestEditorRoute.name,
           path: 'test-admin/:id',
@@ -295,6 +298,7 @@ class TestEditorRoute extends _i7.PageRouteInfo<TestEditorRouteArgs> {
             testId: testId,
             entity: entity,
             testListCubit: testListCubit,
+            draft: draft,
           ),
           rawPathParams: {'id': testId},
         );
@@ -308,6 +312,7 @@ class TestEditorRouteArgs {
     required this.testId,
     this.entity,
     this.testListCubit,
+    this.draft,
   });
 
   final _i8.Key? key;
@@ -318,9 +323,11 @@ class TestEditorRouteArgs {
 
   final _i11.TestListCubit? testListCubit;
 
+  final _i12.DraftEntity? draft;
+
   @override
   String toString() {
-    return 'TestEditorRouteArgs{key: $key, testId: $testId, entity: $entity, testListCubit: $testListCubit}';
+    return 'TestEditorRouteArgs{key: $key, testId: $testId, entity: $entity, testListCubit: $testListCubit, draft: $draft}';
   }
 }
 

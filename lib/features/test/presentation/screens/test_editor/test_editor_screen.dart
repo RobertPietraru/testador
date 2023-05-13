@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/loading_wrapper.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
+import 'package:testador/features/test/domain/entities/draft_entity.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/cubit/test_editor_cubit.dart';
@@ -23,30 +24,37 @@ class TestEditorScreen extends StatelessWidget {
   const TestEditorScreen(
       {super.key,
       @PathParam('id') required this.testId,
-      this.entity,
-      this.testListCubit});
+      this.test,
+      this.testListCubit,
+      this.draft});
   final String testId;
-  final TestEntity? entity;
+  final TestEntity? test;
+  final DraftEntity? draft;
   final TestListCubit? testListCubit;
 
   @override
   Widget build(BuildContext context) {
     return TestEditorRetrivalWidget(
         testId: testId,
-        entity: entity,
-        builder: (state) => BlocProvider(
-            create: (context) => TestEditorCubit(
-                locator(),
-                locator(),
-                locator(),
-                locator(),
-                locator(),
-                locator(),
-                locator(),
-                locator(),
-                testListCubit: testListCubit,
-                initialTest: state.entity),
-            child: const _TestScreen()));
+        entity: test,
+        builder: (state) {
+          return BlocProvider(
+              create: (context) => TestEditorCubit(
+                    locator(),
+                    locator(),
+                    locator(),
+                    locator(),
+                    locator(),
+                    locator(),
+                    locator(),
+                    locator(),
+                    locator(),
+                    initialDraft: draft,
+                    testListCubit: testListCubit,
+                    initialTest: state.entity,
+                  ),
+              child: const _TestScreen());
+        });
   }
 }
 
@@ -66,7 +74,7 @@ class _TestScreenState extends State<_TestScreen> {
     return WillPopScope(
       onWillPop: () async {
         final cubit = context.read<TestEditorCubit>();
-        if (cubit.state.draft == cubit.state.draft) {
+        if (!cubit.state.needsSync) {
           return true;
         }
         final bool? gottaSave = await showDialog(
@@ -80,6 +88,8 @@ class _TestScreenState extends State<_TestScreen> {
 
         if (gottaSave) {
           await context.read<TestEditorCubit>().save();
+        } else {
+          context.read<TestEditorCubit>().deleteDraft();
         }
         return true;
       },
@@ -146,14 +156,14 @@ class _TestScreenState extends State<_TestScreen> {
                     child: FilledButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
-                              state.draft != state.lastSavedTest
+                              state.needsSync
                                   ? theme.good
                                   : theme.secondaryColor),
                           shape:
                               MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ))),
-                      onPressed: state.draft != state.lastSavedTest
+                      onPressed: state.needsSync
                           ? () => context.read<TestEditorCubit>().save()
                           : null,
                       child: const Text('Salveaza'),

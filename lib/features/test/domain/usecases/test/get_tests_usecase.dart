@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+import 'package:testador/features/test/domain/entities/draft_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 
 import 'package:dartz/dartz.dart';
@@ -22,6 +24,16 @@ class GetTestsUsecaseParams extends Params {
 }
 
 class GetTestsUsecaseResult extends Response {
-  final List<TestEntity> testEntities;
-  const GetTestsUsecaseResult({required this.testEntities});
+  final List<TestDraftPair> pairs;
+  const GetTestsUsecaseResult({required this.pairs});
+}
+
+class TestDraftPair extends Equatable {
+  final TestEntity test;
+  final DraftEntity? draft;
+
+  const TestDraftPair({required this.test, this.draft});
+
+  @override
+  List<Object?> get props => [test, draft];
 }

@@ -22,6 +22,6 @@ class GetDraftByIdUsecaseParams extends Params {
 }
 
 class GetDraftByIdUsecaseResult extends Response {
-  final DraftEntity testEntity;
-  const GetDraftByIdUsecaseResult({required this.testEntity});
+  final DraftEntity draft;
+  const GetDraftByIdUsecaseResult({required this.draft});
 }

@@ -16,7 +16,7 @@ class TestRemoteDataSourceIMPL implements TestRemoteDataSource {
   @override
   Future<void> syncToDatabase(SyncTestUsecaseParams params) async {
     //TODO: fix
-    final test = DraftDto.fromEntity(params.test);
+    final test = DraftDto.fromEntity(params.draft);
 
     await db.collection('tests').doc(test.id).set(test.toMap());
   }

@@ -4,15 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/core/components/drawer.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
-import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
+import 'package:testador/features/test/presentation/screens/test_list/widgets/test_widget/test_widget.dart';
 
 import '../../../../../core/components/custom_dialog.dart';
 import '../../../../../injection.dart';
 import '../../../../authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'cubit/test_list_cubit.dart';
-import 'package:testador/features/test/domain/entities/test_entity.dart';
 
 class TestListScreen extends StatelessWidget {
   const TestListScreen({super.key});
@@ -20,7 +19,7 @@ class TestListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TestListCubit(locator(), locator())
+      create: (context) => TestListCubit(locator(), locator(), locator())
         ..getTests(creatorId: context.read<AuthBloc>().state.userEntity!.id),
       child: const _TestListScreen(),
     );
@@ -38,7 +37,9 @@ class _TestListScreen extends StatelessWidget {
           previous is! TestListCreatedDraft && current is TestListCreatedDraft,
       listener: (context, state) {
         state as TestListCreatedDraft;
+
         context.pushRoute(TestEditorRoute(
+            draft: state.createdDraft,
             testListCubit: context.read<TestListCubit>(),
             testId: state.createdDraft.id,
             entity: state.createdDraft.toTest()));
@@ -129,125 +130,20 @@ class _TestListScreen extends StatelessWidget {
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: DeviceSize.screenHeight ~/ 300,
                           ),
-                          itemCount: state.tests.length,
-                          itemBuilder: (context, index) => buildTestWidget(
-                              theme, state.tests[index], context),
-                        )
+                          itemCount: state.pairs.length,
+                          itemBuilder: (context, index) => Padding(
+                              padding: theme.standardPadding,
+                              child: TestWidget(test: state.pairs[index].test)))
                       : ListView.builder(
-                          itemCount: state.tests.length,
-                          itemBuilder: (context, index) => buildTestWidget(
-                              theme, state.tests[index], context),
-                        );
+                          itemCount: state.pairs.length,
+                          itemBuilder: (context, index) => Padding(
+                              padding: theme.standardPadding,
+                              child: TestWidget(
+                                test: state.pairs[index].test,
+                                draft: state.pairs[index].draft,
+                              )));
                 },
               ))),
-    );
-  }
-
-  Padding buildTestWidget(
-      AppThemeData theme, TestEntity model, BuildContext context) {
-    return Padding(
-      padding: theme.standardPadding,
-      child: TestWidget(
-          isPublished: model.isPublic,
-          onPressed: () {
-            context.pushRoute(
-              TestEditorRoute(
-                  testId: model.id,
-                  entity: model,
-                  testListCubit: context.read<TestListCubit>()),
-            );
-          },
-          onSelect: () {},
-          imageUrl: model.imageUrl,
-          label: model.title ?? "Test"),
-    );
-  }
-}
-
-class TestWidget extends StatelessWidget {
-  final String? imageUrl;
-  final String label;
-  final double width;
-  final double height;
-  final VoidCallback onSelect;
-  final VoidCallback onPressed;
-  final bool isPublished;
-
-  const TestWidget(
-      {super.key,
-      required this.imageUrl,
-      required this.label,
-      this.width = 300,
-      this.height = 300,
-      required this.onSelect,
-      required this.onPressed,
-      required this.isPublished});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
-    return GestureDetector(
-      onLongPress: onSelect,
-      onTap: onPressed,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        shadowColor: Colors.blue,
-        elevation: 30,
-        child: Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                image: NetworkImage(imageUrl ?? theme.placeholderImage),
-                opacity: 0.5,
-                fit: BoxFit.cover,
-              ),
-              color: theme.primaryColor),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: theme.standardPadding,
-                child: Text(
-                  label,
-                  textAlign: TextAlign.left,
-                  style: theme.titleTextStyle
-                      .copyWith(color: theme.defaultBackgroundColor),
-                ),
-              ),
-              Container(
-                  padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
-                  width: MediaQuery.of(context).size.width,
-                  height: 70,
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      color: theme.defaultBackgroundColor),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "100 elevi",
-                          style: theme.informationTextStyle,
-                        ),
-                        isPublished
-                            ? Icon(
-                                Icons.public,
-                                color: theme.good,
-                              )
-                            : Icon(
-                                Icons.public_off,
-                                color: theme.bad,
-                              )
-                      ]))
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

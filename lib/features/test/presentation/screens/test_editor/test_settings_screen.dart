@@ -17,10 +17,12 @@ class TestSettingsScreen extends StatefulWidget {
 
 class _TestSettingsScreenState extends State<TestSettingsScreen> {
   late String title;
+  late String initialTitle;
   @override
   void initState() {
     final test = context.read<TestEditorCubit>().state.draft;
     title = test.title ?? '';
+    initialTitle = title;
     super.initState();
   }
 
@@ -29,7 +31,15 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
     final theme = AppTheme.of(context);
     return WillPopScope(
       onWillPop: () async {
+        if (initialTitle == title) {
+          return true;
+        }
+        if (title.isEmpty) {
+          return true;
+        }
+
         context.read<TestEditorCubit>().updateTestTitle(title);
+
         return true;
       },
       child: Scaffold(

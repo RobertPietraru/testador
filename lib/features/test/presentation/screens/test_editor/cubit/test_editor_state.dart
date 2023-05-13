@@ -19,6 +19,7 @@ class TestEditorState extends Equatable {
 
   QuestionEntity get currentQuestion => draft.questions[currentQuestionIndex];
 
+  bool get needsSync => draft.toTest() != lastSavedTest;
 
   TestEditorState copyWith(
       {TestEntity? lastSavedTest,

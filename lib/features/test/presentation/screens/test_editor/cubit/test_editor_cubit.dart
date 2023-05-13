@@ -9,6 +9,7 @@ import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 import 'package:testador/features/test/domain/failures/test_editor/deleting_the_only_question_failure.dart';
 import 'package:testador/features/test/domain/failures/test_failures.dart';
+import 'package:testador/features/test/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 import 'package:uuid/uuid.dart';
 
@@ -25,6 +26,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   final UpdateTestImageUsecase updateTestImageUsecase;
   final UpdateTestUsecase editTestUsecase;
   final SyncTestUsecase syncTestUsecase;
+  final DeleteDraftByIdUsecase deleteDraftByIdUsecase;
 
   final TestListCubit? testListCubit;
 
@@ -36,13 +38,15 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     this.updateQuestionImageUsecase,
     this.moveQuestionUsecase,
     this.updateTestImageUsecase,
-    this.editTestUsecase, {
+    this.editTestUsecase,
+    this.deleteDraftByIdUsecase, {
     required TestEntity initialTest,
+    DraftEntity? initialDraft,
     required this.testListCubit,
   }) : super(TestEditorState(
             currentQuestionIndex: 0,
             lastSavedTest: initialTest,
-            draft: DraftEntity.fromEntity(initialTest),
+            draft: initialDraft ?? DraftEntity.fromEntity(initialTest),
             failure: null,
             status: TestEditorStatus.loaded));
 
@@ -404,7 +408,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     emit(state.copyWith(
         status: TestEditorStatus.loading, failure: null, updateError: true));
     final response =
-        await syncTestUsecase.call(SyncTestUsecaseParams(test: state.draft));
+        await syncTestUsecase.call(SyncTestUsecaseParams(draft: state.draft));
     response.fold((l) {
       emit(state.copyWith(
         failure: l,
@@ -412,8 +416,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
         updateError: true,
       ));
     }, (r) {
-      testListCubit?.updateTest(
-          newTest: state.draft.toTest(), oldTest: state.lastSavedTest);
+      testListCubit?.updateTest(draft: state.draft);
       emit(state.copyWith(
         failure: null,
         status: TestEditorStatus.loaded,
@@ -421,5 +424,11 @@ class TestEditorCubit extends Cubit<TestEditorState> {
         updateError: true,
       ));
     });
+  }
+
+  void deleteDraft() async {
+    await deleteDraftByIdUsecase
+        .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
+    testListCubit?.removeDraft(state.draft);
   }
 }

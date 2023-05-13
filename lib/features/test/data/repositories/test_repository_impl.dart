@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:testador/features/test/data/datasources/test_local_datasource.dart';
 import 'package:testador/features/test/data/datasources/test_remote_datasource.dart';
 import 'package:testador/features/test/domain/failures/test_failures.dart';
+import 'package:testador/features/test/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 import '../../domain/repositories/test_repository.dart';
 
@@ -38,21 +39,6 @@ class TestRepositoryIMPL implements TestRepository {
     try {
       final testEntity = await testLocalDataSource.deleteQuestion(params);
       return Right(DeleteQuestionUsecaseResult(testEntity: testEntity));
-    } on FirebaseException catch (e) {
-      return Left(TestUnknownFailure(code: e.code));
-    } on TestFailure catch (error) {
-      return Left(error);
-    } catch (_) {
-      return const Left(TestUnknownFailure());
-    }
-  }
-
-  @override
-  Future<Either<TestFailure, DeleteTestUsecaseResult>> deleteTest(
-      DeleteTestUsecaseParams params) async {
-    try {
-      await testLocalDataSource.deleteTest(params);
-      return const Right(DeleteTestUsecaseResult());
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -112,7 +98,15 @@ class TestRepositoryIMPL implements TestRepository {
       GetTestsUsecaseParams params) async {
     try {
       final tests = await testRemoteDataSource.getTests(params);
-      return Right(GetTestsUsecaseResult(testEntities: tests));
+      final drafts = await testLocalDataSource.getDrafts(params);
+
+      return Right(GetTestsUsecaseResult(
+          pairs: tests.map((test) {
+        final index = drafts.indexWhere((draft) => draft.id == test.id);
+
+        return TestDraftPair(
+            test: test, draft: index == -1 ? null : drafts[index]);
+      }).toList()));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -129,7 +123,7 @@ class TestRepositoryIMPL implements TestRepository {
       GetDraftByIdUsecaseParams params) async {
     try {
       final test = await testLocalDataSource.getDraftById(params);
-      return Right(GetDraftByIdUsecaseResult(testEntity: test));
+      return Right(GetDraftByIdUsecaseResult(draft: test));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -205,6 +199,21 @@ class TestRepositoryIMPL implements TestRepository {
     try {
       final test = await testRemoteDataSource.getTestById(params);
       return Right(GetTestByIdUsecaseResult(testEntity: test));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<TestFailure, DeleteDraftByIdUsecaseResult>> deleteDraftById(
+      DeleteDraftByIdUsecaseParams params) async {
+    try {
+      await testLocalDataSource.deleteDraftById(params);
+      return const Right(DeleteDraftByIdUsecaseResult());
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {

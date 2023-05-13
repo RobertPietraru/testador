@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:testador/features/test/domain/usecases/draft/delete_draft_by_id.dart';
 
 import '../failures/test_failures.dart';
 import '../usecases/test_usecases.dart';
@@ -19,8 +20,6 @@ abstract class TestRepository {
 
   Future<Either<TestFailure, CreateDraftUsecaseResult>> createTest(
       CreateDraftUsecaseParams params);
-  Future<Either<TestFailure, DeleteTestUsecaseResult>> deleteTest(
-      DeleteTestUsecaseParams params);
   Future<Either<TestFailure, EditTestUsecaseResult>> editTest(
       UpdateTestUsecaseParams params);
 
@@ -32,4 +31,7 @@ abstract class TestRepository {
       DeleteQuestionUsecaseParams params);
   Future<Either<TestFailure, UpdateQuestionUsecaseResult>> updateQuestion(
       UpdateQuestionUsecaseParams params);
+
+  Future<Either<TestFailure, DeleteDraftByIdUsecaseResult>> deleteDraftById(
+      DeleteDraftByIdUsecaseParams params);
 }
