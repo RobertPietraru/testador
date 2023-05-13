@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/test/domain/entities/draft_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
-import 'package:testador/injection.dart';
 
 import '../../../../../../../core/components/theme/app_theme.dart';
 import '../../../../../../../core/routing/app_router.gr.dart';
@@ -32,7 +31,7 @@ class QuizWidget extends StatelessWidget {
           context.pushRoute(
             QuizEditorRoute(
               quizId: quiz.id,
-              entity: quiz,
+              quiz: quiz,
               draft: draft,
               quizListCubit: context.read<QuizListCubit>(),
             ),

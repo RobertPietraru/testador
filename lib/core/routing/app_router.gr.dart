@@ -98,7 +98,7 @@ class AppRouter extends _i7.RootStackRouter {
         child: _i5.QuizEditorScreen(
           key: args.key,
           quizId: args.quizId,
-          quiz: args.entity,
+          quiz: args.quiz,
           quizListCubit: args.quizListCubit,
           draft: args.draft,
         ),
@@ -287,7 +287,7 @@ class QuizEditorRoute extends _i7.PageRouteInfo<QuizEditorRouteArgs> {
   QuizEditorRoute({
     _i8.Key? key,
     required String quizId,
-    _i10.QuizEntity? entity,
+    _i10.QuizEntity? quiz,
     _i11.QuizListCubit? quizListCubit,
     _i12.DraftEntity? draft,
   }) : super(
@@ -296,7 +296,7 @@ class QuizEditorRoute extends _i7.PageRouteInfo<QuizEditorRouteArgs> {
           args: QuizEditorRouteArgs(
             key: key,
             quizId: quizId,
-            entity: entity,
+            quiz: quiz,
             quizListCubit: quizListCubit,
             draft: draft,
           ),
@@ -310,7 +310,7 @@ class QuizEditorRouteArgs {
   const QuizEditorRouteArgs({
     this.key,
     required this.quizId,
-    this.entity,
+    this.quiz,
     this.quizListCubit,
     this.draft,
   });
@@ -319,7 +319,7 @@ class QuizEditorRouteArgs {
 
   final String quizId;
 
-  final _i10.QuizEntity? entity;
+  final _i10.QuizEntity? quiz;
 
   final _i11.QuizListCubit? quizListCubit;
 
@@ -327,7 +327,7 @@ class QuizEditorRouteArgs {
 
   @override
   String toString() {
-    return 'QuizEditorRouteArgs{key: $key, quizId: $quizId, entity: $entity, quizListCubit: $quizListCubit, draft: $draft}';
+    return 'QuizEditorRouteArgs{key: $key, quizId: $quizId, quiz: $quiz, quizListCubit: $quizListCubit, draft: $draft}';
   }
 }
 

@@ -42,7 +42,7 @@ class AuthRepositoryIMPL implements AuthRepository {
     } on AuthFailure catch (error) {
       return Left(error);
     } catch (_) {
-      return Left(AuthUnknownFailure());
+      return const Left(AuthUnknownFailure());
     }
   }
 
@@ -56,7 +56,7 @@ class AuthRepositoryIMPL implements AuthRepository {
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthUnknownFailure());
+      return const Left(AuthUnknownFailure());
     }
   }
 
@@ -70,7 +70,7 @@ class AuthRepositoryIMPL implements AuthRepository {
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthUnknownFailure());
+      return const Left(AuthUnknownFailure());
     }
   }
 
@@ -84,7 +84,7 @@ class AuthRepositoryIMPL implements AuthRepository {
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthUnknownFailure());
+      return const Left(AuthUnknownFailure());
     }
   }
 
@@ -98,7 +98,7 @@ class AuthRepositoryIMPL implements AuthRepository {
     } on AuthFailure catch (e) {
       return Left(e);
     } catch (e) {
-      return Left(AuthUnknownFailure());
+      return const Left(AuthUnknownFailure());
     }
   }
 }

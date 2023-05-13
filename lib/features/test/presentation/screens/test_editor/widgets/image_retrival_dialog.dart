@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
-import 'package:testador/features/test/presentation/screens/test_editor/cubit/test_editor_cubit.dart';
 
 class ImageRetrivalDialog extends StatefulWidget {
   final Function(File imageFile) onImageRetrived;

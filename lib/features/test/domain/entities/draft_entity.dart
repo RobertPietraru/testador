@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:testador/core/globals.dart';
-import 'package:testador/features/test/data/dtos/question/question_dto.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
-//TODO: add description
 
 class DraftEntity extends Equatable {
   final String id;

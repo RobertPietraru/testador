@@ -42,7 +42,7 @@ class _QuizListScreen extends StatelessWidget {
             draft: state.createdDraft,
             quizListCubit: context.read<QuizListCubit>(),
             quizId: state.createdDraft.id,
-            entity: state.createdDraft.toQuiz()));
+            quiz: state.createdDraft.toQuiz()));
       },
       child: Scaffold(
           appBar: const CustomAppBar(),

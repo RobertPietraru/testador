@@ -15,7 +15,6 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<void> syncToDatabase(SyncQuizUsecaseParams params) async {
-    //TODO: fix
     final quiz = DraftDto.fromEntity(params.draft);
 
     await db.collection('tests').doc(quiz.id).set(quiz.toMap());
@@ -23,7 +22,6 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<QuizEntity> getQuizById(GetQuizByIdUsecaseParams params) {
-    // TODO: implement getQuizById
     throw UnimplementedError();
   }
 

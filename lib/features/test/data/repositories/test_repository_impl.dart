@@ -112,8 +112,6 @@ class QuizRepositoryIMPL implements QuizRepository {
     } on QuizFailure catch (error) {
       return Left(error);
     } on Error catch (_) {
-      print(_);
-      print(_.stackTrace);
       return const Left(QuizUnknownFailure());
     }
   }

@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/features/test/data/dtos/draft/draft_dto.dart';
-import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 import 'package:testador/features/test/domain/entities/draft_entity.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
@@ -88,7 +86,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
         question: QuestionEntity(
           id: const Uuid().v1(),
           quizId: state.draft.id,
-          acceptedAnswers: [],
+          acceptedAnswers: const [],
           options: type == QuestionType.multipleChoice
               ? const [
                   MultipleChoiceOptionEntity(text: null),

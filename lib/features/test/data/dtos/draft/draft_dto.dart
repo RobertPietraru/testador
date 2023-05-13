@@ -2,7 +2,6 @@
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:testador/features/test/domain/entities/draft_entity.dart';
-import 'package:testador/features/test/domain/entities/test_entity.dart';
 
 import '../../../../../core/globals.dart';
 import '../question/question_dto.dart';

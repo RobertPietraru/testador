@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path/path.dart';
 import 'package:testador/features/test/data/dtos/draft/draft_dto.dart';
-import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 import 'package:testador/features/test/domain/entities/draft_entity.dart';
 import 'package:testador/features/test/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:uuid/uuid.dart';

@@ -1,4 +1,3 @@
-import '../../entities/test_entity.dart';
 import '../../failures/test_failures.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../../core/classes/usecase.dart';

@@ -68,7 +68,6 @@ class QuizDto with HiveObjectMixin {
   }
 
   factory QuizDto.fromMap(Map<String, dynamic> map) {
-    print(map[questionsField].runtimeType);
     final x = (map[questionsField] as List);
     final y = x.map((e) => QuestionDto.fromMap(e));
     final z = y.toList();

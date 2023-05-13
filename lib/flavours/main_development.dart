@@ -62,9 +62,9 @@ class _MyAppState extends State<MyApp> {
           routerDelegate:
               AutoRouterDelegate.declarative(_appRouter, routes: (_) {
             if (authBloc is AuthUninitialisedState) {
-              return [LoadingRoute()];
+              return [const LoadingRoute()];
             }
-            return [App()];
+            return [const App()];
           }),
           routeInformationParser: _appRouter.defaultRouteParser(),
           theme: _lightTheme.materialThemeData(context),

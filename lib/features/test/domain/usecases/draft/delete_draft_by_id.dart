@@ -1,4 +1,3 @@
-import 'package:testador/features/test/domain/entities/draft_entity.dart';
 
 import '../../../../../core/classes/usecase.dart';
 import '../../failures/test_failures.dart';

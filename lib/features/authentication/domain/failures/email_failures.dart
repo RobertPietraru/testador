@@ -1,4 +1,4 @@
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
 import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
 
 class AuthEmailAlreadyExistsFailure extends AuthInputBackendFailure {
