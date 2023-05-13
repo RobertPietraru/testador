@@ -53,19 +53,19 @@ class QuizEditorScreen extends StatelessWidget {
                     quizListCubit: quizListCubit,
                     initialQuiz: state.entity,
                   ),
-              child: const _QuizScreen());
+              child: const _Quizescreen());
         });
   }
 }
 
-class _QuizScreen extends StatefulWidget {
-  const _QuizScreen();
+class _Quizescreen extends StatefulWidget {
+  const _Quizescreen();
 
   @override
-  State<_QuizScreen> createState() => _QuizScreenState();
+  State<_Quizescreen> createState() => _QuizescreenState();
 }
 
-class _QuizScreenState extends State<_QuizScreen> {
+class _QuizescreenState extends State<_Quizescreen> {
   final ScrollController controller = ScrollController();
 
   @override
@@ -142,7 +142,7 @@ class _QuizScreenState extends State<_QuizScreen> {
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
                           value: context.read<QuizEditorCubit>(),
-                          child: const QuizSettingsScreen(),
+                          child: const QuizesettingsScreen(),
                         ),
                       ));
                 },

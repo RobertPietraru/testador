@@ -20,7 +20,7 @@ class QuizListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => QuizListCubit(locator(), locator(), locator())
-        ..getQuizs(creatorId: context.read<AuthBloc>().state.userEntity!.id),
+        ..getQuizes(creatorId: context.read<AuthBloc>().state.userEntity!.id),
       child: const _QuizListScreen(),
     );
   }

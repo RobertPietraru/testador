@@ -16,7 +16,7 @@ void quizInject() {
     ..registerSingleton(CreateDraftUsecase(locator()))
     ..registerSingleton(DeleteDraftByIdUsecase(locator()))
     ..registerSingleton(UpdateQuizUsecase(locator()))
-    ..registerSingleton(GetQuizsUsecase(locator()))
+    ..registerSingleton(GetQuizesUsecase(locator()))
     ..registerSingleton(InsertQuestionUsecase(locator()))
     ..registerSingleton(DeleteQuestionUsecase(locator()))
     ..registerSingleton(UpdateQuestionUsecase(locator()))

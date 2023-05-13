@@ -7,7 +7,7 @@ import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 abstract class QuizRemoteDataSource {
   Future<void> syncToDatabase(SyncQuizUsecaseParams params);
   Future<QuizEntity> getQuizById(GetQuizByIdUsecaseParams params);
-  Future<List<QuizEntity>> getQuizs(GetQuizsUsecaseParams params);
+  Future<List<QuizEntity>> getQuizes(GetQuizesUsecaseParams params);
 }
 
 class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
@@ -26,7 +26,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   }
 
   @override
-  Future<List<QuizEntity>> getQuizs(GetQuizsUsecaseParams params) async {
+  Future<List<QuizEntity>> getQuizes(GetQuizesUsecaseParams params) async {
     final snap = await db
         .collection(QuizDto.collection)
         .where(QuizDto.creatorField, isEqualTo: params.creatorId)

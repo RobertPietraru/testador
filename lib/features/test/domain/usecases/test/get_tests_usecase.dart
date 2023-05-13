@@ -8,24 +8,24 @@ import '../../../../../core/classes/usecase.dart';
 import '../../failures/test_failures.dart';
 import '../../repositories/test_repository.dart';
 
-class GetQuizsUsecase
-    extends UseCase<GetQuizsUsecaseResult, GetQuizsUsecaseParams> {
-  const GetQuizsUsecase(this.quizRepository);
+class GetQuizesUsecase
+    extends UseCase<GetQuizesUsecaseResult, GetQuizesUsecaseParams> {
+  const GetQuizesUsecase(this.quizRepository);
   final QuizRepository quizRepository;
   @override
-  Future<Either<QuizFailure, GetQuizsUsecaseResult>> call(params) async {
-    return quizRepository.getQuizs(params);
+  Future<Either<QuizFailure, GetQuizesUsecaseResult>> call(params) async {
+    return quizRepository.getQuizes(params);
   }
 }
 
-class GetQuizsUsecaseParams extends Params {
+class GetQuizesUsecaseParams extends Params {
   final String creatorId;
-  const GetQuizsUsecaseParams({required this.creatorId});
+  const GetQuizesUsecaseParams({required this.creatorId});
 }
 
-class GetQuizsUsecaseResult extends Response {
+class GetQuizesUsecaseResult extends Response {
   final List<QuizDraftPair> pairs;
-  const GetQuizsUsecaseResult({required this.pairs});
+  const GetQuizesUsecaseResult({required this.pairs});
 }
 
 class QuizDraftPair extends Equatable {

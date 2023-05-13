@@ -19,7 +19,7 @@ abstract class QuizLocalDataSource {
   Future<DraftEntity> updateQuizImage(UpdateQuizImageUsecaseParams params);
 
   Future<DraftEntity> updateQuiz(UpdateQuizUsecaseParams params);
-  Future<List<DraftEntity>> getDrafts(GetQuizsUsecaseParams params);
+  Future<List<DraftEntity>> getDrafts(GetQuizesUsecaseParams params);
   Future<DraftEntity> insertQuestion(InsertQuestionUsecaseParams params);
   Future<DraftEntity> deleteQuestion(DeleteQuestionUsecaseParams params);
   Future<DraftEntity> updateQuestion(UpdateQuestionUsecaseParams params);
@@ -119,7 +119,7 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
   }
 
   @override
-  Future<List<DraftEntity>> getDrafts(GetQuizsUsecaseParams params) async {
+  Future<List<DraftEntity>> getDrafts(GetQuizesUsecaseParams params) async {
     return draftsBox.values
         .where((element) => element.creatorId == params.creatorId)
         .map((e) => e.toEntity())

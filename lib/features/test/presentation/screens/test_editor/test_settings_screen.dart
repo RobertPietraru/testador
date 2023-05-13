@@ -6,16 +6,16 @@ import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/cubit/test_editor_cubit.dart';
 import 'package:testador/features/test/presentation/screens/test_editor/widgets/image_retrival_dialog.dart';
 
-class QuizSettingsScreen extends StatefulWidget {
-  const QuizSettingsScreen({
+class QuizesettingsScreen extends StatefulWidget {
+  const QuizesettingsScreen({
     super.key,
   });
 
   @override
-  State<QuizSettingsScreen> createState() => _QuizSettingsScreenState();
+  State<QuizesettingsScreen> createState() => _QuizesettingsScreenState();
 }
 
-class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
+class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
   late String title;
   late String initialTitle;
   @override

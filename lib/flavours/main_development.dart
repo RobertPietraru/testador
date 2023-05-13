@@ -22,8 +22,8 @@ void mainDevelopment() async {
   Hive.registerAdapter(QuestionDtoAdapter());
   Hive.registerAdapter(MultipleChoiceOptionDtoAdapter());
   Hive.registerAdapter(QuestionTypeDtoAdapter());
-  await Hive.openBox<QuizDto>(QuizDto.collection);
-  await Hive.openBox<DraftDto>(DraftDto.hiveBoxName);
+  (await Hive.openBox<QuizDto>(QuizDto.collection));
+  (await Hive.openBox<DraftDto>(DraftDto.hiveBoxName));
   await inject();
 
   runApp(const AuthBlocWidget(child: MyApp()));

@@ -9,8 +9,8 @@ abstract class QuizRepository {
       GetDraftByIdUsecaseParams params);
   Future<Either<QuizFailure, GetQuizByIdUsecaseResult>> getQuizById(
       GetQuizByIdUsecaseParams params);
-  Future<Either<QuizFailure, GetQuizsUsecaseResult>> getQuizs(
-      GetQuizsUsecaseParams params);
+  Future<Either<QuizFailure, GetQuizesUsecaseResult>> getQuizes(
+      GetQuizesUsecaseParams params);
   Future<Either<QuizFailure, UpdateQuestionImageUsecaseResult>>
       updateQuestionImage(UpdateQuestionImageUsecaseParams params);
   Future<Either<QuizFailure, UpdateQuizImageUsecaseResult>> updateQuizImage(

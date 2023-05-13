@@ -94,14 +94,14 @@ class QuizRepositoryIMPL implements QuizRepository {
   }
 
   @override
-  Future<Either<QuizFailure, GetQuizsUsecaseResult>> getQuizs(
-      GetQuizsUsecaseParams params) async {
+  Future<Either<QuizFailure, GetQuizesUsecaseResult>> getQuizes(
+      GetQuizesUsecaseParams params) async {
     try {
-      final quizs = await quizRemoteDataSource.getQuizs(params);
+      final quizes = await quizRemoteDataSource.getQuizes(params);
       final drafts = await quizLocalDataSource.getDrafts(params);
 
-      return Right(GetQuizsUsecaseResult(
-          pairs: quizs.map((quiz) {
+      return Right(GetQuizesUsecaseResult(
+          pairs: quizes.map((quiz) {
         final index = drafts.indexWhere((draft) => draft.id == quiz.id);
 
         return QuizDraftPair(
@@ -112,6 +112,8 @@ class QuizRepositoryIMPL implements QuizRepository {
     } on QuizFailure catch (error) {
       return Left(error);
     } on Error catch (_) {
+      print(_.stackTrace);
+
       return const Left(QuizUnknownFailure());
     }
   }

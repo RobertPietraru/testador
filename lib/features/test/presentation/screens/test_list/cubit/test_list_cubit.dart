@@ -9,15 +9,15 @@ part 'test_list_state.dart';
 class QuizListCubit extends Cubit<QuizListState> {
   final CreateDraftUsecase createDraftUsecase;
   final GetDraftByIdUsecase getDraftByIdUsecase;
-  final GetQuizsUsecase getQuizsUsecase;
+  final GetQuizesUsecase getQuizesUsecase;
 
   QuizListCubit(
-      this.createDraftUsecase, this.getQuizsUsecase, this.getDraftByIdUsecase)
+      this.createDraftUsecase, this.getQuizesUsecase, this.getDraftByIdUsecase)
       : super(const QuizListLoading(pairs: []));
 
-  void getQuizs({required String creatorId}) async {
-    final response =
-        await getQuizsUsecase.call(GetQuizsUsecaseParams(creatorId: creatorId));
+  void getQuizes({required String creatorId}) async {
+    final response = await getQuizesUsecase
+        .call(GetQuizesUsecaseParams(creatorId: creatorId));
     response.fold((failure) {
       emit(QuizListError(pairs: state.pairs, failure: failure));
     }, (result) {
