@@ -42,7 +42,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               AppLogo(color: mainColor ?? theme.primaryColor),
               const SizedBox(width: 10),
               Text(
-                "Quizador",
+                "Testador",
                 style: TextStyle(
                   color: mainColor ?? theme.primaryColor,
                   fontWeight: FontWeight.bold,

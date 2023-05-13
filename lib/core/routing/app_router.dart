@@ -4,8 +4,8 @@ import 'package:testador/core/routing/route_guards.dart';
 import 'package:testador/core/screens/landing_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart';
-import 'package:testador/features/test/presentation/screens/test_list/test_list_screen.dart';
-import 'package:testador/features/test/presentation/screens/test_editor/test_editor_screen.dart';
+import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart';
+import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',

@@ -18,13 +18,13 @@ import '../../features/authentication/presentation/screens/login/login_screen.da
     as _i3;
 import '../../features/authentication/presentation/screens/registration/registration_screen.dart'
     as _i2;
-import '../../features/test/domain/entities/draft_entity.dart' as _i12;
-import '../../features/test/domain/entities/test_entity.dart' as _i10;
-import '../../features/test/presentation/screens/test_editor/test_editor_screen.dart'
+import '../../features/quiz/domain/entities/draft_entity.dart' as _i12;
+import '../../features/quiz/domain/entities/quiz_entity.dart' as _i10;
+import '../../features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart'
     as _i5;
-import '../../features/test/presentation/screens/test_list/cubit/test_list_cubit.dart'
+import '../../features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart'
     as _i11;
-import '../../features/test/presentation/screens/test_list/test_list_screen.dart'
+import '../../features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart'
     as _i6;
 import '../screens/landing_screen.dart' as _i4;
 import 'app_router.dart' as _i1;

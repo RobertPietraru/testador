@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'skeleton-a3bd2.appspot.com',
     iosClientId:
         '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
-    iosBundleId: 'com.example.quizador',
+    iosBundleId: 'com.example.testador',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -80,6 +80,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'skeleton-a3bd2.appspot.com',
     iosClientId:
         '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
-    iosBundleId: 'com.example.quizador',
+    iosBundleId: 'com.example.testador',
   );
 }

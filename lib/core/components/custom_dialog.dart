@@ -17,7 +17,6 @@ class CustomDialog extends StatelessWidget {
     final theme = AppTheme.of(context);
 
     return Dialog(
-      
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
