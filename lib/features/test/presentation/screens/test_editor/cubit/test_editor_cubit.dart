@@ -9,6 +9,8 @@ import 'package:testador/features/test/domain/failures/test_failures.dart';
 import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../test_list/cubit/test_list_cubit.dart';
+
 part 'test_editor_state.dart';
 
 class TestEditorCubit extends Cubit<TestEditorState> {
@@ -18,18 +20,23 @@ class TestEditorCubit extends Cubit<TestEditorState> {
   final UpdateQuestionImageUsecase updateQuestionImageUsecase;
   final MoveQuestionUsecase moveQuestionUsecase;
   final UpdateTestImageUsecase updateTestImageUsecase;
-  final EditTestUsecase editTestUsecase;
+  final UpdateTestUsecase editTestUsecase;
+  final SyncTestUsecase syncTestUsecase;
+
+  final TestListCubit? testListCubit;
 
   TestEditorCubit(
-      this.insertQuestionUsecase,
-      this.updateQuestionUsecase,
-      this.deleteQuestionUsecase,
-      this.updateQuestionImageUsecase,
-      this.moveQuestionUsecase,
-      this.updateTestImageUsecase,
-      this.editTestUsecase,
-      {required TestEntity initialTest})
-      : super(TestEditorState(
+    this.syncTestUsecase,
+    this.insertQuestionUsecase,
+    this.updateQuestionUsecase,
+    this.deleteQuestionUsecase,
+    this.updateQuestionImageUsecase,
+    this.moveQuestionUsecase,
+    this.updateTestImageUsecase,
+    this.editTestUsecase, {
+    required TestEntity initialTest,
+    required this.testListCubit,
+  }) : super(TestEditorState(
             currentQuestionIndex: 0,
             lastSavedTest: initialTest,
             test: initialTest,
@@ -355,7 +362,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     emit(state.copyWith(
         status: TestEditorStatus.loading, failure: null, updateError: true));
 
-    final response = await editTestUsecase.call(EditTestUsecaseParams(
+    final response = await editTestUsecase.call(UpdateTestUsecaseParams(
         test: state.test.copyWith(isPublic: !state.test.isPublic),
         testId: state.test.id));
 
@@ -374,8 +381,7 @@ class TestEditorCubit extends Cubit<TestEditorState> {
     emit(state.copyWith(
         status: TestEditorStatus.loading, failure: null, updateError: true));
 
-
-    final response = await editTestUsecase.call(EditTestUsecaseParams(
+    final response = await editTestUsecase.call(UpdateTestUsecaseParams(
         test: state.test.copyWith(title: title), testId: state.test.id));
 
     response.fold(
@@ -387,5 +393,28 @@ class TestEditorCubit extends Cubit<TestEditorState> {
           test: r.test,
           updateError: true)),
     );
+  }
+
+  Future<void> save() async {
+    emit(state.copyWith(
+        status: TestEditorStatus.loading, failure: null, updateError: true));
+    final response =
+        await syncTestUsecase.call(SyncTestUsecaseParams(test: state.test));
+    response.fold((l) {
+      emit(state.copyWith(
+        failure: l,
+        status: TestEditorStatus.failed,
+        updateError: true,
+      ));
+    }, (r) {
+      testListCubit?.updateTest(newTest: r.test, oldTest: state.lastSavedTest);
+      emit(state.copyWith(
+        failure: null,
+        status: TestEditorStatus.loaded,
+        lastSavedTest: r.test,
+        test: r.test,
+        updateError: true,
+      ));
+    });
   }
 }

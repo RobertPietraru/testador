@@ -3,7 +3,6 @@ import 'package:testador/core/globals.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 //TODO: add description
 
-
 class TestEntity extends Equatable {
   final String id;
   final String? title;
@@ -11,8 +10,10 @@ class TestEntity extends Equatable {
   final String creatorId;
   final String? imageUrl;
   final List<QuestionEntity> questions;
+  final bool needsSync;
 
   const TestEntity({
+    required this.needsSync,
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -26,6 +27,7 @@ class TestEntity extends Equatable {
       [id, title, isPublic, creatorId, imageUrl, ...questions];
   TestEntity copyWith({
     String? id,
+    bool? needsSync,
     String? title = mockValueForDefault,
     bool? isPublic,
     String? creatorId,
@@ -33,6 +35,7 @@ class TestEntity extends Equatable {
     List<QuestionEntity>? questions,
   }) {
     return TestEntity(
+      needsSync: needsSync ?? this.needsSync,
       questions: questions ?? this.questions,
       isPublic: isPublic ?? this.isPublic,
       creatorId: creatorId ?? this.creatorId,

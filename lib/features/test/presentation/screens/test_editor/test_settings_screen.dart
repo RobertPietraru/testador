@@ -71,6 +71,7 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
                               : null))
                 ]),
                 TextInputField(
+                    initialValue: title,
                     onChanged: (e) {
                       title = e;
                     },

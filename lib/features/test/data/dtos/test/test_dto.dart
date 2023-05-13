@@ -29,7 +29,11 @@ class TestDto with HiveObjectMixin {
   @HiveField(5)
   final List<QuestionDto>? questions;
 
+  @HiveField(6)
+  final bool needsSync;
+
   TestDto({
+    this.needsSync = true,
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -44,20 +48,23 @@ class TestDto with HiveObjectMixin {
   static const imageField = 'image';
   static const idField = 'id';
   static const questionsField = 'questions';
+  static const needsSyncField = 'needsSync';
 
-  Map<dynamic, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      idField: id,
       titleField: title,
       isPublicField: isPublic,
       creatorField: creatorId,
       imageField: imageUrl,
-      questionsField: questions,
+      idField: id,
+      questionsField: questions?.map((e) => e.toMap()),
+      needsSyncField: needsSync,
     };
   }
 
   TestEntity toEntity() {
     return TestEntity(
+        needsSync: needsSync,
         questions: (questions ?? []).map((e) => e.toEntity()).toList(),
         title: title,
         isPublic: isPublic,
@@ -68,6 +75,7 @@ class TestDto with HiveObjectMixin {
 
   factory TestDto.fromMap(Map<dynamic, dynamic> map) {
     return TestDto(
+      needsSync: map[needsSyncField],
       questions: (map[questionsField] as List<Map<dynamic, dynamic>>)
           .map((e) => QuestionDto.fromMap(map[questionsField]))
           .toList(),
@@ -81,11 +89,13 @@ class TestDto with HiveObjectMixin {
 
   factory TestDto.fromEntity(TestEntity entity) {
     return TestDto(
+      needsSync: entity.needsSync,
       creatorId: entity.creatorId,
       id: entity.id,
       imageUrl: entity.imageUrl,
       isPublic: entity.isPublic,
-      questions: entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),
+      questions:
+          entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),
       title: entity.title,
     );
   }

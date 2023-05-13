@@ -12,6 +12,8 @@ abstract class TestRepository {
       updateQuestionImage(UpdateQuestionImageUsecaseParams params);
   Future<Either<TestFailure, UpdateTestImageUsecaseResult>> updateTestImage(
       UpdateTestImageUsecaseParams params);
+  Future<Either<TestFailure, SyncTestUsecaseResult>> syncTest(
+      SyncTestUsecaseParams params);
 
   Future<Either<TestFailure, CreateTestUsecaseResult>> createTest(
       CreateTestUsecaseParams params);
@@ -20,7 +22,7 @@ abstract class TestRepository {
   Future<Either<TestFailure, SaveTestToDatabaseUsecaseResult>>
       saveTestToDatabase(SaveTestToDatabaseUsecaseParams params);
   Future<Either<TestFailure, EditTestUsecaseResult>> editTest(
-      EditTestUsecaseParams params);
+      UpdateTestUsecaseParams params);
 
   Future<Either<TestFailure, MoveQuestionUsecaseResult>> moveQuestion(
       MoveQuestionUsecaseParams params);

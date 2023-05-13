@@ -33,4 +33,12 @@ class TestListCubit extends Cubit<TestListState> {
         (r) => emit(TestListCreatedTest(
             createdTest: r.testEntity, tests: [r.testEntity, ...state.tests])));
   }
+
+  void updateTest({required TestEntity oldTest, required TestEntity newTest}) {
+    final tests = state.tests.toList();
+    final tests2 = state.tests.toList();
+    final index = tests.indexWhere((element) => element.id == oldTest.id);
+    tests[index] = newTest;
+    emit(TestListRetrieved(tests: tests));
+  }
 }

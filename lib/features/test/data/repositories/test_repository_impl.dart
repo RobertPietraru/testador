@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:testador/features/test/data/datasources/test_local_datasource.dart';
+import 'package:testador/features/test/data/datasources/test_remote_datasource.dart';
 import 'package:testador/features/test/domain/failures/test_failures.dart';
 import 'package:testador/features/test/domain/usecases/test_usecases.dart';
 import '../../domain/repositories/test_repository.dart';
@@ -10,9 +11,11 @@ import '../../domain/repositories/test_repository.dart';
 class TestRepositoryIMPL implements TestRepository {
   const TestRepositoryIMPL(
     this.testLocalDataSource,
+    this.testRemoteDataSource,
   );
 
-  final TestDataSource testLocalDataSource;
+  final TestLocalDataSource testLocalDataSource;
+  final TestRemoteDataSource testRemoteDataSource;
 
   @override
   Future<Either<TestFailure, CreateTestUsecaseResult>> createTest(
@@ -98,9 +101,9 @@ class TestRepositoryIMPL implements TestRepository {
 
   @override
   Future<Either<TestFailure, EditTestUsecaseResult>> editTest(
-      EditTestUsecaseParams params) async {
+      UpdateTestUsecaseParams params) async {
     try {
-      final testEntity = await testLocalDataSource.editTest(params);
+      final testEntity = await testLocalDataSource.updateTest(params);
       return Right(EditTestUsecaseResult(test: testEntity));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
@@ -177,6 +180,24 @@ class TestRepositoryIMPL implements TestRepository {
     try {
       final test = await testLocalDataSource.updateTestImage(params);
       return Right(UpdateTestImageUsecaseResult(test: test));
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<TestFailure, SyncTestUsecaseResult>> syncTest(
+      SyncTestUsecaseParams params) async {
+    try {
+      testRemoteDataSource.syncToDatabase(params);
+      final test = await testLocalDataSource.updateTest(UpdateTestUsecaseParams(
+          testId: params.test.id,
+          test: params.test.copyWith(needsSync: false)));
+      return Right(SyncTestUsecaseResult(test: test));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {

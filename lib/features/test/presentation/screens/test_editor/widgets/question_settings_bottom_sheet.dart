@@ -69,19 +69,16 @@ class QuestionSettingsBottomSheet extends StatelessWidget {
                   ),
                 ListTile(
                   onTap: () {
-                    Navigator.pop(context);
+                    final cubit = context.read<TestEditorCubit>();
+
                     showDialog(
                         context: context,
-                        builder: (_) => BlocProvider.value(
-                              value: context.read<TestEditorCubit>(),
-                              child: ImageRetrivalDialog(
-                                onImageRetrived: (imageFile) {
-                                  context
-                                      .read<TestEditorCubit>()
-                                      .updateQuestionImage(image: imageFile);
-                                },
-                              ),
+                        builder: (_) => ImageRetrivalDialog(
+                              onImageRetrived: (imageFile) {
+                                cubit.updateQuestionImage(image: imageFile);
+                              },
                             ));
+                    Navigator.pop(context);
                   },
                   title: Text(
                     state.currentQuestion.image == null

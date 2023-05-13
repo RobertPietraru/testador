@@ -39,7 +39,9 @@ class _TestListScreen extends StatelessWidget {
       listener: (context, state) {
         state as TestListCreatedTest;
         context.pushRoute(TestEditorRoute(
-            testId: state.createdTest.id, entity: state.createdTest));
+            testListCubit: context.read<TestListCubit>(),
+            testId: state.createdTest.id,
+            entity: state.createdTest));
       },
       child: Scaffold(
           appBar: const CustomAppBar(),
@@ -148,7 +150,12 @@ class _TestListScreen extends StatelessWidget {
       child: TestWidget(
           isPublished: model.isPublic,
           onPressed: () {
-            context.pushRoute(TestEditorRoute(testId: model.id, entity: model));
+            context.pushRoute(
+              TestEditorRoute(
+                  testId: model.id,
+                  entity: model,
+                  testListCubit: context.read<TestListCubit>()),
+            );
           },
           onSelect: () {},
           imageUrl: model.imageUrl,

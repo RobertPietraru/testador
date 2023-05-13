@@ -6,7 +6,7 @@ abstract class TestListState extends Equatable {
   const TestListState({required this.tests});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [tests];
 }
 
 class TestListLoading extends TestListState {
@@ -19,13 +19,20 @@ class TestListRetrieved extends TestListState {
 
 class TestListCreatedTest extends TestListState {
   final TestEntity createdTest;
-  const TestListCreatedTest({required super.tests, required this.createdTest, });
+  const TestListCreatedTest({
+    required super.tests,
+    required this.createdTest,
+  });
+  @override
+  List<Object> get props => [createdTest, ...super.props];
 }
 
 class TestListError extends TestListState {
   final TestFailure failure;
 
   const TestListError({required super.tests, required this.failure});
+  @override
+  List<Object> get props => [failure, ...super.props];
 }
 
 class TestListEmpty extends TestListState {

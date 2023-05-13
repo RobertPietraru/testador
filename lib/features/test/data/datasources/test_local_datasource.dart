@@ -11,14 +11,14 @@ import '../../domain/entities/test_entity.dart';
 import '../../domain/failures/test_failures.dart';
 import '../../domain/usecases/test_usecases.dart';
 
-abstract class TestDataSource {
+abstract class TestLocalDataSource {
   Future<TestEntity> getTestById(GetTestByIdUsecaseParams params);
   Future<TestEntity> moveQuestion(MoveQuestionUsecaseParams params);
   Future<TestEntity> createTest(CreateTestUsecaseParams params);
   Future<void> deleteTest(DeleteTestUsecaseParams params);
   Future<TestEntity> updateTestImage(UpdateTestImageUsecaseParams params);
 
-  Future<TestEntity> editTest(EditTestUsecaseParams params);
+  Future<TestEntity> updateTest(UpdateTestUsecaseParams params);
   Future<List<TestEntity>> getTests(GetTestsUsecaseParams params);
   Future<TestEntity> insertQuestion(InsertQuestionUsecaseParams params);
   Future<TestEntity> deleteQuestion(DeleteQuestionUsecaseParams params);
@@ -27,7 +27,7 @@ abstract class TestDataSource {
       UpdateQuestionImageUsecaseParams params);
 }
 
-class TestLocalDataSourceIMPL implements TestDataSource {
+class TestLocalDataSourceIMPL implements TestLocalDataSource {
   TestLocalDataSourceIMPL();
 
   final Box<TestDto> testsBox = Hive.box<TestDto>(TestDto.hiveBoxName);
@@ -122,7 +122,7 @@ class TestLocalDataSourceIMPL implements TestDataSource {
   }
 
   @override
-  Future<TestEntity> editTest(EditTestUsecaseParams params) async {
+  Future<TestEntity> updateTest(UpdateTestUsecaseParams params) async {
     testsBox.put(params.testId, TestDto.fromEntity(params.test));
     return params.test;
   }
@@ -181,6 +181,7 @@ class TestLocalDataSourceIMPL implements TestDataSource {
     questions[params.index] = questions[params.index].copyWith(image: url);
 
     final entity = TestEntity(
+        needsSync: true,
         questions: questions.toList(),
         title: params.test.title,
         isPublic: params.test.isPublic,

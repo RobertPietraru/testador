@@ -57,7 +57,7 @@ class QuestionDto {
   static const idField = 'id';
 
   const QuestionDto({
-    required this.id, 
+    required this.id,
     required this.text,
     this.image,
     required this.options,
@@ -67,7 +67,7 @@ class QuestionDto {
   });
 
   factory QuestionDto.fromMap(Map<dynamic, dynamic> map) {
-    final optionDtos = (map[optionsField] as List<Map<dynamic, dynamic>>)
+    final optionDtos = (map[optionsField] as List<Map<String, dynamic>>)
         .map((e) => MultipleChoiceOptionDto.fromMap(e))
         .toList();
 
@@ -98,13 +98,39 @@ class QuestionDto {
 
   QuestionEntity toEntity() {
     return QuestionEntity(
-      id: id,
+        id: id,
         image: image,
         testId: testId,
         type: typeDto.toType(),
         acceptedAnswers: acceptedAnswers ?? [],
         text: text,
         options: (options ?? []).map((e) => e.toEntity()).toList());
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      testIdField: testId,
+      typeField: typeDto.index,
+      imageField: image,
+      optionsField: options?.map((e) => e.toMap()).toList(),
+      acceptedAnswersField: acceptedAnswers,
+      textField: text,
+      idField: id,
+    };
+  }
+
+  QuestionDto fromMap(Map<String, dynamic> map) {
+    return QuestionDto(
+      testId: map[testIdField],
+      typeDto: QuestionTypeDto.values[map[typeField] as int],
+      image: map[imageField],
+      options: (map[optionsField] as List<Map<String, dynamic>>)
+          .map((e) => MultipleChoiceOptionDto.fromMap(e))
+          .toList(),
+      acceptedAnswers: map[acceptedAnswersField],
+      text: map[textField],
+      id: map[idField],
+    );
   }
 }
 
@@ -139,8 +165,15 @@ class MultipleChoiceOptionDto {
     );
   }
 
-  factory MultipleChoiceOptionDto.fromMap(Map<dynamic, dynamic> map) {
+  factory MultipleChoiceOptionDto.fromMap(Map<String, dynamic> map) {
     return MultipleChoiceOptionDto(
         text: map[textField], isCorrect: map[isCorrectField]);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      textField: text,
+      isCorrectField: isCorrect,
+    };
   }
 }

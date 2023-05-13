@@ -3,16 +3,18 @@ import 'package:testador/features/test/data/repositories/test_repository_impl.da
 import 'package:testador/features/test/domain/repositories/test_repository.dart';
 
 import '../../injection.dart';
+import 'data/datasources/test_remote_datasource.dart';
 import 'domain/usecases/test_usecases.dart';
 
 void testInject() {
   locator
-    ..registerSingleton<TestDataSource>(TestLocalDataSourceIMPL())
-    ..registerSingleton<TestRepository>(TestRepositoryIMPL(locator()))
+    ..registerSingleton<TestLocalDataSource>(TestLocalDataSourceIMPL())
+    ..registerSingleton<TestRemoteDataSource>(TestRemoteDataSourceIMPL())
+    ..registerSingleton<TestRepository>(TestRepositoryIMPL(locator(), locator()))
     ..registerSingleton(CreateTestUsecase(locator()))
     ..registerSingleton(DeleteTestUsecase(locator()))
     ..registerSingleton(SaveTestToDatabaseUsecase(locator()))
-    ..registerSingleton(EditTestUsecase(locator()))
+    ..registerSingleton(UpdateTestUsecase(locator()))
     ..registerSingleton(GetTestsUsecase(locator()))
     ..registerSingleton(InsertQuestionUsecase(locator()))
     ..registerSingleton(DeleteQuestionUsecase(locator()))
@@ -20,5 +22,6 @@ void testInject() {
     ..registerSingleton(UpdateQuestionImageUsecase(locator()))
     ..registerSingleton(MoveQuestionUsecase(locator()))
     ..registerSingleton(UpdateTestImageUsecase(locator()))
+    ..registerSingleton(SyncTestUsecase(locator()))
     ..registerSingleton(GetTestByIdUsecase(locator()));
 }
