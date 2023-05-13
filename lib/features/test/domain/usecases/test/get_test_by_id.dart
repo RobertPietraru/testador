@@ -1,9 +1,9 @@
-import 'package:testador/features/test/domain/entities/test_entity.dart';
+import '../../../../../core/classes/usecase.dart';
+import '../../entities/test_entity.dart';
+import '../../failures/test_failures.dart';
+import '../../repositories/test_repository.dart';
 
-import '../failures/test_failures.dart';
 import 'package:dartz/dartz.dart';
-import '../../../../core/classes/usecase.dart';
-import '../repositories/test_repository.dart';
 
 class GetTestByIdUsecase
     extends UseCase<GetTestByIdUsecaseResult, GetTestByIdUsecaseParams> {

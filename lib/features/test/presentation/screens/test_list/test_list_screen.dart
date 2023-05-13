@@ -35,13 +35,13 @@ class _TestListScreen extends StatelessWidget {
     final theme = AppTheme.of(context);
     return BlocListener<TestListCubit, TestListState>(
       listenWhen: (previous, current) =>
-          previous is! TestListCreatedTest && current is TestListCreatedTest,
+          previous is! TestListCreatedDraft && current is TestListCreatedDraft,
       listener: (context, state) {
-        state as TestListCreatedTest;
+        state as TestListCreatedDraft;
         context.pushRoute(TestEditorRoute(
             testListCubit: context.read<TestListCubit>(),
-            testId: state.createdTest.id,
-            entity: state.createdTest));
+            testId: state.createdDraft.id,
+            entity: state.createdDraft.toTest()));
       },
       child: Scaffold(
           appBar: const CustomAppBar(),

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:testador/core/globals.dart';
+import 'package:testador/features/test/data/dtos/question/question_dto.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 //TODO: add description
@@ -21,14 +22,14 @@ class DraftEntity extends Equatable {
     required this.id,
   });
 
-  factory DraftEntity.fromEntity(DraftEntity draft) {
+  factory DraftEntity.fromEntity(TestEntity test) {
     return DraftEntity(
-      questions: draft.questions,
-      title: draft.title,
-      isPublic: draft.isPublic,
-      creatorId: draft.creatorId,
-      imageUrl: draft.imageUrl,
-      id: draft.id,
+      questions: test.questions,
+      title: test.title,
+      isPublic: test.isPublic,
+      creatorId: test.creatorId,
+      imageUrl: test.imageUrl,
+      id: test.id,
     );
   }
   @override
@@ -49,6 +50,17 @@ class DraftEntity extends Equatable {
       id: id ?? this.id,
       title: title == mockValueForDefault ? this.title : title,
       imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
+    );
+  }
+
+  TestEntity toTest() {
+    return TestEntity(
+      questions: questions,
+      title: title,
+      isPublic: isPublic,
+      creatorId: creatorId,
+      imageUrl: imageUrl,
+      id: id,
     );
   }
 }

@@ -8,7 +8,8 @@ part 'test_editor_retrival_state.dart';
 class TestEditorRetrivalCubit extends Cubit<TestEditorRetrivalState> {
   final GetTestByIdUsecase getTestByIdUsecase;
 
-  TestEditorRetrivalCubit(this.getTestByIdUsecase) : super(TestEditorRetrivalLoading());
+  TestEditorRetrivalCubit(this.getTestByIdUsecase)
+      : super(TestEditorRetrivalLoading());
 
   void initialize(
       {required TestEntity? testEntity, required String testId}) async {

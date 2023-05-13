@@ -23,7 +23,7 @@ class QuestionDtoAdapter extends TypeAdapter<QuestionDto> {
       options: (fields[4] as List?)?.cast<MultipleChoiceOptionDto>(),
       acceptedAnswers: (fields[5] as List?)?.cast<String>(),
       testId: fields[1] as String,
-      typeDto: fields[2] as QuestionTypeDto,
+      type: fields[2] as QuestionTypeDto,
     );
   }
 
@@ -34,7 +34,7 @@ class QuestionDtoAdapter extends TypeAdapter<QuestionDto> {
       ..writeByte(1)
       ..write(obj.testId)
       ..writeByte(2)
-      ..write(obj.typeDto)
+      ..write(obj.type)
       ..writeByte(3)
       ..write(obj.image)
       ..writeByte(4)

@@ -18,11 +18,11 @@ class TestRepositoryIMPL implements TestRepository {
   final TestRemoteDataSource testRemoteDataSource;
 
   @override
-  Future<Either<TestFailure, CreateTestUsecaseResult>> createTest(
-      CreateTestUsecaseParams params) async {
+  Future<Either<TestFailure, CreateDraftUsecaseResult>> createTest(
+      CreateDraftUsecaseParams params) async {
     try {
-      final testEntity = await testLocalDataSource.createTest(params);
-      return Right(CreateTestUsecaseResult(testEntity: testEntity));
+      final testEntity = await testLocalDataSource.createDraft(params);
+      return Right(CreateDraftUsecaseResult(draft: testEntity));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -67,7 +67,7 @@ class TestRepositoryIMPL implements TestRepository {
       InsertQuestionUsecaseParams params) async {
     try {
       final response = await testLocalDataSource.insertQuestion(params);
-      return Right(InsertQuestionUsecaseResult(test: response));
+      return Right(InsertQuestionUsecaseResult(draft: response));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -75,13 +75,6 @@ class TestRepositoryIMPL implements TestRepository {
     } catch (_) {
       return const Left(TestUnknownFailure());
     }
-  }
-
-  @override
-  Future<Either<TestFailure, SaveTestToDatabaseUsecaseResult>>
-      saveTestToDatabase(SaveTestToDatabaseUsecaseParams params) {
-    // TODO: implement saveTestToDatabase
-    throw UnimplementedError();
   }
 
   @override
@@ -118,23 +111,25 @@ class TestRepositoryIMPL implements TestRepository {
   Future<Either<TestFailure, GetTestsUsecaseResult>> getTests(
       GetTestsUsecaseParams params) async {
     try {
-      final tests = await testLocalDataSource.getTests(params);
+      final tests = await testRemoteDataSource.getTests(params);
       return Right(GetTestsUsecaseResult(testEntities: tests));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
       return Left(error);
-    } catch (_) {
+    } on Error catch (_) {
+      print(_);
+      print(_.stackTrace);
       return const Left(TestUnknownFailure());
     }
   }
 
   @override
-  Future<Either<TestFailure, GetTestByIdUsecaseResult>> getTestById(
-      GetTestByIdUsecaseParams params) async {
+  Future<Either<TestFailure, GetDraftByIdUsecaseResult>> getDraftById(
+      GetDraftByIdUsecaseParams params) async {
     try {
-      final test = await testLocalDataSource.getTestById(params);
-      return Right(GetTestByIdUsecaseResult(testEntity: test));
+      final test = await testLocalDataSource.getDraftById(params);
+      return Right(GetDraftByIdUsecaseResult(testEntity: test));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {
@@ -194,10 +189,22 @@ class TestRepositoryIMPL implements TestRepository {
       SyncTestUsecaseParams params) async {
     try {
       testRemoteDataSource.syncToDatabase(params);
-      final test = await testLocalDataSource.updateTest(UpdateTestUsecaseParams(
-          testId: params.test.id,
-          test: params.test.copyWith(needsSync: false)));
-      return Right(SyncTestUsecaseResult(test: test));
+      return const Right(SyncTestUsecaseResult());
+    } on FirebaseException catch (e) {
+      return Left(TestUnknownFailure(code: e.code));
+    } on TestFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(TestUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<TestFailure, GetTestByIdUsecaseResult>> getTestById(
+      GetTestByIdUsecaseParams params) async {
+    try {
+      final test = await testRemoteDataSource.getTestById(params);
+      return Right(GetTestByIdUsecaseResult(testEntity: test));
     } on FirebaseException catch (e) {
       return Left(TestUnknownFailure(code: e.code));
     } on TestFailure catch (error) {

@@ -17,14 +17,14 @@ class TestListRetrieved extends TestListState {
   const TestListRetrieved({required super.tests});
 }
 
-class TestListCreatedTest extends TestListState {
-  final TestEntity createdTest;
-  const TestListCreatedTest({
+class TestListCreatedDraft extends TestListState {
+  final DraftEntity createdDraft;
+  const TestListCreatedDraft({
     required super.tests,
-    required this.createdTest,
+    required this.createdDraft,
   });
   @override
-  List<Object> get props => [createdTest, ...super.props];
+  List<Object> get props => [createdDraft, ...super.props];
 }
 
 class TestListError extends TestListState {

@@ -17,7 +17,7 @@ class DraftDtoAdapter extends TypeAdapter<DraftDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DraftDto(
-      questions: (fields[5] as List?)?.cast<QuestionDto>(),
+      questions: (fields[5] as List).cast<QuestionDto>(),
       title: fields[1] as String?,
       isPublic: fields[2] as bool,
       creatorId: fields[3] as String,

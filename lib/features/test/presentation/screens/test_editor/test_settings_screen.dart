@@ -19,7 +19,7 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
   late String title;
   @override
   void initState() {
-    final test = context.read<TestEditorCubit>().state.test;
+    final test = context.read<TestEditorCubit>().state.draft;
     title = test.title ?? '';
     super.initState();
   }
@@ -57,12 +57,12 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: theme.secondaryColor,
-                            image: state.test.imageUrl != null
+                            image: state.draft.imageUrl != null
                                 ? DecorationImage(
-                                    image: NetworkImage(state.test.imageUrl!))
+                                    image: NetworkImage(state.draft.imageUrl!))
                                 : null,
                           ),
-                          child: state.test.imageUrl == null
+                          child: state.draft.imageUrl == null
                               ? Center(
                                   child: Text("Adauga imagine",
                                       textAlign: TextAlign.center,
@@ -84,15 +84,15 @@ class _TestSettingsScreenState extends State<TestSettingsScreen> {
                 ),
                 ListTile(
                   leading: Icon(
-                      state.test.isPublic ? Icons.public : Icons.public_off,
-                      color: state.test.isPublic ? theme.good : theme.bad),
+                      state.draft.isPublic ? Icons.public : Icons.public_off,
+                      color: state.draft.isPublic ? theme.good : theme.bad),
                   onTap: () {
                     context.read<TestEditorCubit>().togglePublicity();
                   },
                   title: Text(
-                    state.test.isPublic ? "Public" : "Privat",
+                    state.draft.isPublic ? "Public" : "Privat",
                     style: theme.subtitleTextStyle.copyWith(
-                        color: state.test.isPublic ? theme.good : theme.bad),
+                        color: state.draft.isPublic ? theme.good : theme.bad),
                   ),
                 ),
               ]),

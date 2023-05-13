@@ -66,7 +66,7 @@ class _TestScreenState extends State<_TestScreen> {
     return WillPopScope(
       onWillPop: () async {
         final cubit = context.read<TestEditorCubit>();
-        if (cubit.state.test == cubit.state.test) {
+        if (cubit.state.draft == cubit.state.draft) {
           return true;
         }
         final bool? gottaSave = await showDialog(
@@ -110,7 +110,7 @@ class _TestScreenState extends State<_TestScreen> {
                   },
                   scrollDirection: Axis.horizontal,
                   children: List.generate(
-                      state.test.questions.length,
+                      state.draft.questions.length,
                       (index) => QuestionNavigatorListTile(
                           key: ValueKey('$index'),
                           isSelected: state.currentQuestionIndex == index,
@@ -121,7 +121,7 @@ class _TestScreenState extends State<_TestScreen> {
                             controller.jumpTo(0);
                           },
                           index: index,
-                          question: state.test.questions[index])),
+                          question: state.draft.questions[index])),
                 )),
           ),
           appBar: CustomAppBar(title: const Text("Editor test"), trailing: [
@@ -146,14 +146,14 @@ class _TestScreenState extends State<_TestScreen> {
                     child: FilledButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
-                              state.test != state.lastSavedTest
+                              state.draft != state.lastSavedTest
                                   ? theme.good
                                   : theme.secondaryColor),
                           shape:
                               MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ))),
-                      onPressed: state.test != state.lastSavedTest
+                      onPressed: state.draft != state.lastSavedTest
                           ? () => context.read<TestEditorCubit>().save()
                           : null,
                       child: const Text('Salveaza'),

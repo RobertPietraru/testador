@@ -10,10 +10,10 @@ void testInject() {
   locator
     ..registerSingleton<TestLocalDataSource>(TestLocalDataSourceIMPL())
     ..registerSingleton<TestRemoteDataSource>(TestRemoteDataSourceIMPL())
-    ..registerSingleton<TestRepository>(TestRepositoryIMPL(locator(), locator()))
-    ..registerSingleton(CreateTestUsecase(locator()))
+    ..registerSingleton<TestRepository>(
+        TestRepositoryIMPL(locator(), locator()))
+    ..registerSingleton(CreateDraftUsecase(locator()))
     ..registerSingleton(DeleteTestUsecase(locator()))
-    ..registerSingleton(SaveTestToDatabaseUsecase(locator()))
     ..registerSingleton(UpdateTestUsecase(locator()))
     ..registerSingleton(GetTestsUsecase(locator()))
     ..registerSingleton(InsertQuestionUsecase(locator()))
@@ -23,5 +23,6 @@ void testInject() {
     ..registerSingleton(MoveQuestionUsecase(locator()))
     ..registerSingleton(UpdateTestImageUsecase(locator()))
     ..registerSingleton(SyncTestUsecase(locator()))
-    ..registerSingleton(GetTestByIdUsecase(locator()));
+    ..registerSingleton(GetTestByIdUsecase(locator()))
+    ..registerSingleton(GetDraftByIdUsecase(locator()));
 }

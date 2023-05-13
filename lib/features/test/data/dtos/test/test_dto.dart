@@ -8,7 +8,7 @@ part 'test_dto.g.dart';
 
 @HiveType(typeId: 1)
 class TestDto with HiveObjectMixin {
-  static const hiveBoxName = 'tests';
+  static const collection = 'tests';
   @HiveField(0)
   final String id;
 
@@ -67,11 +67,14 @@ class TestDto with HiveObjectMixin {
         id: id);
   }
 
-  factory TestDto.fromMap(Map<dynamic, dynamic> map) {
+  factory TestDto.fromMap(Map<String, dynamic> map) {
+    print(map[questionsField].runtimeType);
+    final x = (map[questionsField] as List);
+    final y = x.map((e) => QuestionDto.fromMap(e));
+    final z = y.toList();
+
     return TestDto(
-      questions: (map[questionsField] as List<Map<dynamic, dynamic>>)
-          .map((e) => QuestionDto.fromMap(map[questionsField]))
-          .toList(),
+      questions: z,
       title: map[titleField],
       isPublic: map[isPublicField],
       creatorId: map[creatorField],

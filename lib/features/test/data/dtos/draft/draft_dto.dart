@@ -1,8 +1,10 @@
 // ignore_for_file: overridden_fields, must_be_immutable
 
 import 'package:hive_flutter/adapters.dart';
+import 'package:testador/features/test/domain/entities/draft_entity.dart';
 import 'package:testador/features/test/domain/entities/test_entity.dart';
 
+import '../../../../../core/globals.dart';
 import '../question/question_dto.dart';
 part 'draft_dto.g.dart';
 
@@ -28,7 +30,7 @@ class DraftDto with HiveObjectMixin {
   final String? imageUrl;
 
   @HiveField(5)
-  final List<QuestionDto>? questions;
+  final List<QuestionDto> questions;
 
   DraftDto({
     required this.questions,
@@ -53,13 +55,13 @@ class DraftDto with HiveObjectMixin {
       creatorField: creatorId,
       imageField: imageUrl,
       idField: id,
-      questionsField: questions?.map((e) => e.toMap()),
+      questionsField: questions.map((e) => e.toMap()),
     };
   }
 
-  TestEntity toEntity() {
-    return TestEntity(
-        questions: (questions ?? []).map((e) => e.toEntity()).toList(),
+  DraftEntity toEntity() {
+    return DraftEntity(
+        questions: questions.map((e) => e.toEntity()).toList(),
         title: title,
         isPublic: isPublic,
         creatorId: creatorId,
@@ -80,7 +82,7 @@ class DraftDto with HiveObjectMixin {
     );
   }
 
-  factory DraftDto.fromEntity(TestEntity entity) {
+  factory DraftDto.fromEntity(DraftEntity entity) {
     return DraftDto(
       creatorId: entity.creatorId,
       id: entity.id,
@@ -89,6 +91,24 @@ class DraftDto with HiveObjectMixin {
       questions:
           entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),
       title: entity.title,
+    );
+  }
+
+  DraftDto copyWith({
+    String? id,
+    String? title = mockValueForDefault,
+    bool? isPublic,
+    String? creatorId,
+    String? imageUrl = mockValueForDefault,
+    List<QuestionDto>? questions,
+  }) {
+    return DraftDto(
+      questions: questions ?? this.questions,
+      isPublic: isPublic ?? this.isPublic,
+      creatorId: creatorId ?? this.creatorId,
+      id: id ?? this.id,
+      title: title == mockValueForDefault ? this.title : title,
+      imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
     );
   }
 }

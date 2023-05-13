@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:testador/features/test/data/dtos/test/question_dto.dart';
+import 'package:testador/features/test/data/dtos/question/question_dto.dart';
 import 'package:testador/features/test/data/dtos/test/test_dto.dart';
 
 import '../core/components/theme/app_theme.dart';
@@ -11,16 +11,19 @@ import '../core/routing/app_router.gr.dart';
 import '../core/routing/route_guards.dart';
 import '../features/authentication/presentation/auth_bloc/auth_bloc.dart';
 import '../features/authentication/presentation/widgets/auth_bloc_wrapper.dart';
+import '../features/test/data/dtos/draft/draft_dto.dart';
 import '../injection.dart';
 
 void mainDevelopment() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(TestDtoAdapter());
+  Hive.registerAdapter(DraftDtoAdapter());
   Hive.registerAdapter(QuestionDtoAdapter());
   Hive.registerAdapter(MultipleChoiceOptionDtoAdapter());
   Hive.registerAdapter(QuestionTypeDtoAdapter());
-  await Hive.openBox<TestDto>(TestDto.hiveBoxName);
+  await Hive.openBox<TestDto>(TestDto.collection);
+  await Hive.openBox<DraftDto>(DraftDto.hiveBoxName);
   await inject();
 
   runApp(const AuthBlocWidget(child: MyApp()));

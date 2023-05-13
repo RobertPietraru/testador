@@ -2,6 +2,8 @@
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:testador/features/test/domain/entities/question_entity.dart';
+
+import '../../../../../core/globals.dart';
 part "question_dto.g.dart";
 
 @HiveType(typeId: 4)
@@ -32,7 +34,7 @@ class QuestionDto {
   final String testId;
 
   @HiveField(2)
-  final QuestionTypeDto typeDto;
+  final QuestionTypeDto type;
 
   @HiveField(3)
   final String? image;
@@ -63,11 +65,11 @@ class QuestionDto {
     required this.options,
     required this.acceptedAnswers,
     required this.testId,
-    required this.typeDto,
+    required this.type,
   });
 
   factory QuestionDto.fromMap(Map<dynamic, dynamic> map) {
-    final optionDtos = (map[optionsField] as List<Map<String, dynamic>>)
+    final optionDtos = (map[optionsField] as List)
         .map((e) => MultipleChoiceOptionDto.fromMap(e))
         .toList();
 
@@ -75,9 +77,10 @@ class QuestionDto {
       id: map[idField],
       text: map[textField],
       image: map[imageField],
-      acceptedAnswers: map[acceptedAnswersField],
+      acceptedAnswers:
+          (map[acceptedAnswersField] as List).map((e) => e.toString()).toList(),
       testId: map[testIdField],
-      typeDto: map[typeField],
+      type: QuestionTypeDto.values[map[typeField] as int],
       options: optionDtos,
     );
   }
@@ -92,7 +95,7 @@ class QuestionDto {
           .toList(),
       acceptedAnswers: entity.acceptedAnswers,
       testId: entity.testId,
-      typeDto: QuestionTypeDto.fromType(entity.type),
+      type: QuestionTypeDto.fromType(entity.type),
     );
   }
 
@@ -101,7 +104,7 @@ class QuestionDto {
         id: id,
         image: image,
         testId: testId,
-        type: typeDto.toType(),
+        type: type.toType(),
         acceptedAnswers: acceptedAnswers ?? [],
         text: text,
         options: (options ?? []).map((e) => e.toEntity()).toList());
@@ -110,7 +113,7 @@ class QuestionDto {
   Map<String, dynamic> toMap() {
     return {
       testIdField: testId,
-      typeField: typeDto.index,
+      typeField: type.index,
       imageField: image,
       optionsField: options?.map((e) => e.toMap()).toList(),
       acceptedAnswersField: acceptedAnswers,
@@ -122,7 +125,7 @@ class QuestionDto {
   QuestionDto fromMap(Map<String, dynamic> map) {
     return QuestionDto(
       testId: map[testIdField],
-      typeDto: QuestionTypeDto.values[map[typeField] as int],
+      type: QuestionTypeDto.values[map[typeField] as int],
       image: map[imageField],
       options: (map[optionsField] as List<Map<String, dynamic>>)
           .map((e) => MultipleChoiceOptionDto.fromMap(e))
@@ -130,6 +133,26 @@ class QuestionDto {
       acceptedAnswers: map[acceptedAnswersField],
       text: map[textField],
       id: map[idField],
+    );
+  }
+
+  QuestionDto copyWith({
+    String? id,
+    String? testId,
+    QuestionTypeDto? type,
+    String? image = mockValueForDefault,
+    String? text = mockValueForDefault,
+    List<String>? acceptedAnswers,
+    List<MultipleChoiceOptionDto>? options,
+  }) {
+    return QuestionDto(
+      options: options ?? this.options,
+      acceptedAnswers: acceptedAnswers ?? this.acceptedAnswers,
+      testId: testId ?? this.testId,
+      text: text == mockValueForDefault ? this.text : text,
+      type: type ?? this.type,
+      image: image == mockValueForDefault ? this.image : image,
+      id: id ?? this.id,
     );
   }
 }

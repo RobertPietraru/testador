@@ -4,7 +4,7 @@ enum TestEditorStatus { loading, loaded, failed }
 
 class TestEditorState extends Equatable {
   final TestEntity lastSavedTest;
-  final TestEntity test;
+  final DraftEntity draft;
   final TestFailure? failure;
   final TestEditorStatus status;
   final int currentQuestionIndex;
@@ -13,15 +13,16 @@ class TestEditorState extends Equatable {
     required this.currentQuestionIndex,
     this.status = TestEditorStatus.loading,
     required this.lastSavedTest,
-    required this.test,
+    required this.draft,
     this.failure,
   });
 
-  QuestionEntity get currentQuestion => test.questions[currentQuestionIndex];
+  QuestionEntity get currentQuestion => draft.questions[currentQuestionIndex];
+
 
   TestEditorState copyWith(
       {TestEntity? lastSavedTest,
-      TestEntity? test,
+      DraftEntity? draft,
       TestFailure? failure,
       TestEditorStatus? status,
       int? currentQuestionIndex,
@@ -30,7 +31,7 @@ class TestEditorState extends Equatable {
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
       status: status ?? this.status,
       lastSavedTest: lastSavedTest ?? this.lastSavedTest,
-      test: test ?? this.test,
+      draft: draft ?? this.draft,
       failure: updateError ? failure : this.failure,
     );
   }
@@ -40,7 +41,7 @@ class TestEditorState extends Equatable {
         currentQuestionIndex,
         currentQuestion,
         lastSavedTest,
-        test,
+        draft,
         failure,
         status
       ];
