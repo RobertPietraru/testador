@@ -33,7 +33,6 @@ class QuizEditorRetrivalWidget extends StatelessWidget {
 
               context.popRoute();
               context.popRoute();
-              context.router.root.push(const UnprotectedFlowRoute());
             }
           },
           buildWhen: (previous, current) =>

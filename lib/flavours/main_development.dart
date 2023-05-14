@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/quiz/data/dtos/question/question_dto.dart';
 import 'package:testador/features/quiz/data/dtos/quiz/quiz_dto.dart';
 
@@ -45,9 +46,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    _appRouter = AppRouter(
-      authGuard: AuthGuard(),
-    );
+    _appRouter = AppRouter();
     super.initState();
   }
 
@@ -61,10 +60,13 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp.router(
           routerDelegate:
               AutoRouterDelegate.declarative(_appRouter, routes: (_) {
-            if (authBloc is AuthUninitialisedState) {
+            if (authBloc.state is AuthUninitialisedState) {
               return [const LoadingRoute()];
             }
-            return [const App()];
+            if (authBloc.state is AuthAuthenticatedState) {
+              return [const ProtectedFlowRoute()];
+            }
+            return [const AuthenticationFlowRoute()];
           }),
           routeInformationParser: _appRouter.defaultRouteParser(),
           theme: _lightTheme.materialThemeData(context),

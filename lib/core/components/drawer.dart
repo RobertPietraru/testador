@@ -34,7 +34,6 @@ class CustomDrawer extends StatelessWidget {
             listener: (context, state) {
               if (state is AuthUnauthenticatedState) {
                 context.router.popUntilRoot();
-                context.router.root.push(const UnprotectedFlowRoute());
               }
             },
             builder: (context, state) => ListTile(

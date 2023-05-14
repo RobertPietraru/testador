@@ -58,7 +58,6 @@ class _LoginView extends StatelessWidget {
             // look, I don't know why it is this way, but it works nonetheless, so watchu gonna do?
             context.router.popUntilRoot();
             context.router.pop();
-            context.router.root.push(const ProtectedFlowRoute());
           }
         },
         builder: (context, state) {
@@ -66,15 +65,13 @@ class _LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Logheaza-te",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 40,
-                    color: theme.primaryColor,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
+                Text("Logheaza-te",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 40,
+                      color: theme.primaryColor,
+                    ),
+                    textAlign: TextAlign.left),
                 SizedBox(height: theme.spacing.mediumLarge),
                 Text(
                   "Completeaza campurile pentru a continua",
