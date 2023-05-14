@@ -29,7 +29,7 @@ class QuizWidget extends StatelessWidget {
         onLongPress: () {},
         onTap: () {
           context.pushRoute(
-            QuizEditorRoute(
+            QuizRoute(
               quizId: quiz.id,
               quiz: quiz,
               draft: draft,

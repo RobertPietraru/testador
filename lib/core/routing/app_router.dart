@@ -6,6 +6,7 @@ import 'package:testador/features/authentication/presentation/screens/login/logi
 import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart';
+import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',
@@ -43,6 +44,12 @@ import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_edi
             path: 'quiz-admin/:id',
             page: QuizEditorScreen,
           ),
+
+          AutoRoute(
+            path: 'quiz/:id',
+            page: QuizScreen,
+          ),
+
           AutoRoute(initial: true, page: QuizListScreen, path: ''),
         ],
       ),

@@ -9,7 +9,6 @@ import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.
 import 'package:uuid/uuid.dart';
 
 import '../../domain/failures/quiz_failures.dart';
-import '../../domain/usecases/quiz/get_quizes_usecase.dart';
 import '../../domain/usecases/quiz_usecases.dart';
 import '../dtos/question/question_dto.dart';
 

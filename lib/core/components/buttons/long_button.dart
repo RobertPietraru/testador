@@ -32,7 +32,6 @@ class LongButton extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          width: 100.widthPercent,
           height: height,
           child: TextButton(
             onPressed: !isLoading ? onPressed : null,

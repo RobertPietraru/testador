@@ -38,7 +38,7 @@ class _QuizListScreen extends StatelessWidget {
       listener: (context, state) {
         state as QuizListCreatedDraft;
 
-        context.pushRoute(QuizEditorRoute(
+        context.pushRoute(QuizRoute(
             draft: state.createdDraft,
             quizListCubit: context.read<QuizListCubit>(),
             quizId: state.createdDraft.id,
