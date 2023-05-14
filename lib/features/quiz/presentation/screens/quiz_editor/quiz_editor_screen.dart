@@ -87,9 +87,9 @@ class _QuizescreenState extends State<_Quizescreen> {
         }
 
         if (gottaSave) {
-          await context.read<QuizEditorCubit>().save();
+          cubit.save();
         } else {
-          context.read<QuizEditorCubit>().deleteDraft();
+          cubit.deleteDraft();
         }
         return true;
       },

@@ -425,8 +425,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
   }
 
   void deleteDraft() async {
-    await deleteDraftByIdUsecase
-        .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
+    await deleteDraftByIdUsecase .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
     quizListCubit?.removeDraft(state.draft);
   }
 }
