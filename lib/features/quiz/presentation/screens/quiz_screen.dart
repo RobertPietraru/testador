@@ -93,7 +93,10 @@ class QuizScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: LongButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.pushRoute(
+                                            QuizSessionCreationRoute());
+                                      },
                                       label: 'Incepe o sesiune',
                                       isLoading: false,
                                     ),

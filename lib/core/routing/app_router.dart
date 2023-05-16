@@ -7,6 +7,8 @@ import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart';
 
+import '../../features/quiz/presentation/session/session_creation_screen.dart';
+
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',
   routes: <AutoRoute>[
@@ -31,6 +33,10 @@ import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart';
         AutoRoute(
           path: 'quiz/:id',
           page: QuizScreen,
+        ),
+        AutoRoute(
+          path: 'session-create/:id',
+          page: QuizSessionCreationScreen ,
         ),
         AutoRoute(initial: true, page: QuizListScreen, path: ''),
       ],
