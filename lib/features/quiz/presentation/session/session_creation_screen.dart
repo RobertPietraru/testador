@@ -32,11 +32,8 @@ class QuizSessionCreationScreen extends StatelessWidget {
       body: Padding(
         padding: theme.standardPadding,
         child: Column(children: [
-          Text(
-            "Se creaza acum sesiunea ta de joc",
-            style: theme.titleTextStyle,
-            textAlign: TextAlign.center,
-          ),
+          Text("Se creaza acum sesiunea ta de joc",
+              style: theme.titleTextStyle, textAlign: TextAlign.center),
           SizedBox(height: theme.spacing.large),
           Card(
             elevation: 25,

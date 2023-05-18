@@ -222,4 +222,81 @@ class QuizRepositoryIMPL implements QuizRepository {
       return const Left(QuizUnknownFailure());
     }
   }
+
+  @override
+  Future<Either<QuizFailure, BeginSessionUsecaseResult>> beginSession(
+      BeginSessionUsecaseParams params) {
+    // TODO: implement beginSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, CreateSessionUsecaseResult>> createSession(
+      CreateSessionUsecaseParams params) {
+    // TODO: implement createSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, EndSessionUsecaseResult>> endSession(
+      EndSessionUsecaseParams params) {
+    // TODO: implement endSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, GoToNextQuestionUsecaseResult>> goToNextQuestion(
+      GoToNextQuestionUsecaseParams params) {
+    // TODO: implement goToNextQuestion
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, JoinAsViewerUsecaseResult>> joinAsViewer(
+      JoinAsViewerUsecaseParams params) {
+    // TODO: implement joinAsViewer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, JoinSessionUsecaseResult>> joinSession(
+      JoinSessionUsecaseParams params) {
+    // TODO: implement joinSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, KickFromSessionUsecaseResult>> kickFromSession(
+      KickFromSessionUsecaseParams params) {
+    // TODO: implement kickFromSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, LeaveSessionUsecaseResult>> leaveSession(
+      LeaveSessionUsecaseParams params) {
+    // TODO: implement leaveSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, SendAnswerUsecaseResult>> sendAnswer(
+      SendAnswerUsecaseParams params) {
+    // TODO: implement sendAnswer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, ShowPodiumUsecaseResult>> showPodium(
+      ShowPodiumUsecaseParams params) {
+    // TODO: implement showPodium
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<QuizFailure, ShowQuestionResultsUsecaseResult>>
+      showQuestionResults(ShowQuestionResultsUsecaseParams params) {
+    // TODO: implement showQuestionResults
+    throw UnimplementedError();
+  }
 }
