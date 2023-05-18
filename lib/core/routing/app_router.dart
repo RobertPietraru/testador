@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:testador/core/routing/route_guards.dart';
 import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart';
