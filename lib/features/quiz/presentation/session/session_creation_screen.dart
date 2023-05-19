@@ -10,7 +10,7 @@ class QuizSessionCreationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final bool hasStudents = true;
+    final bool hasStudents = false;
     return Scaffold(
       appBar: CustomAppBar(
         trailing: [
@@ -24,7 +24,7 @@ class QuizSessionCreationScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ))),
               onPressed: hasStudents ? () {} : null,
-              child: const Text('Salveaza'),
+              child: const Text('Incepe'),
             ),
           )
         ],

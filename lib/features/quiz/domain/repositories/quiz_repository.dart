@@ -36,28 +36,17 @@ abstract class QuizRepository {
       DeleteDraftByIdUsecaseParams params);
   // game session
 
-  Future<Either<QuizFailure, ShowQuestionResultsUsecaseResult>>
-      showQuestionResults(ShowQuestionResultsUsecaseParams params);
-  Future<Either<QuizFailure, ShowPodiumUsecaseResult>> showPodium(
-      ShowPodiumUsecaseParams params);
-  Future<Either<QuizFailure, SendAnswerUsecaseResult>> sendAnswer(
-      SendAnswerUsecaseParams params);
-  Future<Either<QuizFailure, LeaveSessionUsecaseResult>> leaveSession(
-      LeaveSessionUsecaseParams params);
-  Future<Either<QuizFailure, KickFromSessionUsecaseResult>> kickFromSession(
-      KickFromSessionUsecaseParams params);
-  Future<Either<QuizFailure, JoinSessionUsecaseResult>> joinSession(
-      JoinSessionUsecaseParams params);
-  Future<Either<QuizFailure, JoinAsViewerUsecaseResult>> joinAsViewer(
-      JoinAsViewerUsecaseParams params);
-  Future<Either<QuizFailure, GoToNextQuestionUsecaseResult>> goToNextQuestion(
-      GoToNextQuestionUsecaseParams params);
-  Future<Either<QuizFailure, EndSessionUsecaseResult>> endSession(
-      EndSessionUsecaseParams params);
-  Future<Either<QuizFailure, CreateSessionUsecaseResult>> createSession(
-      CreateSessionUsecaseParams params);
-  Future<Either<QuizFailure, BeginSessionUsecaseResult>> beginSession(
-      BeginSessionUsecaseParams params);
+  Future<Either<QuizFailure, ShowQuestionResultsUsecaseResult>> showQuestionResults(ShowQuestionResultsUsecaseParams params);
+  Future<Either<QuizFailure, ShowPodiumUsecaseResult>> showPodium( ShowPodiumUsecaseParams params);
+  Future<Either<QuizFailure, SendAnswerUsecaseResult>> sendAnswer( SendAnswerUsecaseParams params);
+  Future<Either<QuizFailure, LeaveSessionUsecaseResult>> leaveSession( LeaveSessionUsecaseParams params);
+  Future<Either<QuizFailure, KickFromSessionUsecaseResult>> kickFromSession( KickFromSessionUsecaseParams params);
+  Future<Either<QuizFailure, JoinSessionUsecaseResult>> joinSession( JoinSessionUsecaseParams params);
+  Future<Either<QuizFailure, JoinAsViewerUsecaseResult>> joinAsViewer( JoinAsViewerUsecaseParams params);
+  Future<Either<QuizFailure, GoToNextQuestionUsecaseResult>> goToNextQuestion( GoToNextQuestionUsecaseParams params);
+  Future<Either<QuizFailure, EndSessionUsecaseResult>> endSession( EndSessionUsecaseParams params);
+  Future<Either<QuizFailure, CreateSessionUsecaseResult>> createSession( CreateSessionUsecaseParams params);
+  Future<Either<QuizFailure, BeginSessionUsecaseResult>> beginSession( BeginSessionUsecaseParams params);
 }
 
 // create session (generates code and all that)
