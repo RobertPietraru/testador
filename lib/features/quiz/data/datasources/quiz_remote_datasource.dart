@@ -157,9 +157,26 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<KickFromSessionUsecaseResult> kickFromSession(
-      KickFromSessionUsecaseParams params) {
-    // TODO: implement kickFromSession
-    throw UnimplementedError();
+      KickFromSessionUsecaseParams params) async {
+    final sessionSnapshot =
+        await ref.child('sessions').child(params.sessionId).get();
+    final data = sessionSnapshot.value as Map<String, dynamic>;
+    final session = SessionDto.fromMap(data, params.sessionId);
+    final indexOfUser = session.students
+        .indexWhere((element) => element.userId == params.userId);
+    late SessionDto newSession;
+
+    if (indexOfUser != -1) {
+      final students = session.students.toList();
+      students.removeAt(indexOfUser);
+      newSession = session.copyWith(students: students);
+
+      await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+    } else {
+      newSession = session;
+    }
+
+    return KickFromSessionUsecaseResult(session: newSession.toEntity());
   }
 
   @override
@@ -171,13 +188,16 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     final session = SessionDto.fromMap(data, params.sessionId);
     final indexOfUser = session.students
         .indexWhere((element) => element.userId == params.userId);
-    if (indexOfUser == -1) {}
+    late SessionDto newSession;
+    if (indexOfUser != -1) {
+      final students = session.students.toList();
+      students.removeAt(indexOfUser);
+      newSession = session.copyWith(students: students);
 
-    final students = session.students.toList();
-    students.removeAt(indexOfUser);
-    final newSession = session.copyWith(students: students);
-
-    await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+      await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+    } else {
+      newSession = session;
+    }
 
     return LeaveSessionUsecaseResult(session: newSession.toEntity());
   }
