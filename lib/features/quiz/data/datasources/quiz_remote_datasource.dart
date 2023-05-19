@@ -164,9 +164,22 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<LeaveSessionUsecaseResult> leaveSession(
-      LeaveSessionUsecaseParams params) {
-    // TODO: implement leaveSession
-    throw UnimplementedError();
+      LeaveSessionUsecaseParams params) async {
+    final sessionSnapshot =
+        await ref.child('sessions').child(params.sessionId).get();
+    final data = sessionSnapshot.value as Map<String, dynamic>;
+    final session = SessionDto.fromMap(data, params.sessionId);
+    final indexOfUser = session.students
+        .indexWhere((element) => element.userId == params.userId);
+    if (indexOfUser == -1) {}
+
+    final students = session.students.toList();
+    students.removeAt(indexOfUser);
+    final newSession = session.copyWith(students: students);
+
+    await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+
+    return LeaveSessionUsecaseResult(session: newSession.toEntity());
   }
 
   @override
