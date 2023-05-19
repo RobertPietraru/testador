@@ -4,26 +4,7 @@ import 'package:testador/features/quiz/domain/entities/session/session_entity.da
 
 import '../../../../../core/globals.dart';
 
-extension Dto on SessionStatus {
-  static Map<SessionStatus, String> get _conversionMap => {
-        SessionStatus.answers: 'answers',
-        SessionStatus.leaderboard: 'leaderboard',
-        SessionStatus.podium: 'podium',
-        SessionStatus.question: 'question',
-        SessionStatus.waitingForPlayers: 'waitingForPlayers',
-      };
-
-  String toData() {
-    return _conversionMap[this] ??
-        _conversionMap[SessionStatus.waitingForPlayers]!;
-  }
-
-  static SessionStatus fromData(String data) {
-    final reversedConversionMap =
-        _conversionMap.map((key, value) => MapEntry(value, key));
-    return reversedConversionMap[data] ?? SessionStatus.waitingForPlayers;
-  }
-}
+extension Dto on SessionStatus {}
 
 class SessionDto extends Equatable {
   final String id;
@@ -90,12 +71,30 @@ class SessionDto extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       quizIdField: quizId,
-      statusField: status.toData(),
-      studentsField: students.map((e) => e.toMap()),
+      statusField: status.asString(),
+      studentsField: students.map((e) => e.toMap()).toList(),
       currentQuestionIdField: currentQuestionId,
-      leaderboardField: leaderboard.map((e) => e.toMap()),
-      answersField: answers,
+      leaderboardField: leaderboard.map((e) => e.toMap()).toList(),
+      answersField: answers.map((e) => e.toMap()).toList(),
     };
+  }
+
+  factory SessionDto.fromMap(Map<String, dynamic> map, String id) {
+    return SessionDto(
+      id: id,
+      quizId: map[quizIdField],
+      students: (map[studentsField] as List<Map<String, dynamic>>)
+          .map((e) => PlayerDto.fromMap(e))
+          .toList(),
+      currentQuestionId: map[currentQuestionIdField],
+      leaderboard: (map[leaderboardField] as List<Map<String, dynamic>>)
+          .map((e) => PlayerDto.fromMap(e))
+          .toList(),
+      answers: (map[answersField] as List<Map<String, dynamic>>)
+          .map((e) => SessionAnswerDto.fromMap(e))
+          .toList(),
+      status: SessionStatus.fromString(map[statusField]),
+    );
   }
 }
 
@@ -106,6 +105,10 @@ class SessionAnswerDto extends Equatable {
 
   const SessionAnswerDto({required this.userId, this.optionIndex, this.answer});
 
+  static const userIdField = 'userId';
+  static const optionIndexField = 'optionIndex';
+  static const answerField = 'answer';
+
   @override
   List<Object?> get props => [userId, optionIndex, answer];
 
@@ -114,11 +117,27 @@ class SessionAnswerDto extends Equatable {
         userId: userId, answer: answer, optionIndex: optionIndex);
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      userIdField: userId,
+      optionIndexField: optionIndex,
+      answerField: answer,
+    };
+  }
+
   factory SessionAnswerDto.fromEntity(SessionAnswer entity) {
     return SessionAnswerDto(
       userId: entity.userId,
       answer: entity.answer,
       optionIndex: entity.optionIndex,
+    );
+  }
+
+  factory SessionAnswerDto.fromMap(Map<String, dynamic> map) {
+    return SessionAnswerDto(
+      userId: map[userIdField],
+      answer: map[optionIndexField],
+      optionIndex: map[answerField],
     );
   }
 

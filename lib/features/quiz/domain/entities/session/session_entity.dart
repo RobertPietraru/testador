@@ -2,7 +2,32 @@ import 'package:equatable/equatable.dart';
 import 'package:testador/core/globals.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
 
-enum SessionStatus { waitingForPlayers, question, answers, leaderboard, podium }
+enum SessionStatus {
+  waitingForPlayers,
+  question,
+  answers,
+  leaderboard,
+  podium;
+
+  static Map<SessionStatus, String> get _conversionMap => {
+        SessionStatus.answers: 'answers',
+        SessionStatus.leaderboard: 'leaderboard',
+        SessionStatus.podium: 'podium',
+        SessionStatus.question: 'question',
+        SessionStatus.waitingForPlayers: 'waitingForPlayers',
+      };
+
+  String asString() {
+    return _conversionMap[this] ??
+        _conversionMap[SessionStatus.waitingForPlayers]!;
+  }
+
+  static SessionStatus fromString(String data) {
+    final reversedConversionMap =
+        _conversionMap.map((key, value) => MapEntry(value, key));
+    return reversedConversionMap[data] ?? SessionStatus.waitingForPlayers;
+  }
+}
 
 class SessionEntity extends Equatable {
   final String id;
@@ -24,8 +49,8 @@ class SessionEntity extends Equatable {
   });
 
   @override
-  List<Object> get props => [id, quizId, students, currentQuestionId, leaderboard, answers, status];
-
+  List<Object> get props =>
+      [id, quizId, students, currentQuestionId, leaderboard, answers, status];
 
   SessionEntity copyWith({
     String? id,

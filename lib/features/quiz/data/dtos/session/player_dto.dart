@@ -40,4 +40,8 @@ class PlayerDto extends Equatable {
       nameField: name,
     };
   }
+
+  factory PlayerDto.fromMap(Map<String, dynamic> map) {
+    return PlayerDto(userId: map[userIdField], name: map[nameField]);
+  }
 }

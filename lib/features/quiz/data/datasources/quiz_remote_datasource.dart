@@ -1,14 +1,15 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:testador/features/quiz/data/dtos/draft/draft_dto.dart';
 import 'package:testador/features/quiz/data/dtos/quiz/quiz_dto.dart';
+import 'package:testador/features/quiz/data/dtos/session/player_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/session_dto.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
+import 'package:testador/features/quiz/domain/failures/session/player_name_already_in_use_failure.dart';
 
 import '../../domain/usecases/quiz_usecases.dart';
 
@@ -42,7 +43,7 @@ abstract class QuizRemoteDataSource {
 class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   final random = Random.secure();
   final firestore = FirebaseFirestore.instance;
-  final realtime = FirebaseDatabase.instance;
+  DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   @override
   Future<void> syncToDatabase(SyncQuizUsecaseParams params) async {
@@ -89,7 +90,6 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   @override
   Future<CreateSessionUsecaseResult> createSession(
       CreateSessionUsecaseParams params) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
     final sessions = ref.child('sessions');
     final code = await createCodeWithoutCollision(sessions: sessions);
 
@@ -136,9 +136,23 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<JoinSessionUsecaseResult> joinSession(
-      JoinSessionUsecaseParams params) {
-    // TODO: implement joinSession
-    throw UnimplementedError();
+      JoinSessionUsecaseParams params) async {
+    final sessionSnapshot =
+        await ref.child('sessions').child(params.sessionId).get();
+    final data = sessionSnapshot.value as Map<String, dynamic>;
+    final session = SessionDto.fromMap(data, params.sessionId);
+    final nameAlreadyUsed =
+        session.students.indexWhere((element) => element.name == params.name) !=
+            -1;
+
+    if (nameAlreadyUsed) throw PlayerNameAlreadyInUseQuizFailure();
+    final students = session.students.toList();
+    students.add(PlayerDto(userId: params.userId, name: params.name));
+    final newSession = session.copyWith(students: students);
+
+    await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+
+    return JoinSessionUsecaseResult(session: newSession.toEntity());
   }
 
   @override
