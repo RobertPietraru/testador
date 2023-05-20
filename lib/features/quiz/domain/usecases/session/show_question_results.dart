@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
+import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import '../../../../../core/classes/usecase.dart';
 import '../../failures/quiz_failures.dart';
 import '../../repositories/quiz_repository.dart';
@@ -15,9 +17,14 @@ class ShowQuestionResultsUsecase extends UseCase<
 }
 
 class ShowQuestionResultsUsecaseParams extends Params {
-  const ShowQuestionResultsUsecaseParams();
+  final String sessionId;
+  final QuizEntity quiz;
+
+  const ShowQuestionResultsUsecaseParams(
+      {required this.sessionId, required this.quiz});
 }
 
 class ShowQuestionResultsUsecaseResult extends Response {
-  const ShowQuestionResultsUsecaseResult();
+  final SessionEntity session;
+  const ShowQuestionResultsUsecaseResult({required this.session});
 }

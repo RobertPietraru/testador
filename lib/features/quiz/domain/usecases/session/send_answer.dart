@@ -19,10 +19,12 @@ class SendAnswerUsecaseParams extends Params {
   final String userId;
   final int? answerIndex;
   final String? answer;
+  final Duration responseTime;
 
   const SendAnswerUsecaseParams(
       {required this.sessionId,
       required this.userId,
+required this.responseTime, 
       this.answerIndex,
       this.answer});
 }

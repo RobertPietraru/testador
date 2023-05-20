@@ -6,6 +6,7 @@ import 'package:testador/features/quiz/data/dtos/draft/draft_dto.dart';
 import 'package:testador/features/quiz/data/dtos/quiz/quiz_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/player_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/session_dto.dart';
+import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
@@ -147,7 +148,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
     if (nameAlreadyUsed) throw PlayerNameAlreadyInUseQuizFailure();
     final students = session.students.toList();
-    students.add(PlayerDto(userId: params.userId, name: params.name));
+    students.add(PlayerDto(userId: params.userId, name: params.name, score: 0));
     final newSession = session.copyWith(students: students);
 
     await ref.child('sessions').child(newSession.id).set(newSession.toMap());
@@ -213,7 +214,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     answers.add(SessionAnswerDto(
         userId: params.userId,
         answer: params.answer,
-        optionIndex: params.answerIndex));
+        optionIndex: params.answerIndex,
+        responseTime: params.responseTime));
     final newSession = session.copyWith(answers: answers);
 
     await ref.child('sessions').child(newSession.id).set(newSession.toMap());
@@ -229,8 +231,35 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<ShowQuestionResultsUsecaseResult> showQuestionResults(
-      ShowQuestionResultsUsecaseParams params) {
-    // TODO: implement showQuestionResults
-    throw UnimplementedError();
+      ShowQuestionResultsUsecaseParams params) async {
+    final sessionSnapshot =
+        await ref.child('sessions').child(params.sessionId).get();
+    final data = sessionSnapshot.value as Map<String, dynamic>;
+    final session = SessionDto.fromMap(data, params.sessionId);
+    final question = params.quiz.questions
+        .firstWhere((element) => element.id == session.currentQuestionId);
+    var students = session.students.toList();
+
+    for (var answerDto in session.answers) {
+      bool addPoints = (question.type == QuestionType.answer &&
+              question.acceptedAnswers.contains(answerDto.answer)) ||
+          (answerDto.optionIndex != null &&
+              question.options[answerDto.optionIndex!].isCorrect);
+      if (addPoints) {
+        final index = students
+            .indexWhere((element) => element.userId == answerDto.userId);
+        if (index != -1) {
+          final student = students[index];
+          students[index] =
+              students[index].copyWith(score: student.score + 100);
+        }
+      }
+    }
+
+    final newSession = session.copyWith(students: students);
+
+    await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+
+    return ShowQuestionResultsUsecaseResult(session: newSession.toEntity());
   }
 }

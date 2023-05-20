@@ -62,7 +62,6 @@ class SessionDto extends Equatable {
       quizId: quizId,
       students: students.map((e) => e.toEntity(e)).toList(),
       currentQuestionId: currentQuestionId,
-      leaderboard: leaderboard.map((e) => e.toEntity(e)).toList(),
       answers: answers.map((e) => e.toEntity()).toList(),
       status: status,
     );
@@ -102,19 +101,29 @@ class SessionAnswerDto extends Equatable {
   final String userId;
   final int? optionIndex;
   final String? answer;
+  final Duration responseTime;
 
-  const SessionAnswerDto({required this.userId, this.optionIndex, this.answer});
+  const SessionAnswerDto(
+      {required this.userId,
+      this.optionIndex,
+      this.answer,
+      required this.responseTime});
 
   static const userIdField = 'userId';
   static const optionIndexField = 'optionIndex';
   static const answerField = 'answer';
+  static const responseTimeField = 'responseTime';
 
   @override
   List<Object?> get props => [userId, optionIndex, answer];
 
   SessionAnswer toEntity() {
     return SessionAnswer(
-        userId: userId, answer: answer, optionIndex: optionIndex);
+      userId: userId,
+      answer: answer,
+      optionIndex: optionIndex,
+      responseTime: responseTime,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -122,11 +131,13 @@ class SessionAnswerDto extends Equatable {
       userIdField: userId,
       optionIndexField: optionIndex,
       answerField: answer,
+      responseTimeField: responseTime,
     };
   }
 
   factory SessionAnswerDto.fromEntity(SessionAnswer entity) {
     return SessionAnswerDto(
+      responseTime: entity.responseTime,
       userId: entity.userId,
       answer: entity.answer,
       optionIndex: entity.optionIndex,
@@ -138,6 +149,7 @@ class SessionAnswerDto extends Equatable {
       userId: map[userIdField],
       answer: map[optionIndexField],
       optionIndex: map[answerField],
+      responseTime: map[responseTimeField],
     );
   }
 
@@ -145,11 +157,13 @@ class SessionAnswerDto extends Equatable {
     String? userId,
     int? optionIndex = DefaultValues.forInts,
     String? answer = DefaultValues.forStrings,
+    Duration? responseTime,
   }) {
     return SessionAnswerDto(
       userId: userId ?? this.userId,
       optionIndex: optionIndex ?? this.optionIndex,
       answer: answer ?? this.answer,
+      responseTime: responseTime ?? this.responseTime,
     );
   }
 }
