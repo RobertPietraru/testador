@@ -7,6 +7,7 @@ import 'package:testador/features/quiz/data/datasources/quiz_remote_datasource.d
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
+import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
 import '../../domain/repositories/quiz_repository.dart';
 
 class QuizRepositoryIMPL implements QuizRepository {
@@ -225,78 +226,185 @@ class QuizRepositoryIMPL implements QuizRepository {
 
   @override
   Future<Either<QuizFailure, BeginSessionUsecaseResult>> beginSession(
-      BeginSessionUsecaseParams params) {
-    // TODO: implement beginSession
-    throw UnimplementedError();
+      BeginSessionUsecaseParams params) async {
+    try {
+      final response = await quizRemoteDataSource.beginSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, CreateSessionUsecaseResult>> createSession(
-      CreateSessionUsecaseParams params) {
-    // TODO: implement createSession
-    throw UnimplementedError();
+      CreateSessionUsecaseParams params) async {
+    try {
+      final response = await quizRemoteDataSource.createSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, EndSessionUsecaseResult>> endSession(
-      EndSessionUsecaseParams params) {
-    // TODO: implement endSession
-    throw UnimplementedError();
+      EndSessionUsecaseParams params) async {
+try {
+      final response = await quizRemoteDataSource.endSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, GoToNextQuestionUsecaseResult>> goToNextQuestion(
-      GoToNextQuestionUsecaseParams params) {
-    // TODO: implement goToNextQuestion
-    throw UnimplementedError();
+      GoToNextQuestionUsecaseParams params) async {
+try {
+      final response = await quizRemoteDataSource.goToNextQuestion(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, JoinAsViewerUsecaseResult>> joinAsViewer(
-      JoinAsViewerUsecaseParams params) {
-    // TODO: implement joinAsViewer
-    throw UnimplementedError();
+      JoinAsViewerUsecaseParams params) async {
+try {
+      final response = await quizRemoteDataSource.joinAsViewer(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, JoinSessionUsecaseResult>> joinSession(
-      JoinSessionUsecaseParams params) {
-    // TODO: implement joinSession
-    throw UnimplementedError();
+      JoinSessionUsecaseParams params) async {
+try {
+      final response = await quizRemoteDataSource.joinSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, KickFromSessionUsecaseResult>> kickFromSession(
-      KickFromSessionUsecaseParams params) {
-    // TODO: implement kickFromSession
-    throw UnimplementedError();
+      KickFromSessionUsecaseParams params) async {
+try {
+      final response = await quizRemoteDataSource.kickFromSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, LeaveSessionUsecaseResult>> leaveSession(
-      LeaveSessionUsecaseParams params) {
-    // TODO: implement leaveSession
-    throw UnimplementedError();
+      LeaveSessionUsecaseParams params) async {
+try {
+
+      final response = await quizRemoteDataSource.leaveSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, SendAnswerUsecaseResult>> sendAnswer(
-      SendAnswerUsecaseParams params) {
-    // TODO: implement sendAnswer
-    throw UnimplementedError();
+      SendAnswerUsecaseParams params) async {
+try {
+
+      final response = await quizRemoteDataSource.sendAnswer(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, ShowPodiumUsecaseResult>> showPodium(
-      ShowPodiumUsecaseParams params) {
-    // TODO: implement showPodium
-    throw UnimplementedError();
+      ShowPodiumUsecaseParams params) async {
+try {
+
+      final response = await quizRemoteDataSource.showPodium(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 
   @override
   Future<Either<QuizFailure, ShowQuestionResultsUsecaseResult>>
-      showQuestionResults(ShowQuestionResultsUsecaseParams params) {
-    // TODO: implement showQuestionResults
-    throw UnimplementedError();
+      showQuestionResults(ShowQuestionResultsUsecaseParams params) async {
+try {
+      final response = await quizRemoteDataSource.showQuestionResults(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<QuizFailure, DeleteSessionUsecaseResult>> deleteSession(
+      DeleteSessionUsecaseParams params) async {
+try {
+
+      final response = await quizRemoteDataSource.deleteSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
   }
 }

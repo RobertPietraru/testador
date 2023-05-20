@@ -12,6 +12,7 @@ import 'package:testador/features/quiz/domain/entities/session/session_entity.da
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/failures/session/player_name_already_in_use_failure.dart';
 import 'package:testador/features/quiz/domain/failures/session/session_now_found_failure.dart';
+import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
 
 import '../../domain/usecases/quiz_usecases.dart';
 
@@ -40,6 +41,9 @@ abstract class QuizRemoteDataSource {
       CreateSessionUsecaseParams params);
   Future<BeginSessionUsecaseResult> beginSession(
       BeginSessionUsecaseParams params);
+
+  Future<DeleteSessionUsecaseResult> deleteSession(
+      DeleteSessionUsecaseParams params);
 }
 
 class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
@@ -284,5 +288,11 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     await ref.child('sessions').child(newSession.id).set(newSession.toMap());
 
     return ShowQuestionResultsUsecaseResult(session: newSession.toEntity());
+  }
+  
+  @override
+  Future<DeleteSessionUsecaseResult> deleteSession(DeleteSessionUsecaseParams params) {
+    // TODO: implement deleteSession
+    throw UnimplementedError();
   }
 }
