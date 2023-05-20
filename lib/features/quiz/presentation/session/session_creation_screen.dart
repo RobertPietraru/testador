@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/app_app_bar.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
@@ -23,6 +24,18 @@ class QuizSessionCreationScreen extends StatelessWidget {
 }
 
 class _QuizSessionCreationScreen extends StatelessWidget {
+  String splitCode(String code, {int length = 3}) {
+    List<String> blocks = [];
+    for (int i = 0; i < code.length; i += length) {
+      if (i + length <= code.length) {
+        blocks.add(code.substring(i, i + length));
+      } else {
+        blocks.add(code.substring(i));
+      }
+    }
+    return blocks.join(' ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
@@ -51,6 +64,7 @@ class _QuizSessionCreationScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ))),
                     onPressed: hasStudents ? () {} : null,
+                    onLongPress: () {},
                     child: const Text('Incepe'),
                   ),
                 );
@@ -77,8 +91,18 @@ class _QuizSessionCreationScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: InkWell(
-                    onTap: () {},
-                    borderRadius: BorderRadius.circular(20),
+                    onLongPress: () async {
+                      await Clipboard.setData(
+                          ClipboardData(text: state.session.id));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Copiat codul")));
+                    },
+                    onTap: () async {
+                      await Clipboard.setData(
+                          ClipboardData(text: state.session.id));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Copiat codul")));
+                    },
                     child: Ink(
                       padding: theme.standardPadding,
                       child: Column(
@@ -87,7 +111,8 @@ class _QuizSessionCreationScreen extends StatelessWidget {
                         children: [
                           Text('Parola', style: theme.informationTextStyle),
                           SizedBox(height: theme.spacing.small),
-                          Text("123 8123", style: theme.titleTextStyle),
+                          Text(splitCode(state.session.id),
+                              style: theme.titleTextStyle),
                         ],
                       ),
                     ),
