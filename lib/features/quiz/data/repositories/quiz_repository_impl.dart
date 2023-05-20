@@ -8,6 +8,7 @@ import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
 import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
+import 'package:testador/features/quiz/domain/usecases/session/subscribe_to_session.dart';
 import '../../domain/repositories/quiz_repository.dart';
 
 class QuizRepositoryIMPL implements QuizRepository {
@@ -257,7 +258,7 @@ class QuizRepositoryIMPL implements QuizRepository {
   @override
   Future<Either<QuizFailure, EndSessionUsecaseResult>> endSession(
       EndSessionUsecaseParams params) async {
-try {
+    try {
       final response = await quizRemoteDataSource.endSession(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -272,7 +273,7 @@ try {
   @override
   Future<Either<QuizFailure, GoToNextQuestionUsecaseResult>> goToNextQuestion(
       GoToNextQuestionUsecaseParams params) async {
-try {
+    try {
       final response = await quizRemoteDataSource.goToNextQuestion(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -287,7 +288,7 @@ try {
   @override
   Future<Either<QuizFailure, JoinAsViewerUsecaseResult>> joinAsViewer(
       JoinAsViewerUsecaseParams params) async {
-try {
+    try {
       final response = await quizRemoteDataSource.joinAsViewer(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -302,7 +303,7 @@ try {
   @override
   Future<Either<QuizFailure, JoinSessionUsecaseResult>> joinSession(
       JoinSessionUsecaseParams params) async {
-try {
+    try {
       final response = await quizRemoteDataSource.joinSession(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -317,7 +318,7 @@ try {
   @override
   Future<Either<QuizFailure, KickFromSessionUsecaseResult>> kickFromSession(
       KickFromSessionUsecaseParams params) async {
-try {
+    try {
       final response = await quizRemoteDataSource.kickFromSession(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -332,8 +333,7 @@ try {
   @override
   Future<Either<QuizFailure, LeaveSessionUsecaseResult>> leaveSession(
       LeaveSessionUsecaseParams params) async {
-try {
-
+    try {
       final response = await quizRemoteDataSource.leaveSession(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -348,8 +348,7 @@ try {
   @override
   Future<Either<QuizFailure, SendAnswerUsecaseResult>> sendAnswer(
       SendAnswerUsecaseParams params) async {
-try {
-
+    try {
       final response = await quizRemoteDataSource.sendAnswer(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -364,8 +363,7 @@ try {
   @override
   Future<Either<QuizFailure, ShowPodiumUsecaseResult>> showPodium(
       ShowPodiumUsecaseParams params) async {
-try {
-
+    try {
       final response = await quizRemoteDataSource.showPodium(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -380,7 +378,7 @@ try {
   @override
   Future<Either<QuizFailure, ShowQuestionResultsUsecaseResult>>
       showQuestionResults(ShowQuestionResultsUsecaseParams params) async {
-try {
+    try {
       final response = await quizRemoteDataSource.showQuestionResults(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -395,8 +393,7 @@ try {
   @override
   Future<Either<QuizFailure, DeleteSessionUsecaseResult>> deleteSession(
       DeleteSessionUsecaseParams params) async {
-try {
-
+    try {
       final response = await quizRemoteDataSource.deleteSession(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -406,5 +403,22 @@ try {
     } catch (_) {
       return const Left(QuizUnknownFailure());
     }
+  }
+
+  @override
+  Future<Either<QuizFailure, SubscribeToSessionUsecaseResult>>
+      subscribeToSession(SubscribeToSessionUsecaseParams params) async {
+try {
+
+      final response = await quizRemoteDataSource.subscribeToSession(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
+
   }
 }

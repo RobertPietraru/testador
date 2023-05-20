@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +15,7 @@ import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/failures/session/player_name_already_in_use_failure.dart';
 import 'package:testador/features/quiz/domain/failures/session/session_now_found_failure.dart';
 import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
+import 'package:testador/features/quiz/domain/usecases/session/subscribe_to_session.dart';
 
 import '../../domain/usecases/quiz_usecases.dart';
 
@@ -44,6 +47,9 @@ abstract class QuizRemoteDataSource {
 
   Future<DeleteSessionUsecaseResult> deleteSession(
       DeleteSessionUsecaseParams params);
+
+  Future<SubscribeToSessionUsecaseResult> subscribeToSession(
+      SubscribeToSessionUsecaseParams params);
 }
 
 class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
@@ -295,5 +301,21 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
       DeleteSessionUsecaseParams params) async {
     await ref.child('sessions').child(params.session.id).remove();
     return const DeleteSessionUsecaseResult();
+  }
+
+  @override
+  Future<SubscribeToSessionUsecaseResult> subscribeToSession(
+      SubscribeToSessionUsecaseParams params) async {
+    final stream = ref.child('sessions').child(params.sessionId).onValue;
+
+    Stream<SessionEntity> sessionStream = stream
+        .transform(StreamTransformer<DatabaseEvent, SessionEntity>.fromHandlers(
+      handleData: (DatabaseEvent event, EventSink<SessionEntity> sink) {
+        final data = event.snapshot.value as Map<String, dynamic>;
+        sink.add(SessionDto.fromMap(data, event.snapshot.key!).toEntity());
+      },
+    ));
+
+    return SubscribeToSessionUsecaseResult(sessions: sessionStream);
   }
 }
