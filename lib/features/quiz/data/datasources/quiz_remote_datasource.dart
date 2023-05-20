@@ -289,10 +289,11 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
     return ShowQuestionResultsUsecaseResult(session: newSession.toEntity());
   }
-  
+
   @override
-  Future<DeleteSessionUsecaseResult> deleteSession(DeleteSessionUsecaseParams params) {
-    // TODO: implement deleteSession
-    throw UnimplementedError();
+  Future<DeleteSessionUsecaseResult> deleteSession(
+      DeleteSessionUsecaseParams params) async {
+    await ref.child('sessions').child(params.session.id).remove();
+    return const DeleteSessionUsecaseResult();
   }
 }

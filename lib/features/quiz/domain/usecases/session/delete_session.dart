@@ -20,6 +20,5 @@ class DeleteSessionUsecaseParams extends Params {
 }
 
 class DeleteSessionUsecaseResult extends Response {
-  final SessionEntity session;
-  const DeleteSessionUsecaseResult({required this.session});
+  const DeleteSessionUsecaseResult();
 }
