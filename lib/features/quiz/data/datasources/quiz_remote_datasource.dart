@@ -116,9 +116,13 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
       List.generate(codeLength, (index) => random.nextInt(10)).join();
 
   @override
-  Future<EndSessionUsecaseResult> endSession(EndSessionUsecaseParams params) {
-    // TODO: implement endSess    ion
-    throw UnimplementedError();
+  Future<EndSessionUsecaseResult> endSession(
+      EndSessionUsecaseParams params) async {
+    final newSession = SessionDto.fromEntity(params.session)
+        .copyWith(status: SessionStatus.done, answers: []);
+    //TODO: save to firestore so the teacher can like, revisit this stuff
+    await _writeSessionToDB(newSession);
+    return EndSessionUsecaseResult(session: newSession.toEntity());
   }
 
   @override

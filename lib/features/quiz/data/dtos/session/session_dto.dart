@@ -39,7 +39,6 @@ class SessionDto extends Equatable {
     String? quizId,
     List<PlayerDto>? students,
     String? currentQuestionId,
-    List<PlayerDto>? leaderboard,
     List<SessionAnswerDto>? answers,
     SessionStatus? status,
   }) {
