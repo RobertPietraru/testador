@@ -15,9 +15,9 @@ export 'quiz/sync_quiz.dart';
 
 export 'quiz/get_quiz_by_id.dart';
 
-
 export 'session/begin_session.dart';
 export 'session/create_session.dart';
+export 'session/delete_session.dart';
 export 'session/end_session.dart';
 export 'session/go_to_next_question.dart';
 export 'session/join_as_viewer.dart';
@@ -27,3 +27,4 @@ export 'session/leave_session.dart';
 export 'session/send_answer.dart';
 export 'session/show_podium.dart';
 export 'session/show_question_results.dart';
+export 'session/subscribe_to_session.dart';

@@ -34,11 +34,11 @@ class PlayerDto extends Equatable {
         userId: player.userId, name: player.name, score: player.score);
   }
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {userIdField: userId, nameField: name, scoreField: score};
   }
 
-  factory PlayerDto.fromMap(Map<String, dynamic> map) {
+  factory PlayerDto.fromMap(Map<dynamic, dynamic> map) {
     return PlayerDto(
         userId: map[userIdField], name: map[nameField], score: map[scoreField]);
   }

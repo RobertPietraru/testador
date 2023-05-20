@@ -250,7 +250,9 @@ class QuizRepositoryIMPL implements QuizRepository {
       return Left(QuizUnknownFailure(code: e.code));
     } on QuizFailure catch (error) {
       return Left(error);
-    } catch (_) {
+    } on Error catch (_) {
+      print(_.toString());
+      print(_.stackTrace);
       return const Left(QuizUnknownFailure());
     }
   }
@@ -408,8 +410,7 @@ class QuizRepositoryIMPL implements QuizRepository {
   @override
   Future<Either<QuizFailure, SubscribeToSessionUsecaseResult>>
       subscribeToSession(SubscribeToSessionUsecaseParams params) async {
-try {
-
+    try {
       final response = await quizRemoteDataSource.subscribeToSession(params);
       return Right(response);
     } on FirebaseException catch (e) {
@@ -419,6 +420,5 @@ try {
     } catch (_) {
       return const Left(QuizUnknownFailure());
     }
-
   }
 }

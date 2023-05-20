@@ -63,7 +63,7 @@ class SessionDto extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {
       quizIdField: quizId,
       statusField: status.asString(),
@@ -73,15 +73,15 @@ class SessionDto extends Equatable {
     };
   }
 
-  factory SessionDto.fromMap(Map<String, dynamic> map, String id) {
+  factory SessionDto.fromMap(Map<dynamic, dynamic> map, String id) {
     return SessionDto(
       id: id,
       quizId: map[quizIdField],
-      students: (map[studentsField] as List<Map<String, dynamic>>)
+      students: ((map[studentsField] as List<Map<dynamic, dynamic>>?) ?? [])
           .map((e) => PlayerDto.fromMap(e))
           .toList(),
       currentQuestionId: map[currentQuestionIdField],
-      answers: (map[answersField] as List<Map<String, dynamic>>)
+      answers: ((map[answersField] as List<Map<dynamic, dynamic>>?) ?? [])
           .map((e) => SessionAnswerDto.fromMap(e))
           .toList(),
       status: SessionStatus.fromString(map[statusField]),
@@ -130,7 +130,7 @@ class SessionAnswerDto extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {
       userIdField: userId,
       optionIndexField: optionIndex,
@@ -148,7 +148,7 @@ class SessionAnswerDto extends Equatable {
     );
   }
 
-  factory SessionAnswerDto.fromMap(Map<String, dynamic> map) {
+  factory SessionAnswerDto.fromMap(Map<dynamic, dynamic> map) {
     return SessionAnswerDto(
       userId: map[userIdField],
       answer: map[optionIndexField],

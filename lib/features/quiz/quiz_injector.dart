@@ -25,5 +25,18 @@ void quizInject() {
     ..registerSingleton(UpdateQuizImageUsecase(locator()))
     ..registerSingleton(SyncQuizUsecase(locator()))
     ..registerSingleton(GetQuizByIdUsecase(locator()))
-    ..registerSingleton(GetDraftByIdUsecase(locator()));
+    ..registerSingleton(GetDraftByIdUsecase(locator()))
+    ..registerSingleton(BeginSessionUsecase(locator()))
+    ..registerSingleton(CreateSessionUsecase(locator()))
+    ..registerSingleton(DeleteSessionUsecase(locator()))
+    ..registerSingleton(EndSessionUsecase(locator()))
+    ..registerSingleton(GoToNextQuestionUsecase(locator()))
+    ..registerSingleton(JoinAsViewerUsecase(locator()))
+    ..registerSingleton(JoinSessionUsecase(locator()))
+    ..registerSingleton(KickFromSessionUsecase(locator()))
+    ..registerSingleton(LeaveSessionUsecase(locator()))
+    ..registerSingleton(SendAnswerUsecase(locator()))
+    ..registerSingleton(ShowPodiumUsecase(locator()))
+    ..registerSingleton(ShowQuestionResultsUsecase(locator()))
+    ..registerSingleton(SubscribeToSessionUsecase(locator()));
 }

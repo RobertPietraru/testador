@@ -25,7 +25,7 @@ class UserDto extends UserEntity {
     );
   }
 
-  Map<String, dynamic> toMap() => {
+  Map<dynamic, dynamic> toMap() => {
         'id': id,
         'email': email,
         'name': name,

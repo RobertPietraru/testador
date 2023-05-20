@@ -46,7 +46,7 @@ class QuizDto with HiveObjectMixin {
   static const idField = 'id';
   static const questionsField = 'questions';
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {
       titleField: title,
       isPublicField: isPublic,
@@ -67,7 +67,7 @@ class QuizDto with HiveObjectMixin {
         id: id);
   }
 
-  factory QuizDto.fromMap(Map<String, dynamic> map) {
+  factory QuizDto.fromMap(Map<dynamic, dynamic> map) {
     final x = (map[questionsField] as List);
     final y = x.map((e) => QuestionDto.fromMap(e));
     final z = y.toList();

@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '40369619488',
     projectId: 'skeleton-a3bd2',
     authDomain: 'skeleton-a3bd2.firebaseapp.com',
+    databaseURL: 'https://skeleton-a3bd2-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'skeleton-a3bd2.appspot.com',
     measurementId: 'G-R8414YD0JP',
   );
@@ -58,6 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:40369619488:android:aad3b5301728fe7fe0f245',
     messagingSenderId: '40369619488',
     projectId: 'skeleton-a3bd2',
+    databaseURL: 'https://skeleton-a3bd2-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'skeleton-a3bd2.appspot.com',
   );
 
@@ -66,20 +71,9 @@ class DefaultFirebaseOptions {
     appId: '1:40369619488:ios:c7f5a17343592098e0f245',
     messagingSenderId: '40369619488',
     projectId: 'skeleton-a3bd2',
+    databaseURL: 'https://skeleton-a3bd2-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'skeleton-a3bd2.appspot.com',
-    iosClientId:
-        '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
-    iosBundleId: 'com.example.testador',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCyChretJh2zeOMO7FXwyMa-QPRj0Hkdsg',
-    appId: '1:40369619488:ios:c7f5a17343592098e0f245',
-    messagingSenderId: '40369619488',
-    projectId: 'skeleton-a3bd2',
-    storageBucket: 'skeleton-a3bd2.appspot.com',
-    iosClientId:
-        '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
+    iosClientId: '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
     iosBundleId: 'com.example.testador',
   );
 }

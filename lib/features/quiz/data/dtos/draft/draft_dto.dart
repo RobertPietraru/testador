@@ -47,7 +47,18 @@ class DraftDto with HiveObjectMixin {
   static const idField = 'id';
   static const questionsField = 'questions';
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
+    return {
+      titleField: title,
+      isPublicField: isPublic,
+      creatorField: creatorId,
+      imageField: imageUrl,
+      idField: id,
+      questionsField: questions.map((e) => e.toMap()),
+    };
+  }
+
+  Map<String, dynamic> toStringMap() {
     return {
       titleField: title,
       isPublicField: isPublic,

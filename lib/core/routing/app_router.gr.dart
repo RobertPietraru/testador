@@ -20,8 +20,6 @@ import '../../features/authentication/presentation/screens/registration/registra
     as _i2;
 import '../../features/quiz/domain/entities/draft_entity.dart' as _i12;
 import '../../features/quiz/domain/entities/quiz_entity.dart' as _i10;
-import '../../features/quiz/presentation/session/session_creation_screen.dart'
-    as _i6;
 import '../../features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart'
     as _i4;
 import '../../features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart'
@@ -29,6 +27,8 @@ import '../../features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit
 import '../../features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart'
     as _i7;
 import '../../features/quiz/presentation/screens/quiz_screen.dart' as _i5;
+import '../../features/quiz/presentation/session/session_creation_screen.dart'
+    as _i6;
 import 'app_router.dart' as _i1;
 
 class AppRouter extends _i8.RootStackRouter {
@@ -97,9 +97,13 @@ class AppRouter extends _i8.RootStackRouter {
       );
     },
     QuizSessionCreationRoute.name: (routeData) {
+      final args = routeData.argsAs<QuizSessionCreationRouteArgs>();
       return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i6.QuizSessionCreationScreen(),
+        child: _i6.QuizSessionCreationScreen(
+          key: args.key,
+          quiz: args.quiz,
+        ),
       );
     },
     QuizListRoute.name: (routeData) {
@@ -332,14 +336,37 @@ class QuizRouteArgs {
 
 /// generated route for
 /// [_i6.QuizSessionCreationScreen]
-class QuizSessionCreationRoute extends _i8.PageRouteInfo<void> {
-  const QuizSessionCreationRoute()
-      : super(
+class QuizSessionCreationRoute
+    extends _i8.PageRouteInfo<QuizSessionCreationRouteArgs> {
+  QuizSessionCreationRoute({
+    _i9.Key? key,
+    required _i10.QuizEntity quiz,
+  }) : super(
           QuizSessionCreationRoute.name,
           path: 'session-create/:id',
+          args: QuizSessionCreationRouteArgs(
+            key: key,
+            quiz: quiz,
+          ),
         );
 
   static const String name = 'QuizSessionCreationRoute';
+}
+
+class QuizSessionCreationRouteArgs {
+  const QuizSessionCreationRouteArgs({
+    this.key,
+    required this.quiz,
+  });
+
+  final _i9.Key? key;
+
+  final _i10.QuizEntity quiz;
+
+  @override
+  String toString() {
+    return 'QuizSessionCreationRouteArgs{key: $key, quiz: $quiz}';
+  }
 }
 
 /// generated route for

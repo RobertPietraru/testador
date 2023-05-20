@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,8 +13,6 @@ import 'package:testador/features/quiz/domain/entities/session/session_entity.da
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/failures/session/player_name_already_in_use_failure.dart';
 import 'package:testador/features/quiz/domain/failures/session/session_now_found_failure.dart';
-import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
-import 'package:testador/features/quiz/domain/usecases/session/subscribe_to_session.dart';
 
 import '../../domain/usecases/quiz_usecases.dart';
 
@@ -61,7 +58,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   Future<void> syncToDatabase(SyncQuizUsecaseParams params) async {
     final quiz = DraftDto.fromEntity(params.draft);
 
-    await firestore.collection('quizes').doc(quiz.id).set(quiz.toMap());
+    await firestore.collection('quizes').doc(quiz.id).set(quiz.toStringMap());
   }
 
   @override
@@ -184,7 +181,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
       throw const SessionNotFoundFailure();
     }
 
-    final data = sessionSnapshot.value as Map<String, dynamic>;
+    final data = sessionSnapshot.value as Map<dynamic, dynamic>;
     final session = SessionDto.fromMap(data, sessionId);
 
     return session;
@@ -311,7 +308,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     Stream<SessionEntity> sessionStream = stream
         .transform(StreamTransformer<DatabaseEvent, SessionEntity>.fromHandlers(
       handleData: (DatabaseEvent event, EventSink<SessionEntity> sink) {
-        final data = event.snapshot.value as Map<String, dynamic>;
+        final data = event.snapshot.value as Map<dynamic, dynamic>?;
+        if (data == null) return;
         sink.add(SessionDto.fromMap(data, event.snapshot.key!).toEntity());
       },
     ));

@@ -110,7 +110,7 @@ class QuestionDto {
         options: (options ?? []).map((e) => e.toEntity()).toList());
   }
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {
       quizIdField: quizId,
       typeField: type.index,
@@ -122,12 +122,12 @@ class QuestionDto {
     };
   }
 
-  QuestionDto fromMap(Map<String, dynamic> map) {
+  QuestionDto fromMap(Map<dynamic, dynamic> map) {
     return QuestionDto(
       quizId: map[quizIdField],
       type: QuestionTypeDto.values[map[typeField] as int],
       image: map[imageField],
-      options: (map[optionsField] as List<Map<String, dynamic>>)
+      options: (map[optionsField] as List<Map<dynamic, dynamic>>)
           .map((e) => MultipleChoiceOptionDto.fromMap(e))
           .toList(),
       acceptedAnswers: map[acceptedAnswersField],
@@ -188,12 +188,12 @@ class MultipleChoiceOptionDto {
     );
   }
 
-  factory MultipleChoiceOptionDto.fromMap(Map<String, dynamic> map) {
+  factory MultipleChoiceOptionDto.fromMap(Map<dynamic, dynamic> map) {
     return MultipleChoiceOptionDto(
         text: map[textField], isCorrect: map[isCorrectField]);
   }
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {
       textField: text,
       isCorrectField: isCorrect,
