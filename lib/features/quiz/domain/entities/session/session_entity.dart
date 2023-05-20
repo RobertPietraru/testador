@@ -7,7 +7,8 @@ enum SessionStatus {
   question,
   answers,
   leaderboard,
-  podium;
+  podium,
+  done;
 
   static Map<SessionStatus, String> get _conversionMap => {
         SessionStatus.answers: 'answers',
@@ -15,6 +16,7 @@ enum SessionStatus {
         SessionStatus.podium: 'podium',
         SessionStatus.question: 'question',
         SessionStatus.waitingForPlayers: 'waitingForPlayers',
+        SessionStatus.done: 'done',
       };
 
   String asString() {

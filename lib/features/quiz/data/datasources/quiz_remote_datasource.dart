@@ -11,6 +11,7 @@ import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/failures/session/player_name_already_in_use_failure.dart';
+import 'package:testador/features/quiz/domain/failures/session/session_now_found_failure.dart';
 
 import '../../domain/usecases/quiz_usecases.dart';
 
@@ -103,7 +104,6 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
       quizId: params.quiz.id,
       students: const [],
       currentQuestionId: params.quiz.questions.first.id,
-      leaderboard: const [],
       answers: const [],
       status: SessionStatus.waitingForPlayers,
     );
@@ -123,9 +123,20 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<GoToNextQuestionUsecaseResult> goToNextQuestion(
-      GoToNextQuestionUsecaseParams params) {
-    // TODO: implement goToNextQuestion
-    throw UnimplementedError();
+      GoToNextQuestionUsecaseParams params) async {
+    final currentQuestionIndex = params.quiz.questions.indexWhere(
+        (element) => element.id == params.session.currentQuestionId);
+    if (currentQuestionIndex == -1) {
+      throw const QuizUnknownFailure();
+    }
+
+    final newSession = SessionDto.fromEntity(params.session).copyWith(
+      status: SessionStatus.question,
+      currentQuestionId: params.quiz.questions[currentQuestionIndex + 1].id,
+      answers: [],
+    );
+    await _writeSessionToDB(newSession);
+    return GoToNextQuestionUsecaseResult(session: newSession.toEntity());
   }
 
   @override
@@ -138,10 +149,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   @override
   Future<JoinSessionUsecaseResult> joinSession(
       JoinSessionUsecaseParams params) async {
-    final sessionSnapshot =
-        await ref.child('sessions').child(params.sessionId).get();
-    final data = sessionSnapshot.value as Map<String, dynamic>;
-    final session = SessionDto.fromMap(data, params.sessionId);
+    SessionDto session = await _getSessionFromDB(params.sessionId);
     final nameAlreadyUsed =
         session.students.indexWhere((element) => element.name == params.name) !=
             -1;
@@ -151,10 +159,25 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     students.add(PlayerDto(userId: params.userId, name: params.name, score: 0));
     final newSession = session.copyWith(students: students);
 
-    await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+    await _writeSessionToDB(newSession);
 
     return JoinSessionUsecaseResult(session: newSession.toEntity());
   }
+
+  Future<SessionDto> _getSessionFromDB(String sessionId) async {
+    final sessionSnapshot = await ref.child('sessions').child(sessionId).get();
+    if (!sessionSnapshot.exists) {
+      throw const SessionNotFoundFailure();
+    }
+
+    final data = sessionSnapshot.value as Map<String, dynamic>;
+    final session = SessionDto.fromMap(data, sessionId);
+
+    return session;
+  }
+
+  Future<void> _writeSessionToDB(SessionDto session) async =>
+      await ref.child('sessions').child(session.id).set(session.toMap());
 
   @override
   Future<KickFromSessionUsecaseResult> kickFromSession(
@@ -206,10 +229,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   @override
   Future<SendAnswerUsecaseResult> sendAnswer(
       SendAnswerUsecaseParams params) async {
-    final sessionSnapshot =
-        await ref.child('sessions').child(params.sessionId).get();
-    final data = sessionSnapshot.value as Map<String, dynamic>;
-    final session = SessionDto.fromMap(data, params.sessionId);
+    final session = await _getSessionFromDB(params.sessionId);
+
     final answers = session.answers.toList();
     answers.add(SessionAnswerDto(
         userId: params.userId,
@@ -218,7 +239,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
         responseTime: params.responseTime));
     final newSession = session.copyWith(answers: answers);
 
-    await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+    await _writeSessionToDB(newSession);
 
     return SendAnswerUsecaseResult(session: newSession.toEntity());
   }
@@ -256,7 +277,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
       }
     }
 
-    final newSession = session.copyWith(students: students);
+    final newSession =
+        session.copyWith(students: students, status: SessionStatus.leaderboard);
 
     await ref.child('sessions').child(newSession.id).set(newSession.toMap());
 

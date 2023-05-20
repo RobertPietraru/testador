@@ -25,7 +25,7 @@ class PlayerDto extends Equatable {
     );
   }
 
-  factory PlayerDto.fromEntity(PlayerDto player) {
+  factory PlayerDto.fromEntity(PlayerEntity player) {
     return PlayerDto(
         userId: player.userId, name: player.name, score: player.score);
   }

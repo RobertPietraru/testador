@@ -12,7 +12,6 @@ class SessionDto extends Equatable {
   final SessionStatus status;
   final List<PlayerDto> students;
   final String currentQuestionId;
-  final List<PlayerDto> leaderboard;
   final List<SessionAnswerDto> answers;
 
   static const String quizIdField = 'quizId';
@@ -27,14 +26,13 @@ class SessionDto extends Equatable {
     required this.quizId,
     required this.students,
     required this.currentQuestionId,
-    required this.leaderboard,
     required this.answers,
     required this.status,
   });
 
   @override
   List<Object> get props =>
-      [id, quizId, students, currentQuestionId, leaderboard, answers, status];
+      [id, quizId, students, currentQuestionId, answers, status];
 
   SessionDto copyWith({
     String? id,
@@ -50,7 +48,6 @@ class SessionDto extends Equatable {
       quizId: quizId ?? this.quizId,
       students: students ?? this.students,
       currentQuestionId: currentQuestionId ?? this.currentQuestionId,
-      leaderboard: leaderboard ?? this.leaderboard,
       answers: answers ?? this.answers,
       status: status ?? this.status,
     );
@@ -73,7 +70,6 @@ class SessionDto extends Equatable {
       statusField: status.asString(),
       studentsField: students.map((e) => e.toMap()).toList(),
       currentQuestionIdField: currentQuestionId,
-      leaderboardField: leaderboard.map((e) => e.toMap()).toList(),
       answersField: answers.map((e) => e.toMap()).toList(),
     };
   }
@@ -86,13 +82,22 @@ class SessionDto extends Equatable {
           .map((e) => PlayerDto.fromMap(e))
           .toList(),
       currentQuestionId: map[currentQuestionIdField],
-      leaderboard: (map[leaderboardField] as List<Map<String, dynamic>>)
-          .map((e) => PlayerDto.fromMap(e))
-          .toList(),
       answers: (map[answersField] as List<Map<String, dynamic>>)
           .map((e) => SessionAnswerDto.fromMap(e))
           .toList(),
       status: SessionStatus.fromString(map[statusField]),
+    );
+  }
+
+  factory SessionDto.fromEntity(SessionEntity session) {
+    return SessionDto(
+      id: session.id,
+      quizId: session.quizId,
+      students: session.students.map((e) => PlayerDto.fromEntity(e)).toList(),
+      currentQuestionId: session.currentQuestionId,
+      answers:
+          session.answers.map((e) => SessionAnswerDto.fromEntity(e)).toList(),
+      status: session.status,
     );
   }
 }
