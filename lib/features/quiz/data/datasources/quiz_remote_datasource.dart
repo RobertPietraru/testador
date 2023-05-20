@@ -77,11 +77,11 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   /// return null means max tries were reached and it's still colliding
   Future<String?> createCodeWithoutCollision(
       {required DatabaseReference sessions}) async {
-    var id = generateQuizCode(7);
+    var id = _generateQuizCode(7);
     for (var i = 0; i < maxTriesForCodeCollision; i++) {
       final session = await sessions.child(id).get();
       if (session.exists) {
-        id = generateQuizCode(7);
+        id = _generateQuizCode(7);
       } else {
         return id;
       }
@@ -112,7 +112,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     return CreateSessionUsecaseResult(session: session.toEntity());
   }
 
-  String generateQuizCode(int codeLength) =>
+  String _generateQuizCode(int codeLength) =>
       List.generate(codeLength, (index) => random.nextInt(10)).join();
 
   @override
@@ -186,10 +186,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   @override
   Future<KickFromSessionUsecaseResult> kickFromSession(
       KickFromSessionUsecaseParams params) async {
-    final sessionSnapshot =
-        await ref.child('sessions').child(params.sessionId).get();
-    final data = sessionSnapshot.value as Map<String, dynamic>;
-    final session = SessionDto.fromMap(data, params.sessionId);
+    final session = await _getSessionFromDB(params.sessionId);
+
     final indexOfUser = session.students
         .indexWhere((element) => element.userId == params.userId);
     late SessionDto newSession;
@@ -210,10 +208,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   @override
   Future<LeaveSessionUsecaseResult> leaveSession(
       LeaveSessionUsecaseParams params) async {
-    final sessionSnapshot =
-        await ref.child('sessions').child(params.sessionId).get();
-    final data = sessionSnapshot.value as Map<String, dynamic>;
-    final session = SessionDto.fromMap(data, params.sessionId);
+    final session = await _getSessionFromDB(params.sessionId);
+
     final indexOfUser = session.students
         .indexWhere((element) => element.userId == params.userId);
     late SessionDto newSession;
@@ -249,18 +245,19 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   }
 
   @override
-  Future<ShowPodiumUsecaseResult> showPodium(ShowPodiumUsecaseParams params) {
-    // TODO: implement showPodium
-    throw UnimplementedError();
+  Future<ShowPodiumUsecaseResult> showPodium(
+      ShowPodiumUsecaseParams params) async {
+    final session = SessionDto.fromEntity(params.session)
+        .copyWith(status: SessionStatus.podium);
+    await _writeSessionToDB(session);
+    return ShowPodiumUsecaseResult(session: session.toEntity());
   }
 
   @override
   Future<ShowQuestionResultsUsecaseResult> showQuestionResults(
       ShowQuestionResultsUsecaseParams params) async {
-    final sessionSnapshot =
-        await ref.child('sessions').child(params.sessionId).get();
-    final data = sessionSnapshot.value as Map<String, dynamic>;
-    final session = SessionDto.fromMap(data, params.sessionId);
+    final session = await _getSessionFromDB(params.sessionId);
+
     final question = params.quiz.questions
         .firstWhere((element) => element.id == session.currentQuestionId);
     var students = session.students.toList();
