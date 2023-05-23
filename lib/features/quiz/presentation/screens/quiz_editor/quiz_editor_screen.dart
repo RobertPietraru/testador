@@ -79,7 +79,10 @@ class _QuizescreenState extends State<_Quizescreen> {
         }
         final bool? gottaSave = await showDialog(
           context: context,
-          builder: (context) => const AreYouSureDialog(),
+          builder: (context) => AreYouSureDialog(
+              text: 'Esti sigur ca vrei sa inchizi editorul fara sa salvezi?',
+              option1: 'Da',
+              option2: 'Salveaza'),
         );
         if (gottaSave == null) {
           // it was dissmissed;

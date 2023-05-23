@@ -26,6 +26,9 @@ class SessionAdminMatchState extends SessionAdminState {
           : failure,
     );
   }
+
+  int get currentQuestionIndex => quiz.questions .indexWhere((element) => element.id == session.currentQuestionId);
+  QuestionEntity get currentQuestion => quiz.questions[currentQuestionIndex];
 }
 
 class SessionAdminLoadingState extends SessionAdminState {

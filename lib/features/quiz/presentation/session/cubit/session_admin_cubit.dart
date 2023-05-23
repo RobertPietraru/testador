@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';

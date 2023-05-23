@@ -27,7 +27,7 @@ class AppBarButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: isEnabled ? onPressed : null,
-        child: const Text('Incepe'),
+        child: Text(text),
       ),
     );
   }

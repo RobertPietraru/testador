@@ -3,7 +3,14 @@ import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 
 class AreYouSureDialog extends StatelessWidget {
-  const AreYouSureDialog({super.key});
+  final String text;
+  final String option1;
+  final String option2;
+  const AreYouSureDialog(
+      {super.key,
+      required this.text,
+      required this.option1,
+      required this.option2});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +19,7 @@ class AreYouSureDialog extends StatelessWidget {
         child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text("Esti sigur ca vrei sa inchizi editorul fara sa salvezi?",
-            style: theme.subtitleTextStyle),
+        Text(text, style: theme.subtitleTextStyle),
         SizedBox(height: theme.spacing.medium),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -27,7 +33,7 @@ class AreYouSureDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context, false);
               },
-              child: const Text('Da'),
+              child: Text(option1),
             ),
             SizedBox(width: theme.spacing.medium),
             FilledButton(
@@ -39,7 +45,7 @@ class AreYouSureDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              child: const Text('Salveaza'),
+              child: Text(option2),
             ),
           ],
         ),

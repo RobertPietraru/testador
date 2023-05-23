@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
+import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
 
+import '../../../../core/components/components.dart';
 import '../../../../core/components/theme/app_theme.dart';
 import '../../../../core/components/theme/device_size.dart';
 
@@ -18,7 +20,7 @@ class WaitingForPlayersScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         trailing: [
-          appBarButton(
+          AppBarButton(
             //TODO: use this:state.session.students.isNotEmpty
             isEnabled: true,
             onPressed: () => context.read<SessionAdminCubit>().beginSession(),
@@ -57,7 +59,7 @@ class WaitingForPlayersScreen extends StatelessWidget {
                   children: [
                     Text('Parola', style: theme.informationTextStyle),
                     SizedBox(height: theme.spacing.small),
-                    Text(splitCode(state.session.id),
+                    Text(splitStringIntoBlocks(state.session.id),
                         style: theme.titleTextStyle),
                   ],
                 ),
@@ -94,18 +96,4 @@ class WaitingForPlayersScreen extends StatelessWidget {
       ),
     );
   }
-
-  String splitCode(String code, {int length = 3}) {
-    List<String> blocks = [];
-    for (int i = 0; i < code.length; i += length) {
-      if (i + length <= code.length) {
-        blocks.add(code.substring(i, i + length));
-      } else {
-        blocks.add(code.substring(i));
-      }
-    }
-    return blocks.join(' ');
-  }
 }
-
-

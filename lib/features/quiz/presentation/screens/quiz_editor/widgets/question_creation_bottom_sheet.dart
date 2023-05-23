@@ -34,17 +34,23 @@ class QuestionCreationBottomSheet extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 title: const Text("Adauga intrebare ABC"),
-                leading: const Icon(Icons.abc),
+                leading: Icon(Icons.abc, color: theme.primaryColor),
               ),
               ListTile(
-                onTap: () {
-                  cubit.addNewQuestion(
-                      index: state.currentQuestionIndex,
-                      type: QuestionType.answer);
-                  scrollController.jumpTo(0);
-                  Navigator.pop(context);
-                },
-                title: const Text("Adauga intrebare cu raspuns amplu"),
+                onTap: null,
+                // onTap: () {
+                //   cubit.addNewQuestion(
+                //       index: state.currentQuestionIndex,
+                //       type: QuestionType.answer);
+                //   scrollController.jumpTo(0);
+                //   Navigator.pop(context);
+                // },
+                title: Text(
+                  "Adauga intrebare cu raspuns amplu",
+                  style: TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                      color: theme.secondaryColor),
+                ),
                 leading: const Icon(Icons.edit),
               ),
             ],
