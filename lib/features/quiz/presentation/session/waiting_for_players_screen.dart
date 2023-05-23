@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/core/components/app_app_bar.dart';
+import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
 
 import '../../../../core/components/theme/app_theme.dart';
@@ -95,27 +95,6 @@ class WaitingForPlayersScreen extends StatelessWidget {
     );
   }
 
-  Widget appBarButton(
-      {required String text,
-      required bool isEnabled,
-      required VoidCallback onPressed,
-      Color enabledColor = Colors.green,
-      Color disabledColor = Colors.grey}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: FilledButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-                isEnabled ? enabledColor : disabledColor),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ))),
-        onPressed: isEnabled ? onPressed : null,
-        child: const Text('Incepe'),
-      ),
-    );
-  }
-
   String splitCode(String code, {int length = 3}) {
     List<String> blocks = [];
     for (int i = 0; i < code.length; i += length) {
@@ -128,3 +107,5 @@ class WaitingForPlayersScreen extends StatelessWidget {
     return blocks.join(' ');
   }
 }
+
+

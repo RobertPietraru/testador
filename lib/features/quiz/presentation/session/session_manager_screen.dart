@@ -37,12 +37,29 @@ class _QuizSessionManagerScreen extends StatelessWidget {
             if (status == SessionStatus.waitingForPlayers) {
               return WaitingForPlayersScreen(state: state);
             } else if (status == SessionStatus.question) {
-              return Scaffold(body: Center(child: Text("QUESTION SCREEN")));
+              return SessionQuestionScreen();
             }
           }
 
           return const LoadingScreen();
         },
+      ),
+    );
+  }
+}
+
+class SessionQuestionScreen extends StatelessWidget {
+  const SessionQuestionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Center(
+            child: Text("QUESTION SCREEN"),
+          ),
+        ],
       ),
     );
   }

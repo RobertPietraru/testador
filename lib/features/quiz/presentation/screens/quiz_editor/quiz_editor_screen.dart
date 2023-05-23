@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/core/components/app_app_bar.dart';
+import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/loading_wrapper.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';

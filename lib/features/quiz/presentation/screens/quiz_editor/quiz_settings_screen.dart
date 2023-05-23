@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/core/components/app_app_bar.dart';
+import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/cubit/quiz_editor_cubit.dart';
