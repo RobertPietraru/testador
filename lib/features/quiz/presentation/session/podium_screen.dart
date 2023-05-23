@@ -4,20 +4,20 @@ import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
 import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
 
-class LeaderboardScreen extends StatefulWidget {
-  final VoidCallback onContinue;
+class PodiumScreen extends StatefulWidget {
+  final VoidCallback onLeave;
   final SessionAdminMatchState state;
-  const LeaderboardScreen({
+  const PodiumScreen({
     super.key,
     required this.state,
-    required this.onContinue,
+    required this.onLeave,
   });
 
   @override
-  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+  State<PodiumScreen> createState() => _PodiumScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen> {
+class _PodiumScreenState extends State<PodiumScreen> {
   final ScrollController controller = ScrollController();
   int total = 0;
   late final List<PlayerEntity> sortedPlayers;
@@ -47,15 +47,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final state = widget.state;
-    final List<int> results = calculate();
     return Scaffold(
       appBar: CustomAppBar(
-          title: Text(splitStringIntoBlocks(widget.state.session.id),
-              style: theme.titleTextStyle),
-          trailing: [
-            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
-          ]),
+        title: Text(splitStringIntoBlocks(widget.state.session.id),
+            style: theme.titleTextStyle),
+        trailing: [],
+      ),
       body: NestedScrollView(
         controller: controller,
         headerSliverBuilder: (context, _) {
@@ -65,10 +62,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               Padding(
                   padding: theme.standardPadding.copyWith(top: 0),
                   child: Center(
-                    child: Text(
-                      "Clasament",
-                      style: theme.subtitleTextStyle,
-                    ),
+                    child: Text("Clasament", style: theme.subtitleTextStyle),
                   ))
             ]))
           ];
@@ -80,9 +74,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             itemBuilder: (context, index) => Padding(
                   padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
                   child: ListTile(
+                    leading: Text((index + 1).toString()),
                     trailing:
                         Text(sortedPlayers[index].score.toInt().toString()),
-                    tileColor: theme.secondaryColor.withOpacity(0.5),
+                    tileColor: index < 4
+                        ? Colors.amber
+                        : theme.secondaryColor.withOpacity(0.5),
                     title: Text(sortedPlayers[index].name),
                   ),
                 )),

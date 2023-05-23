@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/components.dart';
@@ -9,6 +7,7 @@ import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
 import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/podium_screen.dart';
 import 'package:testador/features/quiz/presentation/session/question_results_screen.dart';
 import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
@@ -24,7 +23,7 @@ class QuizSessionManagercreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SessionAdminCubit(locator(), locator(), locator(),
-          locator(), locator(), locator(), locator(),
+          locator(), locator(), locator(), locator(), locator(),
           quiz: quiz),
       child: _QuizSessionManagerScreen(),
     );
@@ -78,9 +77,12 @@ class _QuizSessionManagerScreen extends StatelessWidget {
               );
             } else if (status == SessionStatus.leaderboard) {
               return LeaderboardScreen(
-                onContinue: () {},
+                onContinue: () =>
+                    context.read<SessionAdminCubit>().goToNextQuestion(),
                 state: state,
               );
+            } else if (status == SessionStatus.podium) {
+              return PodiumScreen(onLeave: () {}, state: state);
             }
           }
 

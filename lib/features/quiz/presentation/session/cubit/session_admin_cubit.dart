@@ -18,6 +18,7 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
   final DeleteSessionUsecase deleteSessionUsecase;
   final ShowQuestionResultsUsecase showQuestionResultsUsecase;
   final ShowLeaderboardUsecase showLeaderboardUsecase;
+  final GoToNextQuestionUsecase goToNextQuestionUsecase;
 
   final BeginSessionUsecase beginSessionUsecase;
 
@@ -30,7 +31,8 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
     this.deleteSessionUsecase,
     this.beginSessionUsecase,
     this.showQuestionResultsUsecase,
-    this.showLeaderboardUsecase, {
+    this.showLeaderboardUsecase,
+    this.goToNextQuestionUsecase, {
     required QuizEntity quiz,
   }) : super(SessionAdminLoadingState(quiz: quiz)) {
     createAndSubscribe();
@@ -112,6 +114,21 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
 
     final response = await showLeaderboardUsecase
         .call(ShowLeaderboardUsecaseParams(session: state.session));
+
+    response.fold((l) {
+      emit(state.copyWith(failure: l));
+    }, (r) {
+      emit(state.copyWith(session: r.session));
+    });
+  }
+
+  Future<void> goToNextQuestion() async {
+    if (this.state is! SessionAdminMatchState) return;
+    final state = this.state as SessionAdminMatchState;
+
+    final response = await goToNextQuestionUsecase.call(
+        GoToNextQuestionUsecaseParams(
+            session: state.session, quiz: state.quiz));
 
     response.fold((l) {
       emit(state.copyWith(failure: l));

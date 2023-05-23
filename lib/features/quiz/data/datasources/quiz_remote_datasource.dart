@@ -148,12 +148,21 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     if (currentQuestionIndex == -1) {
       throw const QuizUnknownFailure();
     }
+    late final SessionDto newSession;
 
-    final newSession = SessionDto.fromEntity(params.session).copyWith(
-      status: SessionStatus.question,
-      currentQuestionId: params.quiz.questions[currentQuestionIndex + 1].id,
-      answers: [],
-    );
+    if (currentQuestionIndex == params.quiz.questions.length - 1) {
+      newSession = SessionDto.fromEntity(params.session).copyWith(
+        status: SessionStatus.podium,
+        answers: [],
+      );
+    } else {
+      newSession = SessionDto.fromEntity(params.session).copyWith(
+        status: SessionStatus.question,
+        currentQuestionId: params.quiz.questions[currentQuestionIndex + 1].id,
+        answers: [],
+      );
+    }
+
     await _writeSessionToDB(newSession);
     return GoToNextQuestionUsecaseResult(session: newSession.toEntity());
   }
@@ -175,7 +184,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
     if (nameAlreadyUsed) throw PlayerNameAlreadyInUseQuizFailure();
     final students = session.students.toList();
-    students.add(PlayerDto(userId: params.userId, name: params.name, score: 0));
+    students.add(PlayerDto(
+        userId: params.userId, name: params.name, score: 0, correctAnswers: 0));
     final newSession = session.copyWith(students: students);
 
     await _writeSessionToDB(newSession);

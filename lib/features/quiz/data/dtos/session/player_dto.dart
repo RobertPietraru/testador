@@ -6,32 +6,45 @@ class PlayerDto extends Equatable {
   final String userId;
   final String name;
   final double score;
+  final int correctAnswers;
 
   static const String userIdField = 'userId';
   static const String scoreField = 'score';
   static const String nameField = 'name';
+  static const String correctAnswersField = 'correctAnswers';
 
-  const PlayerDto(
-      {required this.userId, required this.name, required this.score});
+  const PlayerDto({
+    required this.userId,
+    required this.name,
+    required this.score,
+    required this.correctAnswers,
+  });
 
   @override
   List<Object?> get props => [userId, name];
 
-  PlayerDto copyWith({String? userId, String? name, double? score}) {
+  PlayerDto copyWith(
+      {String? userId, String? name, double? score, int? correctAnswers}) {
     return PlayerDto(
-      userId: userId ?? this.userId,
-      name: name ?? this.name,
-      score: score ?? this.score,
-    );
+        userId: userId ?? this.userId,
+        name: name ?? this.name,
+        score: score ?? this.score,
+        correctAnswers: correctAnswers ?? this.correctAnswers);
   }
 
   factory PlayerDto.fromEntity(PlayerEntity player) {
     return PlayerDto(
-        userId: player.userId, name: player.name, score: player.score);
+        correctAnswers: player.correctAnswers,
+        userId: player.userId,
+        name: player.name,
+        score: player.score);
   }
   PlayerEntity toEntity(PlayerDto player) {
     return PlayerEntity(
-        userId: player.userId, name: player.name, score: player.score);
+        correctAnswers: correctAnswers,
+        userId: player.userId,
+        name: player.name,
+        score: player.score);
   }
 
   Map<dynamic, dynamic> toMap() {
@@ -40,6 +53,9 @@ class PlayerDto extends Equatable {
 
   factory PlayerDto.fromMap(Map<dynamic, dynamic> map) {
     return PlayerDto(
-        userId: map[userIdField], name: map[nameField], score: map[scoreField]);
+        correctAnswers: map[correctAnswersField],
+        userId: map[userIdField],
+        name: map[nameField],
+        score: map[scoreField]);
   }
 }

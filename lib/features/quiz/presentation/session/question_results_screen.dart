@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
-import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/session_manager_screen.dart';
 
@@ -28,15 +25,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
 
   List<int> calculate() {
     Map<int, int> answerCount = {};
-    //TODO: replcae with the actual thing
-    for (var answer in List.generate(
-      Random().nextInt(100),
-      (index) => SessionAnswer(
-        userId: 'userId',
-        responseTime: Duration(seconds: 10),
-        optionIndex: Random().nextInt(4),
-      ),
-    )) {
+    for (var answer in widget.state.session.answers) {
       final before = answerCount[answer.optionIndex];
       if (before == null) {
         answerCount[answer.optionIndex!] = 0;
@@ -80,7 +69,6 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
                         choices: results,
                         options: widget.state.currentQuestion.options,
                       ),
-                      // KahootChart([1, 2, 34]),
                     ],
                   ))
             ]))
