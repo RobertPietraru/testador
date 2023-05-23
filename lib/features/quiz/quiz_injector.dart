@@ -2,6 +2,7 @@ import 'package:testador/features/quiz/data/datasources/quiz_local_datasource.da
 import 'package:testador/features/quiz/data/repositories/quiz_repository_impl.dart';
 import 'package:testador/features/quiz/domain/repositories/quiz_repository.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
+import 'package:testador/features/quiz/domain/usecases/session/show_leaderboard.dart';
 
 import '../../injection.dart';
 import 'data/datasources/quiz_remote_datasource.dart';
@@ -38,5 +39,6 @@ void quizInject() {
     ..registerSingleton(SendAnswerUsecase(locator()))
     ..registerSingleton(ShowPodiumUsecase(locator()))
     ..registerSingleton(ShowQuestionResultsUsecase(locator()))
+    ..registerSingleton(ShowLeaderboardUsecase(locator()))
     ..registerSingleton(SubscribeToSessionUsecase(locator()));
 }

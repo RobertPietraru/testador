@@ -7,8 +7,7 @@ import 'package:testador/features/quiz/data/datasources/quiz_remote_datasource.d
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
-import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
-import 'package:testador/features/quiz/domain/usecases/session/subscribe_to_session.dart';
+import 'package:testador/features/quiz/domain/usecases/session/show_leaderboard.dart';
 import '../../domain/repositories/quiz_repository.dart';
 
 class QuizRepositoryIMPL implements QuizRepository {
@@ -420,5 +419,21 @@ class QuizRepositoryIMPL implements QuizRepository {
     } catch (_) {
       return const Left(QuizUnknownFailure());
     }
+
+  }
+
+  @override
+  Future<Either<QuizFailure, ShowLeaderboardUsecaseResult>> showLeaderboard(ShowLeaderboardUsecaseParams params) async {
+    try {
+      final response = await quizRemoteDataSource.showLeaderboard(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
+
   }
 }

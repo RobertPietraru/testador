@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
+import 'package:testador/features/quiz/domain/usecases/session/show_leaderboard.dart';
 import 'package:testador/features/quiz/domain/usecases/session/subscribe_to_session.dart';
 
 import '../failures/quiz_failures.dart';
@@ -66,6 +67,9 @@ abstract class QuizRepository {
 
   Future<Either<QuizFailure, SubscribeToSessionUsecaseResult>>
       subscribeToSession(SubscribeToSessionUsecaseParams params);
+
+  Future<Either<QuizFailure, ShowLeaderboardUsecaseResult>> showLeaderboard(
+      ShowLeaderboardUsecaseParams params);
 }
 
 // create session (generates code and all that)

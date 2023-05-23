@@ -13,6 +13,7 @@ import 'package:testador/features/quiz/domain/entities/session/session_entity.da
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/failures/session/player_name_already_in_use_failure.dart';
 import 'package:testador/features/quiz/domain/failures/session/session_now_found_failure.dart';
+import 'package:testador/features/quiz/domain/usecases/session/show_leaderboard.dart';
 
 import '../../domain/usecases/quiz_usecases.dart';
 
@@ -47,6 +48,9 @@ abstract class QuizRemoteDataSource {
 
   Future<SubscribeToSessionUsecaseResult> subscribeToSession(
       SubscribeToSessionUsecaseParams params);
+
+  Future<ShowLeaderboardUsecaseResult> showLeaderboard(
+      ShowLeaderboardUsecaseParams params);
 }
 
 class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
@@ -318,5 +322,19 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     ));
 
     return SubscribeToSessionUsecaseResult(sessions: sessionStream);
+  }
+
+  @override
+  Future<ShowLeaderboardUsecaseResult> showLeaderboard(
+      ShowLeaderboardUsecaseParams params) async {
+    final session = SessionDto.fromEntity(params.session);
+    var students = session.students.toList();
+
+    final newSession =
+        session.copyWith(students: students, status: SessionStatus.leaderboard);
+
+    await ref.child('sessions').child(newSession.id).set(newSession.toMap());
+
+    return ShowLeaderboardUsecaseResult(session: newSession.toEntity());
   }
 }
