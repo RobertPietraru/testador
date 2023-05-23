@@ -1,15 +1,15 @@
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/components.dart';
-import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
 import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/question_results_screen.dart';
 import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 
@@ -23,7 +23,7 @@ class QuizSessionManagercreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SessionAdminCubit(
-          locator(), locator(), locator(), locator(), locator(),
+          locator(), locator(), locator(), locator(), locator(), locator(),
           quiz: quiz),
       child: _QuizSessionManagerScreen(),
     );
@@ -62,7 +62,26 @@ class _QuizSessionManagerScreen extends StatelessWidget {
             if (status == SessionStatus.waitingForPlayers) {
               return WaitingForPlayersScreen(state: state);
             } else if (status == SessionStatus.question) {
-              return SessionQuestionAdminScreen(state: state);
+              return SessionQuestionAdminScreen(
+                state: state,
+                onContinue: () =>
+                    context.read<SessionAdminCubit>().showQuestionResults(),
+                onAnswerPressed: (answer) {},
+              );
+            } else if (status == SessionStatus.results) {
+              return QuestionResultsScreen(
+                options: state.currentQuestion.options,
+                answers: List.generate(
+                  Random().nextInt(100),
+                  (index) => SessionAnswer(
+                    userId: 'userId',
+                    responseTime: Duration(seconds: 10),
+                    optionIndex: Random().nextInt(4),
+                  ),
+                ),
+                onContinue: () {},
+                state: state,
+              );
             }
           }
 
@@ -74,8 +93,14 @@ class _QuizSessionManagerScreen extends StatelessWidget {
 }
 
 class SessionQuestionAdminScreen extends StatefulWidget {
+  final VoidCallback onContinue;
   final SessionAdminMatchState state;
-  const SessionQuestionAdminScreen({super.key, required this.state});
+  final Function(MultipleChoiceOptionEntity answer) onAnswerPressed;
+  const SessionQuestionAdminScreen(
+      {super.key,
+      required this.state,
+      required this.onContinue,
+      required this.onAnswerPressed});
 
   @override
   State<SessionQuestionAdminScreen> createState() =>
@@ -94,12 +119,7 @@ class _SessionQuestionAdminScreenState
           title: Text(splitStringIntoBlocks(widget.state.session.id),
               style: theme.titleTextStyle),
           trailing: [
-            AppBarButton(
-              text: 'Continua',
-              onPressed: () {
-                // context.read();
-              },
-            )
+            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
           ]),
       body: NestedScrollView(
         controller: controller,
@@ -144,10 +164,12 @@ class _SessionQuestionAdminScreenState
                 crossAxisCount: 2),
             itemCount: widget.state.currentQuestion.options.length,
             itemBuilder: (context, index) => SessionOptionWidget(
-                index: index,
-                option: widget.state.currentQuestion.options[index],
-                isSelected: false,
-                onPressed: () {})),
+                  index: index,
+                  option: widget.state.currentQuestion.options[index],
+                  isSelected: false,
+                  onPressed: () => widget.onAnswerPressed(
+                      widget.state.currentQuestion.options[index]),
+                )),
       ),
     );
   }
@@ -156,7 +178,7 @@ class _SessionQuestionAdminScreenState
 class SessionOptionWidget extends StatefulWidget {
   final int index;
   final MultipleChoiceOptionEntity option;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isSelected;
   const SessionOptionWidget({
     super.key,
@@ -171,17 +193,6 @@ class SessionOptionWidget extends StatefulWidget {
 }
 
 class _SessionOptionWidgetState extends State<SessionOptionWidget> {
-  Color getColor(int index) {
-    return [
-      Colors.red,
-      Colors.blue,
-      Colors.orange,
-      Colors.green,
-      Colors.pink,
-      Colors.purple
-    ][index];
-  }
-
   @override
   Widget build(BuildContext context) {
     final bool isEnabled = widget.option.text != null;
@@ -195,7 +206,8 @@ class _SessionOptionWidgetState extends State<SessionOptionWidget> {
       child: InkWell(
         onTap: widget.onPressed,
         child: Ink(
-          color: isEnabled ? getColor(widget.index) : theme.secondaryColor,
+          color:
+              isEnabled ? theme.getColor(widget.index) : theme.secondaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

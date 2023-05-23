@@ -15,17 +15,19 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
   final CreateSessionUsecase createSessionUsecase;
   final JoinSessionUsecase joinSessionUsecase;
   final DeleteSessionUsecase deleteSessionUsecase;
+  final ShowQuestionResultsUsecase showQuestionResultsUsecase;
 
   final BeginSessionUsecase beginSessionUsecase;
 
-  late final StreamSubscription<SessionEntity> sessionsStreamSubscription;
+  late final StreamSubscription<SessionEntity> _sessionsStreamSubscription;
 
   SessionAdminCubit(
     this.subscribeToSessionUsecase,
     this.createSessionUsecase,
     this.joinSessionUsecase,
     this.deleteSessionUsecase,
-    this.beginSessionUsecase, {
+    this.beginSessionUsecase,
+    this.showQuestionResultsUsecase, {
     required QuizEntity quiz,
   }) : super(SessionAdminLoadingState(quiz: quiz)) {
     createAndSubscribe();
@@ -48,7 +50,7 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
         responseSubscription.fold(
           (failure) => emit(
               SessionAdminFailureState(quiz: state.quiz, failure: failure)),
-          (r) => sessionsStreamSubscription = r.sessions.listen(
+          (r) => _sessionsStreamSubscription = r.sessions.listen(
             (entity) {
               emit(SessionAdminMatchState(quiz: state.quiz, session: entity));
             },
@@ -83,13 +85,27 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
     //   (r) => emit(SessionDeletedState(quiz: state.quiz)),
     // );
 
-    sessionsStreamSubscription.cancel();
+    _sessionsStreamSubscription.cancel();
+  }
+
+  Future<void> showQuestionResults() async {
+    if (this.state is! SessionAdminMatchState) return;
+    final state = this.state as SessionAdminMatchState;
+
+    final response = await showQuestionResultsUsecase.call(
+        ShowQuestionResultsUsecaseParams(
+            session: state.session, quiz: state.quiz));
+
+    response.fold((l) {
+      emit(state.copyWith(failure: l));
+    }, (r) {
+      emit(state.copyWith(session: r.session));
+    });
   }
 
   @override
   Future<void> close() {
-    sessionsStreamSubscription.cancel();
+    _sessionsStreamSubscription.cancel();
     return super.close();
   }
-
 }

@@ -10,6 +10,17 @@ const _dividerThemeData = DividerThemeData(
 abstract class AppThemeData {
   ThemeData materialThemeData(BuildContext context);
 
+  Color getColor(int index) {
+    return [
+      Colors.red,
+      Colors.blue,
+      Colors.orange,
+      Colors.green,
+      Colors.pink,
+      Colors.purple
+    ][index];
+  }
+
   String get placeholderImage =>
       'https://www.parentmap.com/images/article/7793/iStock_000043382420_Large.jpg';
 

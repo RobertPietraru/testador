@@ -20,16 +20,7 @@ class OptionWidget extends StatefulWidget {
 }
 
 class _OptionWidgetState extends State<OptionWidget> {
-  Color getColor(int index) {
-    return [
-      Colors.red,
-      Colors.blue,
-      Colors.orange,
-      Colors.green,
-      Colors.pink,
-      Colors.purple
-    ][index];
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +46,7 @@ class _OptionWidgetState extends State<OptionWidget> {
           );
         },
         child: Ink(
-          color: isEnabled ? getColor(widget.index) : theme.secondaryColor,
+          color: isEnabled ? theme.getColor(widget.index) : theme.secondaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

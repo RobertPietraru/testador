@@ -17,11 +17,13 @@ class ShowQuestionResultsUsecase extends UseCase<
 }
 
 class ShowQuestionResultsUsecaseParams extends Params {
-  final String sessionId;
+  final SessionEntity session;
   final QuizEntity quiz;
 
-  const ShowQuestionResultsUsecaseParams(
-      {required this.sessionId, required this.quiz});
+  const ShowQuestionResultsUsecaseParams({
+    required this.quiz,
+    required this.session,
+  });
 }
 
 class ShowQuestionResultsUsecaseResult extends Response {

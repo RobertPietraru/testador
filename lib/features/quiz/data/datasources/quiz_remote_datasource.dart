@@ -267,8 +267,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   @override
   Future<ShowQuestionResultsUsecaseResult> showQuestionResults(
       ShowQuestionResultsUsecaseParams params) async {
-    final session = await _getSessionFromDB(params.sessionId);
-
+    final session = SessionDto.fromEntity(params.session);
     final question = params.quiz.questions
         .firstWhere((element) => element.id == session.currentQuestionId);
     var students = session.students.toList();
@@ -290,7 +289,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     }
 
     final newSession =
-        session.copyWith(students: students, status: SessionStatus.leaderboard);
+        session.copyWith(students: students, status: SessionStatus.results);
 
     await ref.child('sessions').child(newSession.id).set(newSession.toMap());
 

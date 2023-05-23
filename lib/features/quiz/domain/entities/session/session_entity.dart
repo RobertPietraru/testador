@@ -5,13 +5,13 @@ import 'package:testador/features/quiz/domain/entities/session/player_entity.dar
 enum SessionStatus {
   waitingForPlayers,
   question,
-  answers,
+  results,
   leaderboard,
   podium,
   done;
 
   static Map<SessionStatus, String> get _conversionMap => {
-        SessionStatus.answers: 'answers',
+        SessionStatus.results: 'results',
         SessionStatus.leaderboard: 'leaderboard',
         SessionStatus.podium: 'podium',
         SessionStatus.question: 'question',
