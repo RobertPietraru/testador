@@ -125,6 +125,32 @@ class _ResultsChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> showingSections(AppThemeData theme) {
+    if (choices.isEmpty) {
+      return List.generate(options.length, (i) {
+        final isCorrect = options[i].isCorrect;
+        final fontSize = isCorrect ? 25.0 : 16.0;
+        final radius = isCorrect ? 60.0 : 50.0;
+        const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+        return PieChartSectionData(
+          color: theme.getColor(i),
+          badgeWidget: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(0.toString(), style: theme.subtitleTextStyle),
+              if (isCorrect) const SizedBox(width: 3),
+              if (isCorrect) const Icon(Icons.done),
+            ],
+          ),
+          radius: radius,
+          titleStyle: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            shadows: shadows,
+          ),
+        );
+      });
+    }
     return List.generate(choices.length, (i) {
       final isCorrect = options[i].isCorrect;
       final fontSize = isCorrect ? 25.0 : 16.0;
