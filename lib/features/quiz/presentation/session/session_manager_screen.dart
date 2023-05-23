@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/core/components/components.dart';
 import 'package:testador/core/routing/app_router.dart';
-import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
-import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/podium_screen.dart';
 import 'package:testador/features/quiz/presentation/session/question_results_screen.dart';
 import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 
-import '../../domain/entities/question_entity.dart';
+import 'answer_retrival_admin_screen.dart';
 import 'leaderboard_screen.dart';
 
 class QuizSessionManagercreen extends StatelessWidget {
@@ -62,7 +60,7 @@ class _QuizSessionManagerScreen extends StatelessWidget {
             if (status == SessionStatus.waitingForPlayers) {
               return WaitingForPlayersScreen(state: state);
             } else if (status == SessionStatus.question) {
-              return SessionQuestionAdminScreen(
+              return AnswerRetrivalAdminScreen(
                 state: state,
                 onContinue: () =>
                     context.read<SessionAdminCubit>().showQuestionResults(),
@@ -88,151 +86,6 @@ class _QuizSessionManagerScreen extends StatelessWidget {
 
           return const LoadingScreen();
         },
-      ),
-    );
-  }
-}
-
-class SessionQuestionAdminScreen extends StatefulWidget {
-  final VoidCallback onContinue;
-  final SessionAdminMatchState state;
-  final Function(MultipleChoiceOptionEntity answer) onAnswerPressed;
-  const SessionQuestionAdminScreen(
-      {super.key,
-      required this.state,
-      required this.onContinue,
-      required this.onAnswerPressed});
-
-  @override
-  State<SessionQuestionAdminScreen> createState() =>
-      _SessionQuestionAdminScreenState();
-}
-
-class _SessionQuestionAdminScreenState
-    extends State<SessionQuestionAdminScreen> {
-  final ScrollController controller = ScrollController();
-  @override
-  Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
-    final state = widget.state;
-    return Scaffold(
-      appBar: CustomAppBar(
-          title: Text(splitStringIntoBlocks(widget.state.session.id),
-              style: theme.titleTextStyle),
-          trailing: [
-            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
-          ]),
-      body: NestedScrollView(
-        controller: controller,
-        headerSliverBuilder: (context, _) {
-          return [
-            SliverList(
-                delegate: SliverChildListDelegate([
-              Padding(
-                  padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "#${(state.currentQuestionIndex + 1).toString()} ${state.currentQuestion.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
-                        style: theme.subtitleTextStyle,
-                      ),
-                      SizedBox(height: theme.spacing.medium),
-                      if (widget.state.currentQuestion.type ==
-                          QuestionType.answer)
-                        SizedBox(height: theme.spacing.medium),
-                      if (widget.state.currentQuestion.image != null)
-                        Center(
-                          child: Container(
-                            height: 220,
-                            color: theme.secondaryColor,
-                            child: AspectRatio(
-                              aspectRatio: 1.0,
-                              child: Image.network(
-                                  widget.state.currentQuestion.image!,
-                                  fit: BoxFit.contain),
-                            ),
-                          ),
-                        ),
-                      SizedBox(height: theme.spacing.medium),
-                    ],
-                  ))
-            ]))
-          ];
-        },
-        body: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemCount: widget.state.currentQuestion.options.length,
-            itemBuilder: (context, index) => SessionOptionWidget(
-                  index: index,
-                  option: widget.state.currentQuestion.options[index],
-                  isSelected: false,
-                  onPressed: () => widget.onAnswerPressed(
-                      widget.state.currentQuestion.options[index]),
-                )),
-      ),
-    );
-  }
-}
-
-class SessionOptionWidget extends StatefulWidget {
-  final int index;
-  final MultipleChoiceOptionEntity option;
-  final VoidCallback? onPressed;
-  final bool isSelected;
-  const SessionOptionWidget({
-    super.key,
-    required this.index,
-    required this.option,
-    required this.onPressed,
-    required this.isSelected,
-  });
-
-  @override
-  State<SessionOptionWidget> createState() => _SessionOptionWidgetState();
-}
-
-class _SessionOptionWidgetState extends State<SessionOptionWidget> {
-  @override
-  Widget build(BuildContext context) {
-    final bool isEnabled = widget.option.text != null;
-    final theme = AppTheme.of(context);
-
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide.none,
-      ),
-      child: InkWell(
-        onTap: widget.onPressed,
-        child: Ink(
-          color:
-              isEnabled ? theme.getColor(widget.index) : theme.secondaryColor,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (widget.isSelected)
-                    const Icon(Icons.done, color: Colors.white)
-                ],
-              ),
-              Center(
-                child: Text(
-                  widget.option.text ?? "Optiunea ${widget.index + 1}",
-                  style: TextStyle(
-                      color: isEnabled ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(),
-              const SizedBox(),
-            ],
-          ),
-        ),
       ),
     );
   }

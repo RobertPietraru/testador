@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
-import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
 
 class PodiumScreen extends StatefulWidget {
   final VoidCallback onLeave;

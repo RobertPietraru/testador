@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
-import 'package:testador/features/quiz/presentation/session/cubit/session_admin_cubit.dart';
-import 'package:testador/features/quiz/presentation/session/session_manager_screen.dart';
+import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/widgets/session_option_widget.dart';
 
 class QuestionResultsScreen extends StatefulWidget {
   final VoidCallback onContinue;
   final SessionAdminMatchState state;
-  const QuestionResultsScreen({
-    super.key,
-    required this.state,
-    required this.onContinue,
-  });
+  const QuestionResultsScreen(
+      {super.key, required this.state, required this.onContinue});
 
   @override
   State<QuestionResultsScreen> createState() => _QuestionResultsScreenState();
@@ -192,16 +189,11 @@ class Indicator extends StatelessWidget {
               shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
               color: color),
         ),
-        const SizedBox(
-          width: 4,
-        ),
+        const SizedBox(width: 4),
         Text(
           text,
           style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: textColor,
-          ),
+              fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
         )
       ],
     );
