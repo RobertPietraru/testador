@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
@@ -10,14 +12,10 @@ import 'package:testador/features/quiz/presentation/session/session_manager_scre
 class QuestionResultsScreen extends StatefulWidget {
   final VoidCallback onContinue;
   final SessionAdminMatchState state;
-  final List<MultipleChoiceOptionEntity> options;
-  final List<SessionAnswer> answers;
   const QuestionResultsScreen({
     super.key,
     required this.state,
     required this.onContinue,
-    required this.options,
-    required this.answers,
   });
 
   @override
@@ -30,7 +28,15 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
 
   List<int> calculate() {
     Map<int, int> answerCount = {};
-    for (var answer in widget.answers) {
+    //TODO: replcae with the actual thing
+    for (var answer in List.generate(
+      Random().nextInt(100),
+      (index) => SessionAnswer(
+        userId: 'userId',
+        responseTime: Duration(seconds: 10),
+        optionIndex: Random().nextInt(4),
+      ),
+    )) {
       final before = answerCount[answer.optionIndex];
       if (before == null) {
         answerCount[answer.optionIndex!] = 0;
@@ -72,7 +78,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
                       ),
                       _ResultsChart(
                         choices: results,
-                        options: widget.options,
+                        options: widget.state.currentQuestion.options,
                       ),
                       // KahootChart([1, 2, 34]),
                     ],

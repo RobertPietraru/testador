@@ -14,6 +14,7 @@ import 'package:testador/features/quiz/presentation/session/waiting_for_players_
 import 'package:testador/injection.dart';
 
 import '../../domain/entities/question_entity.dart';
+import 'leaderboard_screen.dart';
 
 class QuizSessionManagercreen extends StatelessWidget {
   final QuizEntity quiz;
@@ -22,8 +23,8 @@ class QuizSessionManagercreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SessionAdminCubit(
-          locator(), locator(), locator(), locator(), locator(), locator(),
+      create: (_) => SessionAdminCubit(locator(), locator(), locator(),
+          locator(), locator(), locator(), locator(),
           quiz: quiz),
       child: _QuizSessionManagerScreen(),
     );
@@ -70,15 +71,13 @@ class _QuizSessionManagerScreen extends StatelessWidget {
               );
             } else if (status == SessionStatus.results) {
               return QuestionResultsScreen(
-                options: state.currentQuestion.options,
-                answers: List.generate(
-                  Random().nextInt(100),
-                  (index) => SessionAnswer(
-                    userId: 'userId',
-                    responseTime: Duration(seconds: 10),
-                    optionIndex: Random().nextInt(4),
-                  ),
-                ),
+                onContinue: () {
+                  context.read<SessionAdminCubit>().showLeaderboard();
+                },
+                state: state,
+              );
+            } else if (status == SessionStatus.leaderboard) {
+              return LeaderboardScreen(
                 onContinue: () {},
                 state: state,
               );

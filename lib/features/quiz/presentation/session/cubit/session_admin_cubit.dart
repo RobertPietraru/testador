@@ -7,6 +7,7 @@ import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
+import 'package:testador/features/quiz/domain/usecases/session/show_leaderboard.dart';
 
 part 'session_admin_state.dart';
 
@@ -16,6 +17,7 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
   final JoinSessionUsecase joinSessionUsecase;
   final DeleteSessionUsecase deleteSessionUsecase;
   final ShowQuestionResultsUsecase showQuestionResultsUsecase;
+  final ShowLeaderboardUsecase showLeaderboardUsecase;
 
   final BeginSessionUsecase beginSessionUsecase;
 
@@ -27,7 +29,8 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
     this.joinSessionUsecase,
     this.deleteSessionUsecase,
     this.beginSessionUsecase,
-    this.showQuestionResultsUsecase, {
+    this.showQuestionResultsUsecase,
+    this.showLeaderboardUsecase, {
     required QuizEntity quiz,
   }) : super(SessionAdminLoadingState(quiz: quiz)) {
     createAndSubscribe();
@@ -95,6 +98,20 @@ class SessionAdminCubit extends Cubit<SessionAdminState> {
     final response = await showQuestionResultsUsecase.call(
         ShowQuestionResultsUsecaseParams(
             session: state.session, quiz: state.quiz));
+
+    response.fold((l) {
+      emit(state.copyWith(failure: l));
+    }, (r) {
+      emit(state.copyWith(session: r.session));
+    });
+  }
+
+  Future<void> showLeaderboard() async {
+    if (this.state is! SessionAdminMatchState) return;
+    final state = this.state as SessionAdminMatchState;
+
+    final response = await showLeaderboardUsecase
+        .call(ShowLeaderboardUsecaseParams(session: state.session));
 
     response.fold((l) {
       emit(state.copyWith(failure: l));
