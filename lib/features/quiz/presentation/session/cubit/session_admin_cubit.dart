@@ -7,23 +7,26 @@ import 'package:testador/features/quiz/domain/entities/session/session_entity.da
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
 
-part 'session_state.dart';
+part 'session_admin_state.dart';
 
-class SessionCubit extends Cubit<SessionState> {
+class SessionAdminCubit extends Cubit<SessionAdminState> {
   final SubscribeToSessionUsecase subscribeToSessionUsecase;
   final CreateSessionUsecase createSessionUsecase;
   final JoinSessionUsecase joinSessionUsecase;
   final DeleteSessionUsecase deleteSessionUsecase;
 
+  final BeginSessionUsecase beginSessionUsecase;
+
   late final StreamSubscription<SessionEntity> sessionsStreamSubscription;
 
-  SessionCubit(
+  SessionAdminCubit(
     this.subscribeToSessionUsecase,
     this.createSessionUsecase,
     this.joinSessionUsecase,
-    this.deleteSessionUsecase, {
+    this.deleteSessionUsecase,
+    this.beginSessionUsecase, {
     required QuizEntity quiz,
-  }) : super(SessionLoadingState(quiz: quiz)) {
+  }) : super(SessionAdminLoadingState(quiz: quiz)) {
     createAndSubscribe();
   }
 
@@ -33,20 +36,20 @@ class SessionCubit extends Cubit<SessionState> {
             creatorId: state.quiz.creatorId, quiz: state.quiz));
     responseCreation.fold(
       (l) {
-        emit(SessionFailureState(quiz: state.quiz, failure: l));
+        emit(SessionAdminFailureState(quiz: state.quiz, failure: l));
         return;
       },
       (r) async {
-        emit(SessionInGameState(quiz: state.quiz, session: r.session));
+        emit(SessionAdminMatchState(quiz: state.quiz, session: r.session));
 
         final responseSubscription = await subscribeToSessionUsecase
             .call(SubscribeToSessionUsecaseParams(sessionId: r.session.id));
         responseSubscription.fold(
-          (failure) =>
-              emit(SessionFailureState(quiz: state.quiz, failure: failure)),
+          (failure) => emit(
+              SessionAdminFailureState(quiz: state.quiz, failure: failure)),
           (r) => sessionsStreamSubscription = r.sessions.listen(
             (entity) {
-              emit(SessionInGameState(quiz: state.quiz, session: entity));
+              emit(SessionAdminMatchState(quiz: state.quiz, session: entity));
             },
           ),
         );
@@ -54,9 +57,23 @@ class SessionCubit extends Cubit<SessionState> {
     );
   }
 
+  Future<void> beginSession() async {
+    if (this.state is! SessionAdminMatchState) return;
+    final state = this.state as SessionAdminMatchState;
+
+    final response = await beginSessionUsecase
+        .call(BeginSessionUsecaseParams(session: state.session));
+    response.fold(
+      (l) => emit(SessionAdminMatchState(
+          quiz: state.quiz, session: state.session, failure: l)),
+      (r) => emit(SessionAdminMatchState(
+          quiz: state.quiz, session: r.session, failure: null)),
+    );
+  }
+
   Future<void> deleteAndUnsubscribe() async {
-    if (this.state is SessionLoadingState) return;
-    final state = this.state as SessionInGameState;
+    if (this.state is SessionAdminLoadingState) return;
+    final state = this.state as SessionAdminMatchState;
     final response = await deleteSessionUsecase
         .call(DeleteSessionUsecaseParams(session: state.session));
     // response.fold(
@@ -73,4 +90,5 @@ class SessionCubit extends Cubit<SessionState> {
     sessionsStreamSubscription.cancel();
     return super.close();
   }
+
 }

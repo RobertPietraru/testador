@@ -77,8 +77,12 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
   @override
   Future<BeginSessionUsecaseResult> beginSession(
-      BeginSessionUsecaseParams params) {
-    throw UnimplementedError();
+      BeginSessionUsecaseParams params) async {
+    final newSession = SessionDto.fromEntity(params.session)
+        .copyWith(status: SessionStatus.question, answers: []);
+
+    await _writeSessionToDB(newSession);
+    return BeginSessionUsecaseResult(session: newSession.toEntity());
   }
 
   /// return null means max tries were reached and it's still colliding

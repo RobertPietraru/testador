@@ -1,24 +1,24 @@
-part of 'session_cubit.dart';
+part of 'session_admin_cubit.dart';
 
-abstract class SessionState extends Equatable {
+abstract class SessionAdminState extends Equatable {
   final QuizEntity quiz;
-  const SessionState({required this.quiz});
+  const SessionAdminState({required this.quiz});
 }
 
-class SessionInGameState extends SessionState {
+class SessionAdminMatchState extends SessionAdminState {
   final SessionEntity session;
   final QuizFailure? failure;
-  const SessionInGameState(
+  const SessionAdminMatchState(
       {required super.quiz, required this.session, this.failure});
 
   @override
   List<Object?> get props => [quiz, session, failure];
-  SessionInGameState copyWith({
+  SessionAdminMatchState copyWith({
     QuizEntity? quiz,
     SessionEntity? session,
     QuizFailure? failure = const QuizUnknownFailure(code: 'fake-error'),
   }) {
-    return SessionInGameState(
+    return SessionAdminMatchState(
       quiz: quiz ?? this.quiz,
       session: session ?? this.session,
       failure: failure == const QuizUnknownFailure(code: 'fake-error')
@@ -28,23 +28,23 @@ class SessionInGameState extends SessionState {
   }
 }
 
-class SessionLoadingState extends SessionState {
-  const SessionLoadingState({required super.quiz});
+class SessionAdminLoadingState extends SessionAdminState {
+  const SessionAdminLoadingState({required super.quiz});
 
   @override
   List<Object?> get props => [quiz];
 }
 
-class SessionFailureState extends SessionState {
+class SessionAdminFailureState extends SessionAdminState {
   final QuizFailure failure;
-  const SessionFailureState({required super.quiz, required this.failure});
+  const SessionAdminFailureState({required super.quiz, required this.failure});
 
   @override
   List<Object?> get props => [quiz, failure];
 }
 
-class SessionDeletedState extends SessionState {
-  const SessionDeletedState({required super.quiz});
+class SessionAdminDeletedState extends SessionAdminState {
+  const SessionAdminDeletedState({required super.quiz});
 
   @override
   List<Object?> get props => [quiz];
