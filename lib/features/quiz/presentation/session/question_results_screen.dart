@@ -1,9 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
-import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/widgets/session_code_widget.dart';
 import 'package:testador/features/quiz/presentation/session/widgets/session_option_widget.dart';
 
 class QuestionResultsScreen extends StatefulWidget {
@@ -42,8 +42,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
     final List<int> results = calculate();
     return Scaffold(
       appBar: CustomAppBar(
-          title: Text(splitStringIntoBlocks(widget.state.session.id),
-              style: theme.titleTextStyle),
+          title: SessionCodeWidget(sessionId: widget.state.session.id),
           trailing: [
             AppBarButton(text: 'Continua', onPressed: widget.onContinue)
           ]),

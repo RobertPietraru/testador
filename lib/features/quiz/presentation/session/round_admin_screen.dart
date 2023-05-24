@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/quiz/presentation/session/timer/question_timer_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/widgets/session_code_widget.dart';
 import 'package:testador/features/quiz/presentation/session/widgets/session_option_widget.dart';
 
 import '../../../../core/components/buttons/app_bar_button.dart';
 import '../../../../core/components/custom_app_bar.dart';
 import '../../../../core/components/theme/app_theme.dart';
-import '../../../../core/utils/split_string_into_blocks.dart';
 import '../../domain/entities/question_entity.dart';
 import 'session_admin_cubit/session_admin_cubit.dart';
 
@@ -61,8 +61,7 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
     final state = widget.state;
     return Scaffold(
       appBar: CustomAppBar(
-          title: Text(splitStringIntoBlocks(widget.state.session.id),
-              style: theme.titleTextStyle),
+          title: SessionCodeWidget(sessionId: widget.state.session.id),
           trailing: [
             AppBarButton(text: 'Continua', onPressed: widget.onContinue)
           ]),
