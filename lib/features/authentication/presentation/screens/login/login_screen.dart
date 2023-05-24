@@ -14,6 +14,7 @@ import 'package:testador/injection.dart';
 import '../../../../../core/components/custom_dialog.dart';
 import '../../../../../core/routing/app_router.gr.dart';
 
+@RoutePage(name: 'LoginDialogRoute')
 class LoginDialog extends StatelessWidget {
   const LoginDialog({super.key});
 
@@ -29,6 +30,7 @@ class LoginDialog extends StatelessWidget {
   }
 }
 
+@RoutePage()
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 

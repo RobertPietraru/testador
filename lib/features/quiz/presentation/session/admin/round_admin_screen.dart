@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/features/quiz/presentation/session/admin/timer/question_timer_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/timer/question_timer_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_option_widget.dart';
 

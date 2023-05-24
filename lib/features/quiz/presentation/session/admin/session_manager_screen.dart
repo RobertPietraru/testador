@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/routing/app_router.dart';
@@ -13,9 +14,10 @@ import 'package:testador/injection.dart';
 import 'round_admin_screen.dart';
 import 'leaderboard_screen.dart';
 
-class QuizSessionManagercreen extends StatelessWidget {
+@RoutePage()
+class QuizSessionManagerScreen extends StatelessWidget {
   final QuizEntity quiz;
-  const QuizSessionManagercreen({super.key, required this.quiz});
+  const QuizSessionManagerScreen({super.key, required this.quiz});
 
   @override
   Widget build(BuildContext context) {

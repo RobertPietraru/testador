@@ -14,6 +14,7 @@ import '../../../../../core/components/text_input_field.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../../../../../core/routing/app_router.gr.dart';
 
+@RoutePage()
 class RegistrationScreen extends StatelessWidget {
   const RegistrationScreen({super.key});
 

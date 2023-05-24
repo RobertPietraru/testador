@@ -52,23 +52,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final authBloc = context.watch<AuthBloc>();
     return AppTheme(
       lightTheme: _lightTheme,
       darkTheme: _darkTheme,
       child: Builder(builder: (context) {
         return MaterialApp.router(
-          routerDelegate:
-              AutoRouterDelegate.declarative(_appRouter, routes: (_) {
-            if (authBloc.state is AuthUninitialisedState) {
-              return [const LoadingRoute()];
-            }
-            if (authBloc.state is AuthAuthenticatedState) {
-              return [const ProtectedFlowRoute()];
-            }
-            return [const AuthenticationFlowRoute()];
-          }),
-          routeInformationParser: _appRouter.defaultRouteParser(),
+          routerConfig: _appRouter.config(),
+          // routeInformationParser: _appRouter.defaultRouteParser(),
           theme: _lightTheme.materialThemeData(context),
           darkTheme: _darkTheme.materialThemeData(context),
           themeMode: ThemeMode.light,

@@ -1,91 +1,91 @@
-// **************************************************************************
-// AutoRouteGenerator
-// **************************************************************************
-
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
-// AutoRouteGenerator
+// AutoRouterGenerator
 // **************************************************************************
-//
+
 // ignore_for_file: type=lint
+// coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i8;
-import 'package:flutter/material.dart' as _i9;
-
-import '../../features/authentication/presentation/screens/login/login_screen.dart'
-    as _i3;
-import '../../features/authentication/presentation/screens/registration/registration_screen.dart'
-    as _i2;
-import '../../features/quiz/domain/entities/draft_entity.dart' as _i12;
-import '../../features/quiz/domain/entities/quiz_entity.dart' as _i10;
-import '../../features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart'
-    as _i4;
-import '../../features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart'
-    as _i11;
-import '../../features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart'
+import 'package:auto_route/auto_route.dart' as _i9;
+import 'package:flutter/material.dart' as _i10;
+import 'package:testador/core/routing/app_router.dart' as _i1;
+import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart'
     as _i7;
-import '../../features/quiz/presentation/screens/quiz_screen.dart' as _i5;
-import '../../features/quiz/presentation/session/admin/session_manager_screen.dart'
+import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart'
+    as _i8;
+import 'package:testador/features/quiz/domain/entities/draft_entity.dart'
+    as _i12;
+import 'package:testador/features/quiz/domain/entities/quiz_entity.dart'
+    as _i11;
+import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart'
     as _i6;
-import 'app_router.dart' as _i1;
+import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart'
+    as _i13;
+import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart'
+    as _i4;
+import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart'
+    as _i5;
+import 'package:testador/features/quiz/presentation/session/admin/session_manager_screen.dart'
+    as _i3;
+import 'package:testador/features/quiz/presentation/session/player/join_session_screen.dart'
+    as _i2;
 
-class AppRouter extends _i8.RootStackRouter {
-  AppRouter([_i9.GlobalKey<_i9.NavigatorState>? navigatorKey])
-      : super(navigatorKey);
+abstract class $AppRouter extends _i9.RootStackRouter {
+  $AppRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i8.PageFactory> pagesMap = {
+  final Map<String, _i9.PageFactory> pagesMap = {
     AuthenticationFlowRoute.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i1.AuthenticationFlow(),
       );
     },
+    AuthenticationWrapperRoute.name: (routeData) {
+      return _i9.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i1.AuthenticationWrapper(),
+      );
+    },
     ProtectedFlowRoute.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i1.ProtectedFlow(),
       );
     },
     LoadingRoute.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i1.LoadingScreen(),
       );
     },
-    RegistrationRoute.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
+    JoinSessionRoute.name: (routeData) {
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i2.RegistrationScreen(),
+        child: const _i2.JoinSessionScreen(),
       );
     },
-    LoginRoute.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
+    QuizSessionManagerRoute.name: (routeData) {
+      final args = routeData.argsAs<QuizSessionManagerRouteArgs>();
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.LoginScreen(),
-      );
-    },
-    QuizEditorRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<QuizEditorRouteArgs>(
-          orElse: () =>
-              QuizEditorRouteArgs(quizId: pathParams.getString('id')));
-      return _i8.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: _i4.QuizEditorScreen(
+        child: _i3.QuizSessionManagerScreen(
           key: args.key,
-          quizId: args.quizId,
           quiz: args.quiz,
-          quizListCubit: args.quizListCubit,
-          draft: args.draft,
         ),
+      );
+    },
+    QuizListRoute.name: (routeData) {
+      return _i9.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i4.QuizListScreen(),
       );
     },
     QuizRoute.name: (routeData) {
       final args = routeData.argsAs<QuizRouteArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i5.QuizScreen(
           key: args.key,
@@ -96,206 +96,178 @@ class AppRouter extends _i8.RootStackRouter {
         ),
       );
     },
-    QuizSessionCreationRoute.name: (routeData) {
-      final args = routeData.argsAs<QuizSessionCreationRouteArgs>();
-      return _i8.MaterialPageX<dynamic>(
+    QuizEditorRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<QuizEditorRouteArgs>(
+          orElse: () =>
+              QuizEditorRouteArgs(quizId: pathParams.getString('id')));
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i6.QuizSessionManagercreen(
+        child: _i6.QuizEditorScreen(
           key: args.key,
+          quizId: args.quizId,
           quiz: args.quiz,
+          quizListCubit: args.quizListCubit,
+          draft: args.draft,
         ),
       );
     },
-    QuizListRoute.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
+    LoginDialogRoute.name: (routeData) {
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i7.QuizListScreen(),
+        child: const _i7.LoginDialog(),
+      );
+    },
+    LoginRoute.name: (routeData) {
+      return _i9.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i7.LoginScreen(),
+      );
+    },
+    RegistrationRoute.name: (routeData) {
+      return _i9.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i8.RegistrationScreen(),
       );
     },
   };
-
-  @override
-  List<_i8.RouteConfig> get routes => [
-        _i8.RouteConfig(
-          AuthenticationFlowRoute.name,
-          path: 'auth',
-          children: [
-            _i8.RouteConfig(
-              '#redirect',
-              path: '',
-              parent: AuthenticationFlowRoute.name,
-              redirectTo: 'signup',
-              fullMatch: true,
-            ),
-            _i8.RouteConfig(
-              RegistrationRoute.name,
-              path: 'signup',
-              parent: AuthenticationFlowRoute.name,
-            ),
-            _i8.RouteConfig(
-              LoginRoute.name,
-              path: 'loginin',
-              parent: AuthenticationFlowRoute.name,
-            ),
-          ],
-        ),
-        _i8.RouteConfig(
-          ProtectedFlowRoute.name,
-          path: 'protected',
-          children: [
-            _i8.RouteConfig(
-              QuizEditorRoute.name,
-              path: 'quiz-admin/:id',
-              parent: ProtectedFlowRoute.name,
-            ),
-            _i8.RouteConfig(
-              QuizRoute.name,
-              path: 'quiz/:id',
-              parent: ProtectedFlowRoute.name,
-            ),
-            _i8.RouteConfig(
-              QuizSessionCreationRoute.name,
-              path: 'session-create/:id',
-              parent: ProtectedFlowRoute.name,
-            ),
-            _i8.RouteConfig(
-              QuizListRoute.name,
-              path: '',
-              parent: ProtectedFlowRoute.name,
-            ),
-          ],
-        ),
-        _i8.RouteConfig(
-          LoadingRoute.name,
-          path: 'loading',
-        ),
-      ];
 }
 
 /// generated route for
 /// [_i1.AuthenticationFlow]
-class AuthenticationFlowRoute extends _i8.PageRouteInfo<void> {
-  const AuthenticationFlowRoute({List<_i8.PageRouteInfo>? children})
+class AuthenticationFlowRoute extends _i9.PageRouteInfo<void> {
+  const AuthenticationFlowRoute({List<_i9.PageRouteInfo>? children})
       : super(
           AuthenticationFlowRoute.name,
-          path: 'auth',
           initialChildren: children,
         );
 
   static const String name = 'AuthenticationFlowRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i1.AuthenticationWrapper]
+class AuthenticationWrapperRoute extends _i9.PageRouteInfo<void> {
+  const AuthenticationWrapperRoute({List<_i9.PageRouteInfo>? children})
+      : super(
+          AuthenticationWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AuthenticationWrapperRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i1.ProtectedFlow]
-class ProtectedFlowRoute extends _i8.PageRouteInfo<void> {
-  const ProtectedFlowRoute({List<_i8.PageRouteInfo>? children})
+class ProtectedFlowRoute extends _i9.PageRouteInfo<void> {
+  const ProtectedFlowRoute({List<_i9.PageRouteInfo>? children})
       : super(
           ProtectedFlowRoute.name,
-          path: 'protected',
           initialChildren: children,
         );
 
   static const String name = 'ProtectedFlowRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i1.LoadingScreen]
-class LoadingRoute extends _i8.PageRouteInfo<void> {
-  const LoadingRoute()
+class LoadingRoute extends _i9.PageRouteInfo<void> {
+  const LoadingRoute({List<_i9.PageRouteInfo>? children})
       : super(
           LoadingRoute.name,
-          path: 'loading',
+          initialChildren: children,
         );
 
   static const String name = 'LoadingRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i2.RegistrationScreen]
-class RegistrationRoute extends _i8.PageRouteInfo<void> {
-  const RegistrationRoute()
+/// [_i2.JoinSessionScreen]
+class JoinSessionRoute extends _i9.PageRouteInfo<void> {
+  const JoinSessionRoute({List<_i9.PageRouteInfo>? children})
       : super(
-          RegistrationRoute.name,
-          path: 'signup',
+          JoinSessionRoute.name,
+          initialChildren: children,
         );
 
-  static const String name = 'RegistrationRoute';
+  static const String name = 'JoinSessionRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i3.LoginScreen]
-class LoginRoute extends _i8.PageRouteInfo<void> {
-  const LoginRoute()
-      : super(
-          LoginRoute.name,
-          path: 'loginin',
-        );
-
-  static const String name = 'LoginRoute';
-}
-
-/// generated route for
-/// [_i4.QuizEditorScreen]
-class QuizEditorRoute extends _i8.PageRouteInfo<QuizEditorRouteArgs> {
-  QuizEditorRoute({
-    _i9.Key? key,
-    required String quizId,
-    _i10.QuizEntity? quiz,
-    _i11.QuizListCubit? quizListCubit,
-    _i12.DraftEntity? draft,
+/// [_i3.QuizSessionManagerScreen]
+class QuizSessionManagerRoute
+    extends _i9.PageRouteInfo<QuizSessionManagerRouteArgs> {
+  QuizSessionManagerRoute({
+    _i10.Key? key,
+    required _i11.QuizEntity quiz,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
-          QuizEditorRoute.name,
-          path: 'quiz-admin/:id',
-          args: QuizEditorRouteArgs(
+          QuizSessionManagerRoute.name,
+          args: QuizSessionManagerRouteArgs(
             key: key,
-            quizId: quizId,
             quiz: quiz,
-            quizListCubit: quizListCubit,
-            draft: draft,
           ),
-          rawPathParams: {'id': quizId},
+          initialChildren: children,
         );
 
-  static const String name = 'QuizEditorRoute';
+  static const String name = 'QuizSessionManagerRoute';
+
+  static const _i9.PageInfo<QuizSessionManagerRouteArgs> page =
+      _i9.PageInfo<QuizSessionManagerRouteArgs>(name);
 }
 
-class QuizEditorRouteArgs {
-  const QuizEditorRouteArgs({
+class QuizSessionManagerRouteArgs {
+  const QuizSessionManagerRouteArgs({
     this.key,
-    required this.quizId,
-    this.quiz,
-    this.quizListCubit,
-    this.draft,
+    required this.quiz,
   });
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 
-  final String quizId;
-
-  final _i10.QuizEntity? quiz;
-
-  final _i11.QuizListCubit? quizListCubit;
-
-  final _i12.DraftEntity? draft;
+  final _i11.QuizEntity quiz;
 
   @override
   String toString() {
-    return 'QuizEditorRouteArgs{key: $key, quizId: $quizId, quiz: $quiz, quizListCubit: $quizListCubit, draft: $draft}';
+    return 'QuizSessionManagerRouteArgs{key: $key, quiz: $quiz}';
   }
 }
 
 /// generated route for
+/// [_i4.QuizListScreen]
+class QuizListRoute extends _i9.PageRouteInfo<void> {
+  const QuizListRoute({List<_i9.PageRouteInfo>? children})
+      : super(
+          QuizListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'QuizListRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
+}
+
+/// generated route for
 /// [_i5.QuizScreen]
-class QuizRoute extends _i8.PageRouteInfo<QuizRouteArgs> {
+class QuizRoute extends _i9.PageRouteInfo<QuizRouteArgs> {
   QuizRoute({
-    _i9.Key? key,
+    _i10.Key? key,
     required String quizId,
-    required _i10.QuizEntity quiz,
+    required _i11.QuizEntity quiz,
     _i12.DraftEntity? draft,
-    required _i11.QuizListCubit quizListCubit,
+    required _i13.QuizListCubit quizListCubit,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           QuizRoute.name,
-          path: 'quiz/:id',
           args: QuizRouteArgs(
             key: key,
             quizId: quizId,
@@ -304,9 +276,13 @@ class QuizRoute extends _i8.PageRouteInfo<QuizRouteArgs> {
             quizListCubit: quizListCubit,
           ),
           rawPathParams: {'id': quizId},
+          initialChildren: children,
         );
 
   static const String name = 'QuizRoute';
+
+  static const _i9.PageInfo<QuizRouteArgs> page =
+      _i9.PageInfo<QuizRouteArgs>(name);
 }
 
 class QuizRouteArgs {
@@ -318,15 +294,15 @@ class QuizRouteArgs {
     required this.quizListCubit,
   });
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 
   final String quizId;
 
-  final _i10.QuizEntity quiz;
+  final _i11.QuizEntity quiz;
 
   final _i12.DraftEntity? draft;
 
-  final _i11.QuizListCubit quizListCubit;
+  final _i13.QuizListCubit quizListCubit;
 
   @override
   String toString() {
@@ -335,48 +311,97 @@ class QuizRouteArgs {
 }
 
 /// generated route for
-/// [_i6.QuizSessionManagercreen]
-class QuizSessionCreationRoute
-    extends _i8.PageRouteInfo<QuizSessionCreationRouteArgs> {
-  QuizSessionCreationRoute({
-    _i9.Key? key,
-    required _i10.QuizEntity quiz,
+/// [_i6.QuizEditorScreen]
+class QuizEditorRoute extends _i9.PageRouteInfo<QuizEditorRouteArgs> {
+  QuizEditorRoute({
+    _i10.Key? key,
+    required String quizId,
+    _i11.QuizEntity? quiz,
+    _i13.QuizListCubit? quizListCubit,
+    _i12.DraftEntity? draft,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
-          QuizSessionCreationRoute.name,
-          path: 'session-create/:id',
-          args: QuizSessionCreationRouteArgs(
+          QuizEditorRoute.name,
+          args: QuizEditorRouteArgs(
             key: key,
+            quizId: quizId,
             quiz: quiz,
+            quizListCubit: quizListCubit,
+            draft: draft,
           ),
+          rawPathParams: {'id': quizId},
+          initialChildren: children,
         );
 
-  static const String name = 'QuizSessionCreationRoute';
+  static const String name = 'QuizEditorRoute';
+
+  static const _i9.PageInfo<QuizEditorRouteArgs> page =
+      _i9.PageInfo<QuizEditorRouteArgs>(name);
 }
 
-class QuizSessionCreationRouteArgs {
-  const QuizSessionCreationRouteArgs({
+class QuizEditorRouteArgs {
+  const QuizEditorRouteArgs({
     this.key,
-    required this.quiz,
+    required this.quizId,
+    this.quiz,
+    this.quizListCubit,
+    this.draft,
   });
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 
-  final _i10.QuizEntity quiz;
+  final String quizId;
+
+  final _i11.QuizEntity? quiz;
+
+  final _i13.QuizListCubit? quizListCubit;
+
+  final _i12.DraftEntity? draft;
 
   @override
   String toString() {
-    return 'QuizSessionCreationRouteArgs{key: $key, quiz: $quiz}';
+    return 'QuizEditorRouteArgs{key: $key, quizId: $quizId, quiz: $quiz, quizListCubit: $quizListCubit, draft: $draft}';
   }
 }
 
 /// generated route for
-/// [_i7.QuizListScreen]
-class QuizListRoute extends _i8.PageRouteInfo<void> {
-  const QuizListRoute()
+/// [_i7.LoginDialog]
+class LoginDialogRoute extends _i9.PageRouteInfo<void> {
+  const LoginDialogRoute({List<_i9.PageRouteInfo>? children})
       : super(
-          QuizListRoute.name,
-          path: '',
+          LoginDialogRoute.name,
+          initialChildren: children,
         );
 
-  static const String name = 'QuizListRoute';
+  static const String name = 'LoginDialogRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i7.LoginScreen]
+class LoginRoute extends _i9.PageRouteInfo<void> {
+  const LoginRoute({List<_i9.PageRouteInfo>? children})
+      : super(
+          LoginRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i8.RegistrationScreen]
+class RegistrationRoute extends _i9.PageRouteInfo<void> {
+  const RegistrationRoute({List<_i9.PageRouteInfo>? children})
+      : super(
+          RegistrationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RegistrationRoute';
+
+  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
 }

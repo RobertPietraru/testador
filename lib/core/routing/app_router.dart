@@ -1,57 +1,80 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
-import 'package:testador/features/authentication/presentation/screens/registration/registration_screen.dart';
-import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart';
-import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_editor_screen.dart';
-import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../features/quiz/presentation/session/admin/session_manager_screen.dart';
+import '../../features/authentication/presentation/auth_bloc/auth_bloc.dart';
+import 'app_router.gr.dart';
 
-
-@MaterialAutoRouter(
+@AutoRouterConfig(
   replaceInRouteName: 'Screen,Route',
-  routes: <AutoRoute>[
-    AutoRoute(
-      path: 'auth',
-      name: 'AuthenticationFlowRoute',
-      page: AuthenticationFlow,
-      children: [
-        AutoRoute(initial: true, page: RegistrationScreen, path: 'signup'),
-        AutoRoute(page: LoginScreen, path: 'loginin'),
-      ],
-    ),
-    AutoRoute(
-      path: 'protected',
-      name: 'ProtectedFlowRoute',
-      page: ProtectedFlow,
-      children: [
-        AutoRoute(
-          path: 'quiz-admin/:id',
-          page: QuizEditorScreen,
-        ),
-        AutoRoute(
-          path: 'quiz/:id',
-          page: QuizScreen,
-        ),
-        AutoRoute(
-          path: 'session-create/:id',
-          page: QuizSessionManagercreen,
-        ),
-        AutoRoute(initial: true, page: QuizListScreen, path: ''),
-      ],
-    ),
-    AutoRoute(path: 'loading', page: LoadingScreen),
-  ],
 )
-class $AppRouter {}
+class AppRouter extends $AppRouter {
+  @override
+  RouteType get defaultRouteType => const RouteType.material();
+  @override
+  final List<AutoRoute> routes = [
+    AutoRoute(
+        page: AuthenticationWrapperRoute.page,
+        path: '/',
+        initial: true,
+        children: [
+          AutoRoute(
+              // initial: true,
+              path: 'auth',
+              page: AuthenticationFlowRoute.page,
+              children: [
+                AutoRoute(
+                    initial: true,
+                    page: RegistrationRoute.page,
+                    path: 'signup'),
+                AutoRoute(page: LoginRoute.page, path: 'loginin'),
+              ]),
+          AutoRoute(
+              path: 'protected',
+              page: ProtectedFlowRoute.page,
+              children: [
+                AutoRoute(path: 'quiz-admin/:id', page: QuizEditorRoute.page),
+                AutoRoute(path: 'quiz/:id', page: QuizRoute.page),
+                AutoRoute(
+                    path: 'session-create/:id',
+                    page: QuizSessionManagerRoute.page),
+                AutoRoute(initial: true, page: QuizListRoute.page, path: ''),
+              ]),
+          AutoRoute(path: 'loading', page: LoadingRoute.page),
+        ]),
+    AutoRoute(
+      page: JoinSessionRoute.page,
+      path: '/join',
+    )
+  ];
+}
 
+@RoutePage(name: 'AuthenticationFlowRoute')
 class AuthenticationFlow extends StatelessWidget {
   const AuthenticationFlow({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const AutoRouter();
+  }
+}
+
+@RoutePage(name: 'AuthenticationWrapperRoute')
+class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final authBloc = context.watch<AuthBloc>();
+    return AutoRouter.declarative(routes: (_) {
+      if (authBloc.state is AuthUninitialisedState) {
+        return [const LoadingRoute()];
+      }
+      if (authBloc.state is AuthAuthenticatedState) {
+        return [const ProtectedFlowRoute()];
+      }
+      return [const AuthenticationFlowRoute()];
+    });
   }
 }
 
@@ -64,6 +87,7 @@ class App extends StatelessWidget {
   }
 }
 
+@RoutePage(name: 'ProtectedFlowRoute')
 class ProtectedFlow extends StatelessWidget {
   const ProtectedFlow({super.key});
 
@@ -73,6 +97,7 @@ class ProtectedFlow extends StatelessWidget {
   }
 }
 
+@RoutePage()
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({super.key});
 

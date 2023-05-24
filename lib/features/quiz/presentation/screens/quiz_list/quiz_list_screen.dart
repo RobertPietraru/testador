@@ -13,6 +13,7 @@ import '../../../../../injection.dart';
 import '../../../../authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'cubit/quiz_list_cubit.dart';
 
+@RoutePage()
 class QuizListScreen extends StatelessWidget {
   const QuizListScreen({super.key});
 
@@ -87,7 +88,10 @@ class _QuizListScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   _QuickActionWidget(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context.router.root
+                                          .push(JoinSessionRoute());
+                                    },
                                     icon: Icons.people_alt,
                                     label: 'Joaca',
                                   ),

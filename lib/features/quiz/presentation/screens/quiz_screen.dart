@@ -13,6 +13,7 @@ import '../../../../core/routing/app_router.gr.dart';
 import '../../domain/entities/draft_entity.dart';
 import '../../domain/entities/quiz_entity.dart';
 
+@RoutePage()
 class QuizScreen extends StatelessWidget {
   const QuizScreen(
       {super.key,
@@ -93,11 +94,8 @@ class QuizScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: LongButton(
-                                      onPressed: () {
-                                        context.pushRoute(
-                                            QuizSessionCreationRoute(
-                                                quiz: quiz));
-                                      },
+                                      onPressed: () => context.pushRoute(
+                                          QuizSessionManagerRoute(quiz: quiz)),
                                       label: 'Incepe o sesiune',
                                       isLoading: false,
                                     ),

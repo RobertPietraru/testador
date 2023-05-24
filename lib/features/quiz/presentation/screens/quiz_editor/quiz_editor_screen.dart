@@ -20,6 +20,7 @@ import 'package:testador/injection.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../quiz_editor_retrival/quiz_retrival_widget.dart';
 
+@RoutePage()
 class QuizEditorScreen extends StatelessWidget {
   const QuizEditorScreen(
       {super.key,
