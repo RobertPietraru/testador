@@ -9,14 +9,12 @@ import '../../domain/entities/session/session_entity.dart';
 
 class QuestionResultsScreen extends StatefulWidget {
   final VoidCallback? onContinue;
-  final SessionAdminMatchState state;
   final SessionEntity session;
   final QuestionEntity currentQuestion;
   final int currentQuestionIndex;
 
   const QuestionResultsScreen(
       {super.key,
-      required this.state,
       required this.onContinue,
       required this.session,
       required this.currentQuestion,
@@ -72,7 +70,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
                       ),
                       _ResultsChart(
                         choices: results,
-                        options: widget.state.currentQuestion.options,
+                        options: widget.currentQuestion.options,
                       ),
                     ],
                   ))
@@ -82,10 +80,10 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
         body: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2),
-            itemCount: widget.state.currentQuestion.options.length,
+            itemCount: widget.currentQuestion.options.length,
             itemBuilder: (context, index) => SessionOptionWidget(
                   index: index,
-                  option: widget.state.currentQuestion.options[index],
+                  option: widget.currentQuestion.options[index],
                   isSelected: false,
                   onPressed: null,
                 )),

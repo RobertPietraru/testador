@@ -21,6 +21,6 @@ class GetQuizByIdUsecaseParams extends Params {
 }
 
 class GetQuizByIdUsecaseResult extends Response {
-  final QuizEntity quizEntity;
-  const GetQuizByIdUsecaseResult({required this.quizEntity});
+  final QuizEntity quiz;
+  const GetQuizByIdUsecaseResult({required this.quiz});
 }

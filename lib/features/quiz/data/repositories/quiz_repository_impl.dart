@@ -199,12 +199,14 @@ class QuizRepositoryIMPL implements QuizRepository {
       GetQuizByIdUsecaseParams params) async {
     try {
       final quiz = await quizRemoteDataSource.getQuizById(params);
-      return Right(GetQuizByIdUsecaseResult(quizEntity: quiz));
+      return Right(GetQuizByIdUsecaseResult(quiz: quiz));
     } on FirebaseException catch (e) {
       return Left(QuizUnknownFailure(code: e.code));
     } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
+      print(_);
+      print((_ as Error).stackTrace);
       return const Left(QuizUnknownFailure());
     }
   }
@@ -312,6 +314,8 @@ class QuizRepositoryIMPL implements QuizRepository {
     } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
+      print(_);
+      print((_ as Error).stackTrace);
       return const Left(QuizUnknownFailure());
     }
   }

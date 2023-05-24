@@ -21,7 +21,7 @@ class QuizRetrivalCubit extends Cubit<QuizRetrivalState> {
 
     response.fold(
       (l) => emit(QuizRetrivalFailed()),
-      (r) => emit(QuizRetrivalSuccessful(entity: r.quizEntity)),
+      (r) => emit(QuizRetrivalSuccessful(entity: r.quiz)),
     );
   }
 }

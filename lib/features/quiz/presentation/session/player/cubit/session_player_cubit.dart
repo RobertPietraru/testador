@@ -2,20 +2,24 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
+
+import '../../../../domain/entities/question_entity.dart';
 
 part 'session_player_state.dart';
 
 class SessionPlayerCubit extends Cubit<SessionPlayerState> {
   final JoinSessionUsecase joinSessionUsecase;
   final SubscribeToSessionUsecase subscribeToSessionUsecase;
+  final GetQuizByIdUsecase getQuizByIdUsecase;
   final String userId;
   StreamSubscription<SessionEntity>? _sessionsStreamSubscription;
 
   SessionPlayerCubit(this.joinSessionUsecase, this.subscribeToSessionUsecase,
-      {required this.userId})
+      this.getQuizByIdUsecase, {required this.userId})
       : super(SessionPlayerCodeRetrival(
             failure: null, userId: userId, sessionId: '', isLoading: false));
 
@@ -61,12 +65,29 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
         failure: l,
         isLoading: state.isLoading,
       ));
-    }, (r) {
-      emit(SessionPlayerInGame(
-        name: state.name,
-        session: r.session,
-        userId: state.userId,
-      ));
+    }, (sessionResponse) async {
+      final response = await getQuizByIdUsecase
+          .call(GetQuizByIdUsecaseParams(quizId: state.session.quizId));
+      response.fold(
+        (l) {
+          emit(SessionPlayerNameRetrival(
+            session: state.session,
+            name: state.name,
+            userId: state.userId,
+            failure: l,
+            isLoading: state.isLoading,
+          ));
+        },
+        (quizResponse) {
+          emit(SessionPlayerInGame(
+            name: state.name,
+            quiz: quizResponse.quiz,
+            failure: null,
+            session: sessionResponse.session,
+            userId: state.userId,
+          ));
+        },
+      );
     });
   }
 

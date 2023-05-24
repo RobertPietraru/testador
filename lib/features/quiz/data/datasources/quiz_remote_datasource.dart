@@ -66,8 +66,10 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   }
 
   @override
-  Future<QuizEntity> getQuizById(GetQuizByIdUsecaseParams params) {
-    throw UnimplementedError();
+  Future<QuizEntity> getQuizById(GetQuizByIdUsecaseParams params) async {
+    final doc = await firestore.collection('quizes').doc(params.quizId).get();
+    if (doc.data() == null) throw const QuizNotFoundFailure();
+    return QuizDto.fromMap(doc.data()!).toEntity();
   }
 
   @override

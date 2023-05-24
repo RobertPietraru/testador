@@ -85,7 +85,7 @@ class _PodiumScreenState extends State<PodiumScreen> {
                         leading: Text((index + 1).toString()),
                         trailing:
                             Text(sortedPlayers[index].score.toInt().toString()),
-                        tileColor: index < 4
+                        tileColor: index < 3
                             ? Colors.amber
                             : theme.secondaryColor.withOpacity(0.5),
                         title: Text(sortedPlayers[index].name),

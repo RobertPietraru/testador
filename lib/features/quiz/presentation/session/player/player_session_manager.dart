@@ -5,7 +5,10 @@ import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
+import 'package:testador/features/quiz/presentation/session/admin/podium_screen.dart';
+import 'package:testador/features/quiz/presentation/session/leaderboard_screen.dart';
 import 'package:testador/features/quiz/presentation/session/player/cubit/session_player_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/question_results_screen.dart';
 import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 import 'package:uuid/uuid.dart';
@@ -19,8 +22,8 @@ class PlayerSessionManagerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          SessionPlayerCubit(locator(), locator(), userId: Uuid().v1()),
+      create: (_) => SessionPlayerCubit(locator(), locator(), locator(),
+          userId: const Uuid().v1()),
       child: Builder(builder: (context) {
         return BlocBuilder<SessionPlayerCubit, SessionPlayerState>(
           builder: (context, state) {
@@ -35,7 +38,17 @@ class PlayerSessionManagerScreen extends StatelessWidget {
                   return WaitingForPlayersScreen(session: state.session);
                 case SessionStatus.question:
                   return Scaffold(body: Text("QUESTION"));
-
+                case SessionStatus.results:
+                  return QuestionResultsScreen(
+                      onContinue: null,
+                      session: state.session,
+                      currentQuestion: state.currentQuestion,
+                      currentQuestionIndex: state.currentQuestionIndex);
+                case SessionStatus.leaderboard:
+                  return LeaderboardScreen(
+                      onContinue: null, session: state.session);
+                case SessionStatus.podium:
+                  return PodiumScreen(onLeave: () {}, session: state.session);
                 default:
               }
               return SessionPlayerInGameScreen(state: state);

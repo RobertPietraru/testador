@@ -78,7 +78,6 @@ class _QuizSessionManagerScreen extends StatelessWidget {
                 session: state.session,
                 onContinue: () =>
                     context.read<SessionAdminCubit>().showLeaderboard(),
-                state: state,
               );
             } else if (status == SessionStatus.leaderboard) {
               return LeaderboardScreen(

@@ -14,6 +14,7 @@ abstract class SessionPlayerState extends Equatable {
       );
     } else if (state is SessionPlayerInGame) {
       return SessionPlayerInGame(
+        quiz: state.quiz,
         name: state.name,
         userId: state.userId,
         failure: state.failure,
@@ -65,13 +66,19 @@ class SessionPlayerInGame extends SessionPlayerState {
   final String name;
   final SessionEntity session;
   final QuizFailure? failure;
+  final QuizEntity quiz;
 
   const SessionPlayerInGame(
       {required this.userId,
+      required this.quiz,
       required this.name,
       this.failure,
       required this.session});
 
   @override
-  List<Object?> get props => [userId, name, failure, session];
+  List<Object?> get props => [userId, name, failure, session, quiz];
+
+  int get currentQuestionIndex => quiz.questions
+      .indexWhere((element) => element.id == session.currentQuestionId);
+  QuestionEntity get currentQuestion => quiz.questions[currentQuestionIndex];
 }
