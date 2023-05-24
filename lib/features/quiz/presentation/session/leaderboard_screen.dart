@@ -47,8 +47,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final state = widget.state;
-    final List<int> results = calculate();
     return Scaffold(
       appBar: CustomAppBar(
           title: Text(splitStringIntoBlocks(widget.state.session.id),
@@ -73,19 +71,27 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             ]))
           ];
         },
-        body: ListView.separated(
-            separatorBuilder: (context, index) =>
-                SizedBox(height: theme.spacing.small),
-            itemCount: sortedPlayers.length,
-            itemBuilder: (context, index) => Padding(
-                  padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
-                  child: ListTile(
-                    trailing:
-                        Text(sortedPlayers[index].score.toInt().toString()),
-                    tileColor: theme.secondaryColor.withOpacity(0.5),
-                    title: Text(sortedPlayers[index].name),
-                  ),
-                )),
+        body: widget.state.session.students.isNotEmpty
+            ? ListView.separated(
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: theme.spacing.small),
+                itemCount: sortedPlayers.length,
+                itemBuilder: (context, index) => Padding(
+                      padding:
+                          theme.standardPadding.copyWith(top: 0, bottom: 0),
+                      child: ListTile(
+                        trailing:
+                            Text(sortedPlayers[index].score.toInt().toString()),
+                        tileColor: theme.secondaryColor.withOpacity(0.5),
+                        title: Text(sortedPlayers[index].name),
+                      ),
+                    ))
+            : Expanded(
+                child: Center(
+                    child: Text(
+                "Nu mai este nimeni",
+                style: theme.titleTextStyle,
+              ))),
       ),
     );
   }
