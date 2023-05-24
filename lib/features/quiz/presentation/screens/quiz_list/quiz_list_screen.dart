@@ -81,6 +81,29 @@ class _QuizListScreen extends StatelessWidget {
                                 );
                               },
                             ),
+                            SizedBox(height: theme.spacing.medium),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _QuickActionWidget(
+                                    onPressed: () {},
+                                    icon: Icons.people_alt,
+                                    label: 'Joaca',
+                                  ),
+                                  _QuickActionWidget(
+                                    icon: Icons.arrow_back,
+                                    label: 'Continua',
+                                    isEnabled: false,
+                                    onPressed: () {},
+                                  ),
+                                  _QuickActionWidget(
+                                    icon: Icons.lightbulb,
+                                    label: 'Creaza',
+                                    onPressed: () {},
+                                  )
+                                ]),
+                            SizedBox(height: theme.spacing.medium),
                             BlocBuilder<QuizListCubit, QuizListState>(
                               builder: (context, state) {
                                 if (state is! QuizListEmpty) {
@@ -144,6 +167,48 @@ class _QuizListScreen extends StatelessWidget {
                               )));
                 },
               ))),
+    );
+  }
+}
+
+class _QuickActionWidget extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+  final bool isEnabled;
+  const _QuickActionWidget(
+      {required this.label,
+      required this.icon,
+      required this.onPressed,
+      this.isEnabled = true});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: isEnabled ? onPressed : null,
+      child: Opacity(
+        opacity: isEnabled ? 1 : 0.5,
+        child: Ink(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CircleAvatar(
+                backgroundColor: !isEnabled ? Colors.grey : null,
+                child: Icon(icon, color: !isEnabled ? Colors.white : null),
+              ),
+              Text(
+                label,
+                style: TextStyle(
+                  color: !isEnabled ? Colors.grey : null,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
