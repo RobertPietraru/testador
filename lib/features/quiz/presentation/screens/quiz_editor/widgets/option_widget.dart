@@ -20,8 +20,6 @@ class OptionWidget extends StatefulWidget {
 }
 
 class _OptionWidgetState extends State<OptionWidget> {
-  
-
   @override
   Widget build(BuildContext context) {
     final bool isEnabled = widget.option.text != null;
@@ -46,7 +44,8 @@ class _OptionWidgetState extends State<OptionWidget> {
           );
         },
         child: Ink(
-          color: isEnabled ? theme.getColor(widget.index) : theme.secondaryColor,
+          color:
+              isEnabled ? theme.getColor(widget.index) : theme.secondaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,16 +62,13 @@ class _OptionWidgetState extends State<OptionWidget> {
                                   text: widget.option.text,
                                   isCorrect: !widget.option.isCorrect)),
                       icon: Icon(
-                          widget.option.isCorrect ? Icons.done : Icons.close,
-                          color: Colors.white)),
+                          widget.option.isCorrect ? Icons.done : Icons.close)),
                 ],
               ),
               Center(
                 child: Text(
                   widget.option.text ?? "Optiunea ${widget.index + 1}",
-                  style: TextStyle(
-                      color: isEnabled ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold),
+                  style: theme.questionTextStyle,
                 ),
               ),
               const SizedBox(),
