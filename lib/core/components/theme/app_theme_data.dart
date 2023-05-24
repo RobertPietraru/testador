@@ -21,6 +21,8 @@ abstract class AppThemeData {
     ][index];
   }
 
+  TextStyle get questionTextStyle => subtitleTextStyle;
+
   String get placeholderImage =>
       'https://www.parentmap.com/images/article/7793/iStock_000043382420_Large.jpg';
 

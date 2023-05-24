@@ -26,17 +26,13 @@ class _SessionOptionWidgetState extends State<SessionOptionWidget> {
     final bool isEnabled = widget.option.text != null;
     final theme = AppTheme.of(context);
 
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide.none,
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(8),
       child: InkWell(
         onTap: widget.onPressed,
         child: Ink(
           color:
               isEnabled ? theme.getColor(widget.index) : theme.secondaryColor,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -44,15 +40,23 @@ class _SessionOptionWidgetState extends State<SessionOptionWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (widget.isSelected)
-                    const Icon(Icons.done, color: Colors.white)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.white),
+                          child: const Icon(Icons.done, color: Colors.black)),
+                    )
                 ],
               ),
               Center(
-                child: Text(
-                  widget.option.text ?? "Optiunea ${widget.index + 1}",
-                  style: TextStyle(
-                      color: isEnabled ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.option.text ?? "Optiunea ${widget.index + 1}",
+                    style: theme.questionTextStyle,
+                  ),
                 ),
               ),
               const SizedBox(),

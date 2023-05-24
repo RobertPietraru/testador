@@ -136,7 +136,7 @@ class _ResultsChart extends StatelessWidget {
           badgeWidget: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(0.toString(), style: theme.subtitleTextStyle),
+              Text('0', style: theme.subtitleTextStyle),
               if (isCorrect) const SizedBox(width: 3),
               if (isCorrect) const Icon(Icons.done),
             ],
