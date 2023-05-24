@@ -6,12 +6,12 @@ import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
 import 'package:testador/features/quiz/presentation/session/admin/podium_screen.dart';
-import 'package:testador/features/quiz/presentation/session/admin/question_results_screen.dart';
+import 'package:testador/features/quiz/presentation/session/question_results_screen.dart';
 import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
-import 'package:testador/features/quiz/presentation/session/admin/waiting_for_players_screen.dart';
+import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 
-import 'round_admin_screen.dart';
+import 'admin/round_admin_screen.dart';
 import 'leaderboard_screen.dart';
 
 @RoutePage()
@@ -60,7 +60,10 @@ class _QuizSessionManagerScreen extends StatelessWidget {
           if (state is SessionAdminMatchState) {
             final status = state.session.status;
             if (status == SessionStatus.waitingForPlayers) {
-              return WaitingForPlayersScreen(state: state);
+              return WaitingForPlayersScreen(
+                session: state.session,
+                onBegin: () => context.read<SessionAdminCubit>().beginSession(),
+              );
             } else if (status == SessionStatus.question) {
               return RoundAdminScreen(
                 state: state,
@@ -70,6 +73,9 @@ class _QuizSessionManagerScreen extends StatelessWidget {
               );
             } else if (status == SessionStatus.results) {
               return QuestionResultsScreen(
+                currentQuestion: state.currentQuestion,
+                currentQuestionIndex: state.currentQuestionIndex,
+                session: state.session,
                 onContinue: () =>
                     context.read<SessionAdminCubit>().showLeaderboard(),
                 state: state,
@@ -78,7 +84,7 @@ class _QuizSessionManagerScreen extends StatelessWidget {
               return LeaderboardScreen(
                 onContinue: () =>
                     context.read<SessionAdminCubit>().goToNextQuestion(),
-                state: state,
+                session: state.session,
               );
             } else if (status == SessionStatus.podium) {
               return PodiumScreen(

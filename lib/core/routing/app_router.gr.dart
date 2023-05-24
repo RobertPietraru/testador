@@ -27,7 +27,7 @@ import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_
     as _i4;
 import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart'
     as _i5;
-import 'package:testador/features/quiz/presentation/session/admin/session_manager_screen.dart'
+import 'package:testador/features/quiz/presentation/session/session_manager_screen.dart'
     as _i3;
 import 'package:testador/features/quiz/presentation/session/player/player_session_manager.dart'
     as _i2;
@@ -64,7 +64,7 @@ abstract class $AppRouter extends _i9.RootStackRouter {
     JoinSessionRoute.name: (routeData) {
       return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i2.JoinSessionScreen(),
+        child: const _i2.PlayerSessionManagerScreen(),
       );
     },
     QuizSessionManagerRoute.name: (routeData) {
@@ -190,7 +190,7 @@ class LoadingRoute extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.JoinSessionScreen]
+/// [_i2.PlayerSessionManagerScreen]
 class JoinSessionRoute extends _i9.PageRouteInfo<void> {
   const JoinSessionRoute({List<_i9.PageRouteInfo>? children})
       : super(

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
-import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 
 class LeaderboardScreen extends StatefulWidget {
-  final VoidCallback onContinue;
-  final SessionAdminMatchState state;
-  const LeaderboardScreen({
-    super.key,
-    required this.state,
-    required this.onContinue,
-  });
+  final VoidCallback? onContinue;
+  final SessionEntity session;
+  const LeaderboardScreen({super.key, this.onContinue, required this.session});
 
   @override
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -23,7 +19,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   late final List<PlayerEntity> sortedPlayers;
   List<int> calculate() {
     Map<int, int> answerCount = {};
-    for (var answer in widget.state.session.answers) {
+    for (var answer in widget.session.answers) {
       final before = answerCount[answer.optionIndex];
       if (before == null) {
         answerCount[answer.optionIndex!] = 0;
@@ -38,7 +34,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   @override
   void initState() {
-    sortedPlayers = widget.state.session.students.toList();
+    sortedPlayers = widget.session.students.toList();
     sortedPlayers.sort((a, b) => b.score.compareTo(a.score));
 
     super.initState();
@@ -49,9 +45,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     final theme = AppTheme.of(context);
     return Scaffold(
       appBar: CustomAppBar(
-          title: SessionCodeWidget(sessionId: widget.state.session.id),
+          title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
-            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
+            if (widget.onContinue != null)
+              AppBarButton(text: 'Continua', onPressed: widget.onContinue!)
           ]),
       body: NestedScrollView(
         controller: controller,
@@ -70,7 +67,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             ]))
           ];
         },
-        body: widget.state.session.students.isNotEmpty
+        body: widget.session.students.isNotEmpty
             ? ListView.separated(
                 separatorBuilder: (context, index) =>
                     SizedBox(height: theme.spacing.small),

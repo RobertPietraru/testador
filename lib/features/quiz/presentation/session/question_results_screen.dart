@@ -5,12 +5,22 @@ import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_option_widget.dart';
+import '../../domain/entities/session/session_entity.dart';
 
 class QuestionResultsScreen extends StatefulWidget {
-  final VoidCallback onContinue;
+  final VoidCallback? onContinue;
   final SessionAdminMatchState state;
+  final SessionEntity session;
+  final QuestionEntity currentQuestion;
+  final int currentQuestionIndex;
+
   const QuestionResultsScreen(
-      {super.key, required this.state, required this.onContinue});
+      {super.key,
+      required this.state,
+      required this.onContinue,
+      required this.session,
+      required this.currentQuestion,
+      required this.currentQuestionIndex});
 
   @override
   State<QuestionResultsScreen> createState() => _QuestionResultsScreenState();
@@ -22,7 +32,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
 
   List<int> calculate() {
     Map<int, int> answerCount = {};
-    for (var answer in widget.state.session.answers) {
+    for (var answer in widget.session.answers) {
       final before = answerCount[answer.optionIndex];
       if (before == null) {
         answerCount[answer.optionIndex!] = 0;
@@ -38,13 +48,12 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final state = widget.state;
     final List<int> results = calculate();
     return Scaffold(
       appBar: CustomAppBar(
-          title: SessionCodeWidget(sessionId: widget.state.session.id),
+          title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
-            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
+            if (widget.onContinue != null) AppBarButton(text: 'Continua', onPressed: widget.onContinue!)
           ]),
       body: NestedScrollView(
         controller: controller,
@@ -58,7 +67,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "#${(state.currentQuestionIndex + 1).toString()} ${state.currentQuestion.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
+                        "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
                         style: theme.subtitleTextStyle,
                       ),
                       _ResultsChart(

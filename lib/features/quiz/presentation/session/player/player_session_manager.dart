@@ -4,15 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/text_input_field.dart';
+import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/player/cubit/session_player_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/components/theme/app_theme.dart';
 
 @RoutePage()
-class JoinSessionScreen extends StatelessWidget {
-  const JoinSessionScreen({super.key});
+class PlayerSessionManagerScreen extends StatelessWidget {
+  const PlayerSessionManagerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,14 @@ class JoinSessionScreen extends StatelessWidget {
               return NameRetrivalScreen(state: state);
             } else {
               state as SessionPlayerInGame;
+              switch (state.session.status) {
+                case SessionStatus.waitingForPlayers:
+                  return WaitingForPlayersScreen(session: state.session);
+                case SessionStatus.question:
+                  return Scaffold(body: Text("QUESTION"));
+
+                default:
+              }
               return SessionPlayerInGameScreen(state: state);
             }
           },
@@ -141,8 +151,7 @@ class SessionPlayerInGameScreen extends StatelessWidget {
       body: Padding(
         padding: theme.standardPadding,
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: []),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, children: []),
       ),
     );
   }
