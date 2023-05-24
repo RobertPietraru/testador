@@ -10,7 +10,7 @@ import 'package:testador/features/quiz/presentation/session/question_results_scr
 import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 
-import 'answer_retrival_admin_screen.dart';
+import 'round_admin_screen.dart';
 import 'leaderboard_screen.dart';
 
 class QuizSessionManagercreen extends StatelessWidget {
@@ -60,7 +60,7 @@ class _QuizSessionManagerScreen extends StatelessWidget {
             if (status == SessionStatus.waitingForPlayers) {
               return WaitingForPlayersScreen(state: state);
             } else if (status == SessionStatus.question) {
-              return AnswerRetrivalAdminScreen(
+              return RoundAdminScreen(
                 state: state,
                 onContinue: () =>
                     context.read<SessionAdminCubit>().showQuestionResults(),
