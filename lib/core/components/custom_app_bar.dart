@@ -35,6 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       foregroundColor: mainColor ?? theme.primaryColor,
       automaticallyImplyLeading: showLeading && leading == null,
       leading: leading,
+      
       title: title ??
           Row(
             mainAxisSize: MainAxisSize.min,

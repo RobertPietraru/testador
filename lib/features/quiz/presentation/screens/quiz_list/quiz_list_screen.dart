@@ -100,7 +100,15 @@ class _QuizListScreen extends StatelessWidget {
                                   _QuickActionWidget(
                                     icon: Icons.lightbulb,
                                     label: 'Creaza',
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context.read<QuizListCubit>().createQuiz(
+                                          creatorId: context
+                                              .read<AuthBloc>()
+                                              .state
+                                              .userEntity!
+                                              .id);
+                                      Navigator.pop(context);
+                                    },
                                   )
                                 ]),
                             SizedBox(height: theme.spacing.medium),

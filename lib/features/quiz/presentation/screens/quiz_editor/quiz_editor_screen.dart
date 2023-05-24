@@ -154,23 +154,19 @@ class _QuizescreenState extends State<_Quizescreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: BlocBuilder<QuizEditorCubit, QuizEditorState>(
                     builder: (context, state) {
-                  return LoadingWrapper(
-                    isLoading: state.status == QuizEditorStatus.loading,
-                    child: FilledButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              state.needsSync
-                                  ? theme.good
-                                  : theme.secondaryColor),
-                          shape:
-                              MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ))),
-                      onPressed: state.needsSync
-                          ? () => context.read<QuizEditorCubit>().save()
-                          : null,
-                      child: const Text('Salveaza'),
-                    ),
+                  return FilledButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            state.needsSync
+                                ? theme.good
+                                : theme.secondaryColor),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ))),
+                    onPressed: state.needsSync
+                        ? () => context.read<QuizEditorCubit>().save()
+                        : null,
+                    child: const Text('Salveaza'),
                   );
                 }))
           ]),
