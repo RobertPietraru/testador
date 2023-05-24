@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
-import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
-import 'package:testador/features/quiz/presentation/session/widgets/session_code_widget.dart';
+import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 
-class PodiumScreen extends StatefulWidget {
-  final VoidCallback onLeave;
+class LeaderboardScreen extends StatefulWidget {
+  final VoidCallback onContinue;
   final SessionAdminMatchState state;
-  const PodiumScreen({
+  const LeaderboardScreen({
     super.key,
     required this.state,
-    required this.onLeave,
+    required this.onContinue,
   });
 
   @override
-  State<PodiumScreen> createState() => _PodiumScreenState();
+  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
 }
 
-class _PodiumScreenState extends State<PodiumScreen> {
+class _LeaderboardScreenState extends State<LeaderboardScreen> {
   final ScrollController controller = ScrollController();
   int total = 0;
   late final List<PlayerEntity> sortedPlayers;
@@ -49,11 +49,10 @@ class _PodiumScreenState extends State<PodiumScreen> {
     final theme = AppTheme.of(context);
     return Scaffold(
       appBar: CustomAppBar(
-        title: SessionCodeWidget(
-          sessionId: widget.state.session.id,
-        ),
-        trailing: const [],
-      ),
+          title: SessionCodeWidget(sessionId: widget.state.session.id),
+          trailing: [
+            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
+          ]),
       body: NestedScrollView(
         controller: controller,
         headerSliverBuilder: (context, _) {
@@ -61,15 +60,13 @@ class _PodiumScreenState extends State<PodiumScreen> {
             SliverList(
                 delegate: SliverChildListDelegate([
               Padding(
-                padding: theme.standardPadding.copyWith(top: 0),
-                child: Column(
-                  children: [
-                    Text("Podium", style: theme.subtitleTextStyle),
-                    Text("Felicitari tuturor! 🎉🎉",
-                        style: theme.informationTextStyle),
-                  ],
-                ),
-              )
+                  padding: theme.standardPadding.copyWith(top: 0),
+                  child: Center(
+                    child: Text(
+                      "Clasament",
+                      style: theme.subtitleTextStyle,
+                    ),
+                  ))
             ]))
           ];
         },
@@ -82,12 +79,9 @@ class _PodiumScreenState extends State<PodiumScreen> {
                       padding:
                           theme.standardPadding.copyWith(top: 0, bottom: 0),
                       child: ListTile(
-                        leading: Text((index + 1).toString()),
                         trailing:
                             Text(sortedPlayers[index].score.toInt().toString()),
-                        tileColor: index < 4
-                            ? Colors.amber
-                            : theme.secondaryColor.withOpacity(0.5),
+                        tileColor: theme.secondaryColor.withOpacity(0.5),
                         title: Text(sortedPlayers[index].name),
                       ),
                     ))
@@ -101,5 +95,3 @@ class _PodiumScreenState extends State<PodiumScreen> {
     );
   }
 }
-
-

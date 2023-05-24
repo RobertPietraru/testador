@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/utils/split_string_into_blocks.dart';
-import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
 
-import '../../../../core/components/components.dart';
-import '../../../../core/components/theme/app_theme.dart';
-import '../../../../core/components/theme/device_size.dart';
+import '../../../../../core/components/buttons/app_bar_button.dart';
+import '../../../../../core/components/theme/app_theme.dart';
+import '../../../../../core/components/theme/device_size.dart';
 
 class WaitingForPlayersScreen extends StatelessWidget {
   final SessionAdminMatchState state;

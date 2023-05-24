@@ -27,7 +27,7 @@ import '../../features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit
 import '../../features/quiz/presentation/screens/quiz_list/quiz_list_screen.dart'
     as _i7;
 import '../../features/quiz/presentation/screens/quiz_screen.dart' as _i5;
-import '../../features/quiz/presentation/session/session_manager_screen.dart'
+import '../../features/quiz/presentation/session/admin/session_manager_screen.dart'
     as _i6;
 import 'app_router.dart' as _i1;
 

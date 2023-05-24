@@ -2,9 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
-import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
-import 'package:testador/features/quiz/presentation/session/widgets/session_code_widget.dart';
-import 'package:testador/features/quiz/presentation/session/widgets/session_option_widget.dart';
+import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
+import 'package:testador/features/quiz/presentation/session/admin/widgets/session_option_widget.dart';
 
 class QuestionResultsScreen extends StatefulWidget {
   final VoidCallback onContinue;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/components/theme/app_theme.dart';
-import '../../../domain/entities/question_entity.dart';
+import '../../../../../../core/components/theme/app_theme.dart';
+import '../../../../domain/entities/question_entity.dart';
 
 class SessionOptionWidget extends StatefulWidget {
   final int index;

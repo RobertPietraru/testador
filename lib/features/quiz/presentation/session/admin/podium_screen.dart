@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
-import 'package:testador/core/utils/split_string_into_blocks.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
-import 'package:testador/features/quiz/presentation/session/session_admin_cubit/session_admin_cubit.dart';
-import 'package:testador/features/quiz/presentation/session/widgets/session_code_widget.dart';
+import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 
-class LeaderboardScreen extends StatefulWidget {
-  final VoidCallback onContinue;
+class PodiumScreen extends StatefulWidget {
+  final VoidCallback onLeave;
   final SessionAdminMatchState state;
-  const LeaderboardScreen({
+  const PodiumScreen({
     super.key,
     required this.state,
-    required this.onContinue,
+    required this.onLeave,
   });
 
   @override
-  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+  State<PodiumScreen> createState() => _PodiumScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen> {
+class _PodiumScreenState extends State<PodiumScreen> {
   final ScrollController controller = ScrollController();
   int total = 0;
   late final List<PlayerEntity> sortedPlayers;
@@ -50,10 +49,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     final theme = AppTheme.of(context);
     return Scaffold(
       appBar: CustomAppBar(
-          title: SessionCodeWidget(sessionId: widget.state.session.id),
-          trailing: [
-            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
-          ]),
+        title: SessionCodeWidget(
+          sessionId: widget.state.session.id,
+        ),
+        trailing: const [],
+      ),
       body: NestedScrollView(
         controller: controller,
         headerSliverBuilder: (context, _) {
@@ -61,13 +61,15 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             SliverList(
                 delegate: SliverChildListDelegate([
               Padding(
-                  padding: theme.standardPadding.copyWith(top: 0),
-                  child: Center(
-                    child: Text(
-                      "Clasament",
-                      style: theme.subtitleTextStyle,
-                    ),
-                  ))
+                padding: theme.standardPadding.copyWith(top: 0),
+                child: Column(
+                  children: [
+                    Text("Podium", style: theme.subtitleTextStyle),
+                    Text("Felicitari tuturor! 🎉🎉",
+                        style: theme.informationTextStyle),
+                  ],
+                ),
+              )
             ]))
           ];
         },
@@ -80,9 +82,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       padding:
                           theme.standardPadding.copyWith(top: 0, bottom: 0),
                       child: ListTile(
+                        leading: Text((index + 1).toString()),
                         trailing:
                             Text(sortedPlayers[index].score.toInt().toString()),
-                        tileColor: theme.secondaryColor.withOpacity(0.5),
+                        tileColor: index < 4
+                            ? Colors.amber
+                            : theme.secondaryColor.withOpacity(0.5),
                         title: Text(sortedPlayers[index].name),
                       ),
                     ))
@@ -96,3 +101,5 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     );
   }
 }
+
+

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../../core/components/theme/app_theme.dart';
-import '../../../../../core/utils/split_string_into_blocks.dart';
+import '../../../../../../core/components/theme/app_theme.dart';
+import '../../../../../../core/utils/split_string_into_blocks.dart';
+
 
 class SessionCodeWidget extends StatelessWidget {
   final String sessionId;

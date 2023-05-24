@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/features/quiz/presentation/session/timer/question_timer_cubit.dart';
-import 'package:testador/features/quiz/presentation/session/widgets/session_code_widget.dart';
-import 'package:testador/features/quiz/presentation/session/widgets/session_option_widget.dart';
+import 'package:testador/features/quiz/presentation/session/admin/timer/question_timer_cubit.dart';
+import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
+import 'package:testador/features/quiz/presentation/session/admin/widgets/session_option_widget.dart';
 
-import '../../../../core/components/buttons/app_bar_button.dart';
-import '../../../../core/components/custom_app_bar.dart';
-import '../../../../core/components/theme/app_theme.dart';
-import '../../domain/entities/question_entity.dart';
+import '../../../../../core/components/buttons/app_bar_button.dart';
+import '../../../../../core/components/custom_app_bar.dart';
+import '../../../../../core/components/theme/app_theme.dart';
+import '../../../domain/entities/question_entity.dart';
 import 'session_admin_cubit/session_admin_cubit.dart';
 
 class RoundAdminScreen extends StatelessWidget {
