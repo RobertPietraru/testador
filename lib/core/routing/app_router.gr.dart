@@ -29,7 +29,7 @@ import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart'
     as _i5;
 import 'package:testador/features/quiz/presentation/session/admin/session_manager_screen.dart'
     as _i3;
-import 'package:testador/features/quiz/presentation/session/player/join_session_screen.dart'
+import 'package:testador/features/quiz/presentation/session/player/player_session_manager.dart'
     as _i2;
 
 abstract class $AppRouter extends _i9.RootStackRouter {

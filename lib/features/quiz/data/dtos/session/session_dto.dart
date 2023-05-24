@@ -74,16 +74,21 @@ class SessionDto extends Equatable {
   }
 
   factory SessionDto.fromMap(Map<dynamic, dynamic> map, String id) {
+    List<PlayerDto> players = [];
+    List<SessionAnswerDto> answers = [];
+    for (var x in map[studentsField] ?? []) {
+      players.add(PlayerDto.fromMap(x as Map<dynamic, dynamic>));
+    }
+
+    for (var x in map[answersField] ?? []) {
+      answers.add(SessionAnswerDto.fromMap(x as Map<dynamic, dynamic>));
+    }
     return SessionDto(
       id: id,
       quizId: map[quizIdField],
-      students: ((map[studentsField] as List<Map<dynamic, dynamic>>?) ?? [])
-          .map((e) => PlayerDto.fromMap(e))
-          .toList(),
+      students: players,
       currentQuestionId: map[currentQuestionIdField],
-      answers: ((map[answersField] as List<Map<dynamic, dynamic>>?) ?? [])
-          .map((e) => SessionAnswerDto.fromMap(e))
-          .toList(),
+      answers: answers,
       status: SessionStatus.fromString(map[statusField]),
     );
   }

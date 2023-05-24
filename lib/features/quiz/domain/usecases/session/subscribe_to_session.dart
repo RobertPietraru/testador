@@ -22,5 +22,6 @@ class SubscribeToSessionUsecaseParams extends Params {
 
 class SubscribeToSessionUsecaseResult extends Response {
   final Stream<SessionEntity> sessions;
-  const SubscribeToSessionUsecaseResult({required this.sessions});
+  final SessionEntity currentSession;
+  const SubscribeToSessionUsecaseResult({required this.sessions, required this.currentSession, });
 }

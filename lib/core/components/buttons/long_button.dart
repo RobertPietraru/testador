@@ -10,7 +10,7 @@ class LongButton extends StatelessWidget {
     required this.onPressed,
     required this.label,
     required this.isLoading,
-    this.height = 45,
+    this.height = 55,
     this.textGradient,
     this.color,
     this.error,

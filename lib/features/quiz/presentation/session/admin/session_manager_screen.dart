@@ -70,9 +70,8 @@ class _QuizSessionManagerScreen extends StatelessWidget {
               );
             } else if (status == SessionStatus.results) {
               return QuestionResultsScreen(
-                onContinue: () {
-                  context.read<SessionAdminCubit>().showLeaderboard();
-                },
+                onContinue: () =>
+                    context.read<SessionAdminCubit>().showLeaderboard(),
                 state: state,
               );
             } else if (status == SessionStatus.leaderboard) {
@@ -82,7 +81,10 @@ class _QuizSessionManagerScreen extends StatelessWidget {
                 state: state,
               );
             } else if (status == SessionStatus.podium) {
-              return PodiumScreen(onLeave: () {}, state: state);
+              return PodiumScreen(
+                onLeave: () {},
+                session: state.session,
+              );
             }
           }
 

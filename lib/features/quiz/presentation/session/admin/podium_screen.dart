@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
-import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
+import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 
 class PodiumScreen extends StatefulWidget {
   final VoidCallback onLeave;
-  final SessionAdminMatchState state;
+  final SessionEntity session;
   const PodiumScreen({
     super.key,
-    required this.state,
     required this.onLeave,
+    required this.session,
   });
 
   @override
@@ -23,7 +23,7 @@ class _PodiumScreenState extends State<PodiumScreen> {
   late final List<PlayerEntity> sortedPlayers;
   List<int> calculate() {
     Map<int, int> answerCount = {};
-    for (var answer in widget.state.session.answers) {
+    for (var answer in widget.session.answers) {
       final before = answerCount[answer.optionIndex];
       if (before == null) {
         answerCount[answer.optionIndex!] = 0;
@@ -38,7 +38,7 @@ class _PodiumScreenState extends State<PodiumScreen> {
 
   @override
   void initState() {
-    sortedPlayers = widget.state.session.students.toList();
+    sortedPlayers = widget.session.students.toList();
     sortedPlayers.sort((a, b) => b.score.compareTo(a.score));
 
     super.initState();
@@ -50,7 +50,7 @@ class _PodiumScreenState extends State<PodiumScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: SessionCodeWidget(
-          sessionId: widget.state.session.id,
+          sessionId: widget.session.id,
         ),
         trailing: const [],
       ),
@@ -73,7 +73,7 @@ class _PodiumScreenState extends State<PodiumScreen> {
             ]))
           ];
         },
-        body: widget.state.session.students.isNotEmpty
+        body: widget.session.students.isNotEmpty
             ? ListView.separated(
                 separatorBuilder: (context, index) =>
                     SizedBox(height: theme.spacing.small),
@@ -101,5 +101,3 @@ class _PodiumScreenState extends State<PodiumScreen> {
     );
   }
 }
-
-

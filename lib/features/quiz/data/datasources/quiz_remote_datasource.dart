@@ -321,7 +321,15 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   Future<SubscribeToSessionUsecaseResult> subscribeToSession(
       SubscribeToSessionUsecaseParams params) async {
     final stream = ref.child('sessions').child(params.sessionId).onValue;
-
+    if (params.sessionId.isEmpty) {
+      throw const SessionNotFoundFailure();
+    }
+    final data = (await ref.child('sessions').child(params.sessionId).get())
+        .value as Map<dynamic, dynamic>?;
+    if (data == null) {
+      throw const SessionNotFoundFailure();
+    }
+    final session = SessionDto.fromMap(data, params.sessionId).toEntity();
     Stream<SessionEntity> sessionStream = stream
         .transform(StreamTransformer<DatabaseEvent, SessionEntity>.fromHandlers(
       handleData: (DatabaseEvent event, EventSink<SessionEntity> sink) {
@@ -331,7 +339,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
       },
     ));
 
-    return SubscribeToSessionUsecaseResult(sessions: sessionStream);
+    return SubscribeToSessionUsecaseResult(
+        sessions: sessionStream, currentSession: session);
   }
 
   @override

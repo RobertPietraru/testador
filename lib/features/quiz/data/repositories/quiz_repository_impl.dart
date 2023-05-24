@@ -419,11 +419,11 @@ class QuizRepositoryIMPL implements QuizRepository {
     } catch (_) {
       return const Left(QuizUnknownFailure());
     }
-
   }
 
   @override
-  Future<Either<QuizFailure, ShowLeaderboardUsecaseResult>> showLeaderboard(ShowLeaderboardUsecaseParams params) async {
+  Future<Either<QuizFailure, ShowLeaderboardUsecaseResult>> showLeaderboard(
+      ShowLeaderboardUsecaseParams params) async {
     try {
       final response = await quizRemoteDataSource.showLeaderboard(params);
       return Right(response);
@@ -434,6 +434,5 @@ class QuizRepositoryIMPL implements QuizRepository {
     } catch (_) {
       return const Left(QuizUnknownFailure());
     }
-
   }
 }
