@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testador/core/language_cubit/language_cubit.dart';
 import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/quiz/data/dtos/question/question_dto.dart';
 import 'package:testador/features/quiz/data/dtos/quiz/quiz_dto.dart';
@@ -47,30 +52,31 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return AppTheme(
-      lightTheme: _lightTheme,
-      darkTheme: _darkTheme,
+    return BlocProvider(
+      create: (context) => LanguageCubit(),
       child: Builder(builder: (context) {
-        return MaterialApp.router(
-          routerConfig: _appRouter.config(),
-          // routeInformationParser: _appRouter.defaultRouteParser(),
-          theme: _lightTheme.materialThemeData(context),
-          darkTheme: _darkTheme.materialThemeData(context),
-          themeMode: ThemeMode.light,
-          // supportedLocales: const [
-          //   Locale('en'), // English
-          //   // Locale('de'), // Spanish
-          //   Locale('ro'), // Spanish
-          //   // Locale('hu'), // Spanish
-          //   // Locale('ru'), // Spanish
-          // ],
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          // localizationsDelegates: [ AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate, ],
+        return BlocBuilder<LanguageCubit, LanguageState>(
+          builder: (context, state) {
+            return AppTheme(
+              lightTheme: _lightTheme,
+              darkTheme: _darkTheme,
+              child: Builder(builder: (context) {
+                return MaterialApp.router(
+                  routerConfig: _appRouter.config(),
+                  theme: _lightTheme.materialThemeData(context),
+                  darkTheme: _darkTheme.materialThemeData(context),
+                  themeMode: ThemeMode.light,
+                  locale: Locale(state.locale),
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  // localizationsDelegates: [ AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate, ],
+                );
+              }),
+            );
+          },
         );
       }),
     );
   }
 }
-
-

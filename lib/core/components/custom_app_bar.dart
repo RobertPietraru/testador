@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/services.dart';
 import 'package:testador/core/components/components.dart';
+import 'package:testador/core/language_cubit/language_cubit.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
+import 'package:testador/core/utils/translator.dart';
+import 'package:testador/main.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLeading;
@@ -66,7 +70,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
                 child: Text(translator.play, style: theme.actionTextStyle)),
             SizedBox(width: theme.spacing.small),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.language))
+            BlocBuilder<LanguageCubit, LanguageState>(
+              builder: (context, state) {
+                return LanguagePicker(
+                  initialLanguage: state.locale,
+                  languages: const {
+                    "Deutsch": 'de',
+                    "English": 'en',
+                    "French": 'fr',
+                    "Magyar": 'hu',
+                    'Русский': 'ru',
+                    "română": 'ro',
+                    'українська': 'uk',
+                  },
+                  onChanged: (newValue) {
+                    if (newValue == null) return;
+                    context.read<LanguageCubit>().update(newValue);
+                  },
+                );
+              },
+            )
           ],
       bottom: bottom,
     );
@@ -85,4 +108,32 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => AppBar().preferredSize;
+}
+
+class LanguagePicker extends StatelessWidget {
+  final String initialLanguage;
+  final Map<String, String> languages;
+  final void Function(String? newValue) onChanged;
+
+  const LanguagePicker(
+      {super.key,
+      required this.initialLanguage,
+      required this.languages,
+      required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.language),
+      onSelected: onChanged,
+      itemBuilder: (BuildContext context) {
+        return languages.keys.map((String choice) {
+          return PopupMenuItem<String>(
+            value: languages[choice] ?? 'en',
+            child: Text(choice),
+          );
+        }).toList();
+      },
+    );
+  }
 }
