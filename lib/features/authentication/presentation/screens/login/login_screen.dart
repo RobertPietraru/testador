@@ -91,7 +91,8 @@ class _LoginView extends StatelessWidget {
                 SizedBox(height: theme.spacing.mediumLarge),
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   TextButton(
-                      onPressed: null, child:  Text(context.translator.forgotYourPassword))
+                      onPressed: null,
+                      child: Text(context.translator.forgotYourPassword))
                 ]),
                 SizedBox(height: theme.spacing.mediumLarge),
                 LongButton(
@@ -114,7 +115,7 @@ class _LoginView extends StatelessWidget {
                                 .copyWith(color: theme.primaryColor),
                           ),
                           TextSpan(
-                              text: context.translator.register,
+                              text: ' ${context.translator.register}',
                               style: theme.actionTextStyle.copyWith(
                                 color: theme.companyColor,
                               )),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/services.dart';
@@ -8,7 +7,6 @@ import 'package:testador/core/components/components.dart';
 import 'package:testador/core/language_cubit/language_cubit.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
 import 'package:testador/core/utils/translator.dart';
-import 'package:testador/main.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLeading;
@@ -34,8 +32,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     VoidCallback? onMenuPressed,
     required BuildContext context,
   }) {
-    final translator = AppLocalizations.of(context);
-
     return AppBar(
       systemOverlayStyle: SystemUiOverlayStyle.light,
       elevation: fillColor == Colors.transparent ? 0 : null,
@@ -68,7 +64,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     context.pushRoute(const PlayerSessionManagerRoute());
                   }
                 },
-                child: Text(translator.play, style: theme.actionTextStyle)),
+                child: Text(context.translator.play, style: theme.actionTextStyle)),
             SizedBox(width: theme.spacing.small),
             BlocBuilder<LanguageCubit, LanguageState>(
               builder: (context, state) {
@@ -80,7 +76,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     "French": 'fr',
                     "Magyar": 'hu',
                     'Русский': 'ru',
-                    "română": 'ro',
+                    "Română": 'ro',
                     'українська': 'uk',
                   },
                   onChanged: (newValue) {

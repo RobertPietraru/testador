@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +9,8 @@ part 'language_state.dart';
 
 class LanguageCubit extends Cubit<LanguageState> {
   late final SharedPreferences sharedPreferences;
-  LanguageCubit() : super(LanguageState(locale: Platform.localeName)) {
+  LanguageCubit()
+      : super(LanguageState(locale: kIsWeb ? 'en' : Platform.localeName)) {
     init();
   }
   Future<void> update(String newLocale) async {
@@ -21,7 +23,7 @@ class LanguageCubit extends Cubit<LanguageState> {
     final locale = sharedPreferences.getString("locale");
     if (locale == null) {
       sharedPreferences.setString("locale", Platform.localeName);
-      emit(LanguageState(locale: Platform.localeName));
+      emit(LanguageState(locale: kIsWeb ? 'en' : Platform.localeName));
     } else {
       emit(LanguageState(locale: locale));
     }

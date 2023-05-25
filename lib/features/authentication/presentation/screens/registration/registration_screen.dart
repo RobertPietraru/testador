@@ -126,7 +126,7 @@ class _RegistrationScreen extends StatelessWidget {
                                         .copyWith(color: theme.primaryColor),
                                   ),
                                   TextSpan(
-                                      text: translator.login,
+                                      text: ' ${translator.login}',
                                       style: theme.actionTextStyle
                                           .copyWith(color: theme.companyColor)),
                                 ]),
