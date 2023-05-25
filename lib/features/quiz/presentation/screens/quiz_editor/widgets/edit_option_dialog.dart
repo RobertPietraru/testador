@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../../../core/components/custom_dialog.dart';
 import '../../../../../../core/components/text_input_field.dart';
@@ -38,14 +39,14 @@ class _EditOptionDialogState extends State<EditOptionDialog> {
         TextInputField(
           initialValue: value,
           onChanged: (e) => setState(() => value = e),
-          hint: 'Apasa pentru a edita raspunsul',
+          hint: context.translator.tapToModify,
           backgroundColor: Colors.transparent,
           showLabel: false,
         ),
         CheckboxListTile(
           value: isCorrect,
           onChanged: (e) => setState(() => isCorrect = !isCorrect),
-          title: const Text("Este corect?"),
+          title:  Text(context.translator.isItCorrect),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -64,7 +65,7 @@ class _EditOptionDialogState extends State<EditOptionDialog> {
                         isCorrect: isCorrect));
                 Navigator.pop(context);
               },
-              child: const Text('Salveaza'),
+              child:  Text(context.translator.save),
             )
           ],
         )

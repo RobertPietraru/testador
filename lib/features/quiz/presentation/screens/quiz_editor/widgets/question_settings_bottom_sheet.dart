@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../../../core/components/theme/app_theme.dart';
 import '../../../../domain/entities/question_entity.dart';
@@ -33,38 +34,38 @@ class QuestionSettingsView extends StatelessWidget {
                         .deleteQuestion(index: state.currentQuestionIndex);
                     Navigator.pop(context);
                   },
-                  title: const Text(
-                    "Sugereaza continutul cu A.I.",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  title: Text(
+                    context.translator.suggestContentWithAI,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   leading: const Icon(Icons.diversity_2),
                 ),
-                  ListTile(
-                    onTap: () {
-                      context
-                          .read<QuizEditorCubit>()
-                          .addAnotherRowOfOptions(questionIndex: questionIndex);
-                      Navigator.pop(context);
-                    },
-                    title: const Text(
-                      "Adauga un rand de optiuni",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    leading: const Icon(Icons.add),
+                ListTile(
+                  onTap: () {
+                    context
+                        .read<QuizEditorCubit>()
+                        .addAnotherRowOfOptions(questionIndex: questionIndex);
+                    Navigator.pop(context);
+                  },
+                  title: Text(
+                    context.translator.addOptionsRow,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  ListTile(
-                    onTap: () {
-                      context
-                          .read<QuizEditorCubit>()
-                          .removeRowOfOptions(questionIndex: questionIndex);
-                      Navigator.pop(context);
-                    },
-                    title: const Text(
-                      "Inlatura un rand de optiuni",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    leading: const Icon(Icons.remove),
+                  leading: const Icon(Icons.add),
+                ),
+                ListTile(
+                  onTap: () {
+                    context
+                        .read<QuizEditorCubit>()
+                        .removeRowOfOptions(questionIndex: questionIndex);
+                    Navigator.pop(context);
+                  },
+                  title: Text(
+                    context.translator.removeOptionsRow,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  leading: const Icon(Icons.remove),
+                ),
                 ListTile(
                   onTap: () {
                     final cubit = context.read<QuizEditorCubit>();
@@ -80,8 +81,8 @@ class QuestionSettingsView extends StatelessWidget {
                   },
                   title: Text(
                     state.currentQuestion.image == null
-                        ? "Adauga o imagine"
-                        : "Schimba imaginea",
+                        ? context.translator.addImage
+                        : context.translator.changeImage,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   leading: const Icon(Icons.image),
@@ -94,7 +95,7 @@ class QuestionSettingsView extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   title: Text(
-                    "Sterge intrebarea",
+                    context.translator.deleteQuestion,
                     style: TextStyle(
                         color: theme.bad, fontWeight: FontWeight.bold),
                   ),

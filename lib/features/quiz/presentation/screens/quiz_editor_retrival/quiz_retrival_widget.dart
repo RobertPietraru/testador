@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../core/routing/app_router.gr.dart';
 import '../../../../../../injection.dart';
 import '../../../domain/entities/quiz_entity.dart';
 import 'cubit/quiz_retrival_cubit.dart';

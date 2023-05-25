@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
@@ -34,7 +35,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
             if (widget.onContinue != null)
-              AppBarButton(text: 'Continua', onPressed: widget.onContinue!)
+              AppBarButton(text: context.translator.continueText, onPressed: widget.onContinue!)
           ]),
       body: NestedScrollView(
         controller: controller,
@@ -46,7 +47,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   padding: theme.standardPadding.copyWith(top: 0),
                   child: Center(
                     child: Text(
-                      "Clasament",
+                      context.translator.leaderboard,
                       style: theme.subtitleTextStyle,
                     ),
                   ))
@@ -71,7 +72,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             : Expanded(
                 child: Center(
                     child: Text(
-                "Nu mai este nimeni",
+                context.translator.theresNobodyElse,
                 style: theme.titleTextStyle,
               ))),
       ),

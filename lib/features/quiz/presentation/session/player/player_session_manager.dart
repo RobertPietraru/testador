@@ -5,6 +5,7 @@ import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/routing/app_router.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/podium_screen.dart';
 import 'package:testador/features/quiz/presentation/session/leaderboard_screen.dart';
@@ -106,7 +107,7 @@ class CodeRetrivalScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Introdu codul pentru a te conecta',
+                       context.translator.insertCodeToConnect,
                         style: theme.titleTextStyle,
                       ),
                       SizedBox(height: theme.spacing.small),
@@ -115,7 +116,7 @@ class CodeRetrivalScreen extends StatelessWidget {
                         onChanged: (e) =>
                             context.read<SessionPlayerCubit>().updateCode(e),
                         error: state.failure?.retrieveMessage(context),
-                        hint: 'Codul',
+                        hint: context.translator.code,
                         showLabel: false,
                       ),
                     ],
@@ -124,7 +125,7 @@ class CodeRetrivalScreen extends StatelessWidget {
                   LongButton(
                     onPressed: () =>
                         context.read<SessionPlayerCubit>().subscribeToSession(),
-                    label: 'Cauta sesiunea',
+                    label: context.translator.searchForSession,
                     isLoading: state.isLoading,
                   ),
                 ]),
@@ -159,7 +160,7 @@ class NameRetrivalScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Alege-ti un nume',
+                        context.translator.chooseAName,
                         style: theme.titleTextStyle,
                       ),
                       SizedBox(height: theme.spacing.small),
@@ -168,7 +169,7 @@ class NameRetrivalScreen extends StatelessWidget {
                         onChanged: (e) => context
                             .read<SessionPlayerCubit>()
                             .updateName(e.replaceAll(' ', '')),
-                        hint: 'Nume',
+                        hint: context.translator.name,
                         error: state.failure?.retrieveMessage(context),
                         showLabel: false,
                       ),
@@ -178,7 +179,7 @@ class NameRetrivalScreen extends StatelessWidget {
                   LongButton(
                     onPressed: () =>
                         context.read<SessionPlayerCubit>().joinSession(),
-                    label: 'Conecteaza-te',
+                    label: context.translator.connect,
                     isLoading: false,
                   ),
                 ]),

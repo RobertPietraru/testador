@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../../../core/components/theme/app_theme.dart';
 import '../../../../domain/entities/question_entity.dart';
@@ -38,7 +39,7 @@ class QuestionNavigatorListTile extends StatelessWidget {
               SizedBox(
                 width: 84,
                 child: Text(
-                  question.text ?? 'Nu are intrebare',
+                  question.text ?? context.translator.someoneForgotTo,
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.white),
                   overflow: TextOverflow.ellipsis,
@@ -83,7 +84,7 @@ class QuizQuestionWidget extends StatelessWidget {
                   child: EditQuestionDialog(
                       initialValue: state.currentQuestion.text ?? ''))),
           child: Text(
-            "#${(state.currentQuestionIndex + 1).toString()} ${state.currentQuestion.text ?? "Apasa pentru a modifica intrebarea"}",
+            "#${(state.currentQuestionIndex + 1).toString()} ${state.currentQuestion.text ?? context.translator.tapToModifyQuestion}",
             style: theme.subtitleTextStyle,
           ),
         ),

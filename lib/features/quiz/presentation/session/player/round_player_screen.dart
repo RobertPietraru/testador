@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/routing/app_router.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/player/player_question/player_question_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/timer/question_timer_cubit.dart';
@@ -75,7 +76,7 @@ class _RoundPlayerScreenState extends State<_RoundPlayerScreen> {
             return Scaffold(
                 body: Center(
                     child: Text(
-              "Ai ramas fara timp\n"
+              "${context.translator.youRanOutOfTime}\n"
               "¯\\_(ツ)_/¯",
               style: theme.largetitleTextStyle
                   .copyWith(color: theme.secondaryColor),
@@ -86,7 +87,7 @@ class _RoundPlayerScreenState extends State<_RoundPlayerScreen> {
             return Scaffold(
                 body: Center(
                     child: Text(
-              "Bravo, raspuns inregistrat",
+             context.translator.responseRegistered,
               style: theme.largetitleTextStyle
                   .copyWith(color: theme.secondaryColor),
             )));
@@ -133,7 +134,7 @@ class _AnswerRetrivalScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              "#${(state.questionIndex + 1).toString()} ${state.question.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
+                              "#${(state.questionIndex + 1).toString()} ${state.question.text ?? context.translator.someoneForgotTo}",
                               style: theme.subtitleTextStyle,
                             ),
                           ),

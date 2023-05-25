@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
 
 class AuthEmailEmptyValidationFailure extends AuthValidationFailure {
@@ -6,7 +7,7 @@ class AuthEmailEmptyValidationFailure extends AuthValidationFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return "Trebuie sa introduceti un email";
+    return context.translator.youMustProvideAnEmail;
   }
 }
 
@@ -15,6 +16,6 @@ class AuthEmailInvalidFailure extends AuthValidationFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return 'Emailul este invalid';
+    return context.translator.emailIsInvalid;
   }
 }

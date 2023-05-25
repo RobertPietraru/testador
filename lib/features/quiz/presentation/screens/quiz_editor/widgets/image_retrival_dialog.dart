@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/core/utils/translator.dart';
 
 class ImageRetrivalDialog extends StatefulWidget {
   final Function(File imageFile) onImageRetrived;
@@ -36,9 +37,9 @@ class _ImageRetrivalDialogState extends State<ImageRetrivalDialog> {
               child: Ink(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.camera_alt),
-                    Text("Camera"),
+                  children:  [
+                    const Icon(Icons.camera_alt),
+                    Text(context.translator.camera),
                   ],
                 ),
               ),
@@ -52,9 +53,9 @@ class _ImageRetrivalDialogState extends State<ImageRetrivalDialog> {
                 widget.onImageRetrived(File(file.path));
               },
               child: Ink(
-                child: Column(mainAxisSize: MainAxisSize.min, children: const [
-                  Icon(Icons.photo),
-                  Text("Galerie"),
+                child: Column(mainAxisSize: MainAxisSize.min, children:  [
+                  const Icon(Icons.photo),
+                  Text(context.translator.gallery),
                 ]),
               ),
             )

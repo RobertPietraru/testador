@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 
 class PlayerNameAlreadyInUseQuizFailure extends QuizFailure {
@@ -7,6 +8,6 @@ class PlayerNameAlreadyInUseQuizFailure extends QuizFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return 'Numele pe care l-ai introdus tu, este deja folosit de cineva';
+    return context.translator.nameAlreadyUsed;
   }
 }

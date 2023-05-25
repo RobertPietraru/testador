@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
-import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/cubit/quiz_editor_cubit.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_settings_screen.dart';
@@ -68,6 +69,7 @@ class _QuizescreenState extends State<_Quizescreen> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final translator = AppLocalizations.of(context);
     return WillPopScope(
       onWillPop: () async {
         final cubit = context.read<QuizEditorCubit>();
@@ -77,9 +79,9 @@ class _QuizescreenState extends State<_Quizescreen> {
         final bool? gottaSave = await showDialog(
           context: context,
           builder: (context) => AreYouSureDialog(
-              text: 'Esti sigur ca vrei sa inchizi editorul fara sa salvezi?',
-              option1: 'Da',
-              option2: 'Salveaza'),
+              text: context.translator.areYouSureNoSave,
+              option1: translator.yes,
+              option2: translator.save),
         );
         if (gottaSave == null) {
           // it was dissmissed;
@@ -128,39 +130,42 @@ class _QuizescreenState extends State<_Quizescreen> {
                           question: state.draft.questions[index])),
                 )),
           ),
-          appBar: CustomAppBar(title: const Text("Editor test"), trailing: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<QuizEditorCubit>(),
-                          child: const QuizesettingsScreen(),
-                        ),
-                      ));
-                },
-                icon: const Icon(Icons.settings)),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: BlocBuilder<QuizEditorCubit, QuizEditorState>(
-                    builder: (context, state) {
-                  return FilledButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            state.needsSync
-                                ? theme.good
-                                : theme.secondaryColor),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ))),
-                    onPressed: state.needsSync
-                        ? () => context.read<QuizEditorCubit>().save()
-                        : null,
-                    child: const Text('Salveaza'),
-                  );
-                }))
-          ]),
+          appBar: CustomAppBar(
+              title: Text(context.translator.testEditor),
+              trailing: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: context.read<QuizEditorCubit>(),
+                              child: const QuizesettingsScreen(),
+                            ),
+                          ));
+                    },
+                    icon: const Icon(Icons.settings)),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: BlocBuilder<QuizEditorCubit, QuizEditorState>(
+                        builder: (context, state) {
+                      return FilledButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                state.needsSync
+                                    ? theme.good
+                                    : theme.secondaryColor),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ))),
+                        onPressed: state.needsSync
+                            ? () => context.read<QuizEditorCubit>().save()
+                            : null,
+                        child: Text(context.translator.save),
+                      );
+                    }))
+              ]),
           body: BlocConsumer<QuizEditorCubit, QuizEditorState>(
             listener: (context, state) {
               if (state.status == QuizEditorStatus.failed &&

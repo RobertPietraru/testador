@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
@@ -50,8 +51,8 @@ class _PodiumScreenState extends State<PodiumScreen> {
                 padding: theme.standardPadding.copyWith(top: 0),
                 child: Column(
                   children: [
-                    Text("Podium", style: theme.subtitleTextStyle),
-                    Text("Felicitari tuturor! 🎉🎉",
+                    Text(context.translator.podium, style: theme.subtitleTextStyle),
+                    Text(context.translator.congrats,
                         style: theme.informationTextStyle),
                   ],
                 ),
@@ -81,7 +82,7 @@ class _PodiumScreenState extends State<PodiumScreen> {
             : Expanded(
                 child: Center(
                     child: Text(
-                "Nu mai este nimeni",
+                context.translator.theresNobodyElse,
                 style: theme.titleTextStyle,
               ))),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/text_input_field.dart';
@@ -29,6 +30,7 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final translator = AppLocalizations.of(context);
     return WillPopScope(
       onWillPop: () async {
         if (initialTitle == title) {
@@ -74,7 +76,7 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                           ),
                           child: state.draft.imageUrl == null
                               ? Center(
-                                  child: Text("Adauga imagine",
+                                  child: Text(translator.addImage,
                                       textAlign: TextAlign.center,
                                       style: theme.subtitleTextStyle
                                           .copyWith(color: Colors.white)))
@@ -85,11 +87,11 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                     onChanged: (e) {
                       title = e;
                     },
-                    hint: 'Titlu'),
+                    hint: translator.title),
                 SizedBox(height: theme.spacing.small),
                 TextInputField(
                   onChanged: (e) {},
-                  hint: 'Descriere',
+                  hint: translator.description,
                   maxLines: 5,
                 ),
                 ListTile(
@@ -100,7 +102,9 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                     context.read<QuizEditorCubit>().togglePublicity();
                   },
                   title: Text(
-                    state.draft.isPublic ? "Public" : "Privat",
+                    state.draft.isPublic
+                        ? translator.public
+                        : translator.private,
                     style: theme.subtitleTextStyle.copyWith(
                         color: state.draft.isPublic ? theme.good : theme.bad),
                   ),

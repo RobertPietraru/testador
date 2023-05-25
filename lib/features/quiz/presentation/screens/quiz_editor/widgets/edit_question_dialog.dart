@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../../../core/components/custom_dialog.dart';
 import '../../../../../../core/components/text_input_field.dart';
@@ -33,7 +34,7 @@ class _EditQuestionDialogState extends State<EditQuestionDialog> {
           TextInputField(
             onChanged: (e) => setState(() => value = e),
             initialValue: value,
-            hint: 'Apasa pentru a modifica intrebarea',
+            hint: context.translator.tapToModifyQuestion,
             showLabel: true,
           ),
           SizedBox(height: theme.spacing.medium),
@@ -51,7 +52,7 @@ class _EditQuestionDialogState extends State<EditQuestionDialog> {
                       newText: value.isEmpty ? null : value);
                   Navigator.pop(context);
                 },
-                child: const Text('Salveaza'),
+                child: Text(context.translator.save),
               ),
             ],
           )

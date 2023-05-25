@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/timer/question_timer_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
@@ -71,7 +72,7 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
       appBar: CustomAppBar(
           title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
-            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
+            AppBarButton(text: context.translator.continueText, onPressed: widget.onContinue)
           ]),
       body: NestedScrollView(
         controller: controller,
@@ -88,7 +89,7 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
                         children: [
                           Expanded(
                             child: Text(
-                              "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
+                              "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? context.translator.someoneForgotTo}",
                               style: theme.subtitleTextStyle,
                             ),
                           ),

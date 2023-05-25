@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
 
 class AuthPasswordEmptyValidationFailure extends AuthValidationFailure {
@@ -6,7 +7,7 @@ class AuthPasswordEmptyValidationFailure extends AuthValidationFailure {
 
   @override
   String retrieveMessage(BuildContext context) =>
-      'Trebuie sa introduceti o parola';
+     context.translator.youMustProvideAPassword;
 }
 
 class AuthPasswordInvalidFailure extends AuthValidationFailure {
@@ -14,5 +15,5 @@ class AuthPasswordInvalidFailure extends AuthValidationFailure {
 
   @override
   String retrieveMessage(BuildContext context) =>
-      'Parola este prea slaba sau invalida';
+      context.translator.passwordToWeak;
 }

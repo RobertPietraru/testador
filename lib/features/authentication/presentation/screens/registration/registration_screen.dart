@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
 import 'package:testador/features/authentication/presentation/screens/registration/cubit/registration_cubit.dart';
 import 'package:testador/injection.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../../core/components/buttons/long_button.dart';
 import '../../../../../core/components/text_input_field.dart';
 import '../../../../../core/components/theme/app_theme.dart';
@@ -30,6 +32,7 @@ class RegistrationScreen extends StatelessWidget {
 class _RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final translator = AppLocalizations.of(context);
     return Scaffold(
       appBar: const CustomAppBar(),
       body: BlocConsumer<RegistrationCubit, RegistrationState>(
@@ -53,7 +56,7 @@ class _RegistrationScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Inregistreaza-te",
+                        Text(context.translator.register,
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 40,
@@ -61,9 +64,8 @@ class _RegistrationScreen extends StatelessWidget {
                             textAlign: TextAlign.left),
                         SizedBox(height: theme.spacing.mediumLarge),
                         Text(
-                          "Completeaza campurile pentru a continua",
+                          context.translator.fillInToContinue,
                           style: TextStyle(
-                              fontFamily: 'Inter',
                               fontWeight: FontWeight.w400,
                               fontSize: 16,
                               color: theme.primaryColor),
@@ -73,7 +75,7 @@ class _RegistrationScreen extends StatelessWidget {
                         TextInputField(
                           onChanged:
                               context.read<RegistrationCubit>().onEmailChanged,
-                          hint: "Email",
+                          hint: context.translator.email,
                           error: state.emailFailure(context),
                         ),
                         SizedBox(height: theme.spacing.mediumLarge),
@@ -81,7 +83,7 @@ class _RegistrationScreen extends StatelessWidget {
                           onChanged: context
                               .read<RegistrationCubit>()
                               .onPasswordChanged,
-                          hint: "Parola",
+                          hint: context.translator.password,
                           isPassword: true,
                           error: state.passwordFailure(context),
                         ),
@@ -91,14 +93,14 @@ class _RegistrationScreen extends StatelessWidget {
                           onChanged: context
                               .read<RegistrationCubit>()
                               .onConfirmedPasswordChanged,
-                          hint: "Confirmare parola",
+                          hint: context.translator.confirmPassword,
                           error: state.confirmPasswordFailure(context),
                         ),
                         SizedBox(height: theme.spacing.xxLarge),
                         LongButton(
                           onPressed: () =>
                               context.read<RegistrationCubit>().register(),
-                          label: 'Inregistreaza-te',
+                          label: context.translator.register,
                           isLoading: state.isLoading,
                         ),
                         SizedBox(height: theme.spacing.xxLarge),
@@ -118,12 +120,13 @@ class _RegistrationScreen extends StatelessWidget {
                               child: RichText(
                                 text: TextSpan(children: [
                                   TextSpan(
-                                    text: "Ai deja cont? ",
+                                    text:
+                                        context.translator.alreadyHaveAnAccount,
                                     style: theme.actionTextStyle
                                         .copyWith(color: theme.primaryColor),
                                   ),
                                   TextSpan(
-                                      text: "Logheaza-te",
+                                      text: translator.login,
                                       style: theme.actionTextStyle
                                           .copyWith(color: theme.companyColor)),
                                 ]),

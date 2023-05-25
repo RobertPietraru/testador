@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../../../core/components/theme/app_theme.dart';
 import '../../../../domain/entities/question_entity.dart';
@@ -67,7 +68,7 @@ class _OptionWidgetState extends State<OptionWidget> {
               ),
               Center(
                 child: Text(
-                  widget.option.text ?? "Optiunea ${widget.index + 1}",
+                  widget.option.text ?? "${ context.translator.option} ${widget.index + 1}",
                   style: theme.questionTextStyle,
                 ),
               ),

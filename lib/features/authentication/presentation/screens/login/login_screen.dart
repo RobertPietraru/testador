@@ -5,6 +5,7 @@ import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
 import 'package:testador/features/authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'package:testador/features/authentication/presentation/screens/login/cubit/login_cubit.dart';
@@ -65,18 +66,11 @@ class _LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Logheaza-te",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 40,
-                      color: theme.primaryColor,
-                    ),
-                    textAlign: TextAlign.left),
+                Text(context.translator.login),
                 SizedBox(height: theme.spacing.mediumLarge),
                 Text(
-                  "Completeaza campurile pentru a continua",
+                  context.translator.completeToContinue,
                   style: TextStyle(
-                    fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
                     color: theme.primaryColor,
@@ -86,23 +80,23 @@ class _LoginView extends StatelessWidget {
                 SizedBox(height: theme.spacing.xxLarge),
                 TextInputField(
                   onChanged: context.read<LoginCubit>().onEmailChanged,
-                  hint: "Email",
+                  hint: context.translator.email,
                 ),
                 SizedBox(height: theme.spacing.mediumLarge),
                 TextInputField(
                   onChanged: context.read<LoginCubit>().onPasswordChanged,
-                  hint: "Parola",
+                  hint: context.translator.password,
                   isPassword: true,
                 ),
                 SizedBox(height: theme.spacing.mediumLarge),
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   TextButton(
-                      onPressed: null, child: const Text("Ti-ai uitat parola?"))
+                      onPressed: null, child:  Text(context.translator.forgotYourPassword))
                 ]),
                 SizedBox(height: theme.spacing.mediumLarge),
                 LongButton(
                     onPressed: () => context.read<LoginCubit>().login(),
-                    label: 'Logheaza-te',
+                    label: context.translator.login,
                     error: state.failure?.fieldWithIssue == FieldWithIssue.none
                         ? state.failure?.retrieveMessage(context)
                         : null,
@@ -115,12 +109,12 @@ class _LoginView extends StatelessWidget {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: "Nu ai cont? ",
+                            text: context.translator.dontHaveAnAccount,
                             style: theme.actionTextStyle
                                 .copyWith(color: theme.primaryColor),
                           ),
                           TextSpan(
-                              text: "Inregistreaza-te",
+                              text: context.translator.register,
                               style: theme.actionTextStyle.copyWith(
                                 color: theme.companyColor,
                               )),

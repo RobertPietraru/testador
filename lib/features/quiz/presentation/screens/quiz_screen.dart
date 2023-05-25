@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
@@ -6,8 +7,6 @@ import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
-
-import '../../../../core/components/theme/app_theme_data.dart';
 import '../../../../core/routing/app_router.gr.dart';
 import '../../domain/entities/draft_entity.dart';
 import '../../domain/entities/quiz_entity.dart';
@@ -28,6 +27,7 @@ class QuizScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final translator = AppLocalizations.of(context);
     // I wanted to be able to use the word quiz without using the inital quiz,
     final quiz0 = quiz;
     return BlocProvider.value(
@@ -68,7 +68,7 @@ class QuizScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(quiz.title ?? "Fara nume",
+                                  Text(quiz.title ?? translator.noTitle,
                                       style: theme.titleTextStyle),
                                   IconButton(
                                     onPressed: () {
@@ -95,7 +95,7 @@ class QuizScreen extends StatelessWidget {
                                     child: LongButton(
                                       onPressed: () => context.pushRoute(
                                           QuizSessionManagerRoute(quiz: quiz)),
-                                      label: 'Incepe o sesiune',
+                                      label: translator.startNewSession,
                                       isLoading: false,
                                     ),
                                   ),
@@ -139,6 +139,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final translator = AppLocalizations.of(context);
 
     return Padding(
       padding: theme.standardPadding,
@@ -146,7 +147,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "#${widget.index + 1} ${widget.question.text ?? "Nu a fost adaugata intrebarea"}",
+            "#${widget.index + 1} ${widget.question.text ?? translator.someoneForgotTo}",
             style: theme.informationTextStyle,
           ),
           ListView.builder(
@@ -160,7 +161,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 leading: option.isCorrect
                     ? Icon(Icons.done, color: theme.good)
                     : Icon(Icons.close, color: theme.bad),
-                title: Text(option.text ?? 'Optiune'),
+                title: Text(option.text ?? translator.option),
               );
             },
             itemCount: widget.question.options.length,

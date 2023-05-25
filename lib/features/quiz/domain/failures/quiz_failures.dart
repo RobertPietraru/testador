@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../core/classes/failure.dart';
 
@@ -16,7 +17,7 @@ class QuizNetworkFailure extends QuizFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return "Nu esti conectat la internet";
+    return context.translator.youAreNotConnected;
   }
 }
 
@@ -25,7 +26,7 @@ class QuizNotFoundFailure extends QuizFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return 'Quizul cautat nu a fost gasit';
+    return context.translator.quizNotFound;
   }
 }
 
@@ -34,6 +35,6 @@ class QuizUnknownFailure extends QuizFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return 'A aparut o eroare. Codul: $code';
+    return '${context.translator.thereWasAnError} $code';
   }
 }

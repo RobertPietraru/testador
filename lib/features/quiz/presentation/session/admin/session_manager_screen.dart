@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/routing/app_router.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
@@ -39,11 +40,10 @@ class _QuizSessionManagerScreen extends StatelessWidget {
         final cubit = context.read<SessionAdminCubit>();
         final result = await showDialog(
           context: context,
-          builder: (context) => const AreYouSureDialog(
-              text:
-                  'Daca iesi, sesiunea de test se va incheia. Esti sigur ca vrei sa faci asta?',
-              option1: 'Da',
-              option2: 'Ramane'),
+          builder: (context) =>  AreYouSureDialog(
+              text: context.translator.ifYouLeaveSession,
+              option1: context.translator.yes,
+              option2: context.translator.stay),
         );
         if (result == null) {
           return false;

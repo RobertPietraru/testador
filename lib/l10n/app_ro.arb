@@ -25,5 +25,12 @@
   "start": "Începe",
   "codeCopied": "Codul a fost copiat",
   "noTests": "Nu ai teste",
-  "unsaved": "Nesalvat"
+  "unsaved": "Nesalvat",
+  "someoneForgotTo": "Cineva a uitat sa puna aici o intrebare 😁",
+  "login": "Logheaza-te",
+  "save": "Salveaza",
+  "yes": "Da",
+  "testEditor": "Editor test",
+  "areYouSureNoSave": "Esti sigur ca vrei sa inchizi editorul fara sa salvezi?",
+  "no": "Nu"
 }

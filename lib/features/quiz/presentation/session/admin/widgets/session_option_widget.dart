@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../../../core/components/theme/app_theme.dart';
 import '../../../../domain/entities/question_entity.dart';
@@ -54,7 +55,7 @@ class _SessionOptionWidgetState extends State<SessionOptionWidget> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    widget.option.text ?? "Optiunea ${widget.index + 1}",
+                    widget.option.text ?? "${context.translator.option} ${widget.index + 1}",
                     style: theme.questionTextStyle,
                   ),
                 ),

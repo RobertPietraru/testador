@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/utils/split_string_into_blocks.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
 
@@ -26,14 +27,14 @@ class WaitingForPlayersScreen extends StatelessWidget {
             AppBarButton(
               isEnabled: session.students.isNotEmpty,
               onPressed: onBegin!,
-              text: 'Incepe',
+              text: context.translator.start,
             )
         ],
       ),
       body: Padding(
         padding: theme.standardPadding,
         child: Column(children: [
-          Text("Sesiunea a fost creata. Asteptem jucatorii",
+          Text(context.translator.sessionIsCreated,
               style: theme.titleTextStyle, textAlign: TextAlign.center),
           SizedBox(height: theme.spacing.large),
           Card(
@@ -45,12 +46,12 @@ class WaitingForPlayersScreen extends StatelessWidget {
             child: InkWell(
               onLongPress: () async {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Copiat codul")));
+                    SnackBar(content: Text(context.translator.codeCopied)));
                 await Clipboard.setData(ClipboardData(text: session.id));
               },
               onTap: () async {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Copiat codul")));
+                    SnackBar(content: Text(context.translator.codeCopied)));
                 await Clipboard.setData(ClipboardData(text: session.id));
               },
               child: Ink(
@@ -59,7 +60,7 @@ class WaitingForPlayersScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Parola', style: theme.informationTextStyle),
+                    Text(context.translator.password, style: theme.informationTextStyle),
                     SizedBox(height: theme.spacing.small),
                     Text(splitStringIntoBlocks(session.id),
                         style: theme.titleTextStyle),
@@ -72,7 +73,7 @@ class WaitingForPlayersScreen extends StatelessWidget {
           Expanded(
               child: Center(
             child: session.students.isEmpty
-                ? Text("Asteptam elevii...", style: theme.titleTextStyle)
+                ? Text("${context.translator.waitingForStudents}...", style: theme.titleTextStyle)
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: DeviceSize.screenHeight ~/ 300,

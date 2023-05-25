@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_option_widget.dart';
@@ -52,7 +53,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
           title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
             if (widget.onContinue != null)
-              AppBarButton(text: 'Continua', onPressed: widget.onContinue!)
+              AppBarButton(text: context.translator.continueText, onPressed: widget.onContinue!)
           ]),
       body: NestedScrollView(
         controller: controller,
@@ -66,7 +67,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
+                        "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? context.translator.someoneForgotTo}",
                         style: theme.subtitleTextStyle,
                       ),
                       _ResultsChart(

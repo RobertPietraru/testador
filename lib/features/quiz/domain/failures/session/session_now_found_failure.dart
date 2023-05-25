@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../quiz_failures.dart';
 
@@ -7,6 +8,6 @@ class SessionNotFoundFailure extends QuizFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return 'Sesiunea cautata nu a fost gasita';
+    return context.translator.sessionNotFound;
   }
 }
