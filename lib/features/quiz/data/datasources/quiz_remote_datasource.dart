@@ -300,8 +300,9 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
             .indexWhere((element) => element.userId == answerDto.userId);
         if (index != -1) {
           final student = students[index];
-          students[index] =
-              students[index].copyWith(score: student.score + 100);
+          students[index] = students[index].copyWith(
+              score: student.score + 100,
+              correctAnswers: student.correctAnswers);
         }
       }
     }

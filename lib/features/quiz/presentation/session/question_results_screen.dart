@@ -14,7 +14,7 @@ class QuestionResultsScreen extends StatefulWidget {
 
   const QuestionResultsScreen(
       {super.key,
-       this.onContinue,
+      this.onContinue,
       required this.session,
       required this.currentQuestion,
       required this.currentQuestionIndex});
@@ -27,28 +27,26 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
   final ScrollController controller = ScrollController();
   int total = 0;
 
-  List<int> calculate() {
+  Map<int, int> getAnsweresPerOptionIndex() {
     Map<int, int> answerCount = {};
-    for (var answer in widget.session.answers) {
-      final before = answerCount[answer.optionIndexes];
-      if (before == null) {
-        for (var index in answer.optionIndexes!) {
-          answerCount[index] = 0;
-        }
-      } else {
-        for (var index in answer.optionIndexes!) {
-          answerCount[index] = answerCount[index]! + 1;
-        }
+
+    // pentru fiecare answer entity
+    // vezi ce raspunsuri sunt selectate
+    // si incrementeaza pt fiecare raspuns
+    for (var answerEntity in widget.session.answers) {
+      for (var selectedOption in answerEntity.optionIndexes ?? <int>[]) {
+        answerCount[selectedOption] = answerCount[selectedOption] == null
+            ? 1
+            : answerCount[selectedOption]! + 1;
       }
-      total++;
     }
-    return answerCount.values.toList();
+    return answerCount;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final List<int> results = calculate();
+    Map<int, int> answerCount = getAnsweresPerOptionIndex();
     return Scaffold(
       appBar: CustomAppBar(
           title: SessionCodeWidget(sessionId: widget.session.id),
@@ -72,8 +70,8 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
                         style: theme.subtitleTextStyle,
                       ),
                       _ResultsChart(
-                        choices: results,
                         options: widget.currentQuestion.options,
+                        answerCount: answerCount,
                       ),
                     ],
                   ))
@@ -96,9 +94,10 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
 }
 
 class _ResultsChart extends StatelessWidget {
-  final List<int> choices;
+  final Map<int, int> answerCount;
+
   final List<MultipleChoiceOptionEntity> options;
-  const _ResultsChart({required this.choices, required this.options});
+  const _ResultsChart({required this.answerCount, required this.options});
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +133,7 @@ class _ResultsChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> showingSections(AppThemeData theme) {
-    if (choices.isEmpty) {
+    if (answerCount.isEmpty) {
       return List.generate(options.length, (i) {
         final isCorrect = options[i].isCorrect;
         final fontSize = isCorrect ? 25.0 : 16.0;
@@ -160,12 +159,12 @@ class _ResultsChart extends StatelessWidget {
         );
       });
     }
-    return List.generate(choices.length, (i) {
+    return List.generate(options.length, (i) {
       final isCorrect = options[i].isCorrect;
       final fontSize = isCorrect ? 25.0 : 16.0;
       final radius = isCorrect ? 60.0 : 50.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      int count = choices[i];
+      int count = answerCount[i] ?? 0;
       return PieChartSectionData(
         color: theme.getColor(i),
         badgeWidget: Row(
