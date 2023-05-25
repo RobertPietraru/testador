@@ -16,6 +16,7 @@ import 'package:testador/injection.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/components/theme/app_theme.dart';
+import '../../../../../core/components/theme/device_size.dart';
 
 @RoutePage()
 class PlayerSessionManagerScreen extends StatelessWidget {
@@ -91,36 +92,44 @@ class CodeRetrivalScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: Padding(
-        padding: theme.standardPadding,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: Center(
+        child: SizedBox(
+          width: DeviceSize.isDesktopMode ? 50.widthPercent : null,
+          child: Padding(
+            padding: theme.standardPadding,
+            child: Column(
+                mainAxisAlignment: DeviceSize.isDesktopMode
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Introdu codul pentru a te conecta',
-                    style: theme.titleTextStyle,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Introdu codul pentru a te conecta',
+                        style: theme.titleTextStyle,
+                      ),
+                      SizedBox(height: theme.spacing.small),
+                      TextInputField(
+                        initialValue: state.sessionId,
+                        onChanged: (e) =>
+                            context.read<SessionPlayerCubit>().updateCode(e),
+                        error: state.failure?.retrieveMessage(context),
+                        hint: 'Codul',
+                        showLabel: false,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: theme.spacing.small),
-                  TextInputField(
-                    initialValue: state.sessionId,
-                    onChanged: (e) =>
-                        context.read<SessionPlayerCubit>().updateCode(e),
-                    error: state.failure?.retrieveMessage(context),
-                    hint: 'Codul',
-                    showLabel: false,
+                  SizedBox(height: theme.spacing.large),
+                  LongButton(
+                    onPressed: () =>
+                        context.read<SessionPlayerCubit>().subscribeToSession(),
+                    label: 'Cauta sesiunea',
+                    isLoading: state.isLoading,
                   ),
-                ],
-              ),
-              LongButton(
-                onPressed: () =>
-                    context.read<SessionPlayerCubit>().subscribeToSession(),
-                label: 'Cauta sesiunea',
-                isLoading: state.isLoading,
-              ),
-            ]),
+                ]),
+          ),
+        ),
       ),
     );
   }
@@ -136,37 +145,45 @@ class NameRetrivalScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: Padding(
-        padding: theme.standardPadding,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: Center(
+        child: SizedBox(
+          width: DeviceSize.isDesktopMode ? 50.widthPercent : null,
+          child: Padding(
+            padding: theme.standardPadding,
+            child: Column(
+                mainAxisAlignment: DeviceSize.isDesktopMode
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Alege-ti un nume',
-                    style: theme.titleTextStyle,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Alege-ti un nume',
+                        style: theme.titleTextStyle,
+                      ),
+                      SizedBox(height: theme.spacing.small),
+                      TextInputField(
+                        initialValue: state.name,
+                        onChanged: (e) => context
+                            .read<SessionPlayerCubit>()
+                            .updateName(e.replaceAll(' ', '')),
+                        hint: 'Nume',
+                        error: state.failure?.retrieveMessage(context),
+                        showLabel: false,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: theme.spacing.small),
-                  TextInputField(
-                    initialValue: state.name,
-                    onChanged: (e) => context
-                        .read<SessionPlayerCubit>()
-                        .updateName(e.replaceAll(' ', '')),
-                    hint: 'Nume',
-                    error: state.failure?.retrieveMessage(context),
-                    showLabel: false,
+                  SizedBox(height: theme.spacing.large),
+                  LongButton(
+                    onPressed: () =>
+                        context.read<SessionPlayerCubit>().joinSession(),
+                    label: 'Conecteaza-te',
+                    isLoading: false,
                   ),
-                ],
-              ),
-              LongButton(
-                onPressed: () =>
-                    context.read<SessionPlayerCubit>().joinSession(),
-                label: 'Conecteaza-te',
-                isLoading: false,
-              ),
-            ]),
+                ]),
+          ),
+        ),
       ),
     );
   }

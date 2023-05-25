@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/components/theme/device_size.dart';
 
 import '../../../../../../core/components/theme/app_theme.dart';
 import '../../../../domain/entities/question_entity.dart';
@@ -88,18 +89,34 @@ class QuizQuestionWidget extends StatelessWidget {
         ),
       ),
       InkWell(
-          onTap: () => showModalBottomSheet(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                    value: BlocProvider.of<QuizEditorCubit>(context),
-                    child: QuestionSettingsBottomSheet(
-                      questionIndex: state.currentQuestionIndex,
-                      entity: state.currentQuestion,
+          onTap: () {
+            if (DeviceSize.isDesktopMode) {
+              showDialog(
+                  context: context,
+                  builder: (_) => BlocProvider.value(
+                        value: BlocProvider.of<QuizEditorCubit>(context),
+                        child: Dialog(
+                          child: QuestionSettingsView(
+                            questionIndex: state.currentQuestionIndex,
+                            entity: state.currentQuestion,
+                          ),
+                        ),
+                      ));
+              return;
+            }
+            showModalBottomSheet(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<QuizEditorCubit>(context),
+                      child: QuestionSettingsView(
+                        questionIndex: state.currentQuestionIndex,
+                        entity: state.currentQuestion,
+                      ),
                     ),
-                  ),
-              shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(20.0)))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20.0))));
+          },
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(

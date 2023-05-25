@@ -6,10 +6,10 @@ import '../../../../domain/entities/question_entity.dart';
 import '../cubit/quiz_editor_cubit.dart';
 import 'image_retrival_dialog.dart';
 
-class QuestionSettingsBottomSheet extends StatelessWidget {
+class QuestionSettingsView extends StatelessWidget {
   final QuestionEntity entity;
   final int questionIndex;
-  const QuestionSettingsBottomSheet({
+  const QuestionSettingsView({
     super.key,
     required this.entity,
     required this.questionIndex,

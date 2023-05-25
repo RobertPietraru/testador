@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/loading_wrapper.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
+import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
@@ -232,15 +233,23 @@ class _QuizescreenState extends State<_Quizescreen> {
                   },
                   body: state.currentQuestion.type ==
                           QuestionType.multipleChoice
-                      ? GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                      ? Center(
+                          child: SizedBox(
+                            width: DeviceSize.isDesktopMode
+                                ? 50.widthPercent
+                                : null,
+                            child: GridView.builder(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                ),
+                                itemCount: state.currentQuestion.options.length,
+                                itemBuilder: (context, index) => OptionWidget(
+                                    index: index,
+                                    option:
+                                        state.currentQuestion.options[index])),
                           ),
-                          itemCount: state.currentQuestion.options.length,
-                          itemBuilder: (context, index) => OptionWidget(
-                              index: index,
-                              option: state.currentQuestion.options[index]))
+                        )
                       : buildAnswers(theme, state.currentQuestion));
             },
           )),

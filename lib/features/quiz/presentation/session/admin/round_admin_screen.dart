@@ -8,6 +8,7 @@ import 'package:testador/features/quiz/presentation/session/admin/widgets/sessio
 import '../../../../../core/components/buttons/app_bar_button.dart';
 import '../../../../../core/components/custom_app_bar.dart';
 import '../../../../../core/components/theme/app_theme.dart';
+import '../../../../../core/components/theme/device_size.dart';
 import '../../../domain/entities/question_entity.dart';
 
 class AdminRoundScreen extends StatelessWidget {
@@ -121,15 +122,20 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
             ]))
           ];
         },
-        body: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemCount: widget.currentQuestion.options.length,
-            itemBuilder: (context, index) => SessionOptionWidget(
-                index: index,
-                option: widget.currentQuestion.options[index],
-                isSelected: false,
-                onPressed: null)),
+        body: Center(
+          child: SizedBox(
+            width: DeviceSize.isDesktopMode ? 50.widthPercent : null,
+            child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemCount: widget.currentQuestion.options.length,
+                itemBuilder: (context, index) => SessionOptionWidget(
+                    index: index,
+                    option: widget.currentQuestion.options[index],
+                    isSelected: false,
+                    onPressed: null)),
+          ),
+        ),
       ),
     );
   }
