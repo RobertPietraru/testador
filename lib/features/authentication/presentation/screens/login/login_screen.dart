@@ -66,7 +66,7 @@ class _LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(context.translator.login),
+                Text(context.translator.login, style: theme.titleTextStyle),
                 SizedBox(height: theme.spacing.mediumLarge),
                 Text(
                   context.translator.completeToContinue,

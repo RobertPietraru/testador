@@ -7,6 +7,7 @@ import 'package:testador/core/components/components.dart';
 import 'package:testador/core/language_cubit/language_cubit.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
 import 'package:testador/core/utils/translator.dart';
+import 'package:testador/features/authentication/presentation/auth_bloc/auth_bloc.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLeading;
@@ -64,7 +65,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     context.pushRoute(const PlayerSessionManagerRoute());
                   }
                 },
-                child: Text(context.translator.play, style: theme.actionTextStyle)),
+                child: Text(context.translator.play,
+                    style: theme.actionTextStyle)),
             SizedBox(width: theme.spacing.small),
             BlocBuilder<LanguageCubit, LanguageState>(
               builder: (context, state) {
@@ -85,7 +87,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   },
                 );
               },
-            )
+            ),
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is AuthAuthenticatedState) {
+                  return IconButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(AuthUserLoggedOut());
+                      },
+                      icon: const Icon(Icons.logout));
+                }
+                return Container();
+              },
+            ),
           ],
       bottom: bottom,
     );
