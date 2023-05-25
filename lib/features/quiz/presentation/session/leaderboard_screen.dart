@@ -17,20 +17,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   final ScrollController controller = ScrollController();
   int total = 0;
   late final List<PlayerEntity> sortedPlayers;
-  List<int> calculate() {
-    Map<int, int> answerCount = {};
-    for (var answer in widget.session.answers) {
-      final before = answerCount[answer.optionIndex];
-      if (before == null) {
-        answerCount[answer.optionIndex!] = 0;
-      } else {
-        answerCount[answer.optionIndex!] =
-            answerCount[answer.optionIndex!]! + 1;
-      }
-      total++;
-    }
-    return answerCount.values.toList();
-  }
 
   @override
   void initState() {

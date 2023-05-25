@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/text_input_field.dart';
+import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
-import 'package:testador/features/quiz/presentation/session/admin/podium_screen.dart';
+import 'package:testador/features/quiz/presentation/session/podium_screen.dart';
 import 'package:testador/features/quiz/presentation/session/leaderboard_screen.dart';
 import 'package:testador/features/quiz/presentation/session/player/cubit/session_player_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/question_results_screen.dart';
+import 'package:testador/features/quiz/presentation/session/player/round_player_screen.dart';
 import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 import 'package:uuid/uuid.dart';
@@ -22,10 +24,23 @@ class PlayerSessionManagerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SessionPlayerCubit(locator(), locator(), locator(),
+      create: (_) => SessionPlayerCubit(
+          locator(), locator(), locator(), locator(),
           userId: const Uuid().v1()),
       child: Builder(builder: (context) {
         return BlocBuilder<SessionPlayerCubit, SessionPlayerState>(
+          buildWhen: (previous, current) {
+            if (current is! SessionPlayerInGame ||
+                previous is! SessionPlayerInGame) {
+              return true;
+            }
+            // rebuild only on page change, otherwise, there is no reason
+            if (current.session.status != previous.session.status) {
+              return true;
+            }
+
+            return false;
+          },
           builder: (context, state) {
             if (state is SessionPlayerCodeRetrival) {
               return CodeRetrivalScreen(state: state);
@@ -37,21 +52,23 @@ class PlayerSessionManagerScreen extends StatelessWidget {
                 case SessionStatus.waitingForPlayers:
                   return WaitingForPlayersScreen(session: state.session);
                 case SessionStatus.question:
-                  return Scaffold(body: Text("QUESTION"));
+                  return PlayerRoundScreen(
+                    session: state.session,
+                    currentQuestionIndex: state.currentQuestionIndex,
+                    currentQuestion: state.currentQuestion,
+                  );
                 case SessionStatus.results:
                   return QuestionResultsScreen(
-                      onContinue: null,
                       session: state.session,
                       currentQuestion: state.currentQuestion,
                       currentQuestionIndex: state.currentQuestionIndex);
                 case SessionStatus.leaderboard:
-                  return LeaderboardScreen(
-                      onContinue: null, session: state.session);
+                  return LeaderboardScreen(session: state.session);
                 case SessionStatus.podium:
                   return PodiumScreen(onLeave: () {}, session: state.session);
                 default:
+                  return const LoadingScreen();
               }
-              return SessionPlayerInGameScreen(state: state);
             }
           },
         );
@@ -146,25 +163,6 @@ class NameRetrivalScreen extends StatelessWidget {
                 isLoading: false,
               ),
             ]),
-      ),
-    );
-  }
-}
-
-class SessionPlayerInGameScreen extends StatelessWidget {
-  final SessionPlayerInGame state;
-  const SessionPlayerInGameScreen({super.key, required this.state});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
-
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      body: Padding(
-        padding: theme.standardPadding,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, children: []),
       ),
     );
   }

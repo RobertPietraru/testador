@@ -27,7 +27,7 @@ import 'package:testador/features/quiz/presentation/screens/quiz_list/quiz_list_
     as _i4;
 import 'package:testador/features/quiz/presentation/screens/quiz_screen.dart'
     as _i5;
-import 'package:testador/features/quiz/presentation/session/session_manager_screen.dart'
+import 'package:testador/features/quiz/presentation/session/admin/session_manager_screen.dart'
     as _i3;
 import 'package:testador/features/quiz/presentation/session/player/player_session_manager.dart'
     as _i2;

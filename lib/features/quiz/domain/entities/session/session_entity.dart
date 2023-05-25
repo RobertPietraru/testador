@@ -73,28 +73,29 @@ class SessionEntity extends Equatable {
 
 class SessionAnswer extends Equatable {
   final String userId;
-  final int? optionIndex;
+  final List<int>? optionIndexes;
   final String? answer;
   final Duration responseTime;
 
   const SessionAnswer(
       {required this.userId,
-      this.optionIndex,
+      this.optionIndexes,
       this.answer,
       required this.responseTime});
 
   @override
-  List<Object?> get props => [userId, optionIndex, answer, responseTime];
+  List<Object?> get props =>
+      [userId, ...(optionIndexes ?? []), answer, responseTime];
 
   SessionAnswer copyWith({
     String? userId,
-    int? optionIndex = DefaultValues.forInts,
+    List<int>? optionIndexes,
     String? answer = DefaultValues.forStrings,
     Duration? responseTime,
   }) {
     return SessionAnswer(
       userId: userId ?? this.userId,
-      optionIndex: optionIndex ?? this.optionIndex,
+      optionIndexes: optionIndexes ?? this.optionIndexes,
       answer: answer ?? this.answer,
       responseTime: responseTime ?? this.responseTime,
     );

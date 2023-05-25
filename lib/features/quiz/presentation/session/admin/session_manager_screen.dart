@@ -5,14 +5,15 @@ import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
-import 'package:testador/features/quiz/presentation/session/admin/podium_screen.dart';
+import 'package:testador/features/quiz/presentation/session/admin/round_admin_screen.dart';
+import 'package:testador/features/quiz/presentation/session/podium_screen.dart';
 import 'package:testador/features/quiz/presentation/session/question_results_screen.dart';
 import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/waiting_for_players_screen.dart';
 import 'package:testador/injection.dart';
 
-import 'admin/round_admin_screen.dart';
-import 'leaderboard_screen.dart';
+import '../player/round_player_screen.dart';
+import '../leaderboard_screen.dart';
 
 @RoutePage()
 class QuizSessionManagerScreen extends StatelessWidget {
@@ -65,11 +66,12 @@ class _QuizSessionManagerScreen extends StatelessWidget {
                 onBegin: () => context.read<SessionAdminCubit>().beginSession(),
               );
             } else if (status == SessionStatus.question) {
-              return RoundAdminScreen(
-                state: state,
+              return AdminRoundScreen(
+                session: state.session,
+                currentQuestion: state.currentQuestion,
+                currentQuestionIndex: state.currentQuestionIndex,
                 onContinue: () =>
                     context.read<SessionAdminCubit>().showQuestionResults(),
-                onAnswerPressed: (answer) {},
               );
             } else if (status == SessionStatus.results) {
               return QuestionResultsScreen(

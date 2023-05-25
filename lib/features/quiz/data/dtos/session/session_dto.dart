@@ -108,29 +108,26 @@ class SessionDto extends Equatable {
 
 class SessionAnswerDto extends Equatable {
   final String userId;
-  final int? optionIndex;
-  final String? answer;
+  final List<int>? optionIndexes;
   final Duration responseTime;
 
   const SessionAnswerDto(
-      {required this.userId,
-      this.optionIndex,
-      this.answer,
-      required this.responseTime});
+      {required this.userId, this.optionIndexes, required this.responseTime});
 
   static const userIdField = 'userId';
   static const optionIndexField = 'optionIndex';
-  static const answerField = 'answer';
   static const responseTimeField = 'responseTime';
 
   @override
-  List<Object?> get props => [userId, optionIndex, answer];
+  List<Object?> get props => [
+        userId,
+        ...(optionIndexes ?? []),
+      ];
 
   SessionAnswer toEntity() {
     return SessionAnswer(
       userId: userId,
-      answer: answer,
-      optionIndex: optionIndex,
+      optionIndexes: optionIndexes,
       responseTime: responseTime,
     );
   }
@@ -138,8 +135,7 @@ class SessionAnswerDto extends Equatable {
   Map<dynamic, dynamic> toMap() {
     return {
       userIdField: userId,
-      optionIndexField: optionIndex,
-      answerField: answer,
+      optionIndexField: optionIndexes,
       responseTimeField: responseTime,
     };
   }
@@ -148,30 +144,27 @@ class SessionAnswerDto extends Equatable {
     return SessionAnswerDto(
       responseTime: entity.responseTime,
       userId: entity.userId,
-      answer: entity.answer,
-      optionIndex: entity.optionIndex,
+      optionIndexes: entity.optionIndexes,
     );
   }
 
   factory SessionAnswerDto.fromMap(Map<dynamic, dynamic> map) {
     return SessionAnswerDto(
       userId: map[userIdField],
-      answer: map[optionIndexField],
-      optionIndex: map[answerField],
+      optionIndexes: map[optionIndexField],
       responseTime: map[responseTimeField],
     );
   }
 
   SessionAnswerDto copyWith({
     String? userId,
-    int? optionIndex = DefaultValues.forInts,
+    List<int>? optionIndexes,
     String? answer = DefaultValues.forStrings,
     Duration? responseTime,
   }) {
     return SessionAnswerDto(
       userId: userId ?? this.userId,
-      optionIndex: optionIndex ?? this.optionIndex,
-      answer: answer ?? this.answer,
+      optionIndexes: optionIndexes ?? this.optionIndexes,
       responseTime: responseTime ?? this.responseTime,
     );
   }

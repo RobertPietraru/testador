@@ -17,15 +17,15 @@ class SendAnswerUsecase
 class SendAnswerUsecaseParams extends Params {
   final String sessionId;
   final String userId;
-  final int? answerIndex;
+  final List<int>? answerIndexes;
   final String? answer;
   final Duration responseTime;
 
   const SendAnswerUsecaseParams(
       {required this.sessionId,
       required this.userId,
-required this.responseTime, 
-      this.answerIndex,
+      required this.responseTime,
+      this.answerIndexes,
       this.answer});
 }
 

@@ -11,6 +11,8 @@ class QuestionEntity extends Equatable {
   final String? text;
   final List<MultipleChoiceOptionEntity> options;
   final List<String> acceptedAnswers;
+  bool get hasMultipleSolutions =>
+      options.where((element) => element.isCorrect).isNotEmpty;
 
   const QuestionEntity({
     required this.id,

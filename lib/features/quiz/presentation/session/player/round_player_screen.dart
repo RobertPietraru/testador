@@ -1,78 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/components/theme/app_theme_data.dart';
+import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
+import 'package:testador/features/quiz/presentation/session/player/player_question/player_question_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/timer/question_timer_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_option_widget.dart';
 
-import '../../../../../core/components/buttons/app_bar_button.dart';
 import '../../../../../core/components/custom_app_bar.dart';
 import '../../../../../core/components/theme/app_theme.dart';
+import '../../../../../injection.dart';
 import '../../../domain/entities/question_entity.dart';
 
-class AdminRoundScreen extends StatelessWidget {
-  final VoidCallback onContinue;
-  final int currentQuestionIndex;
-  final QuestionEntity currentQuestion;
-  final SessionEntity session;
-  final List<int>? selectedAnswers;
-
-  const AdminRoundScreen(
-      {super.key,
-      required this.onContinue,
-      required this.session,
-      required this.currentQuestionIndex,
-      required this.currentQuestion,
-      this.selectedAnswers});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => QuestionTimerCubit(time: 40),
-      child: Builder(builder: (context) {
-        return BlocListener<QuestionTimerCubit, QuestionTimerState>(
-          listenWhen: (previous, current) => current.time == 0,
-          listener: (context, state) => onContinue(),
-          child: _RoundAdminScreen(
-            currentQuestion: currentQuestion,
-            currentQuestionIndex: currentQuestionIndex,
-            session: session,
-            onContinue: onContinue,
-          ),
-        );
-      }),
-    );
-  }
-}
-
-class _RoundAdminScreen extends StatefulWidget {
-  final VoidCallback onContinue;
+class PlayerRoundScreen extends StatelessWidget {
   final int currentQuestionIndex;
   final QuestionEntity currentQuestion;
   final SessionEntity session;
 
-  const _RoundAdminScreen({
-    required this.onContinue,
+  const PlayerRoundScreen({
+    super.key,
     required this.session,
     required this.currentQuestionIndex,
     required this.currentQuestion,
   });
 
   @override
-  State<_RoundAdminScreen> createState() => _RoundAdminScreenState();
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(lazy: false, create: (_) => QuestionTimerCubit(time: 40)),
+        BlocProvider(
+            create: (context) => PlayerQuestionCubit(locator(),
+                questionindex: currentQuestionIndex,
+                question: currentQuestion,
+                session: session,
+                timer: context.read<QuestionTimerCubit>())),
+      ],
+      child: Builder(builder: (context) {
+        return BlocListener<QuestionTimerCubit, QuestionTimerState>(
+          listenWhen: (previous, current) => current.time == 0,
+          listener: (context, state) =>
+              context.read<PlayerQuestionCubit>().ranOutOfTime(),
+          child: const _RoundPlayerScreen(),
+        );
+      }),
+    );
+  }
 }
 
-class _RoundAdminScreenState extends State<_RoundAdminScreen> {
+class _RoundPlayerScreen extends StatefulWidget {
+  const _RoundPlayerScreen();
+
+  @override
+  State<_RoundPlayerScreen> createState() => _RoundPlayerScreenState();
+}
+
+class _RoundPlayerScreenState extends State<_RoundPlayerScreen> {
   final ScrollController controller = ScrollController();
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PlayerQuestionCubit, PlayerQuestionState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case PlayerQuestionStatus.thinking:
+            return _AnswerRetrivalScreen(
+              controller: controller,
+              state: state,
+            );
+          case PlayerQuestionStatus.outOfTime:
+            return Scaffold(body: Center(child: Text('Ai ramas fara timp')));
+          case PlayerQuestionStatus.outOfTime:
+            return LoadingScreen();
+          case PlayerQuestionStatus.answered:
+            return Scaffold(body: Center(child: Text('Ai raspuns! Bravo!')));
+          default:
+            return LoadingScreen();
+        }
+      },
+    );
+  }
+}
+
+class _AnswerRetrivalScreen extends StatelessWidget {
+  final PlayerQuestionState state;
+  final ScrollController controller;
+  const _AnswerRetrivalScreen({required this.state, required this.controller});
+
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return Scaffold(
+      floatingActionButton: state.question.hasMultipleSolutions &&
+              state.selectedAnswerIndexes.isNotEmpty
+          ? FloatingActionButton(
+              onPressed: () =>
+                  context.read<PlayerQuestionCubit>().sendAnswers(),
+              child: const Icon(Icons.send),
+            )
+          : null,
       appBar: CustomAppBar(
-          title: SessionCodeWidget(sessionId: widget.session.id),
-          trailing: [
-            AppBarButton(text: 'Continua', onPressed: widget.onContinue)
-          ]),
+          title: SessionCodeWidget(sessionId: state.session.id),
+          trailing: const []),
       body: NestedScrollView(
         controller: controller,
         headerSliverBuilder: (context, _) {
@@ -88,7 +117,7 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
                         children: [
                           Expanded(
                             child: Text(
-                              "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
+                              "#${(state.questionIndex + 1).toString()} ${state.question.text ?? "Cineva a uitat sa puna aici o intrebare 😁"}",
                               style: theme.subtitleTextStyle,
                             ),
                           ),
@@ -101,17 +130,14 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
                         ],
                       ),
                       SizedBox(height: theme.spacing.medium),
-                      if (widget.currentQuestion.type == QuestionType.answer)
-                        SizedBox(height: theme.spacing.medium),
-                      if (widget.currentQuestion.image != null)
+                      if (state.question.image != null)
                         Center(
                           child: Container(
                             height: 220,
                             color: theme.secondaryColor,
                             child: AspectRatio(
                               aspectRatio: 1.0,
-                              child: Image.network(
-                                  widget.currentQuestion.image!,
+                              child: Image.network(state.question.image!,
                                   fit: BoxFit.contain),
                             ),
                           ),
@@ -125,12 +151,12 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
         body: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2),
-            itemCount: widget.currentQuestion.options.length,
+            itemCount: state.question.options.length,
             itemBuilder: (context, index) => SessionOptionWidget(
                 index: index,
-                option: widget.currentQuestion.options[index],
-                isSelected: false,
-                onPressed: null)),
+                option: state.question.options[index],
+                isSelected: state.selectedAnswerIndexes.contains(index),
+                onPressed: context.read<PlayerQuestionCubit>().selectAnswer())),
       ),
     );
   }

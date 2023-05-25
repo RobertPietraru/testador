@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
-import 'package:testador/features/quiz/presentation/session/admin/session_admin_cubit/session_admin_cubit.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_option_widget.dart';
 import '../../domain/entities/session/session_entity.dart';
@@ -15,7 +14,7 @@ class QuestionResultsScreen extends StatefulWidget {
 
   const QuestionResultsScreen(
       {super.key,
-      required this.onContinue,
+       this.onContinue,
       required this.session,
       required this.currentQuestion,
       required this.currentQuestionIndex});
@@ -31,12 +30,15 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
   List<int> calculate() {
     Map<int, int> answerCount = {};
     for (var answer in widget.session.answers) {
-      final before = answerCount[answer.optionIndex];
+      final before = answerCount[answer.optionIndexes];
       if (before == null) {
-        answerCount[answer.optionIndex!] = 0;
+        for (var index in answer.optionIndexes!) {
+          answerCount[index] = 0;
+        }
       } else {
-        answerCount[answer.optionIndex!] =
-            answerCount[answer.optionIndex!]! + 1;
+        for (var index in answer.optionIndexes!) {
+          answerCount[index] = answerCount[index]! + 1;
+        }
       }
       total++;
     }
@@ -51,7 +53,8 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
       appBar: CustomAppBar(
           title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
-            if (widget.onContinue != null) AppBarButton(text: 'Continua', onPressed: widget.onContinue!)
+            if (widget.onContinue != null)
+              AppBarButton(text: 'Continua', onPressed: widget.onContinue!)
           ]),
       body: NestedScrollView(
         controller: controller,

@@ -261,8 +261,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     final answers = session.answers.toList();
     answers.add(SessionAnswerDto(
         userId: params.userId,
-        answer: params.answer,
-        optionIndex: params.answerIndex,
+        optionIndexes: params.answerIndexes,
         responseTime: params.responseTime));
     final newSession = session.copyWith(answers: answers);
 
@@ -289,10 +288,14 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     var students = session.students.toList();
 
     for (var answerDto in session.answers) {
-      bool addPoints = (question.type == QuestionType.answer &&
-              question.acceptedAnswers.contains(answerDto.answer)) ||
-          (answerDto.optionIndex != null &&
-              question.options[answerDto.optionIndex!].isCorrect);
+      bool addPoints = true;
+      for (var option in answerDto.optionIndexes ?? []) {
+        if (!question.options[option].isCorrect) {
+          addPoints = false;
+          break;
+        }
+      }
+
       if (addPoints) {
         final index = students
             .indexWhere((element) => element.userId == answerDto.userId);

@@ -15,11 +15,12 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
   final JoinSessionUsecase joinSessionUsecase;
   final SubscribeToSessionUsecase subscribeToSessionUsecase;
   final GetQuizByIdUsecase getQuizByIdUsecase;
+  final SendAnswerUsecase sendAnswerUsecase;
   final String userId;
   StreamSubscription<SessionEntity>? _sessionsStreamSubscription;
 
   SessionPlayerCubit(this.joinSessionUsecase, this.subscribeToSessionUsecase,
-      this.getQuizByIdUsecase, {required this.userId})
+      this.getQuizByIdUsecase, this.sendAnswerUsecase, {required this.userId})
       : super(SessionPlayerCodeRetrival(
             failure: null, userId: userId, sessionId: '', isLoading: false));
 
@@ -36,9 +37,7 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
         userId: state.userId,
       ));
     }, (r) {
-      _sessionsStreamSubscription = r.sessions.listen((session) {
-        emit(this.state.withSession(session));
-      });
+      _sessionsStreamSubscription = r.sessions.listen(sessionStreamHandler);
       emit(SessionPlayerNameRetrival(
         name: '',
         userId: userId,
@@ -46,6 +45,18 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
         isLoading: state.isLoading,
       ));
     });
+  }
+
+  void sessionStreamHandler(SessionEntity session) {
+    if (state is SessionPlayerInGame) {
+      final state = this.state as SessionPlayerInGame;
+      if (state.session.status != session.status) {
+        // they moved to a different screen
+        emit(state.copyWith(isSent: false, session: session));
+        return;
+      }
+    }
+    emit(state.withSession(session));
   }
 
   Future<void> joinSession() async {
@@ -80,11 +91,13 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
         },
         (quizResponse) {
           emit(SessionPlayerInGame(
+            selectedAnswers: const [],
             name: state.name,
             quiz: quizResponse.quiz,
             failure: null,
             session: sessionResponse.session,
             userId: state.userId,
+            isSent: false,
           ));
         },
       );
@@ -118,5 +131,69 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
       userId: state.userId,
       isLoading: state.isLoading,
     ));
+  }
+
+  void toggleOption(int index) {
+    if (this.state is! SessionPlayerInGame) return;
+    final state = this.state as SessionPlayerInGame;
+    if (state.selectedAnswers.contains(index)) {
+      final ans = state.selectedAnswers.toList();
+      ans.remove(index);
+      emit(state.copyWith(
+        userId: userId,
+        selectedAnswers: ans,
+      ));
+      return;
+    }
+    emit(
+      state.copyWith(
+        userId: userId,
+        selectedAnswers: [index, ...state.selectedAnswers],
+      ),
+    );
+  }
+
+  Future<void> sendAnswer(int index, int secondsLeft) async {
+    if (this.state is! SessionPlayerInGame) return;
+    final state = this.state as SessionPlayerInGame;
+    final response = await sendAnswerUsecase.call(SendAnswerUsecaseParams(
+        sessionId: state.session.id,
+        userId: state.userId,
+        answerIndexes: [index],
+        responseTime: Duration(seconds: 40 - secondsLeft)));
+    response.fold((l) {
+      emit(state.copyWith(
+        failure: l,
+      ));
+    }, (r) {
+      emit(state.copyWith(
+        isSent: true,
+        selectedAnswers: const [],
+        failure: null,
+        session: r.session,
+      ));
+    });
+  }
+
+  Future<void> sendSelectedAnswers(int secondsLeft) async {
+    if (this.state is! SessionPlayerInGame) return;
+    final state = this.state as SessionPlayerInGame;
+    final response = await sendAnswerUsecase.call(SendAnswerUsecaseParams(
+        sessionId: state.session.id,
+        userId: userId,
+        answerIndexes: state.selectedAnswers,
+        responseTime: Duration(seconds: 40 - secondsLeft)));
+    response.fold((l) {
+      emit(state.copyWith(
+        failure: l,
+      ));
+    }, (r) {
+      emit(state.copyWith(
+        selectedAnswers: const [],
+        failure: null,
+        isSent: true,
+        session: r.session,
+      ));
+    });
   }
 }
