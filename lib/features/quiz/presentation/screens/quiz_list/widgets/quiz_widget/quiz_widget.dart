@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
@@ -24,6 +25,8 @@ class QuizWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final translator = AppLocalizations.of(context);
+
     return Builder(builder: (context) {
       return GestureDetector(
         onTap: () {
@@ -64,7 +67,7 @@ class QuizWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          quiz.title ?? 'Fara titlu',
+                          quiz.title ?? translator.noTitle,
                           textAlign: TextAlign.left,
                           style: theme.titleTextStyle
                               .copyWith(color: theme.defaultBackgroundColor),
@@ -78,10 +81,10 @@ class QuizWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: theme.bad,
                                 borderRadius: BorderRadius.circular(20)),
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                "Nesalvat",
-                                style: TextStyle(color: Colors.white),
+                                translator.unsaved,
+                                style: const TextStyle(color: Colors.white),
                               ),
                             )),
                     ],

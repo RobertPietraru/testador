@@ -42,10 +42,7 @@ class AppRouter extends $AppRouter {
               ]),
           AutoRoute(path: 'loading', page: LoadingRoute.page),
         ]),
-    AutoRoute(
-      page: JoinSessionRoute.page,
-      path: '/join',
-    )
+    AutoRoute(page: PlayerSessionManagerRoute.page, path: '/join')
   ];
 }
 

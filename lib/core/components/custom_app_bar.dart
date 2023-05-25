@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:testador/core/components/components.dart';
-import 'package:testador/core/components/theme/app_theme.dart';
-import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
-
-import 'app_logo.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLeading;
@@ -32,8 +28,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   AppBar theAppBar({
     required AppThemeData theme,
     VoidCallback? onMenuPressed,
-    BuildContext? context,
+    required BuildContext context,
   }) {
+    final translator = AppLocalizations.of(context);
+
     return AppBar(
       systemOverlayStyle: SystemUiOverlayStyle.light,
       elevation: fillColor == Colors.transparent ? 0 : null,
@@ -61,12 +59,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             TextButton(
                 onPressed: () {
                   if (DeviceSize.isDesktopMode) {
-                    context?.navigateTo(const JoinSessionRoute());
+                    context.navigateTo(const PlayerSessionManagerRoute());
                   } else {
-                    context?.pushRoute(const JoinSessionRoute());
+                    context.pushRoute(const PlayerSessionManagerRoute());
                   }
                 },
-                child: Text("Joaca", style: theme.actionTextStyle)),
+                child: Text(translator.play, style: theme.actionTextStyle)),
             SizedBox(width: theme.spacing.small),
             IconButton(onPressed: () {}, icon: const Icon(Icons.language))
           ],

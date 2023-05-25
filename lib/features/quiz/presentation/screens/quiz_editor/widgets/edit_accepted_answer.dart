@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../core/components/custom_dialog.dart';
@@ -28,6 +29,7 @@ class _EditAcceptedAnswerDialogState extends State<EditAcceptedAnswerDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final translator = AppLocalizations.of(context);
     return CustomDialog(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -40,7 +42,7 @@ class _EditAcceptedAnswerDialogState extends State<EditAcceptedAnswerDialog> {
               });
             },
             initialValue: widget.initialValue,
-            hint: 'Apasa pentru a modifica optiunea',
+            hint: translator.tapToModifyQuestion,
             showLabel: false,
           ),
           SizedBox(height: theme.spacing.medium),
@@ -59,7 +61,7 @@ class _EditAcceptedAnswerDialogState extends State<EditAcceptedAnswerDialog> {
                       .removeAcceptedAnswer(index: widget.index);
                   Navigator.pop(context);
                 },
-                child: const Text('Sterge'),
+                child:  Text('Sterge'),
               ),
               SizedBox(width: theme.spacing.small),
               FilledButton(

@@ -61,7 +61,7 @@ abstract class $AppRouter extends _i9.RootStackRouter {
         child: const _i1.LoadingScreen(),
       );
     },
-    JoinSessionRoute.name: (routeData) {
+    PlayerSessionManagerRoute.name: (routeData) {
       return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i2.PlayerSessionManagerScreen(),
@@ -191,14 +191,14 @@ class LoadingRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.PlayerSessionManagerScreen]
-class JoinSessionRoute extends _i9.PageRouteInfo<void> {
-  const JoinSessionRoute({List<_i9.PageRouteInfo>? children})
+class PlayerSessionManagerRoute extends _i9.PageRouteInfo<void> {
+  const PlayerSessionManagerRoute({List<_i9.PageRouteInfo>? children})
       : super(
-          JoinSessionRoute.name,
+          PlayerSessionManagerRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'JoinSessionRoute';
+  static const String name = 'PlayerSessionManagerRoute';
 
   static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
 }

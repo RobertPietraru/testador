@@ -6,8 +6,8 @@ import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/widgets/quiz_widget/quiz_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../../core/components/custom_dialog.dart';
 import '../../../../../injection.dart';
 import '../../../../authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'cubit/quiz_list_cubit.dart';
@@ -32,6 +32,7 @@ class _QuizListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+    final translator = AppLocalizations.of(context);
     return BlocListener<QuizListCubit, QuizListState>(
       listenWhen: (previous, current) =>
           previous is! QuizListCreatedDraft && current is QuizListCreatedDraft,
@@ -66,7 +67,7 @@ class _QuizListScreen extends StatelessWidget {
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
                                 return Text(
-                                  'Bine ai venit,',
+                                  '${translator.welcome},',
                                   style: TextStyle(
                                     color: theme.secondaryColor,
                                     fontWeight: FontWeight.w600,
@@ -87,21 +88,21 @@ class _QuizListScreen extends StatelessWidget {
                                     children: [
                                       _QuickActionWidget(
                                         onPressed: () {
-                                          context.router.root
-                                              .push(const JoinSessionRoute());
+                                          context.router.root.push(
+                                              const PlayerSessionManagerRoute());
                                         },
                                         icon: Icons.people_alt,
-                                        label: 'Joaca',
+                                        label: translator.play,
                                       ),
                                       _QuickActionWidget(
                                         icon: Icons.arrow_back,
-                                        label: 'Continua',
+                                        label: translator.continueText,
                                         isEnabled: false,
                                         onPressed: null,
                                       ),
                                       _QuickActionWidget(
                                         icon: Icons.lightbulb,
-                                        label: 'Creaza',
+                                        label: translator.create,
                                         onPressed: () {
                                           context
                                               .read<QuizListCubit>()
@@ -122,7 +123,7 @@ class _QuizListScreen extends StatelessWidget {
                               builder: (context, state) {
                                 if (state is! QuizListEmpty) {
                                   return Text(
-                                    'Testele tale',
+                                    translator.yourTests,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: theme.spacing.xxLarge,
@@ -150,7 +151,7 @@ class _QuizListScreen extends StatelessWidget {
                   if (state is QuizListEmpty) {
                     return Center(
                       child: Text(
-                        "Nu ai teste\n"
+                        "${translator.noTests}"
                         "¯\\_(ツ)_/¯",
                         style: theme.largetitleTextStyle
                             .copyWith(color: theme.secondaryColor),
