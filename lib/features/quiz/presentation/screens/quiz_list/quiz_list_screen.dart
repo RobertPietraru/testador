@@ -153,6 +153,7 @@ class _QuizListScreen extends StatelessWidget {
                       child: Text(
                         "${translator.noTests}\n"
                         "¯\\_(ツ)_/¯",
+                        textAlign: TextAlign.center,
                         style: theme.largetitleTextStyle
                             .copyWith(color: theme.secondaryColor),
                       ),
