@@ -149,49 +149,24 @@ class _QuestionWidgetState extends State<QuestionWidget> {
             "#${widget.index + 1} ${widget.question.text ?? "Nu a fost adaugata intrebarea"}",
             style: theme.informationTextStyle,
           ),
-          buildAnswerSection(theme: theme),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final option = widget.question.options[index];
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                key: ValueKey(option),
+                leading: option.isCorrect
+                    ? Icon(Icons.done, color: theme.good)
+                    : Icon(Icons.close, color: theme.bad),
+                title: Text(option.text ?? 'Optiune'),
+              );
+            },
+            itemCount: widget.question.options.length,
+          )
         ],
       ),
     );
-  }
-
-  Widget buildAnswerSection({
-    required AppThemeData theme,
-  }) {
-    switch (widget.question.type) {
-      case QuestionType.answer:
-        return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final answer = widget.question.acceptedAnswers[index];
-            return ListTile(
-              key: ValueKey(answer),
-              leading: Icon(Icons.done, color: theme.good),
-              title: Text(answer),
-            );
-          },
-          itemCount: widget.question.acceptedAnswers.length,
-        );
-      case QuestionType.multipleChoice:
-        return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final option = widget.question.options[index];
-            return ListTile(
-              contentPadding: EdgeInsets.zero,
-              key: ValueKey(option),
-              leading: option.isCorrect
-                  ? Icon(Icons.done, color: theme.good)
-                  : Icon(Icons.close, color: theme.bad),
-              title: Text(option.text ?? 'Optiune'),
-            );
-          },
-          itemCount: widget.question.options.length,
-        );
-      default:
-        return Container();
-    }
   }
 }

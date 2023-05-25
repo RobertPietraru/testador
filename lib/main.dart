@@ -18,7 +18,6 @@ void main() async {
   Hive.registerAdapter(DraftDtoAdapter());
   Hive.registerAdapter(QuestionDtoAdapter());
   Hive.registerAdapter(MultipleChoiceOptionDtoAdapter());
-  Hive.registerAdapter(QuestionTypeDtoAdapter());
   (await Hive.openBox<QuizDto>(QuizDto.collection));
   (await Hive.openBox<DraftDto>(DraftDto.hiveBoxName));
   await initialize();

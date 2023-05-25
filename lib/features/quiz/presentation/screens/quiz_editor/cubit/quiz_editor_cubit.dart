@@ -77,8 +77,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     );
   }
 
-  Future<void> addNewQuestion(
-      {required int index, required QuestionType type}) async {
+  Future<void> addNewQuestion() async {
     emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final response = await insertQuestionUsecase.call(
       InsertQuestionUsecaseParams(
@@ -86,18 +85,14 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
         question: QuestionEntity(
           id: const Uuid().v1(),
           quizId: state.draft.id,
-          acceptedAnswers: const [],
-          options: type == QuestionType.multipleChoice
-              ? const [
-                  MultipleChoiceOptionEntity(text: null),
-                  MultipleChoiceOptionEntity(text: null)
-                ]
-              : [],
+          options: const [
+            MultipleChoiceOptionEntity(text: null),
+            MultipleChoiceOptionEntity(text: null)
+          ],
           text: null,
-          type: type,
           image: null,
         ),
-        index: index + 1,
+        index: state.currentQuestionIndex + 1,
       ),
     );
     response.fold(
@@ -111,7 +106,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
           status: QuizEditorStatus.loaded,
           updateError: true,
           draft: r.draft,
-          currentQuestionIndex: index + 1)),
+          currentQuestionIndex: state.currentQuestionIndex + 1)),
     );
   }
 
@@ -285,38 +280,6 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     );
   }
 
-  Future<void> addAcceptedAnswer({required String answer}) async {
-    final question = state.currentQuestion;
-
-    await updateQuestion(
-        index: state.currentQuestionIndex,
-        replacementQuestion: question
-            .copyWith(acceptedAnswers: [...question.acceptedAnswers, answer]));
-  }
-
-  Future<void> removeAcceptedAnswer({required int index}) async {
-    final question = state.currentQuestion;
-
-    final answers = question.acceptedAnswers.toList();
-    answers.removeAt(index);
-
-    await updateQuestion(
-        index: state.currentQuestionIndex,
-        replacementQuestion: question.copyWith(acceptedAnswers: answers));
-  }
-
-  Future<void> updateAcceptedAnswer(
-      {required int index, required String answer}) async {
-    final question = state.currentQuestion;
-
-    final answers = question.acceptedAnswers.toList();
-    answers[index] = answer;
-
-    final newQuestion = question.copyWith(acceptedAnswers: answers);
-    await updateQuestion(
-        index: state.currentQuestionIndex, replacementQuestion: newQuestion);
-  }
-
   Future<void> moveQuestion(
       {required int oldIndex, required int newIndex}) async {
     emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
@@ -425,7 +388,8 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
   }
 
   void deleteDraft() async {
-    await deleteDraftByIdUsecase .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
+    await deleteDraftByIdUsecase
+        .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
     quizListCubit?.removeDraft(state.draft);
   }
 }

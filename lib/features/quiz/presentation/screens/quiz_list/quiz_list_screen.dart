@@ -151,7 +151,7 @@ class _QuizListScreen extends StatelessWidget {
                   if (state is QuizListEmpty) {
                     return Center(
                       child: Text(
-                        "${translator.noTests}"
+                        "${translator.noTests}\n"
                         "¯\\_(ツ)_/¯",
                         style: theme.largetitleTextStyle
                             .copyWith(color: theme.secondaryColor),

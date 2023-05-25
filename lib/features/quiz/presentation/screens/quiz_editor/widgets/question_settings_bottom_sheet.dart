@@ -39,7 +39,6 @@ class QuestionSettingsView extends StatelessWidget {
                   ),
                   leading: const Icon(Icons.diversity_2),
                 ),
-                if (entity.type == QuestionType.multipleChoice)
                   ListTile(
                     onTap: () {
                       context
@@ -53,7 +52,6 @@ class QuestionSettingsView extends StatelessWidget {
                     ),
                     leading: const Icon(Icons.add),
                   ),
-                if (entity.type == QuestionType.multipleChoice)
                   ListTile(
                     onTap: () {
                       context

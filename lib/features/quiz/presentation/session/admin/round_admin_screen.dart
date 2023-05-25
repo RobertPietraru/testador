@@ -101,8 +101,6 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
                         ],
                       ),
                       SizedBox(height: theme.spacing.medium),
-                      if (widget.currentQuestion.type == QuestionType.answer)
-                        SizedBox(height: theme.spacing.medium),
                       if (widget.currentQuestion.image != null)
                         Center(
                           child: Container(

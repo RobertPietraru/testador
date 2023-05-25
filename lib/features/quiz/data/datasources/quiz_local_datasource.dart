@@ -46,15 +46,14 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
       title: null,
       questions: [
         QuestionDto(
-            id: const Uuid().v1(),
-            text: null,
-            options: [
-              const MultipleChoiceOptionDto(text: null, isCorrect: false),
-              const MultipleChoiceOptionDto(text: null, isCorrect: false),
-            ],
-            acceptedAnswers: null,
-            quizId: id,
-            type: QuestionTypeDto.multipleChoice)
+          id: const Uuid().v1(),
+          text: null,
+          options: [
+            const MultipleChoiceOptionDto(text: null, isCorrect: false),
+            const MultipleChoiceOptionDto(text: null, isCorrect: false),
+          ],
+          quizId: id,
+        )
       ],
     );
     draftsBox.put(id, draftDto);
