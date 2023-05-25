@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testador/core/components/components.dart';
+import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/player_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
@@ -7,10 +8,12 @@ import 'package:testador/features/quiz/presentation/session/admin/widgets/sessio
 class PodiumScreen extends StatefulWidget {
   final VoidCallback onLeave;
   final SessionEntity session;
+  final QuizEntity quiz;
   const PodiumScreen({
     super.key,
     required this.onLeave,
     required this.session,
+    required this.quiz,
   });
 
   @override
@@ -67,7 +70,8 @@ class _PodiumScreenState extends State<PodiumScreen> {
                       padding:
                           theme.standardPadding.copyWith(top: 0, bottom: 0),
                       child: ListTile(
-                        leading: Text((index + 1).toString()),
+                        leading: Text(
+                            '${sortedPlayers[index].correctAnswers}/${widget.quiz.questions.length}'),
                         trailing:
                             Text(sortedPlayers[index].score.toInt().toString()),
                         tileColor: index < 3

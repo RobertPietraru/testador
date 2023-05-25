@@ -62,6 +62,7 @@ class _RoundPlayerScreenState extends State<_RoundPlayerScreen> {
   final ScrollController controller = ScrollController();
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
     return BlocBuilder<PlayerQuestionCubit, PlayerQuestionState>(
       builder: (context, state) {
         switch (state.status) {
@@ -71,13 +72,26 @@ class _RoundPlayerScreenState extends State<_RoundPlayerScreen> {
               state: state,
             );
           case PlayerQuestionStatus.outOfTime:
-            return Scaffold(body: Center(child: Text('Ai ramas fara timp')));
-          case PlayerQuestionStatus.outOfTime:
-            return LoadingScreen();
+            return Scaffold(
+                body: Center(
+                    child: Text(
+              "Ai ramas fara timp\n"
+              "¯\\_(ツ)_/¯",
+              style: theme.largetitleTextStyle
+                  .copyWith(color: theme.secondaryColor),
+            )));
+          case PlayerQuestionStatus.loading:
+            return const LoadingScreen();
           case PlayerQuestionStatus.answered:
-            return Scaffold(body: Center(child: Text('Ai raspuns! Bravo!')));
+            return Scaffold(
+                body: Center(
+                    child: Text(
+              "Bravo, raspuns inregistrat",
+              style: theme.largetitleTextStyle
+                  .copyWith(color: theme.secondaryColor),
+            )));
           default:
-            return LoadingScreen();
+            return const LoadingScreen();
         }
       },
     );

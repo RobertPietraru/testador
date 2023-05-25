@@ -55,7 +55,8 @@ class PlayerSessionManagerScreen extends StatelessWidget {
                   return PlayerRoundScreen(
                     session: state.session,
                     currentQuestionIndex: state.currentQuestionIndex,
-                    currentQuestion: state.currentQuestion, userId: state.userId,
+                    currentQuestion: state.currentQuestion,
+                    userId: state.userId,
                   );
                 case SessionStatus.results:
                   return QuestionResultsScreen(
@@ -65,7 +66,11 @@ class PlayerSessionManagerScreen extends StatelessWidget {
                 case SessionStatus.leaderboard:
                   return LeaderboardScreen(session: state.session);
                 case SessionStatus.podium:
-                  return PodiumScreen(onLeave: () {}, session: state.session);
+                  return PodiumScreen(
+                    quiz: state.quiz,
+                    onLeave: () {},
+                    session: state.session,
+                  );
                 default:
                   return const LoadingScreen();
               }

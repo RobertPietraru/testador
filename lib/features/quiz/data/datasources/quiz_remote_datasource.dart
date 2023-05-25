@@ -302,7 +302,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
           final student = students[index];
           students[index] = students[index].copyWith(
               score: student.score + 100,
-              correctAnswers: student.correctAnswers);
+              correctAnswers: student.correctAnswers + 1);
         }
       }
     }
