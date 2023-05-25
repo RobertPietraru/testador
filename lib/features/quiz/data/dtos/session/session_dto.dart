@@ -136,7 +136,7 @@ class SessionAnswerDto extends Equatable {
     return {
       userIdField: userId,
       optionIndexField: optionIndexes,
-      responseTimeField: responseTime,
+      responseTimeField: responseTime.inSeconds,
     };
   }
 
@@ -151,8 +151,10 @@ class SessionAnswerDto extends Equatable {
   factory SessionAnswerDto.fromMap(Map<dynamic, dynamic> map) {
     return SessionAnswerDto(
       userId: map[userIdField],
-      optionIndexes: map[optionIndexField],
-      responseTime: map[responseTimeField],
+      optionIndexes: (map[optionIndexField] as List<Object?>)
+          .map((e) => int.parse('$e'))
+          .toList(),
+      responseTime: Duration(seconds: map[responseTimeField]),
     );
   }
 

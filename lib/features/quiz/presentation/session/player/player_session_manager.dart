@@ -55,7 +55,7 @@ class PlayerSessionManagerScreen extends StatelessWidget {
                   return PlayerRoundScreen(
                     session: state.session,
                     currentQuestionIndex: state.currentQuestionIndex,
-                    currentQuestion: state.currentQuestion,
+                    currentQuestion: state.currentQuestion, userId: state.userId,
                   );
                 case SessionStatus.results:
                   return QuestionResultsScreen(

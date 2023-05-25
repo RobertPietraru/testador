@@ -7,7 +7,6 @@ import 'package:testador/features/quiz/data/dtos/draft/draft_dto.dart';
 import 'package:testador/features/quiz/data/dtos/quiz/quiz_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/player_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/session_dto.dart';
-import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';

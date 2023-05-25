@@ -7,9 +7,12 @@ class PlayerQuestionState extends Equatable {
   final PlayerQuestionStatus status;
   final QuestionEntity question;
   final int questionIndex;
+  final QuizFailure? failure;
+
   final List<int> selectedAnswerIndexes;
 
   const PlayerQuestionState({
+    this.failure,
     required this.questionIndex,
     required this.session,
     required this.status,
@@ -23,11 +26,13 @@ class PlayerQuestionState extends Equatable {
     QuestionEntity? question,
     List<int>? selectedAnswerIndexes,
     int? questionIndex,
+    QuizFailure? failure = DefaultValues.forQuizfailure,
   }) {
     return PlayerQuestionState(
       session: session ?? this.session,
       status: status ?? this.status,
       question: question ?? this.question,
+      failure: failure == DefaultValues.forQuizfailure ? this.failure : failure,
       selectedAnswerIndexes:
           selectedAnswerIndexes ?? this.selectedAnswerIndexes,
       questionIndex: questionIndex ?? this.questionIndex,

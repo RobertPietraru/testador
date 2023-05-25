@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testador/core/components/theme/app_theme_data.dart';
 import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/player/player_question/player_question_cubit.dart';
@@ -17,12 +16,14 @@ class PlayerRoundScreen extends StatelessWidget {
   final int currentQuestionIndex;
   final QuestionEntity currentQuestion;
   final SessionEntity session;
+  final String userId;
 
   const PlayerRoundScreen({
     super.key,
     required this.session,
     required this.currentQuestionIndex,
     required this.currentQuestion,
+    required this.userId,
   });
 
   @override
@@ -35,7 +36,8 @@ class PlayerRoundScreen extends StatelessWidget {
                 questionindex: currentQuestionIndex,
                 question: currentQuestion,
                 session: session,
-                timer: context.read<QuestionTimerCubit>())),
+                timer: context.read<QuestionTimerCubit>(),
+                userId: userId)),
       ],
       child: Builder(builder: (context) {
         return BlocListener<QuestionTimerCubit, QuestionTimerState>(
@@ -91,11 +93,11 @@ class _AnswerRetrivalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return Scaffold(
-      floatingActionButton: state.question.hasMultipleSolutions &&
+      floatingActionButton: state.question.hasMultipleAnswers &&
               state.selectedAnswerIndexes.isNotEmpty
           ? FloatingActionButton(
               onPressed: () =>
-                  context.read<PlayerQuestionCubit>().sendAnswers(),
+                  context.read<PlayerQuestionCubit>().sendSelectedAnswers(),
               child: const Icon(Icons.send),
             )
           : null,
@@ -156,7 +158,9 @@ class _AnswerRetrivalScreen extends StatelessWidget {
                 index: index,
                 option: state.question.options[index],
                 isSelected: state.selectedAnswerIndexes.contains(index),
-                onPressed: context.read<PlayerQuestionCubit>().selectAnswer())),
+                onPressed: () => context
+                    .read<PlayerQuestionCubit>()
+                    .onAnswerPressed(index))),
       ),
     );
   }

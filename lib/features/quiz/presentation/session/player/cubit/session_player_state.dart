@@ -61,13 +61,9 @@ class SessionPlayerInGame extends SessionPlayerState {
   final SessionEntity session;
   final QuizFailure? failure;
   final QuizEntity quiz;
-  final List<int> selectedAnswers;
-  final bool isSent;
 
   const SessionPlayerInGame(
       {required this.userId,
-      required this.isSent,
-      required this.selectedAnswers,
       required this.quiz,
       required this.name,
       this.failure,
@@ -77,27 +73,22 @@ class SessionPlayerInGame extends SessionPlayerState {
     String? userId,
     String? name,
     SessionEntity? session,
-    QuizFailure? failure = const QuizUnknownFailure(code: 'mock'),
+    QuizFailure? failure = DefaultValues.forQuizfailure,
     QuizEntity? quiz,
     List<int>? selectedAnswers,
     bool? isSent,
   }) {
     return SessionPlayerInGame(
       userId: userId ?? this.userId,
-      isSent: isSent ?? this.isSent,
-      selectedAnswers: selectedAnswers ?? this.selectedAnswers,
       quiz: quiz ?? this.quiz,
       name: name ?? this.name,
       session: session ?? this.session,
-      failure: failure == const QuizUnknownFailure(code: 'mock')
-          ? this.failure
-          : failure,
+      failure: failure == DefaultValues.forQuizfailure ? this.failure : failure,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [userId, name, isSent, failure, session, quiz, ...selectedAnswers];
+  List<Object?> get props => [userId, name, failure, session, quiz];
 
   int get currentQuestionIndex => quiz.questions
       .indexWhere((element) => element.id == session.currentQuestionId);

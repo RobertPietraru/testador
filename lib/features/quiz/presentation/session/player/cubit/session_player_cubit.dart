@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/globals.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
@@ -91,13 +92,11 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
         },
         (quizResponse) {
           emit(SessionPlayerInGame(
-            selectedAnswers: const [],
             name: state.name,
             quiz: quizResponse.quiz,
             failure: null,
             session: sessionResponse.session,
             userId: state.userId,
-            isSent: false,
           ));
         },
       );
@@ -131,69 +130,5 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
       userId: state.userId,
       isLoading: state.isLoading,
     ));
-  }
-
-  void toggleOption(int index) {
-    if (this.state is! SessionPlayerInGame) return;
-    final state = this.state as SessionPlayerInGame;
-    if (state.selectedAnswers.contains(index)) {
-      final ans = state.selectedAnswers.toList();
-      ans.remove(index);
-      emit(state.copyWith(
-        userId: userId,
-        selectedAnswers: ans,
-      ));
-      return;
-    }
-    emit(
-      state.copyWith(
-        userId: userId,
-        selectedAnswers: [index, ...state.selectedAnswers],
-      ),
-    );
-  }
-
-  Future<void> sendAnswer(int index, int secondsLeft) async {
-    if (this.state is! SessionPlayerInGame) return;
-    final state = this.state as SessionPlayerInGame;
-    final response = await sendAnswerUsecase.call(SendAnswerUsecaseParams(
-        sessionId: state.session.id,
-        userId: state.userId,
-        answerIndexes: [index],
-        responseTime: Duration(seconds: 40 - secondsLeft)));
-    response.fold((l) {
-      emit(state.copyWith(
-        failure: l,
-      ));
-    }, (r) {
-      emit(state.copyWith(
-        isSent: true,
-        selectedAnswers: const [],
-        failure: null,
-        session: r.session,
-      ));
-    });
-  }
-
-  Future<void> sendSelectedAnswers(int secondsLeft) async {
-    if (this.state is! SessionPlayerInGame) return;
-    final state = this.state as SessionPlayerInGame;
-    final response = await sendAnswerUsecase.call(SendAnswerUsecaseParams(
-        sessionId: state.session.id,
-        userId: userId,
-        answerIndexes: state.selectedAnswers,
-        responseTime: Duration(seconds: 40 - secondsLeft)));
-    response.fold((l) {
-      emit(state.copyWith(
-        failure: l,
-      ));
-    }, (r) {
-      emit(state.copyWith(
-        selectedAnswers: const [],
-        failure: null,
-        isSent: true,
-        session: r.session,
-      ));
-    });
   }
 }

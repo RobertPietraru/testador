@@ -15,15 +15,14 @@ class AdminRoundScreen extends StatelessWidget {
   final int currentQuestionIndex;
   final QuestionEntity currentQuestion;
   final SessionEntity session;
-  final List<int>? selectedAnswers;
 
-  const AdminRoundScreen(
-      {super.key,
-      required this.onContinue,
-      required this.session,
-      required this.currentQuestionIndex,
-      required this.currentQuestion,
-      this.selectedAnswers});
+  const AdminRoundScreen({
+    super.key,
+    required this.onContinue,
+    required this.session,
+    required this.currentQuestionIndex,
+    required this.currentQuestion,
+  });
 
   @override
   Widget build(BuildContext context) {
