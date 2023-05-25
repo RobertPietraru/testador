@@ -1,7 +1,5 @@
 # testador
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-final translator = AppLocalizations.of(context);
 A new Flutter project.
 
 ## Getting Started
