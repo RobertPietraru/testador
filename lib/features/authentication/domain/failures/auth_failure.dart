@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testador/core/utils/translator.dart';
 
 import '../../../../core/classes/failure.dart';
 
@@ -52,7 +53,7 @@ class AuthNetworkFailure extends AuthFailure {
 
   @override
   String retrieveMessage(BuildContext context) {
-    return "Nu esti conectat la internet";
+    return context.translator.youAreNotConnected;
   }
 }
 
