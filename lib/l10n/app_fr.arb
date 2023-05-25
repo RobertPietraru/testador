@@ -73,5 +73,7 @@
   "code": "Code",
   "searchForSession": "Rechercher une session",
   "selectALanguage": "Sélectionnez une langue",
-  "theresNobodyElse": "Il n'y a personne d'autre"
+  "theresNobodyElse": "Il n'y a personne d'autre",
+  "emailNotFound": "Compte introuvable",
+  "wrongPassword": "Le mot de passe est incorrect"
 }

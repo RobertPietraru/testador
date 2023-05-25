@@ -25,21 +25,21 @@ class AuthFailureDto {
       'email-already-exists': const AuthEmailAlreadyExistsFailure(),
       'email-already-in-use': const AuthEmailAlreadyExistsFailure(),
       'network-request-failed': const AuthNetworkFailure(),
-      'invalid-email': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.email),
-      'invalid-password': AuthInputBackendFailure(
+      'invalid-email':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.email),
+      'invalid-password': AuthUnknownFailure(
           code: code, fieldWithIssue: FieldWithIssue.password),
       'invalid-uid': AuthAuthorizationFailure(code: code),
       'invalid-phone-number': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
       'invalid-display-name': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-dynamic-link-domain': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-creation-time': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-disabled-field': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-dynamic-link-domain':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-creation-time':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-disabled-field':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
       'invalid-email-verified': AuthUnknownFailure(code: code),
       'invalid-photo-url': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
@@ -66,25 +66,23 @@ class AuthFailureDto {
       'invalid-page-token': AuthUnknownFailure(code: code),
       'phone-number-already-exists': AuthValidationFailure(
           code: code, fieldWithIssue: FieldWithIssue.none),
-      'uid-already-exists': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
-      'user-not-found': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.email),
+      'uid-already-exists':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'user-not-found': const AuthUserNotFound(),
       'invalid-session-cookie-duration': AuthAuthorizationFailure(code: code),
       'session-cookie-expired': AuthAuthorizationFailure(code: code),
       'session-cookie-revoked': AuthAuthorizationFailure(code: code),
       'id-token-expired': AuthAuthorizationFailure(code: code),
       'id-token-revoked': AuthAuthorizationFailure(code: code),
-      'invalid-password-hash': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
-      'invalid-password-salt': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
-      'missing-ios-bundle-id': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
-      'reserved-claims	': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.none),
-      'wrong-password': AuthInputBackendFailure(
-          code: code, fieldWithIssue: FieldWithIssue.password),
+      'invalid-password-hash':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'invalid-password-salt':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'missing-ios-bundle-id':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'reserved-claims	':
+          AuthUnknownFailure(code: code, fieldWithIssue: FieldWithIssue.none),
+      'wrong-password': const AuthWrongPassword(),
     };
     return failureConverter[code] ?? AuthUnknownFailure(code: code);
   }

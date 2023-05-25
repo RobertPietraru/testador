@@ -73,5 +73,7 @@
   "code": "Код",
   "searchForSession": "Пошук сесії",
   "selectALanguage": "Виберіть мову",
-  "theresNobodyElse": "Нікого більше немає"
+  "theresNobodyElse": "Нікого більше немає",
+  "emailNotFound": "Обліковий запис не знайдено",
+  "wrongPassword": "Невірний пароль"
 }

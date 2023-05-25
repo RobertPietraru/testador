@@ -81,12 +81,14 @@ class _LoginView extends StatelessWidget {
                 TextInputField(
                   onChanged: context.read<LoginCubit>().onEmailChanged,
                   hint: context.translator.email,
+                  error: state.emailFailure(context),
                 ),
                 SizedBox(height: theme.spacing.mediumLarge),
                 TextInputField(
                   onChanged: context.read<LoginCubit>().onPasswordChanged,
                   hint: context.translator.password,
                   isPassword: true,
+                  error: state.passwordFailure(context),
                 ),
                 SizedBox(height: theme.spacing.mediumLarge),
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [

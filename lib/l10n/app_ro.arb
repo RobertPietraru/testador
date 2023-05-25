@@ -73,5 +73,7 @@
   "code": "Cod",
   "searchForSession": "Caută o sesiune",
   "selectALanguage": "Selectează o limbă",
-  "theresNobodyElse": "Nu mai este nimeni altcineva"
+  "theresNobodyElse": "Nu mai este nimeni altcineva",
+  "emailNotFound": "Contul nu a fost găsit",
+"wrongPassword": "Parola este greșită"
 }

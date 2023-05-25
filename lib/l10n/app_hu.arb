@@ -72,5 +72,7 @@
   "code": "Kód",
   "searchForSession": "Keresés munkamenetek között",
   "selectALanguage": "Válassz nyelvet",
-  "theresNobodyElse": "Nincs más senki"
+  "theresNobodyElse": "Nincs más senki",
+  "emailNotFound": "Fiók nem található",
+"wrongPassword": "Hibás jelszó"
 }

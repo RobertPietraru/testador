@@ -73,5 +73,7 @@
   "code": "Код",
   "searchForSession": "Поиск сессии",
   "selectALanguage": "Выберите язык",
-  "theresNobodyElse": "Никого больше нет"
+  "theresNobodyElse": "Никого больше нет",
+  "emailNotFound": "Аккаунт не найден",
+  "wrongPassword": "Неправильный пароль"
 }

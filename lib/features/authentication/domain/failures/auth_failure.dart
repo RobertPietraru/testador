@@ -57,29 +57,44 @@ class AuthNetworkFailure extends AuthFailure {
   }
 }
 
-class AuthInputBackendFailure extends AuthFailure {
+abstract class AuthInputBackendFailure extends AuthFailure {
   const AuthInputBackendFailure({
     required super.code,
     super.fieldWithIssue = FieldWithIssue.none,
   });
-
-  @override
-  String retrieveMessage(BuildContext context) {
-    throw UnimplementedError();
-  }
 }
 
 class AuthUserNotFound extends AuthInputBackendFailure {
-  const AuthUserNotFound({super.code = 'user-not-found'});
+  const AuthUserNotFound({
+    super.code = 'user-not-found',
+    super.fieldWithIssue = FieldWithIssue.email,
+  });
+
+  @override
+  String retrieveMessage(BuildContext context) {
+    return context.translator.emailNotFound;
+  }
+}
+
+class AuthWrongPassword extends AuthInputBackendFailure {
+  const AuthWrongPassword({
+    super.code = 'wrong-password',
+    super.fieldWithIssue = FieldWithIssue.password,
+  });
+
+  @override
+  String retrieveMessage(BuildContext context) {
+    return context.translator.wrongPassword;
+  }
 }
 
 class AuthUnknownFailure extends AuthFailure {
   const AuthUnknownFailure(
-      {super.code = 'uknown', super.fieldWithIssue = FieldWithIssue.none});
+      {super.code = 'unknown', super.fieldWithIssue = FieldWithIssue.none});
 
   @override
   String retrieveMessage(BuildContext context) {
-    throw UnimplementedError();
+    return '${context.translator.thereWasAnError} unknown';
   }
 }
 

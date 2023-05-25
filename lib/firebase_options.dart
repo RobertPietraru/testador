@@ -45,35 +45,34 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBDObcs3GlQjsvW_sDBwYD-C_vUrv7siWQ',
-    appId: '1:40369619488:web:98b99bee44454d09e0f245',
-    messagingSenderId: '40369619488',
-    projectId: 'skeleton-a3bd2',
-    authDomain: 'skeleton-a3bd2.firebaseapp.com',
-    databaseURL: 'https://skeleton-a3bd2-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'skeleton-a3bd2.appspot.com',
-    measurementId: 'G-R8414YD0JP',
+    apiKey: 'AIzaSyBUQ8ca-7owhmXOhiStTYmQ27pnq8DeR2E',
+    appId: '1:457057212276:web:b7677107adc27f2a68fe21',
+    messagingSenderId: '457057212276',
+    projectId: 'testador-5b80a',
+    authDomain: 'testador-5b80a.firebaseapp.com',
+    databaseURL: 'https://testador-5b80a-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'testador-5b80a.appspot.com',
+    measurementId: 'G-WZJ89Z2REV',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDtA1oWFif2z4fkbgNBtdWw9JXI5YmUddM',
-    appId: '1:40369619488:android:aad3b5301728fe7fe0f245',
-    messagingSenderId: '40369619488',
-    projectId: 'skeleton-a3bd2',
-    databaseURL: 'https://skeleton-a3bd2-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'skeleton-a3bd2.appspot.com',
+    apiKey: 'AIzaSyD-GgCIRxVrrwxzokfZBRB5qVdGjY9rdGo',
+    appId: '1:457057212276:android:7df45c2b8b47aca068fe21',
+    messagingSenderId: '457057212276',
+    projectId: 'testador-5b80a',
+    databaseURL: 'https://testador-5b80a-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'testador-5b80a.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCyChretJh2zeOMO7FXwyMa-QPRj0Hkdsg',
-    appId: '1:40369619488:ios:c7f5a17343592098e0f245',
-    messagingSenderId: '40369619488',
-    projectId: 'skeleton-a3bd2',
-    databaseURL: 'https://skeleton-a3bd2-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'skeleton-a3bd2.appspot.com',
-    iosClientId: '40369619488-6r708l2qspaivcjci1fgtn6jc3jiorct.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAyHcTwox7cNXxDbeM-6MgRO7kQan1Gq84',
+    appId: '1:457057212276:ios:3d2c924c881d85e868fe21',
+    messagingSenderId: '457057212276',
+    projectId: 'testador-5b80a',
+    databaseURL: 'https://testador-5b80a-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'testador-5b80a.appspot.com',
+    iosClientId: '457057212276-6asomabq3l14rvrkcgse7c3aom58iktq.apps.googleusercontent.com',
     iosBundleId: 'com.example.testador',
   );
 }

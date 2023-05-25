@@ -73,5 +73,7 @@
   "code": "Code",
   "searchForSession": "Search for session",
   "selectALanguage": "Select a language",
-  "theresNobodyElse": "There's nobody else"
+  "theresNobodyElse": "There's nobody else",
+  "emailNotFound": "Account not found",
+  "wrongPassword": "The password is wrong"
 }

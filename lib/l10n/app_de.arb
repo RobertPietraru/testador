@@ -72,5 +72,7 @@
   "code": "Code",
   "searchForSession": "Sitzung suchen",
   "selectALanguage": "Sprache auswählen",
-  "theresNobodyElse": "Es ist niemand sonst da"
+  "theresNobodyElse": "Es ist niemand sonst da",
+  "emailNotFound": "Konto nicht gefunden",
+  "wrongPassword": "Das Passwort ist falsch"
 }

@@ -1,113 +1,41 @@
 {
   "project_info": {
-    "project_number": "40369619488",
-    "firebase_url": "https://skeleton-a3bd2-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "skeleton-a3bd2",
-    "storage_bucket": "skeleton-a3bd2.appspot.com"
+    "project_number": "457057212276",
+    "firebase_url": "https://testador-5b80a-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "testador-5b80a",
+    "storage_bucket": "testador-5b80a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:40369619488:android:94be3a0a25c6fb56e0f245",
-        "android_client_info": {
-          "package_name": "com.example.perfect_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "40369619488-pa7tnkqu4r10ff2is71oai8586s642bk.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDtA1oWFif2z4fkbgNBtdWw9JXI5YmUddM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "40369619488-pa7tnkqu4r10ff2is71oai8586s642bk.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "40369619488-4a1j72fsmoo14vkqo68kl0j5tbndirrg.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.skeleton"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:40369619488:android:2edcf1f76cbc5466e0f245",
-        "android_client_info": {
-          "package_name": "com.example.skeleton"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "40369619488-pa7tnkqu4r10ff2is71oai8586s642bk.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDtA1oWFif2z4fkbgNBtdWw9JXI5YmUddM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "40369619488-pa7tnkqu4r10ff2is71oai8586s642bk.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "40369619488-4a1j72fsmoo14vkqo68kl0j5tbndirrg.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.skeleton"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:40369619488:android:aad3b5301728fe7fe0f245",
+        "mobilesdk_app_id": "1:457057212276:android:7df45c2b8b47aca068fe21",
         "android_client_info": {
           "package_name": "com.example.testador"
         }
       },
       "oauth_client": [
         {
-          "client_id": "40369619488-pa7tnkqu4r10ff2is71oai8586s642bk.apps.googleusercontent.com",
+          "client_id": "457057212276-tcjt8kl0u0s9nelifl2smqlrk0u1hiap.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDtA1oWFif2z4fkbgNBtdWw9JXI5YmUddM"
+          "current_key": "AIzaSyD-GgCIRxVrrwxzokfZBRB5qVdGjY9rdGo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "40369619488-pa7tnkqu4r10ff2is71oai8586s642bk.apps.googleusercontent.com",
+              "client_id": "457057212276-tcjt8kl0u0s9nelifl2smqlrk0u1hiap.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "40369619488-4a1j72fsmoo14vkqo68kl0j5tbndirrg.apps.googleusercontent.com",
+              "client_id": "457057212276-6asomabq3l14rvrkcgse7c3aom58iktq.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.skeleton"
+                "bundle_id": "com.example.testador"
               }
             }
           ]
