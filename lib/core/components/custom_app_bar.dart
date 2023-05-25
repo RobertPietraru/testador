@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
+import 'package:testador/core/components/components.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/app_theme_data.dart';
-import 'package:testador/core/components/theme/device_size.dart';
+import 'package:testador/core/routing/app_router.gr.dart';
 
 import 'app_logo.dart';
 
@@ -28,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   AppBar theAppBar({
     required AppThemeData theme,
     VoidCallback? onMenuPressed,
+    BuildContext? context,
   }) {
     return AppBar(
       systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -35,7 +40,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       foregroundColor: mainColor ?? theme.primaryColor,
       automaticallyImplyLeading: showLeading && leading == null,
       leading: leading,
-      
       title: title ??
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -53,32 +57,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
       backgroundColor: fillColor,
       actions: trailing ??
-          (DeviceSize.isDesktopMode
-              ? [
-                  TextButton(
-                      onPressed: () {},
-                      child: Text("Contact", style: theme.actionTextStyle)),
-                  SizedBox(width: theme.spacing.large),
-                  TextButton(
-                      onPressed: () {},
-                      child: Text("Descopera", style: theme.actionTextStyle)),
-                  SizedBox(width: theme.spacing.large),
-                  TextButton(
-                      onPressed: () {},
-                      child: Text("Alatura-te", style: theme.actionTextStyle)),
-                  SizedBox(width: theme.spacing.large),
-                  TextButton(
-                      onPressed: () {},
-                      child: Text("Creeaza", style: theme.actionTextStyle)),
-                ]
-              : [
-                  IconButton(
-                      onPressed: onMenuPressed,
-                      icon: Icon(
-                        Icons.menu,
-                        color: mainColor ?? theme.primaryColor,
-                      )),
-                ]),
+          [
+            TextButton(
+                onPressed: () {
+                  if (DeviceSize.isDesktopMode) {
+                    context?.navigateTo(const JoinSessionRoute());
+                  } else {
+                    context?.pushRoute(const JoinSessionRoute());
+                  }
+                },
+                child: Text("Joaca", style: theme.actionTextStyle)),
+            SizedBox(width: theme.spacing.small),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.language))
+          ],
       bottom: bottom,
     );
   }
@@ -90,6 +81,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return theAppBar(
       theme: theme,
       onMenuPressed: () => Scaffold.of(context).openEndDrawer(),
+      context: context,
     );
   }
 

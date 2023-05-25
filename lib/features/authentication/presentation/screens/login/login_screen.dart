@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
-import 'package:testador/core/components/drawer.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/features/authentication/domain/failures/auth_failure.dart';
@@ -41,7 +40,6 @@ class LoginScreen extends StatelessWidget {
           LoginCubit(locator(), authBloc: context.read<AuthBloc>()),
       child: Scaffold(
         appBar: const CustomAppBar(),
-        endDrawer: const CustomDrawer(),
         body: _LoginBlocWrapper(child: _LoginView()),
       ),
     );
@@ -99,8 +97,7 @@ class _LoginView extends StatelessWidget {
                 SizedBox(height: theme.spacing.mediumLarge),
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   TextButton(
-                      onPressed: () {},
-                      child: const Text("Ti-ai uitat parola?"))
+                      onPressed: null, child: const Text("Ti-ai uitat parola?"))
                 ]),
                 SizedBox(height: theme.spacing.mediumLarge),
                 LongButton(

@@ -6,12 +6,10 @@ import 'package:testador/features/quiz/domain/entities/session/session_entity.da
 import 'package:testador/features/quiz/presentation/session/admin/widgets/session_code_widget.dart';
 
 class PodiumScreen extends StatefulWidget {
-  final VoidCallback onLeave;
   final SessionEntity session;
   final QuizEntity quiz;
   const PodiumScreen({
     super.key,
-    required this.onLeave,
     required this.session,
     required this.quiz,
   });

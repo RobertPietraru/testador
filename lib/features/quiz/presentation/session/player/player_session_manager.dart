@@ -68,7 +68,6 @@ class PlayerSessionManagerScreen extends StatelessWidget {
                 case SessionStatus.podium:
                   return PodiumScreen(
                     quiz: state.quiz,
-                    onLeave: () {},
                     session: state.session,
                   );
                 default:

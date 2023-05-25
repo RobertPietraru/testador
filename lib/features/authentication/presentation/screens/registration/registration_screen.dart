@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
-import 'package:testador/core/components/drawer.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/features/authentication/presentation/auth_bloc/auth_bloc.dart';
 import 'package:testador/features/authentication/presentation/screens/login/login_screen.dart';
@@ -33,14 +32,13 @@ class _RegistrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      endDrawer: const CustomDrawer(),
       body: BlocConsumer<RegistrationCubit, RegistrationState>(
         listener: (context, state) {
           if (state.isSuccessful) {
             // look, I don't know why it is this way, but it works nonetheless, so watchu gonna do?
             context.router.popUntilRoot();
             context.router.pop();
-            context.router.root.push(const ProtectedFlowRoute());
+            // context.router.root.push(const ProtectedFlowRoute());
           }
         },
         builder: (context, state) {

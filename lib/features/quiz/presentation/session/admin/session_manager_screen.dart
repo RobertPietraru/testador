@@ -90,7 +90,6 @@ class _QuizSessionManagerScreen extends StatelessWidget {
             } else if (status == SessionStatus.podium) {
               return PodiumScreen(
                 quiz: state.quiz,
-                onLeave: () {},
                 session: state.session,
               );
             }

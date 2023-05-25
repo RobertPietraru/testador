@@ -3,7 +3,6 @@ export 'app_logo.dart';
 export 'components.dart';
 export 'custom_app_bar.dart';
 export 'custom_dialog.dart';
-export 'drawer.dart';
 export 'gradient_text.dart';
 export 'loading_wrapper.dart';
 export 'text_input_field.dart';

@@ -26,7 +26,6 @@ class QuizWidget extends StatelessWidget {
     final theme = AppTheme.of(context);
     return Builder(builder: (context) {
       return GestureDetector(
-        onLongPress: () {},
         onTap: () {
           context.pushRoute(
             QuizRoute(
@@ -99,12 +98,8 @@ class QuizWidget extends StatelessWidget {
                         ),
                         color: theme.defaultBackgroundColor),
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            "100 elevi",
-                            style: theme.informationTextStyle,
-                          ),
                           quiz.isPublic
                               ? Icon(
                                   Icons.public,

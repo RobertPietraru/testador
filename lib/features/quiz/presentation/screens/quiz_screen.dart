@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
-import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
 
@@ -99,14 +98,6 @@ class QuizScreen extends StatelessWidget {
                                       label: 'Incepe o sesiune',
                                       isLoading: false,
                                     ),
-                                  ),
-                                  SizedBox(width: theme.spacing.medium),
-                                  SizedBox(
-                                    width: 30.widthPercent,
-                                    child: LongButton(
-                                        onPressed: () {},
-                                        label: 'Testeaza',
-                                        isLoading: false),
                                   ),
                                 ],
                               ),

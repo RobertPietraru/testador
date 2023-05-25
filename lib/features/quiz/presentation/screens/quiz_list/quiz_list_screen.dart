@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
-import 'package:testador/core/components/drawer.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
@@ -39,7 +38,7 @@ class _QuizListScreen extends StatelessWidget {
       listener: (context, state) {
         state as QuizListCreatedDraft;
 
-        context.pushRoute(QuizRoute(
+        context.pushRoute(QuizEditorRoute(
             draft: state.createdDraft,
             quizListCubit: context.read<QuizListCubit>(),
             quizId: state.createdDraft.id,
@@ -47,15 +46,10 @@ class _QuizListScreen extends StatelessWidget {
       },
       child: Scaffold(
           appBar: const CustomAppBar(),
-          endDrawer: const CustomDrawer(),
           floatingActionButton: FloatingActionButton(
             backgroundColor: theme.companyColor,
-            onPressed: () => showDialog(
-              context: context,
-              builder: (_) => QuizTypeSelectionDialog(
-                quizListCubit: context.read<QuizListCubit>(),
-              ),
-            ),
+            onPressed: () => context.read<QuizListCubit>().createQuiz(
+                creatorId: context.read<AuthBloc>().state.userEntity!.id),
             child: const Icon(Icons.add),
           ),
           body: NestedScrollView(
@@ -71,9 +65,8 @@ class _QuizListScreen extends StatelessWidget {
                           children: [
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
-                                final name = state.userEntity?.name ?? '';
                                 return Text(
-                                  'Bine ai venit, $name',
+                                  'Bine ai venit,',
                                   style: TextStyle(
                                     color: theme.secondaryColor,
                                     fontWeight: FontWeight.w600,
@@ -83,38 +76,47 @@ class _QuizListScreen extends StatelessWidget {
                               },
                             ),
                             SizedBox(height: theme.spacing.medium),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  _QuickActionWidget(
-                                    onPressed: () {
-                                      context.router.root
-                                          .push(JoinSessionRoute());
-                                    },
-                                    icon: Icons.people_alt,
-                                    label: 'Joaca',
-                                  ),
-                                  _QuickActionWidget(
-                                    icon: Icons.arrow_back,
-                                    label: 'Continua',
-                                    isEnabled: false,
-                                    onPressed: () {},
-                                  ),
-                                  _QuickActionWidget(
-                                    icon: Icons.lightbulb,
-                                    label: 'Creaza',
-                                    onPressed: () {
-                                      context.read<QuizListCubit>().createQuiz(
-                                          creatorId: context
-                                              .read<AuthBloc>()
-                                              .state
-                                              .userEntity!
-                                              .id);
-                                      Navigator.pop(context);
-                                    },
-                                  )
-                                ]),
+                            Center(
+                              child: SizedBox(
+                                width: DeviceSize.isDesktopMode
+                                    ? 30.widthPercent
+                                    : null,
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _QuickActionWidget(
+                                        onPressed: () {
+                                          context.router.root
+                                              .push(const JoinSessionRoute());
+                                        },
+                                        icon: Icons.people_alt,
+                                        label: 'Joaca',
+                                      ),
+                                      _QuickActionWidget(
+                                        icon: Icons.arrow_back,
+                                        label: 'Continua',
+                                        isEnabled: false,
+                                        onPressed: null,
+                                      ),
+                                      _QuickActionWidget(
+                                        icon: Icons.lightbulb,
+                                        label: 'Creaza',
+                                        onPressed: () {
+                                          context
+                                              .read<QuizListCubit>()
+                                              .createQuiz(
+                                                  creatorId: context
+                                                      .read<AuthBloc>()
+                                                      .state
+                                                      .userEntity!
+                                                      .id);
+                                          Navigator.pop(context);
+                                        },
+                                      )
+                                    ]),
+                              ),
+                            ),
                             SizedBox(height: theme.spacing.medium),
                             BlocBuilder<QuizListCubit, QuizListState>(
                               builder: (context, state) {
@@ -163,7 +165,7 @@ class _QuizListScreen extends StatelessWidget {
                       ? GridView.builder(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: DeviceSize.screenHeight ~/ 300,
+                            crossAxisCount: DeviceSize.screenHeight ~/ 200,
                           ),
                           itemCount: state.pairs.length,
                           itemBuilder: (context, index) => Padding(
@@ -186,7 +188,7 @@ class _QuizListScreen extends StatelessWidget {
 class _QuickActionWidget extends StatelessWidget {
   final String label;
   final IconData icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isEnabled;
   const _QuickActionWidget(
       {required this.label,
@@ -222,56 +224,6 @@ class _QuickActionWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class QuizTypeSelectionDialog extends StatelessWidget {
-  final QuizListCubit quizListCubit;
-  const QuizTypeSelectionDialog({super.key, required this.quizListCubit});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
-    return CustomDialog(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Preferinte quiz",
-          style: theme.titleTextStyle,
-        ),
-        Text(
-          "Alegeti cum preferati sa lucrati",
-          style: theme.subtitleTextStyle.copyWith(color: theme.secondaryColor),
-        ),
-        SizedBox(height: theme.spacing.xLarge),
-        SelectionOptionWidget(
-          onPressed: () {
-            quizListCubit.createQuiz(
-                creatorId: context.read<AuthBloc>().state.userEntity!.id);
-            Navigator.pop(context);
-          },
-          title: "Creare clasica",
-          description: "Concepeti quizul de la zero",
-          gradient: const LinearGradient(colors: [
-            Color.fromARGB(255, 0, 200, 255),
-            Color(0xFF0061ff),
-          ]),
-        ),
-        SizedBox(height: theme.spacing.medium),
-        SelectionOptionWidget(
-          onPressed: () {},
-          title: "Creare cu A.I.",
-          description:
-              "Creati quizul cu ajutorul inteligentei artificiale. Introduceti materia predata si programul genereaza quizul",
-          gradient: LinearGradient(colors: [
-            const Color(0xFF0061ff).withOpacity(0.9),
-            const Color(0xFFFF005A).withOpacity(0.9),
-          ]),
-        ),
-      ],
-    ));
   }
 }
 
