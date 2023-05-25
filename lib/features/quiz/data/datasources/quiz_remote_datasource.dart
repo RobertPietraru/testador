@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:testador/features/quiz/data/datasources/image_data_source.dart';
 import 'package:testador/features/quiz/data/dtos/draft/draft_dto.dart';
 import 'package:testador/features/quiz/data/dtos/quiz/quiz_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/player_dto.dart';
@@ -55,11 +57,18 @@ abstract class QuizRemoteDataSource {
 class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   final random = Random.secure();
   final firestore = FirebaseFirestore.instance;
+  final imageDB = ImageDataSource();
   DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   @override
   Future<void> syncToDatabase(SyncQuizUsecaseParams params) async {
     final quiz = DraftDto.fromEntity(params.draft);
+    if (quiz.imageId != params.oldQuiz.imageId) {
+      if (params.oldQuiz.imageId != null) {
+        await imageDB.removeImageFromDB(params.oldQuiz.imageId!);
+      }
+      await imageDB.uploadImageToDB(File(params.draft.imageId!));
+    }
 
     await firestore.collection('quizes').doc(quiz.id).set(quiz.toStringMap());
   }

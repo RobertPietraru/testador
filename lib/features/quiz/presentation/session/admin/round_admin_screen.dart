@@ -7,6 +7,7 @@ import 'package:testador/features/quiz/presentation/session/admin/widgets/sessio
 
 import '../../../../../core/components/buttons/app_bar_button.dart';
 import '../../../../../core/components/custom_app_bar.dart';
+import '../../../../../core/components/custom_image.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../../../domain/entities/question_entity.dart';
 
@@ -109,9 +110,12 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
                             color: theme.secondaryColor,
                             child: AspectRatio(
                               aspectRatio: 1.0,
-                              child: Image.network(
+                              child: Image(
+                                image: CustomImageProvider(
                                   widget.currentQuestion.image!,
-                                  fit: BoxFit.contain),
+                                ),
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
                         ),

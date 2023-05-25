@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/components/custom_image.dart';
 
 import '../../../../../../core/components/theme/app_theme.dart';
 import '../../../../domain/entities/question_entity.dart';
@@ -48,8 +49,8 @@ class QuestionNavigatorListTile extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(
-                              question.image ?? theme.placeholderImage))),
+                          image: CustomImageProvider(
+                              question.image ?? theme.placeholderImageId))),
                 ),
               ),
               Text(

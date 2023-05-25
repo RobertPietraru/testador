@@ -67,12 +67,12 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: theme.secondaryColor,
-                            image: state.draft.imageUrl != null
+                            image: state.draft.imageId != null
                                 ? DecorationImage(
-                                    image: NetworkImage(state.draft.imageUrl!))
+                                    image: NetworkImage(state.draft.imageId!))
                                 : null,
                           ),
-                          child: state.draft.imageUrl == null
+                          child: state.draft.imageId == null
                               ? Center(
                                   child: Text("Adauga imagine",
                                       textAlign: TextAlign.center,

@@ -1,5 +1,6 @@
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
 
+import '../../entities/quiz_entity.dart';
 import '../../failures/quiz_failures.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../../core/classes/usecase.dart';
@@ -17,7 +18,8 @@ class SyncQuizUsecase
 
 class SyncQuizUsecaseParams extends Params {
   final DraftEntity draft;
-  const SyncQuizUsecaseParams({required this.draft});
+  final QuizEntity oldQuiz;
+  const SyncQuizUsecaseParams({required this.draft, required this.oldQuiz, });
 }
 
 class SyncQuizUsecaseResult extends Response {

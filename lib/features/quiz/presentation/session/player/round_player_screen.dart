@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testador/core/components/custom_image.dart';
 import 'package:testador/core/routing/app_router.dart';
 import 'package:testador/features/quiz/domain/entities/session/session_entity.dart';
 import 'package:testador/features/quiz/presentation/session/player/player_question/player_question_cubit.dart';
@@ -153,8 +154,12 @@ class _AnswerRetrivalScreen extends StatelessWidget {
                             color: theme.secondaryColor,
                             child: AspectRatio(
                               aspectRatio: 1.0,
-                              child: Image.network(state.question.image!,
-                                  fit: BoxFit.contain),
+                              child: Image(
+                                fit: BoxFit.contain,
+                                image: CustomImageProvider(
+                                  state.question.image!,
+                                ),
+                              ),
                             ),
                           ),
                         ),

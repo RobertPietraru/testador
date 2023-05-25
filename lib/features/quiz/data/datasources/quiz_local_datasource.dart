@@ -1,8 +1,5 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:path/path.dart';
+import 'package:testador/features/quiz/data/datasources/image_data_source.dart';
 import 'package:testador/features/quiz/data/dtos/draft/draft_dto.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
@@ -16,7 +13,6 @@ abstract class QuizLocalDataSource {
   Future<DraftEntity> getDraftById(GetDraftByIdUsecaseParams params);
   Future<DraftEntity> moveQuestion(MoveQuestionUsecaseParams params);
   Future<DraftEntity> createDraft(CreateDraftUsecaseParams params);
-  Future<DraftEntity> updateQuizImage(UpdateQuizImageUsecaseParams params);
 
   Future<DraftEntity> updateQuiz(UpdateQuizUsecaseParams params);
   Future<List<DraftEntity>> getDrafts(GetQuizesUsecaseParams params);
@@ -27,13 +23,15 @@ abstract class QuizLocalDataSource {
       UpdateQuestionImageUsecaseParams params);
 
   Future<void> deleteDraftById(DeleteDraftByIdUsecaseParams params);
+
+  Future<DraftEntity> updateQuizImage(UpdateQuizImageUsecaseParams params);
 }
 
 class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
   QuizLocalDataSourceIMPL();
 
   final Box<DraftDto> draftsBox = Hive.box<DraftDto>(DraftDto.hiveBoxName);
-  final storage = FirebaseStorage.instance;
+  final imageDB = ImageDataSource();
 
   @override
   Future<DraftEntity> createDraft(CreateDraftUsecaseParams params) async {
@@ -41,7 +39,7 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
     final draftDto = DraftDto(
       creatorId: params.creatorId,
       id: id,
-      imageUrl: null,
+      imageId: null,
       isPublic: false,
       title: null,
       questions: [
@@ -73,7 +71,7 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
       title: params.quiz.title,
       isPublic: params.quiz.isPublic,
       creatorId: params.quiz.creatorId,
-      imageUrl: params.quiz.imageUrl,
+      imageId: params.quiz.imageId,
       id: params.quiz.id,
     );
     draftsBox.put(dto.id, dto);
@@ -92,7 +90,7 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
       title: params.draft.title,
       isPublic: params.draft.isPublic,
       creatorId: params.draft.creatorId,
-      imageUrl: params.draft.imageUrl,
+      imageId: params.draft.imageId,
       id: params.draft.id,
     );
     draftsBox.put(dto.id, dto);
@@ -156,45 +154,33 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
   }
 
   @override
-  Future<DraftEntity> updateQuestionImage(
-      UpdateQuestionImageUsecaseParams params) async {
-    var dto = DraftDto.fromEntity(params.draft);
-
-    final questions = dto.questions.toList();
-    String url = await uploadImage(
-        params.draft.creatorId, params.draft.id, params.image);
-
-    questions[params.index] = questions[params.index].copyWith(image: url);
-
-    dto = dto.copyWith(questions: questions.toList());
-
-    await draftsBox.put(dto.id, dto);
-    return dto.toEntity();
+  Future<void> deleteDraftById(DeleteDraftByIdUsecaseParams params) async {
+    await draftsBox.delete(params.draftId);
   }
 
-  Future<String> uploadImage(
-      String creatorId, String quizId, File image) async {
-    final fileExtension = basename(image.path).split('.').last;
-    final path = '$creatorId/$quizId/${const Uuid().v1()}.$fileExtension';
+  @override
+  Future<DraftEntity> updateQuestionImage(
+      UpdateQuestionImageUsecaseParams params) async {
+    var question = QuestionDto.fromEntity(params.draft.questions[params.index]);
+    final newQuestions = params.draft.questions.toList();
 
-    final snap = await storage.ref(path).putFile(image);
-    final url = await snap.ref.getDownloadURL();
+    final imageID = await imageDB.cacheImage(params.image);
+    question = question.copyWith(image: imageID);
 
-    return url;
+    newQuestions[params.index] = question.toEntity();
+
+    final dto =
+        DraftDto.fromEntity(params.draft.copyWith(questions: newQuestions));
+    draftsBox.put(dto.id, dto);
+    return dto.toEntity();
   }
 
   @override
   Future<DraftEntity> updateQuizImage(
       UpdateQuizImageUsecaseParams params) async {
-    final imageUrl =
-        await uploadImage(params.quiz.creatorId, params.quiz.id, params.image);
-    final quiz = params.quiz.copyWith(imageUrl: imageUrl);
-    draftsBox.put(quiz.id, DraftDto.fromEntity(quiz));
-    return quiz;
-  }
-
-  @override
-  Future<void> deleteDraftById(DeleteDraftByIdUsecaseParams params) async {
-    await draftsBox.delete(params.draftId);
+    final imageID = await imageDB.cacheImage(params.image);
+    final dto = DraftDto.fromEntity(params.draft.copyWith(imageId: imageID));
+    draftsBox.put(dto.id, dto);
+    return dto.toEntity();
   }
 }

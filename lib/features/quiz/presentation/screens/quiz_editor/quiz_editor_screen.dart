@@ -17,6 +17,7 @@ import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/question_creation_bottom_sheet.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
 import 'package:testador/injection.dart';
+import '../../../../../core/components/custom_image.dart';
 import '../../../../../core/components/theme/app_theme.dart';
 import '../quiz_editor_retrival/quiz_retrival_widget.dart';
 
@@ -218,8 +219,10 @@ class _QuizescreenState extends State<_Quizescreen> {
                                       color: theme.secondaryColor,
                                       child: AspectRatio(
                                         aspectRatio: 1.0,
-                                        child: Image.network(
-                                            state.currentQuestion.image!,
+                                        child: Image(
+                                            image: CustomImageProvider(
+                                              state.currentQuestion.image!,
+                                            ),
                                             fit: BoxFit.contain),
                                       ),
                                     ),

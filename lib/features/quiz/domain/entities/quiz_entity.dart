@@ -7,7 +7,7 @@ class QuizEntity extends Equatable {
   final String? title;
   final bool isPublic;
   final String creatorId;
-  final String? imageUrl;
+  final String? imageId;
   final List<QuestionEntity> questions;
 
   const QuizEntity({
@@ -15,19 +15,19 @@ class QuizEntity extends Equatable {
     required this.title,
     required this.isPublic,
     required this.creatorId,
-    required this.imageUrl,
+    required this.imageId,
     required this.id,
   });
 
   @override
   List<Object?> get props =>
-      [id, title, isPublic, creatorId, imageUrl, ...questions];
+      [id, title, isPublic, creatorId, imageId, ...questions];
   QuizEntity copyWith({
     String? id,
     String? title = mockValueForDefault,
     bool? isPublic,
     String? creatorId,
-    String? imageUrl = mockValueForDefault,
+    String? imageId = mockValueForDefault,
     List<QuestionEntity>? questions,
   }) {
     return QuizEntity(
@@ -36,7 +36,7 @@ class QuizEntity extends Equatable {
       creatorId: creatorId ?? this.creatorId,
       id: id ?? this.id,
       title: title == mockValueForDefault ? this.title : title,
-      imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
+      imageId: imageId == mockValueForDefault ? this.imageId : imageId,
     );
   }
 }

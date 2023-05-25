@@ -47,7 +47,7 @@ class QuizWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
-                  image: NetworkImage(quiz.imageUrl ?? theme.placeholderImage),
+                  image: NetworkImage(quiz.imageId ?? theme.placeholderImageId),
                   opacity: 0.5,
                   fit: BoxFit.cover,
                 ),

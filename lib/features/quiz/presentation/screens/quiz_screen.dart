@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
+import 'package:testador/core/components/custom_image.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
@@ -57,8 +58,10 @@ class QuizScreen extends StatelessWidget {
                             SizedBox(
                               height: 250,
                               width: MediaQuery.of(context).size.width,
-                              child: Image.network(
-                                quiz.imageUrl ?? theme.placeholderImage,
+                              child: Image(
+                                image: CustomImageProvider(
+                                  quiz.imageId ?? theme.placeholderImageId,
+                                ),
                                 fit: BoxFit.cover,
                               ),
                             ),

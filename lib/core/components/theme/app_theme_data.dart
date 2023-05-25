@@ -23,8 +23,7 @@ abstract class AppThemeData {
 
   TextStyle get questionTextStyle => subtitleTextStyle;
 
-  String get placeholderImage =>
-      'https://www.parentmap.com/images/article/7793/iStock_000043382420_Large.jpg';
+  String get placeholderImageId => 'placeholder';
 
   final ThemeSpacing spacing = ThemeSpacing();
 

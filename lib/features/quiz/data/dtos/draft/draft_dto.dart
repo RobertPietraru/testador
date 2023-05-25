@@ -26,7 +26,7 @@ class DraftDto with HiveObjectMixin {
   final String creatorId;
 
   @HiveField(4)
-  final String? imageUrl;
+  final String? imageId;
 
   @HiveField(5)
   final List<QuestionDto> questions;
@@ -36,7 +36,7 @@ class DraftDto with HiveObjectMixin {
     required this.title,
     required this.isPublic,
     required this.creatorId,
-    required this.imageUrl,
+    required this.imageId,
     required this.id,
   });
 
@@ -52,7 +52,7 @@ class DraftDto with HiveObjectMixin {
       titleField: title,
       isPublicField: isPublic,
       creatorField: creatorId,
-      imageField: imageUrl,
+      imageField: imageId,
       idField: id,
       questionsField: questions.map((e) => e.toMap()),
     };
@@ -63,7 +63,7 @@ class DraftDto with HiveObjectMixin {
       titleField: title,
       isPublicField: isPublic,
       creatorField: creatorId,
-      imageField: imageUrl,
+      imageField: imageId,
       idField: id,
       questionsField: questions.map((e) => e.toMap()),
     };
@@ -75,7 +75,7 @@ class DraftDto with HiveObjectMixin {
         title: title,
         isPublic: isPublic,
         creatorId: creatorId,
-        imageUrl: imageUrl,
+        imageId: imageId,
         id: id);
   }
 
@@ -87,7 +87,7 @@ class DraftDto with HiveObjectMixin {
       title: map[titleField],
       isPublic: map[isPublicField],
       creatorId: map[creatorField],
-      imageUrl: map[imageField],
+      imageId: map[imageField],
       id: map[idField],
     );
   }
@@ -96,7 +96,7 @@ class DraftDto with HiveObjectMixin {
     return DraftDto(
       creatorId: entity.creatorId,
       id: entity.id,
-      imageUrl: entity.imageUrl,
+      imageId: entity.imageId,
       isPublic: entity.isPublic,
       questions:
           entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),
@@ -109,7 +109,7 @@ class DraftDto with HiveObjectMixin {
     String? title = mockValueForDefault,
     bool? isPublic,
     String? creatorId,
-    String? imageUrl = mockValueForDefault,
+    String? imageId = mockValueForDefault,
     List<QuestionDto>? questions,
   }) {
     return DraftDto(
@@ -118,7 +118,7 @@ class DraftDto with HiveObjectMixin {
       creatorId: creatorId ?? this.creatorId,
       id: id ?? this.id,
       title: title == mockValueForDefault ? this.title : title,
-      imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
+      imageId: imageId == mockValueForDefault ? this.imageId : imageId,
     );
   }
 }

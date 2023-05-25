@@ -25,7 +25,7 @@ class QuizDto with HiveObjectMixin {
   final String creatorId;
 
   @HiveField(4)
-  final String? imageUrl;
+  final String? imageId;
 
   @HiveField(5)
   final List<QuestionDto>? questions;
@@ -35,7 +35,7 @@ class QuizDto with HiveObjectMixin {
     required this.title,
     required this.isPublic,
     required this.creatorId,
-    required this.imageUrl,
+    required this.imageId,
     required this.id,
   });
 
@@ -51,7 +51,7 @@ class QuizDto with HiveObjectMixin {
       titleField: title,
       isPublicField: isPublic,
       creatorField: creatorId,
-      imageField: imageUrl,
+      imageField: imageId,
       idField: id,
       questionsField: questions?.map((e) => e.toMap()),
     };
@@ -63,7 +63,7 @@ class QuizDto with HiveObjectMixin {
         title: title,
         isPublic: isPublic,
         creatorId: creatorId,
-        imageUrl: imageUrl,
+        imageId: imageId,
         id: id);
   }
 
@@ -77,7 +77,7 @@ class QuizDto with HiveObjectMixin {
       title: map[titleField],
       isPublic: map[isPublicField],
       creatorId: map[creatorField],
-      imageUrl: map[imageField],
+      imageId: map[imageField],
       id: map[idField],
     );
   }
@@ -86,7 +86,7 @@ class QuizDto with HiveObjectMixin {
     return QuizDto(
       creatorId: entity.creatorId,
       id: entity.id,
-      imageUrl: entity.imageUrl,
+      imageId: entity.imageId,
       isPublic: entity.isPublic,
       questions:
           entity.questions.map((e) => QuestionDto.fromEntity(e)).toList(),

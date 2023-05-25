@@ -347,8 +347,8 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     emit(state.copyWith(
         status: QuizEditorStatus.loading, failure: null, updateError: true));
 
-    final response = await updateQuizImageUsecase
-        .call(UpdateQuizImageUsecaseParams(quiz: state.draft, image: newImage));
+    final response = await updateQuizImageUsecase.call(
+        UpdateQuizImageUsecaseParams(draft: state.draft, image: newImage));
 
     response.fold(
       (l) {
@@ -405,8 +405,8 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
   Future<void> save() async {
     emit(state.copyWith(
         status: QuizEditorStatus.loading, failure: null, updateError: true));
-    final response =
-        await syncQuizUsecase.call(SyncQuizUsecaseParams(draft: state.draft));
+    final response = await syncQuizUsecase.call(SyncQuizUsecaseParams(
+        draft: state.draft, oldQuiz: state.lastSavedQuiz));
     response.fold((l) {
       emit(state.copyWith(
         failure: l,
@@ -425,7 +425,8 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
   }
 
   void deleteDraft() async {
-    await deleteDraftByIdUsecase .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
+    await deleteDraftByIdUsecase
+        .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
     quizListCubit?.removeDraft(state.draft);
   }
 }

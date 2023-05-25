@@ -21,7 +21,7 @@ class QuizDtoAdapter extends TypeAdapter<QuizDto> {
       title: fields[1] as String?,
       isPublic: fields[2] as bool,
       creatorId: fields[3] as String,
-      imageUrl: fields[4] as String?,
+      imageId: fields[4] as String?,
       id: fields[0] as String,
     );
   }
@@ -39,7 +39,7 @@ class QuizDtoAdapter extends TypeAdapter<QuizDto> {
       ..writeByte(3)
       ..write(obj.creatorId)
       ..writeByte(4)
-      ..write(obj.imageUrl)
+      ..write(obj.imageId)
       ..writeByte(5)
       ..write(obj.questions);
   }

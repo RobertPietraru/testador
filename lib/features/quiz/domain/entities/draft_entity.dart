@@ -8,7 +8,7 @@ class DraftEntity extends Equatable {
   final String? title;
   final bool isPublic;
   final String creatorId;
-  final String? imageUrl;
+  final String? imageId;
   final List<QuestionEntity> questions;
 
   const DraftEntity({
@@ -16,7 +16,7 @@ class DraftEntity extends Equatable {
     required this.title,
     required this.isPublic,
     required this.creatorId,
-    required this.imageUrl,
+    required this.imageId,
     required this.id,
   });
 
@@ -26,19 +26,19 @@ class DraftEntity extends Equatable {
       title: quiz.title,
       isPublic: quiz.isPublic,
       creatorId: quiz.creatorId,
-      imageUrl: quiz.imageUrl,
+      imageId: quiz.imageId,
       id: quiz.id,
     );
   }
   @override
   List<Object?> get props =>
-      [id, title, isPublic, creatorId, imageUrl, ...questions];
+      [id, title, isPublic, creatorId, imageId, ...questions];
   DraftEntity copyWith({
     String? id,
     String? title = mockValueForDefault,
     bool? isPublic,
     String? creatorId,
-    String? imageUrl = mockValueForDefault,
+    String? imageId = mockValueForDefault,
     List<QuestionEntity>? questions,
   }) {
     return DraftEntity(
@@ -47,7 +47,7 @@ class DraftEntity extends Equatable {
       creatorId: creatorId ?? this.creatorId,
       id: id ?? this.id,
       title: title == mockValueForDefault ? this.title : title,
-      imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
+      imageId: imageId == mockValueForDefault ? this.imageId : imageId,
     );
   }
 
@@ -57,7 +57,7 @@ class DraftEntity extends Equatable {
       title: title,
       isPublic: isPublic,
       creatorId: creatorId,
-      imageUrl: imageUrl,
+      imageId: imageId,
       id: id,
     );
   }

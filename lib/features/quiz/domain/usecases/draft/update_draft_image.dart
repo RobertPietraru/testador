@@ -16,9 +16,10 @@ class UpdateQuizImageUsecase extends UseCase<UpdateQuizImageUsecaseResult,
 }
 
 class UpdateQuizImageUsecaseParams extends Params {
-  final DraftEntity quiz;
+  final DraftEntity draft;
   final File image;
-  const UpdateQuizImageUsecaseParams({required this.quiz, required this.image});
+  const UpdateQuizImageUsecaseParams(
+      {required this.draft, required this.image});
 }
 
 class UpdateQuizImageUsecaseResult extends Response {
