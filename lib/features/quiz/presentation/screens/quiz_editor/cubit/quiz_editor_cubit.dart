@@ -351,12 +351,19 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     );
   }
 
-  Future<void> updateQuizTitle(String title) async {
+  Future<void> updateQuiz({
+    required String title,
+    required String lesson,
+  }) async {
     emit(state.copyWith(
         status: QuizEditorStatus.loading, failure: null, updateError: true));
 
     final response = await editQuizUsecase.call(UpdateQuizUsecaseParams(
-        quiz: state.draft.copyWith(title: title), quizId: state.draft.id));
+        quiz: state.draft.copyWith(
+          title: title,
+          lesson: lesson,
+        ),
+        quizId: state.draft.id));
 
     response.fold(
       (l) => emit(state.copyWith(
@@ -398,7 +405,8 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
   }
 
   Future<void> suggestOptions(BuildContext context) async {
-    if (state.currentQuestion.text == null) return;
+    if (state.currentQuestion.text == null)
+      return;
 
     emit(state.copyWith(
       failure: null,

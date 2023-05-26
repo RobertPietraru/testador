@@ -43,10 +43,10 @@ class DraftEntity extends Equatable {
     String? creatorId,
     String? imageUrl = DefaultValues.forStrings,
     List<QuestionEntity>? questions,
-    String? lesson,
+    String? lesson = DefaultValues.forStrings,
   }) {
     return DraftEntity(
-      lesson: lesson ?? this.lesson,
+      lesson: DefaultValues.forStrings == lesson ? this.lesson : lesson,
       questions: questions ?? this.questions,
       isPublic: isPublic ?? this.isPublic,
       creatorId: creatorId ?? this.creatorId,

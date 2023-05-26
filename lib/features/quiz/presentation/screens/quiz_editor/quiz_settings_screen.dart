@@ -47,11 +47,16 @@ class QuizSettingsView extends StatefulWidget {
 class _QuizSettingsViewState extends State<QuizSettingsView> {
   late String title;
   late String initialTitle;
+  late String lesson;
+  late String initialLesson;
   @override
   void initState() {
     final quiz = context.read<QuizEditorCubit>().state.draft;
     title = quiz.title ?? '';
     initialTitle = title;
+
+    lesson = quiz.lesson ?? '';
+    initialLesson = lesson;
     super.initState();
   }
 
@@ -60,14 +65,16 @@ class _QuizSettingsViewState extends State<QuizSettingsView> {
     final theme = AppTheme.of(context);
     return WillPopScope(
       onWillPop: () async {
-        if (initialTitle == title) {
+        if (initialTitle == title && initialLesson == lesson) {
           return true;
         }
-        if (title.isEmpty) {
+        if (title.isEmpty && lesson.isEmpty) {
           return true;
         }
 
-        context.read<QuizEditorCubit>().updateQuizTitle(title);
+        context
+            .read<QuizEditorCubit>()
+            .updateQuiz(title: title, lesson: lesson);
 
         return true;
       },
@@ -120,7 +127,10 @@ class _QuizSettingsViewState extends State<QuizSettingsView> {
                   hint: context.translator.title),
               SizedBox(height: theme.spacing.small),
               TextInputField(
-                onChanged: (e) {},
+                onChanged: (e) {
+                  lesson = e;
+                },
+                initialValue: initialLesson,
                 hint: context.translator.lesson,
                 maxLines: 5,
               ),

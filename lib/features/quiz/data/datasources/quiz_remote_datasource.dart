@@ -387,13 +387,16 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
     final question = questions[params.questionIndex];
 
+    final information = params.draft.lesson == null
+        ? 'Provide'
+        : 'Given this information "${params.draft.lesson!}", provide';
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
       model: "gpt-3.5-turbo",
       messages: [
         OpenAIChatCompletionChoiceMessageModel(
           content:
-              'Provide 4 multiple choice options for the question "${question.text}". I want the result to be in json format, a list of objects with text field, index field and isCorrect field. Also, the values should be different. Answer in the language of the question, unless mentioned otherwise in the question. Don\'t provide any other explanation',
+              '$information 4 multiple choice options for the question "${question.text}". I want the result to be in json format, a list of objects with text field, index field and isCorrect field. Also, the values should be different. Answer in the language of the question, unless mentioned otherwise in the question. Don\'t provide any other explanation',
           role: OpenAIChatMessageRole.user,
         ),
       ],
@@ -413,7 +416,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
   @override
   Future<SuggestQuestionAndOptionsUsecaseResult> suggestQuestionAndOptions(
       SuggestQuestionAndOptionsUsecaseParams params) {
-    // TODO: implement suggestQuestionAndOptions
+    // not for mvp after all
     throw UnimplementedError();
   }
 }

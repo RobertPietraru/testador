@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_openai/openai.dart';
 import 'package:dartz/dartz.dart';
 import 'package:testador/features/quiz/data/datasources/quiz_local_datasource.dart';
 import 'package:testador/features/quiz/data/datasources/quiz_remote_datasource.dart';
+import 'package:testador/features/quiz/domain/failures/quiz_editor/generation_in_cooldown_failure.dart';
+import 'package:testador/features/quiz/domain/failures/quiz_editor/generation_unknown_failure.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/ai/suggest_question_and_answers.dart';
 import 'package:testador/features/quiz/domain/usecases/ai/suggest_options.dart';
@@ -464,6 +467,11 @@ class QuizRepositoryIMPL implements QuizRepository {
       return Left(QuizUnknownFailure(code: e.code));
     } on QuizFailure catch (error) {
       return Left(error);
+    } on RequestFailedException catch (error) {
+      if (error.statusCode == 429) {
+        return Left(GenerationInCooldownQuizFailure());
+      }
+      return Left(GenerationUnknownQuizFailure(status: error.statusCode));
     } catch (_) {
       return const Left(QuizUnknownFailure());
     }
