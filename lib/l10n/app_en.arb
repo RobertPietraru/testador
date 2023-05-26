@@ -78,6 +78,7 @@
   "emailNotFound": "Account not found",
   "lesson": "Lesson",
   "leave": "Leave",
-
+  "needQuestionToGenerate": "You need to write a question before generating",
+  
   "wrongPassword": "The password is wrong"
 }

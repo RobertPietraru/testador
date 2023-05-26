@@ -11,7 +11,6 @@ import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_set
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/views/questions_navigator.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/option_widget.dart';
-import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/quick_action_bottom_sheet.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
 import 'package:testador/injection.dart';
 import '../../../../../core/components/theme/app_theme.dart';
@@ -93,25 +92,10 @@ class _QuizScreenState extends State<_QuizScreen> {
           floatingActionButton: FloatingActionButton(
               backgroundColor: theme.primaryColor,
               onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (_) {
-                    final cubit = context.read<QuizEditorCubit>();
-                    return BlocProvider.value(
-                      value: cubit,
-                      child: QuickActionBottomSheet(
-                        controller: controller,
-                        questionIndex: cubit.state.currentQuestionIndex,
-                        entity: cubit.state.currentQuestion,
-                      ),
-                    );
-                  },
-                  shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20.0))),
-                );
+                context.read<QuizEditorCubit>().addNewQuestion();
+                controller.jumpTo(0);
               },
-              child: const Icon(Icons.bolt)),
+              child: const Icon(Icons.add)),
           backgroundColor: theme.defaultBackgroundColor.withOpacity(0.9),
           resizeToAvoidBottomInset: true,
           bottomSheet: BlocBuilder<QuizEditorCubit, QuizEditorState>(

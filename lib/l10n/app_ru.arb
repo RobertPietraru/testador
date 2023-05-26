@@ -78,5 +78,7 @@
   "language": "Язык",
   "leave": "Уйди",
   "lesson": "Урок",
+"needQuestionToGenerate": "Вы должны задать вопрос перед генерацией",
+
   "wrongPassword": "Неправильный пароль"
 }

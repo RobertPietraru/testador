@@ -29,9 +29,7 @@ class QuestionSettingsView extends StatelessWidget {
               children: [
                 ListTile(
                   onTap: () {
-                    context
-                        .read<QuizEditorCubit>()
-                        .deleteQuestion(index: state.currentQuestionIndex);
+                    context.read<QuizEditorCubit>().suggestOptions();
                     Navigator.pop(context);
                   },
                   title: Text(

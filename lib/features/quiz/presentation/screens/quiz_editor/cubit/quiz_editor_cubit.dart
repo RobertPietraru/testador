@@ -8,6 +8,7 @@ import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_editor/deleting_the_only_question_failure.dart';
+import 'package:testador/features/quiz/domain/failures/quiz_editor/need_question_to_generate.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
@@ -404,16 +405,20 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     quizListCubit?.removeDraft(state.draft);
   }
 
-  Future<void> suggestOptions(BuildContext context) async {
-    if (state.currentQuestion.text == null)
+  Future<void> suggestOptions() async {
+    if (state.currentQuestion.text == null) {
+      emit(state.copyWith(
+          failure: NeedQuestionToGenerateQuizFailure(),
+          status: QuizEditorStatus.failed,
+          updateError: true));
       return;
+    }
 
     emit(state.copyWith(
       failure: null,
       status: QuizEditorStatus.loading,
       updateError: true,
     ));
-    Navigator.pop(context);
     final response = await suggestOptionsUsecase.call(
       SuggestOptionsUsecaseParams(
           questionIndex: state.currentQuestionIndex, draft: state.draft),

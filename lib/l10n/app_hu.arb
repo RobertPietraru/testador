@@ -77,5 +77,7 @@
   "language": "Nyelv",
   "leave": "Hagyj el",
   "lesson": "Az óra",
+"needQuestionToGenerate": "Mielőtt generálni tudnál, írj be egy kérdést",
+
   "wrongPassword": "Hibás jelszó"
 }

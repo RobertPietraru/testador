@@ -77,6 +77,8 @@
   "emailNotFound": "Compte introuvable",
   "wrongPassword": "Le mot de passe est incorrect",
   "lesson": "La leçon",
+"needQuestionToGenerate": "Vous devez écrire une question avant de générer",
+
   "leave": "Quittez",
   "language": "Langue"
 }

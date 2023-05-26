@@ -72,6 +72,8 @@
   "chooseAName": "Alege un nume",
   "code": "Cod",
   "searchForSession": "Caută o sesiune",
+"needQuestionToGenerate": "Trebuie să scrieți o întrebare înainte de a genera",
+
   "selectALanguage": "Selectează o limbă",
   "theresNobodyElse": "Nu mai este nimeni altcineva",
   "emailNotFound": "Contul nu a fost găsit",
