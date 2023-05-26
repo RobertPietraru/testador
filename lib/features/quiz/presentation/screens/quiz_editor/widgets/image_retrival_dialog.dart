@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:testador/core/components/custom_dialog.dart';
@@ -19,46 +20,49 @@ class _ImageRetrivalDialogState extends State<ImageRetrivalDialog> {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return CustomDialog(
-      child: Padding(
-        padding: theme.standardPadding.copyWith(top: 0, bottom: 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            InkWell(
-              onTap: () async {
-                Navigator.pop(context);
-                final file = await picker.pickImage(source: ImageSource.camera);
-                if (file == null) return;
-                widget.onImageRetrived(file);
-              },
-              child: Ink(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children:  [
-                    const Icon(Icons.camera_alt),
-                    Text(context.translator.camera),
-                  ],
-                ),
+      fitContent: true,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: kIsWeb
+                ? null
+                : () async {
+                    Navigator.pop(context);
+                    final file =
+                        await picker.pickImage(source: ImageSource.camera);
+                    if (file == null) return;
+                    widget.onImageRetrived(file);
+                  },
+            child: Ink(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.camera_alt, color: kIsWeb ? Colors.grey : null),
+                  Text(
+                    context.translator.camera,
+                    style: const TextStyle(color: kIsWeb ? Colors.grey : null),
+                  ),
+                ],
               ),
             ),
-            InkWell(
-              onTap: () async {
-                Navigator.pop(context);
-                final file =
-                    await picker.pickImage(source: ImageSource.gallery);
-                if (file == null) return;
-                widget.onImageRetrived(file);
-              },
-              child: Ink(
-                child: Column(mainAxisSize: MainAxisSize.min, children:  [
-                  const Icon(Icons.photo),
-                  Text(context.translator.gallery),
-                ]),
-              ),
-            )
-          ],
-        ),
+          ),
+          InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+              final file = await picker.pickImage(source: ImageSource.gallery);
+              if (file == null) return;
+              widget.onImageRetrived(file);
+            },
+            child: Ink(
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                const Icon(Icons.photo),
+                Text(context.translator.gallery),
+              ]),
+            ),
+          )
+        ],
       ),
     );
   }
