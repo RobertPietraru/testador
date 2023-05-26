@@ -1,22 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
+import 'package:testador/core/components/custom_dialog.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/cubit/quiz_editor_cubit.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/image_retrival_dialog.dart';
 
-class QuizesettingsScreen extends StatefulWidget {
-  const QuizesettingsScreen({
+class QuizSettingsScreen extends StatelessWidget {
+  final bool isFullScreen;
+
+  const QuizSettingsScreen({super.key, required this.isFullScreen});
+
+  @override
+  Widget build(BuildContext context) {
+    if (isFullScreen) {
+      return const Scaffold(
+        appBar: CustomAppBar(trailing: []),
+        body: QuizSettingsView(
+          isFullScreen: true,
+        ),
+      );
+    }
+    return const CustomDialog(
+      fitContent: true,
+      child: QuizSettingsView(
+        isFullScreen: false,
+      ),
+    );
+  }
+}
+
+class QuizSettingsView extends StatefulWidget {
+  final bool isFullScreen;
+  const QuizSettingsView({
     super.key,
+    required this.isFullScreen,
   });
 
   @override
-  State<QuizesettingsScreen> createState() => _QuizesettingsScreenState();
+  State<QuizSettingsView> createState() => _QuizSettingsViewState();
 }
 
-class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
+class _QuizSettingsViewState extends State<QuizSettingsView> {
   late String title;
   late String initialTitle;
   @override
@@ -43,25 +71,26 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
 
         return true;
       },
-      child: Scaffold(
-        appBar: const CustomAppBar(trailing: []),
-        body: BlocBuilder<QuizEditorCubit, QuizEditorState>(
-          builder: (context, state) {
-            return Padding(
-              padding: theme.standardPadding,
-              child: Column(children: [
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  InkWell(
-                      onTap: () => showDialog(
-                          context: context,
-                          builder: (_) => BlocProvider.value(
-                              value: context.read<QuizEditorCubit>(),
-                              child: ImageRetrivalDialog(
-                                  onImageRetrived: (imageFile) {
-                                context
-                                    .read<QuizEditorCubit>()
-                                    .updateQuizImage(newImage: imageFile);
-                              }))),
+      child: BlocBuilder<QuizEditorCubit, QuizEditorState>(
+        builder: (context, state) {
+          return Container(
+            padding: widget.isFullScreen ? theme.standardPadding : null,
+            width: DeviceSize.isDesktopMode ? 50.widthPercent : null,
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Row(children: [
+                InkWell(
+                    // borderRadius: BorderRadius.circular(20),
+                    onTap: () => showDialog(
+                        context: context,
+                        builder: (_) => BlocProvider.value(
+                            value: context.read<QuizEditorCubit>(),
+                            child: ImageRetrivalDialog(
+                                onImageRetrived: (imageFile) {
+                              context
+                                  .read<QuizEditorCubit>()
+                                  .updateQuizImage(newImage: imageFile);
+                            }))),
+                    child: Material(
                       child: Ink(
                           width: 200,
                           height: 200,
@@ -79,39 +108,39 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                                       textAlign: TextAlign.center,
                                       style: theme.subtitleTextStyle
                                           .copyWith(color: Colors.white)))
-                              : null))
-                ]),
-                TextInputField(
-                    initialValue: title,
-                    onChanged: (e) {
-                      title = e;
-                    },
-                    hint: context.translator.title),
-                SizedBox(height: theme.spacing.small),
-                TextInputField(
-                  onChanged: (e) {},
-                  hint: context.translator.lesson,
-                  maxLines: 5,
-                ),
-                ListTile(
-                  leading: Icon(
-                      state.draft.isPublic ? Icons.public : Icons.public_off,
-                      color: state.draft.isPublic ? theme.good : theme.bad),
-                  onTap: () {
-                    context.read<QuizEditorCubit>().togglePublicity();
-                  },
-                  title: Text(
-                    state.draft.isPublic
-                        ? context.translator.public
-                        : context.translator.private,
-                    style: theme.subtitleTextStyle.copyWith(
-                        color: state.draft.isPublic ? theme.good : theme.bad),
-                  ),
-                ),
+                              : null),
+                    ))
               ]),
-            );
-          },
-        ),
+              SizedBox(height: theme.spacing.small),
+              TextInputField(
+                  initialValue: title,
+                  onChanged: (e) {
+                    title = e;
+                  },
+                  hint: context.translator.title),
+              SizedBox(height: theme.spacing.small),
+              TextInputField(
+                onChanged: (e) {},
+                hint: context.translator.lesson,
+                maxLines: 5,
+              ),
+              SizedBox(height: theme.spacing.small),
+              ListTile(
+                leading: Icon(
+                    state.draft.isPublic ? Icons.public : Icons.public_off,
+                    color: state.draft.isPublic ? theme.good : theme.bad),
+                onTap: () => context.read<QuizEditorCubit>().togglePublicity(),
+                title: Text(
+                  state.draft.isPublic
+                      ? context.translator.public
+                      : context.translator.private,
+                  style: theme.subtitleTextStyle.copyWith(
+                      color: state.draft.isPublic ? theme.good : theme.bad),
+                ),
+              ),
+            ]),
+          );
+        },
       ),
     );
   }

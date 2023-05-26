@@ -128,12 +128,23 @@ class _QuizScreenState extends State<_QuizScreen> {
               trailing: [
                 IconButton(
                     onPressed: () {
+                      if (DeviceSize.isDesktopMode) {
+                        showDialog(
+                            context: context,
+                            builder: (_) => BlocProvider.value(
+                                  value: context.read<QuizEditorCubit>(),
+                                  child: const QuizSettingsScreen(
+                                      isFullScreen: false),
+                                ));
+                        return;
+                      }
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
                               value: context.read<QuizEditorCubit>(),
-                              child: const QuizesettingsScreen(),
+                              child:
+                                  const QuizSettingsScreen(isFullScreen: true),
                             ),
                           ));
                     },
