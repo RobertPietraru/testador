@@ -17,16 +17,6 @@ class QuizListRetrieved extends QuizListState {
   const QuizListRetrieved({required super.pairs});
 }
 
-class QuizListCreatedDraft extends QuizListState {
-  final DraftEntity createdDraft;
-  const QuizListCreatedDraft({
-    required super.pairs,
-    required this.createdDraft,
-  });
-  @override
-  List<Object> get props => [createdDraft, ...super.props];
-}
-
 class QuizListError extends QuizListState {
   final QuizFailure failure;
 
