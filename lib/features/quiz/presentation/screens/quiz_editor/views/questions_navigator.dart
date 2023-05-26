@@ -84,7 +84,7 @@ class QuizQuestionWidget extends StatelessWidget {
                   child: EditQuestionDialog(
                       initialValue: state.currentQuestion.text ?? ''))),
           child: Text(
-            "#${(state.currentQuestionIndex + 1).toString()} ${state.currentQuestion.text ?? context.translator.tapToModifyQuestion}",
+            "${(state.currentQuestionIndex + 1).toString()}. ${state.currentQuestion.text ?? context.translator.tapToModifyQuestion}",
             style: theme.subtitleTextStyle,
           ),
         ),

@@ -87,7 +87,7 @@ class _RoundPlayerScreenState extends State<_RoundPlayerScreen> {
             return Scaffold(
                 body: Center(
                     child: Text(
-             context.translator.responseRegistered,
+              context.translator.responseRegistered,
               style: theme.largetitleTextStyle
                   .copyWith(color: theme.secondaryColor),
             )));
@@ -134,7 +134,7 @@ class _AnswerRetrivalScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              "#${(state.questionIndex + 1).toString()} ${state.question.text ?? context.translator.someoneForgotTo}",
+                              "${(state.questionIndex + 1).toString()}. ${state.question.text ?? context.translator.someoneForgotTo}",
                               style: theme.subtitleTextStyle,
                             ),
                           ),

@@ -147,7 +147,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "#${widget.index + 1} ${widget.question.text ?? translator.someoneForgotTo}",
+            "${widget.index + 1}. ${widget.question.text ?? translator.someoneForgotTo}",
             style: theme.informationTextStyle,
           ),
           ListView.builder(

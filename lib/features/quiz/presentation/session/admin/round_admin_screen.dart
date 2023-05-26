@@ -89,7 +89,7 @@ class _RoundAdminScreenState extends State<_RoundAdminScreen> {
                         children: [
                           Expanded(
                             child: Text(
-                              "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? context.translator.someoneForgotTo}",
+                              "${(widget.currentQuestionIndex + 1).toString()}. ${widget.currentQuestion.text ?? context.translator.someoneForgotTo}",
                               style: theme.subtitleTextStyle,
                             ),
                           ),

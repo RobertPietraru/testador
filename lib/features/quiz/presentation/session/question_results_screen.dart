@@ -67,7 +67,7 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "#${(widget.currentQuestionIndex + 1).toString()} ${widget.currentQuestion.text ?? context.translator.someoneForgotTo}",
+                        "${(widget.currentQuestionIndex + 1).toString()}. ${widget.currentQuestion.text ?? context.translator.someoneForgotTo}",
                         style: theme.subtitleTextStyle,
                       ),
                       _ResultsChart(
