@@ -9,7 +9,6 @@ import '../dtos/user_dto.dart';
 abstract class AuthRemoteDataSource {
   Future<UserDto> registerUser(RegisterParams params);
   Future<UserDto> loginUser(LoginParams params);
-  Future<UserDto> logInWithGoogle();
   Future<UserDto> getUserById(String id);
   Future<UserDto?> getLocalUser();
   Future<void> logUserOut();
@@ -18,7 +17,6 @@ abstract class AuthRemoteDataSource {
 class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
   AuthFirebaseDataSourceIMPL();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Future<UserDto> registerUser(RegisterParams params) async {
@@ -68,30 +66,6 @@ class AuthFirebaseDataSourceIMPL implements AuthRemoteDataSource {
       throw const AuthUserNotFound();
     }
     return getUserById(user.uid);
-  }
-
-  @override
-  Future<UserDto> logInWithGoogle() async {
-    late final AuthCredential credential;
-
-    final googleUser = await _googleSignIn.signIn();
-    final googleAuth = await googleUser!.authentication;
-
-    credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final userCredentials =
-        await _firebaseAuth.signInWithCredential(credential);
-
-    final user = userCredentials.user;
-
-    if (user == null) {
-      throw const AuthUserNotFound();
-    }
-
-    return UserDto.empty();
   }
 
   @override

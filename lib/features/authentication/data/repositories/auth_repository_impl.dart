@@ -32,21 +32,6 @@ class AuthRepositoryIMPL implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, UserEntity>> logInWithGoogle(
-      NoParams noParams) async {
-    try {
-      final response = await authRemoteDataSource.logInWithGoogle();
-      return Right(response);
-    } on FirebaseAuthException catch (e) {
-      return Left(AuthFailureDto.fromFirebaseErrorCode(e.code));
-    } on AuthFailure catch (error) {
-      return Left(error);
-    } catch (_) {
-      return const Left(AuthUnknownFailure());
-    }
-  }
-
-  @override
   Future<Either<AuthFailure, UserEntity>> loginUser(LoginParams params) async {
     try {
       final entity = await authRemoteDataSource.loginUser(params);

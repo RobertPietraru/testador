@@ -5,7 +5,6 @@ import 'domain/repositories/auth_repository.dart';
 import 'domain/usecases/get_local_user_usecase.dart';
 import 'domain/usecases/get_user_by_id_usecase.dart';
 import 'domain/usecases/login_usecase.dart';
-import 'domain/usecases/login_with_google_usecase.dart';
 import 'domain/usecases/logout_usecase.dart';
 import 'domain/usecases/register_usecase.dart';
 
@@ -18,6 +17,5 @@ void authInject() {
     ..registerSingleton(LoginUsecase(locator()))
     ..registerSingleton(LogoutUsecase(locator()))
     ..registerSingleton(RegisterUsecase(locator()))
-    ..registerSingleton(LoginWithGoogleUsecase(locator()))
     ..registerSingleton(GetUserByIdUsecase(locator()));
 }
