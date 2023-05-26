@@ -48,24 +48,8 @@ class _EditorOptionWidgetState extends State<EditorOptionWidget> {
           color:
               isEnabled ? theme.getColor(widget.index) : theme.secondaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      onPressed: () => context
-                          .read<QuizEditorCubit>()
-                          .updateCurrentQuestionOption(
-                              optionIndex: widget.index,
-                              newOption: MultipleChoiceOptionEntity(
-                                  text: widget.option.text,
-                                  isCorrect: !widget.option.isCorrect)),
-                      icon: Icon(
-                          widget.option.isCorrect ? Icons.done : Icons.close)),
-                ],
-              ),
               Center(
                 child: Text(
                   widget.option.text ??
@@ -73,8 +57,16 @@ class _EditorOptionWidgetState extends State<EditorOptionWidget> {
                   style: theme.questionTextStyle,
                 ),
               ),
-              const SizedBox(),
-              const SizedBox(),
+              IconButton(
+                  onPressed: () => context
+                      .read<QuizEditorCubit>()
+                      .updateCurrentQuestionOption(
+                          optionIndex: widget.index,
+                          newOption: MultipleChoiceOptionEntity(
+                              text: widget.option.text,
+                              isCorrect: !widget.option.isCorrect)),
+                  icon:
+                      Icon(widget.option.isCorrect ? Icons.done : Icons.close))
             ],
           ),
         ),
