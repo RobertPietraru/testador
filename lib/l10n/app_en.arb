@@ -76,5 +76,6 @@
   "selectALanguage": "Select a language",
   "theresNobodyElse": "There's nobody else",
   "emailNotFound": "Account not found",
+  "lesson": "Lesson",
   "wrongPassword": "The password is wrong"
 }

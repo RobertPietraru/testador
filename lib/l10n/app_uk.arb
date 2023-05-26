@@ -76,5 +76,6 @@
   "theresNobodyElse": "Нікого більше немає",
   "emailNotFound": "Обліковий запис не знайдено",
   "language": "Мова",
+  "lesson": "Урок",
   "wrongPassword": "Невірний пароль"
 }

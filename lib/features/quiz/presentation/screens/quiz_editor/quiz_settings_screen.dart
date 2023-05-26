@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/text_input_field.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/cubit/quiz_editor_cubit.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/image_retrival_dialog.dart';
 
@@ -30,7 +31,6 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final translator = AppLocalizations.of(context);
     return WillPopScope(
       onWillPop: () async {
         if (initialTitle == title) {
@@ -76,7 +76,7 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                           ),
                           child: state.draft.imageUrl == null
                               ? Center(
-                                  child: Text(translator.addImage,
+                                  child: Text(context.translator.addImage,
                                       textAlign: TextAlign.center,
                                       style: theme.subtitleTextStyle
                                           .copyWith(color: Colors.white)))
@@ -87,11 +87,11 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                     onChanged: (e) {
                       title = e;
                     },
-                    hint: translator.title),
+                    hint: context.translator.title),
                 SizedBox(height: theme.spacing.small),
                 TextInputField(
                   onChanged: (e) {},
-                  hint: translator.description,
+                  hint: context.translator.lesson,
                   maxLines: 5,
                 ),
                 ListTile(
@@ -103,8 +103,8 @@ class _QuizesettingsScreenState extends State<QuizesettingsScreen> {
                   },
                   title: Text(
                     state.draft.isPublic
-                        ? translator.public
-                        : translator.private,
+                        ? context.translator.public
+                        : context.translator.private,
                     style: theme.subtitleTextStyle.copyWith(
                         color: state.draft.isPublic ? theme.good : theme.bad),
                   ),
