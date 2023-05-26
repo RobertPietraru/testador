@@ -74,7 +74,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   languages: const {
                     "Deutsch": 'de',
                     "English": 'en',
-                    "French": 'fr',
+                    "Français": 'fr',
                     "Magyar": 'hu',
                     'Русский': 'ru',
                     "Română": 'ro',
