@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
+import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
 
@@ -27,15 +28,20 @@ class QuizListCubit extends Cubit<QuizListState> {
     });
   }
 
-  void createQuiz({required String creatorId}) async {
+  void createQuiz(
+      {required String creatorId,
+      required Function(DraftEntity draft) onCreated}) async {
     final response = await createDraftUsecase
         .call(CreateDraftUsecaseParams(creatorId: creatorId));
     response.fold(
         (failure) => emit(QuizListError(pairs: state.pairs, failure: failure)),
-        (r) => emit(QuizListCreatedDraft(createdDraft: r.draft, pairs: [
-              QuizDraftPair(quiz: r.draft.toQuiz(), draft: r.draft),
-              ...state.pairs
-            ])));
+        (r) {
+      emit(QuizListRetrieved(pairs: [
+        QuizDraftPair(quiz: r.draft.toQuiz(), draft: r.draft),
+        ...state.pairs
+      ]));
+      onCreated(r.draft);
+    });
   }
 
   void updateQuiz({required DraftEntity draft}) {

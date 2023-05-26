@@ -15,61 +15,54 @@ import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
 import 'package:testador/injection.dart';
 import '../../../../../core/components/theme/app_theme.dart';
-import '../quiz_editor_retrival/quiz_retrival_widget.dart';
 
 @RoutePage()
 class QuizEditorScreen extends StatelessWidget {
   const QuizEditorScreen(
       {super.key,
       @PathParam('id') required this.quizId,
-      this.quiz,
-      this.quizListCubit,
+      required this.quiz,
+      required this.quizListCubit,
       this.draft});
   final String quizId;
-  final QuizEntity? quiz;
+  final QuizEntity quiz;
   final DraftEntity? draft;
-  final QuizListCubit? quizListCubit;
+  final QuizListCubit quizListCubit;
 
   @override
   Widget build(BuildContext context) {
-    return QuizEditorRetrivalWidget(
-        quizId: quizId,
-        entity: quiz,
-        builder: (state) {
-          return BlocProvider(
-              create: (context) => QuizEditorCubit(
-                    locator(),
-                    locator(),
-                    locator(),
-                    locator(),
-                    locator(),
-                    locator(),
-                    locator(),
-                    locator(),
-                    locator(),
-                    initialDraft: draft,
-                    quizListCubit: quizListCubit,
-                    initialQuiz: state.entity,
-                  ),
-              child: const _Quizescreen());
-        });
+    return BlocProvider(
+        create: (context) => QuizEditorCubit(
+              locator(),
+              locator(),
+              locator(),
+              locator(),
+              locator(),
+              locator(),
+              locator(),
+              locator(),
+              locator(),
+              initialDraft: draft,
+              quizListCubit: quizListCubit,
+              initialQuiz: quiz,
+            ),
+        child: const _QuizScreen());
   }
 }
 
-class _Quizescreen extends StatefulWidget {
-  const _Quizescreen();
+class _QuizScreen extends StatefulWidget {
+  const _QuizScreen();
 
   @override
-  State<_Quizescreen> createState() => _QuizescreenState();
+  State<_QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizescreenState extends State<_Quizescreen> {
+class _QuizScreenState extends State<_QuizScreen> {
   final ScrollController controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
-    final translator = AppLocalizations.of(context);
     return WillPopScope(
       onWillPop: () async {
         final cubit = context.read<QuizEditorCubit>();
@@ -80,8 +73,8 @@ class _QuizescreenState extends State<_Quizescreen> {
           context: context,
           builder: (context) => AreYouSureDialog(
               text: context.translator.areYouSureNoSave,
-              option1: translator.yes,
-              option2: translator.save),
+              option1: context.translator.yes,
+              option2: context.translator.save),
         );
         if (gottaSave == null) {
           // it was dissmissed;

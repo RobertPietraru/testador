@@ -97,10 +97,7 @@ abstract class $AppRouter extends _i9.RootStackRouter {
       );
     },
     QuizEditorRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<QuizEditorRouteArgs>(
-          orElse: () =>
-              QuizEditorRouteArgs(quizId: pathParams.getString('id')));
+      final args = routeData.argsAs<QuizEditorRouteArgs>();
       return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i6.QuizEditorScreen(
@@ -316,8 +313,8 @@ class QuizEditorRoute extends _i9.PageRouteInfo<QuizEditorRouteArgs> {
   QuizEditorRoute({
     _i10.Key? key,
     required String quizId,
-    _i11.QuizEntity? quiz,
-    _i13.QuizListCubit? quizListCubit,
+    required _i11.QuizEntity quiz,
+    required _i13.QuizListCubit quizListCubit,
     _i12.DraftEntity? draft,
     List<_i9.PageRouteInfo>? children,
   }) : super(
@@ -343,8 +340,8 @@ class QuizEditorRouteArgs {
   const QuizEditorRouteArgs({
     this.key,
     required this.quizId,
-    this.quiz,
-    this.quizListCubit,
+    required this.quiz,
+    required this.quizListCubit,
     this.draft,
   });
 
@@ -352,9 +349,9 @@ class QuizEditorRouteArgs {
 
   final String quizId;
 
-  final _i11.QuizEntity? quiz;
+  final _i11.QuizEntity quiz;
 
-  final _i13.QuizListCubit? quizListCubit;
+  final _i13.QuizListCubit quizListCubit;
 
   final _i12.DraftEntity? draft;
 

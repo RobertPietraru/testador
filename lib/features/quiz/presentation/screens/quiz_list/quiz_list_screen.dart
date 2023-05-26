@@ -5,6 +5,7 @@ import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
 import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/core/routing/app_router.gr.dart';
+import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/widgets/quiz_widget/quiz_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,157 +34,164 @@ class _QuizListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     final translator = AppLocalizations.of(context);
-    return BlocListener<QuizListCubit, QuizListState>(
-      listenWhen: (previous, current) =>
-          previous is! QuizListCreatedDraft && current is QuizListCreatedDraft,
-      listener: (context, state) {
-        state as QuizListCreatedDraft;
-
-        context.pushRoute(QuizEditorRoute(
-            draft: state.createdDraft,
-            quizListCubit: context.read<QuizListCubit>(),
-            quizId: state.createdDraft.id,
-            quiz: state.createdDraft.toQuiz()));
-      },
-      child: Scaffold(
-          appBar: const CustomAppBar(),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: theme.companyColor,
-            onPressed: () => context.read<QuizListCubit>().createQuiz(
-                creatorId: context.read<AuthBloc>().state.userEntity!.id),
-            child: const Icon(Icons.add),
-          ),
-          body: NestedScrollView(
-              headerSliverBuilder: (context, _) {
-                return [
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Padding(
-                        padding:
-                            theme.standardPadding.copyWith(top: 0, bottom: 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BlocBuilder<AuthBloc, AuthState>(
-                              builder: (context, state) {
-                                return Text(
-                                  '${translator.welcome}!',
-                                  style: TextStyle(
-                                    color: theme.secondaryColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: theme.spacing.large,
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: theme.spacing.medium),
-                            Center(
-                              child: SizedBox(
-                                width: DeviceSize.isDesktopMode
-                                    ? 30.widthPercent
-                                    : null,
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      _QuickActionWidget(
-                                        onPressed: () {
-                                          context.router.root.push(
-                                              const PlayerSessionManagerRoute());
-                                        },
-                                        icon: Icons.people_alt,
-                                        label: translator.play,
-                                      ),
-                                      _QuickActionWidget(
-                                        icon: Icons.arrow_back,
-                                        label: translator.continueText,
-                                        isEnabled: false,
-                                        onPressed: null,
-                                      ),
-                                      _QuickActionWidget(
+    return Scaffold(
+        appBar: const CustomAppBar(),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: theme.companyColor,
+          onPressed: () => context.read<QuizListCubit>().createQuiz(
+              creatorId: context.read<AuthBloc>().state.userEntity!.id,
+              onCreated: (draft) => goToQuizEditor(context, draft)),
+          child: const Icon(Icons.add),
+        ),
+        body: NestedScrollView(
+            headerSliverBuilder: (context, _) {
+              return [
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding:
+                          theme.standardPadding.copyWith(top: 0, bottom: 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, state) {
+                              return Text(
+                                '${translator.welcome}!',
+                                style: TextStyle(
+                                  color: theme.secondaryColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: theme.spacing.large,
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: theme.spacing.medium),
+                          Center(
+                            child: SizedBox(
+                              width: DeviceSize.isDesktopMode
+                                  ? 30.widthPercent
+                                  : null,
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _QuickActionWidget(
+                                      onPressed: () {
+                                        context.router.root.push(
+                                            const PlayerSessionManagerRoute());
+                                      },
+                                      icon: Icons.people_alt,
+                                      label: translator.play,
+                                    ),
+                                    _QuickActionWidget(
+                                      icon: Icons.arrow_back,
+                                      label: translator.continueText,
+                                      isEnabled: false,
+                                      onPressed: null,
+                                    ),
+                                    _QuickActionWidget(
                                         icon: Icons.lightbulb,
                                         label: translator.create,
-                                        onPressed: () {
-                                          context
-                                              .read<QuizListCubit>()
-                                              .createQuiz(
-                                                  creatorId: context
-                                                      .read<AuthBloc>()
-                                                      .state
-                                                      .userEntity!
-                                                      .id);
-                                          Navigator.pop(context);
-                                        },
-                                      )
-                                    ]),
-                              ),
+                                        onPressed: () => context
+                                            .read<QuizListCubit>()
+                                            .createQuiz(
+                                                creatorId: context
+                                                    .read<AuthBloc>()
+                                                    .state
+                                                    .userEntity!
+                                                    .id,
+                                                onCreated: (draft) =>
+                                                    goToQuizEditor(
+                                                        context, draft)))
+                                  ]),
                             ),
-                            SizedBox(height: theme.spacing.medium),
-                            BlocBuilder<QuizListCubit, QuizListState>(
-                              builder: (context, state) {
-                                if (state is! QuizListEmpty) {
-                                  return Text(
-                                    translator.yourTests,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: theme.spacing.xxLarge,
-                                    ),
-                                  );
-                                }
-                                return Container();
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]),
-                  ),
-                ];
-              },
-              body: BlocConsumer<QuizListCubit, QuizListState>(
-                listener: (context, state) {
-                  if (state is QuizListError) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(state.failure.retrieveMessage(context))));
-                  }
-                },
-                builder: (context, state) {
-                  if (state is QuizListEmpty) {
-                    return Center(
-                      child: Text(
-                        "${translator.noTests}\n"
-                        "¯\\_(ツ)_/¯",
-                        textAlign: TextAlign.center,
-                        style: theme.largetitleTextStyle
-                            .copyWith(color: theme.secondaryColor),
-                      ),
-                    );
-                  }
-                  if (state is QuizListLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  return DeviceSize.isDesktopMode
-                      ? GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: DeviceSize.screenHeight ~/ 200,
                           ),
-                          itemCount: state.pairs.length,
-                          itemBuilder: (context, index) => Padding(
-                              padding: theme.standardPadding,
-                              child: QuizWidget(quiz: state.pairs[index].quiz)))
-                      : ListView.builder(
-                          itemCount: state.pairs.length,
-                          itemBuilder: (context, index) => Padding(
-                              padding: theme.standardPadding,
-                              child: QuizWidget(
-                                quiz: state.pairs[index].quiz,
-                                draft: state.pairs[index].draft,
-                              )));
-                },
-              ))),
-    );
+                          SizedBox(height: theme.spacing.medium),
+                          BlocBuilder<QuizListCubit, QuizListState>(
+                            builder: (context, state) {
+                              if (state is! QuizListEmpty) {
+                                return Text(
+                                  translator.yourTests,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: theme.spacing.xxLarge,
+                                  ),
+                                );
+                              }
+                              return Container();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+                ),
+              ];
+            },
+            body: BlocConsumer<QuizListCubit, QuizListState>(
+              listener: (context, state) {
+                if (state is QuizListError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(state.failure.retrieveMessage(context))));
+                }
+              },
+              builder: (context, state) {
+                if (state is QuizListEmpty) {
+                  return Center(
+                    child: Text(
+                      "${translator.noTests}\n"
+                      "¯\\_(ツ)_/¯",
+                      textAlign: TextAlign.center,
+                      style: theme.largetitleTextStyle
+                          .copyWith(color: theme.secondaryColor),
+                    ),
+                  );
+                }
+                if (state is QuizListLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (DeviceSize.isDesktopMode) {
+                  return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: DeviceSize.screenHeight ~/ 200,
+                      ),
+                      itemCount: state.pairs.length,
+                      itemBuilder: (context, index) => Padding(
+                          padding: theme.standardPadding,
+                          child: QuizWidget(quiz: state.pairs[index].quiz)));
+                } else {
+                  return RefreshIndicator(
+                    onRefresh: () async =>
+                        context.read<QuizListCubit>().getQuizes(
+                              creatorId:
+                                  context.read<AuthBloc>().state.userEntity!.id,
+                            ),
+                    child: ListView.builder(
+                        itemCount: state.pairs.length,
+                        itemBuilder: (context, index) => Padding(
+                            padding: theme.standardPadding,
+                            child: QuizWidget(
+                              quiz: state.pairs[index].quiz,
+                              draft: state.pairs[index].draft,
+                            ))),
+                  );
+                }
+              },
+            )));
+  }
+
+  void goToQuizEditor(BuildContext context, DraftEntity draft) {
+    final canPush = Navigator.maybeOf(context) != null;
+    if (canPush) {
+      context.pushRoute(QuizEditorRoute(
+        draft: draft,
+        quizListCubit: context.read<QuizListCubit>(),
+        quizId: draft.id,
+        quiz: draft.toQuiz(),
+      ));
+    }
   }
 }
 
