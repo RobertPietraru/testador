@@ -46,7 +46,7 @@ class QuizScreen extends StatelessWidget {
             }
 
             return Scaffold(
-              appBar: const CustomAppBar(showLeading: true),
+              appBar: const CustomAppBar(showLeading: true, showPlay:  false,),
               body: NestedScrollView(
                   headerSliverBuilder: (context, _) {
                     return [

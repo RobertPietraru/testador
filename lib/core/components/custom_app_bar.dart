@@ -17,6 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
   final Color fillColor;
   final Color? mainColor;
+  final bool showPlay;
   const CustomAppBar({
     Key? key,
     this.showLeading = true,
@@ -26,6 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottom,
     this.fillColor = Colors.transparent,
     this.mainColor,
+    this.showPlay = true,
   }) : super(key: key);
 
   AppBar theAppBar({
@@ -57,16 +59,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: fillColor,
       actions: trailing ??
           [
-            TextButton(
-                onPressed: () {
-                  if (DeviceSize.isDesktopMode) {
-                    context.navigateTo(const PlayerSessionManagerRoute());
-                  } else {
-                    context.pushRoute(const PlayerSessionManagerRoute());
-                  }
-                },
-                child: Text(context.translator.play,
-                    style: theme.actionTextStyle)),
+            if (showPlay)
+              TextButton(
+                  onPressed: () {
+                    if (DeviceSize.isDesktopMode) {
+                      context.navigateTo(const PlayerSessionManagerRoute());
+                    } else {
+                      context.pushRoute(const PlayerSessionManagerRoute());
+                    }
+                  },
+                  child: Text(context.translator.play,
+                      style: theme.actionTextStyle)),
             BlocBuilder<LanguageCubit, LanguageState>(
               builder: (context, state) {
                 return LanguagePicker(

@@ -107,7 +107,7 @@ class CodeRetrivalScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                       context.translator.insertCodeToConnect,
+                        context.translator.insertCodeToConnect,
                         style: theme.titleTextStyle,
                       ),
                       SizedBox(height: theme.spacing.small),
@@ -145,7 +145,7 @@ class NameRetrivalScreen extends StatelessWidget {
     final theme = AppTheme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBar(showPlay: false),
       body: Center(
         child: SizedBox(
           width: DeviceSize.isDesktopMode ? 50.widthPercent : null,
