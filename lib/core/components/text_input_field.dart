@@ -11,6 +11,7 @@ class TextInputField extends StatefulWidget {
   final bool showLabel;
   final Color? backgroundColor;
   final String? initialValue;
+  final TextInputType? keyboardType;
   const TextInputField({
     Key? key,
     required this.onChanged,
@@ -22,6 +23,7 @@ class TextInputField extends StatefulWidget {
     this.showLabel = true,
     this.backgroundColor,
     this.initialValue,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -62,6 +64,7 @@ class _TextInputFieldState extends State<TextInputField> {
             ],
           ),
         TextFormField(
+            keyboardType: widget.keyboardType,
             maxLines: widget.maxLines,
             obscureText: isObscured,
             style: TextStyle(color: theme.primaryColor),

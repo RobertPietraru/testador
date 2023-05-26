@@ -85,12 +85,14 @@ class _RoundPlayerScreenState extends State<_RoundPlayerScreen> {
             return const LoadingScreen();
           case PlayerQuestionStatus.answered:
             return Scaffold(
+                appBar: CustomAppBar(trailing: []),
                 body: Center(
                     child: Text(
-              context.translator.responseRegistered,
-              style: theme.largetitleTextStyle
-                  .copyWith(color: theme.secondaryColor),
-            )));
+                  context.translator.responseRegistered,
+                  textAlign: TextAlign.center,
+                  style: theme.largetitleTextStyle
+                      .copyWith(color: theme.secondaryColor),
+                )));
           default:
             return const LoadingScreen();
         }

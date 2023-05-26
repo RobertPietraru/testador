@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/components.dart';
 import 'package:testador/core/utils/translator.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
@@ -13,12 +14,13 @@ class QuestionResultsScreen extends StatefulWidget {
   final QuestionEntity currentQuestion;
   final int currentQuestionIndex;
 
-  const QuestionResultsScreen(
-      {super.key,
-      this.onContinue,
-      required this.session,
-      required this.currentQuestion,
-      required this.currentQuestionIndex});
+  const QuestionResultsScreen({
+    super.key,
+    this.onContinue,
+    required this.session,
+    required this.currentQuestion,
+    required this.currentQuestionIndex,
+  });
 
   @override
   State<QuestionResultsScreen> createState() => _QuestionResultsScreenState();
@@ -53,7 +55,9 @@ class _QuestionResultsScreenState extends State<QuestionResultsScreen> {
           title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
             if (widget.onContinue != null)
-              AppBarButton(text: context.translator.continueText, onPressed: widget.onContinue!)
+              AppBarButton(
+                  text: context.translator.continueText,
+                  onPressed: widget.onContinue!)
           ]),
       body: NestedScrollView(
         controller: controller,

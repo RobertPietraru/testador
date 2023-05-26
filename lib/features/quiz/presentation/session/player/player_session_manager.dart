@@ -112,6 +112,7 @@ class CodeRetrivalScreen extends StatelessWidget {
                       ),
                       SizedBox(height: theme.spacing.small),
                       TextInputField(
+                        keyboardType: TextInputType.number,
                         initialValue: state.sessionId,
                         onChanged: (e) =>
                             context.read<SessionPlayerCubit>().updateCode(e),

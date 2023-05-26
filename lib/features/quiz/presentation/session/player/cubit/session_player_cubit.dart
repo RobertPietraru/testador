@@ -34,7 +34,7 @@ class SessionPlayerCubit extends Cubit<SessionPlayerState> {
       emit(SessionPlayerCodeRetrival(
         failure: l,
         isLoading: false,
-        sessionId: state.sessionId,
+        sessionId: state.sessionId.replaceAll(' ', ''),
         userId: state.userId,
       ));
     }, (r) {
