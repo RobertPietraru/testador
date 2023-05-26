@@ -7,20 +7,20 @@ import '../../../../domain/entities/question_entity.dart';
 import '../cubit/quiz_editor_cubit.dart';
 import 'edit_option_dialog.dart';
 
-class OptionWidget extends StatefulWidget {
+class EditorOptionWidget extends StatefulWidget {
   final int index;
   final MultipleChoiceOptionEntity option;
-  const OptionWidget({
+  const EditorOptionWidget({
     super.key,
     required this.index,
     required this.option,
   });
 
   @override
-  State<OptionWidget> createState() => _OptionWidgetState();
+  State<EditorOptionWidget> createState() => _EditorOptionWidgetState();
 }
 
-class _OptionWidgetState extends State<OptionWidget> {
+class _EditorOptionWidgetState extends State<EditorOptionWidget> {
   @override
   Widget build(BuildContext context) {
     final bool isEnabled = widget.option.text != null;
@@ -68,7 +68,8 @@ class _OptionWidgetState extends State<OptionWidget> {
               ),
               Center(
                 child: Text(
-                  widget.option.text ?? "${ context.translator.option} ${widget.index + 1}",
+                  widget.option.text ??
+                      "${context.translator.option} ${widget.index + 1}",
                   style: theme.questionTextStyle,
                 ),
               ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/domain/entities/quiz_entity.dart';
@@ -258,7 +259,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
         ),
       );
 
-  Future<void> updateQuestionImage({required File image}) async {
+  Future<void> updateQuestionImage({required XFile image}) async {
     emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final response = await updateQuestionImageUsecase.call(
         UpdateQuestionImageUsecaseParams(
@@ -306,7 +307,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     );
   }
 
-  Future<void> updateQuizImage({required File newImage}) async {
+  Future<void> updateQuizImage({required XFile newImage}) async {
     emit(state.copyWith(
         status: QuizEditorStatus.loading, failure: null, updateError: true));
 

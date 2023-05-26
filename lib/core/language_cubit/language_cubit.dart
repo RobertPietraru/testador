@@ -22,8 +22,14 @@ class LanguageCubit extends Cubit<LanguageState> {
     sharedPreferences = await SharedPreferences.getInstance();
     final locale = sharedPreferences.getString("locale");
     if (locale == null) {
-      sharedPreferences.setString("locale", Platform.localeName);
-      emit(LanguageState(locale: kIsWeb ? 'en' : Platform.localeName));
+      sharedPreferences.setString(
+          "locale", kIsWeb ? 'en' : Platform.localeName);
+      emit(LanguageState(
+          locale: kIsWeb
+              ? 'en'
+              : kIsWeb
+                  ? 'en'
+                  : Platform.localeName));
     } else {
       emit(LanguageState(locale: locale));
     }

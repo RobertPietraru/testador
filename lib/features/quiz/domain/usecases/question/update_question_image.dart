@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
 
 import 'package:dartz/dartz.dart';
@@ -21,8 +22,7 @@ class UpdateQuestionImageUsecase extends UseCase<
 class UpdateQuestionImageUsecaseParams extends Params {
   final DraftEntity draft;
   final int index;
-  // if null, will remove the image
-  final File image;
+  final XFile image;
   const UpdateQuestionImageUsecaseParams(
       {required this.image, required this.draft, required this.index});
 }

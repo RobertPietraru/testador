@@ -70,6 +70,7 @@ class QuestionSettingsView extends StatelessWidget {
                   onTap: () {
                     final cubit = context.read<QuizEditorCubit>();
 
+                    Navigator.pop(context);
                     showDialog(
                         context: context,
                         builder: (_) => ImageRetrivalDialog(
@@ -77,7 +78,6 @@ class QuestionSettingsView extends StatelessWidget {
                                 cubit.updateQuestionImage(image: imageFile);
                               },
                             ));
-                    Navigator.pop(context);
                   },
                   title: Text(
                     state.currentQuestion.image == null

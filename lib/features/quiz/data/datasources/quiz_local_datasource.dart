@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:testador/features/quiz/data/dtos/draft/draft_dto.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
@@ -172,11 +173,11 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
   }
 
   Future<String> uploadImage(
-      String creatorId, String quizId, File image) async {
+      String creatorId, String quizId, XFile image) async {
     final fileExtension = basename(image.path).split('.').last;
     final path = '$creatorId/$quizId/${const Uuid().v1()}.$fileExtension';
 
-    final snap = await storage.ref(path).putFile(image);
+    final snap = await storage.ref(path).putData(await image.readAsBytes());
     final url = await snap.ref.getDownloadURL();
 
     return url;

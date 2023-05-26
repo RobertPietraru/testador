@@ -184,15 +184,11 @@ class _QuizScreenState extends State<_QuizScreen> {
                                 SizedBox(height: theme.spacing.xLarge),
                                 if (state.currentQuestion.image != null)
                                   Center(
-                                    child: Container(
-                                      height: 220,
-                                      color: theme.secondaryColor,
-                                      child: AspectRatio(
-                                        aspectRatio: 1.0,
-                                        child: Image.network(
-                                            state.currentQuestion.image!,
-                                            fit: BoxFit.contain),
-                                      ),
+                                    child: SizedBox(
+                                      height: 40.heightPercent,
+                                      child: Image.network(
+                                          state.currentQuestion.image!,
+                                          fit: BoxFit.contain),
                                     ),
                                   ),
                                 SizedBox(height: theme.spacing.medium),
@@ -210,7 +206,7 @@ class _QuizScreenState extends State<_QuizScreen> {
                             crossAxisCount: 2,
                           ),
                           itemCount: state.currentQuestion.options.length,
-                          itemBuilder: (context, index) => OptionWidget(
+                          itemBuilder: (context, index) => EditorOptionWidget(
                               index: index,
                               option: state.currentQuestion.options[index])),
                     ),
