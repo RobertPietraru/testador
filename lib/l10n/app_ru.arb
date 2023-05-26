@@ -75,7 +75,8 @@
   "selectALanguage": "Выберите язык",
   "theresNobodyElse": "Никого больше нет",
   "emailNotFound": "Аккаунт не найден",
-"language": "Язык",
-"lesson": "Урок",
+  "language": "Язык",
+  "leave": "Уйди",
+  "lesson": "Урок",
   "wrongPassword": "Неправильный пароль"
 }

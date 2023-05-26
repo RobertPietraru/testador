@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
 import 'package:testador/core/components/buttons/long_button.dart';
 import 'package:testador/core/components/theme/app_theme.dart';
+import 'package:testador/core/components/theme/device_size.dart';
 import 'package:testador/features/quiz/domain/entities/question_entity.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
 import '../../../../core/routing/app_router.gr.dart';
@@ -89,17 +90,16 @@ class QuizScreen extends StatelessWidget {
                             Padding(
                               padding: theme.standardPadding
                                   .copyWith(top: 0, bottom: 0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: LongButton(
-                                      onPressed: () => context.pushRoute(
-                                          QuizSessionManagerRoute(quiz: quiz)),
-                                      label: translator.startNewSession,
-                                      isLoading: false,
-                                    ),
-                                  ),
-                                ],
+                              child: SizedBox(
+                                width: DeviceSize.isDesktopMode
+                                    ? 40.widthPercent
+                                    : null,
+                                child: LongButton(
+                                  onPressed: () => context.pushRoute(
+                                      QuizSessionManagerRoute(quiz: quiz)),
+                                  label: translator.startNewSession,
+                                  isLoading: false,
+                                ),
                               ),
                             ),
                           ],

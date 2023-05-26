@@ -42,7 +42,7 @@ class _QuizSessionManagerScreen extends StatelessWidget {
           context: context,
           builder: (context) =>  AreYouSureDialog(
               text: context.translator.ifYouLeaveSession,
-              option1: context.translator.yes,
+              option1: context.translator.leave,
               option2: context.translator.stay),
         );
         if (result == null) {

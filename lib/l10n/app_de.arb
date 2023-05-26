@@ -74,7 +74,8 @@
   "selectALanguage": "Sprache auswählen",
   "theresNobodyElse": "Es ist niemand sonst da",
   "emailNotFound": "Konto nicht gefunden",
- "language": "Sprache",
- "lesson": "Die Lektion",
+  "language": "Sprache",
+  "lesson": "Die Lektion",
+  "leave": "Verlassse",
   "wrongPassword": "Das Passwort ist falsch"
 }

@@ -16,40 +16,40 @@ class AreYouSureDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     return CustomDialog(
+        fitContent: true,
         child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(text, style: theme.subtitleTextStyle),
-        SizedBox(height: theme.spacing.medium),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            FilledButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(theme.bad),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ))),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: Text(option1),
-            ),
-            SizedBox(width: theme.spacing.medium),
-            FilledButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(theme.good),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ))),
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: Text(option2),
+            Text(text, style: theme.subtitleTextStyle),
+            SizedBox(height: theme.spacing.medium),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FilledButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(theme.bad),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ))),
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(option1),
+                ),
+                SizedBox(width: theme.spacing.medium),
+                FilledButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(theme.good),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ))),
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text(option2),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
-    ));
+        ));
   }
 }
