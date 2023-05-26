@@ -299,7 +299,7 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
 
     for (var answerDto in session.answers) {
       bool addPoints = true;
-      for (var option in answerDto.optionIndexes ?? []) {
+      for (int option in answerDto.optionIndexes ?? []) {
         if (!question.options[option].isCorrect) {
           addPoints = false;
           break;
@@ -312,7 +312,8 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
         if (index != -1) {
           final student = students[index];
           students[index] = students[index].copyWith(
-              score: student.score + 100,
+              score:
+                  student.score + 60 + (40 - answerDto.responseTime.inSeconds),
               correctAnswers: student.correctAnswers + 1);
         }
       }
