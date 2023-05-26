@@ -48,13 +48,14 @@ class QuizWidget extends StatelessWidget {
             width: width,
             height: height,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                  image: NetworkImage(quiz.imageUrl ?? theme.placeholderImage),
-                  opacity: 0.5,
-                  fit: BoxFit.cover,
-                ),
-                color: theme.primaryColor),
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: NetworkImage(quiz.imageUrl ?? theme.placeholderImage),
+                colorFilter: colorFilter,
+                fit: BoxFit.cover,
+              ),
+              color: theme.primaryColor,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,3 +127,27 @@ class QuizWidget extends StatelessWidget {
     return quiz != draft?.toQuiz();
   }
 }
+
+const imageOpacity = 0.8;
+const colorFilter = ColorFilter.matrix(<double>[
+  0.5,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0.5,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0.5,
+  0,
+  0,
+  0,
+  0,
+  0,
+  imageOpacity,
+  0
+]);
