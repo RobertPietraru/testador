@@ -23,7 +23,7 @@ class QuizEntity extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, title, isPublic, creatorId, imageUrl, ...questions];
+      [id, lesson, title, isPublic, creatorId, imageUrl, ...questions];
   QuizEntity copyWith({
     String? id,
     String? title = DefaultValues.forStrings,
