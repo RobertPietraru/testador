@@ -5,6 +5,9 @@ import 'package:dartz/dartz.dart';
 import 'package:testador/features/quiz/data/datasources/quiz_local_datasource.dart';
 import 'package:testador/features/quiz/data/datasources/quiz_remote_datasource.dart';
 import 'package:testador/features/quiz/domain/failures/quiz_failures.dart';
+import 'package:testador/features/quiz/domain/usecases/ai/suggest_question_and_answers.dart';
+import 'package:testador/features/quiz/domain/usecases/ai/suggest_options.dart';
+import 'package:testador/features/quiz/domain/usecases/ai/suggest_entire_quiz.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/quiz/domain/usecases/quiz_usecases.dart';
 import 'package:testador/features/quiz/domain/usecases/session/show_leaderboard.dart';
@@ -113,8 +116,6 @@ class QuizRepositoryIMPL implements QuizRepository {
     } on QuizFailure catch (error) {
       return Left(error);
     } on Error catch (_) {
-      print(_.stackTrace);
-
       return const Left(QuizUnknownFailure());
     }
   }
@@ -205,8 +206,6 @@ class QuizRepositoryIMPL implements QuizRepository {
     } on QuizFailure catch (error) {
       return Left(error);
     } catch (_) {
-      print(_);
-      print((_ as Error).stackTrace);
       return const Left(QuizUnknownFailure());
     }
   }
@@ -430,6 +429,53 @@ class QuizRepositoryIMPL implements QuizRepository {
       ShowLeaderboardUsecaseParams params) async {
     try {
       final response = await quizRemoteDataSource.showLeaderboard(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<QuizFailure, SuggestEntireQuizUsecaseResult>> suggestEntireQuiz(
+      SuggestEntireQuizUsecaseParams params) async {
+    try {
+      final response = await quizRemoteDataSource.suggestEntireQuiz(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<QuizFailure, SuggestOptionsUsecaseResult>> suggestOptions(
+      SuggestOptionsUsecaseParams params) async {
+    try {
+      final response = await quizRemoteDataSource.suggestOptions(params);
+      return Right(response);
+    } on FirebaseException catch (e) {
+      return Left(QuizUnknownFailure(code: e.code));
+    } on QuizFailure catch (error) {
+      return Left(error);
+    } catch (_) {
+      return const Left(QuizUnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<QuizFailure, SuggestQuestionAndOptionsUsecaseResult>>
+      suggestQuestionAndOptions(
+          SuggestQuestionAndOptionsUsecaseParams params) async {
+    try {
+      final response =
+          await quizRemoteDataSource.suggestQuestionAndOptions(params);
       return Right(response);
     } on FirebaseException catch (e) {
       return Left(QuizUnknownFailure(code: e.code));

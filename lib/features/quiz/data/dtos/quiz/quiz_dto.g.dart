@@ -17,6 +17,7 @@ class QuizDtoAdapter extends TypeAdapter<QuizDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return QuizDto(
+      lesson: fields[6] as String?,
       questions: (fields[5] as List?)?.cast<QuestionDto>(),
       title: fields[1] as String?,
       isPublic: fields[2] as bool,
@@ -29,7 +30,7 @@ class QuizDtoAdapter extends TypeAdapter<QuizDto> {
   @override
   void write(BinaryWriter writer, QuizDto obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class QuizDtoAdapter extends TypeAdapter<QuizDto> {
       ..writeByte(4)
       ..write(obj.imageUrl)
       ..writeByte(5)
-      ..write(obj.questions);
+      ..write(obj.questions)
+      ..writeByte(6)
+      ..write(obj.lesson);
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testador/core/components/custom_app_bar.dart';
@@ -12,6 +11,7 @@ import 'package:testador/features/quiz/presentation/screens/quiz_editor/quiz_set
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/views/questions_navigator.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/are_you_sure_dialog.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/option_widget.dart';
+import 'package:testador/features/quiz/presentation/screens/quiz_editor/widgets/quick_action_bottom_sheet.dart';
 import 'package:testador/features/quiz/presentation/screens/quiz_list/cubit/quiz_list_cubit.dart';
 import 'package:testador/injection.dart';
 import '../../../../../core/components/theme/app_theme.dart';
@@ -33,6 +33,7 @@ class QuizEditorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => QuizEditorCubit(
+              locator(),
               locator(),
               locator(),
               locator(),
@@ -92,10 +93,25 @@ class _QuizScreenState extends State<_QuizScreen> {
           floatingActionButton: FloatingActionButton(
               backgroundColor: theme.primaryColor,
               onPressed: () {
-                context.read<QuizEditorCubit>().addNewQuestion();
-                controller.jumpTo(0);
+                showModalBottomSheet(
+                  context: context,
+                  builder: (_) {
+                    final cubit = context.read<QuizEditorCubit>();
+                    return BlocProvider.value(
+                      value: cubit,
+                      child: QuickActionBottomSheet(
+                        controller: controller,
+                        questionIndex: cubit.state.currentQuestionIndex,
+                        entity: cubit.state.currentQuestion,
+                      ),
+                    );
+                  },
+                  shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20.0))),
+                );
               },
-              child: const Icon(Icons.add)),
+              child: const Icon(Icons.bolt)),
           backgroundColor: theme.defaultBackgroundColor.withOpacity(0.9),
           resizeToAvoidBottomInset: true,
           bottomSheet: BlocBuilder<QuizEditorCubit, QuizEditorState>(
@@ -179,6 +195,9 @@ class _QuizScreenState extends State<_QuizScreen> {
               }
             },
             builder: (context, state) {
+              if (state.status == QuizEditorStatus.loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
               return NestedScrollView(
                   controller: controller,
                   headerSliverBuilder: (context, _) {

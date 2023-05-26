@@ -27,3 +27,7 @@ export 'session/send_answer.dart';
 export 'session/show_podium.dart';
 export 'session/show_question_results.dart';
 export 'session/subscribe_to_session.dart';
+
+export 'ai/suggest_entire_quiz.dart';
+export 'ai/suggest_options.dart';
+export 'ai/suggest_question_and_answers.dart';

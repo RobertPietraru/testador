@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,6 +38,7 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
   Future<DraftEntity> createDraft(CreateDraftUsecaseParams params) async {
     final id = const Uuid().v1();
     final draftDto = DraftDto(
+      lesson: null,
       creatorId: params.creatorId,
       id: id,
       imageUrl: null,
@@ -64,18 +63,12 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
   @override
   Future<DraftEntity> deleteQuestion(DeleteQuestionUsecaseParams params) async {
     final questions =
-        params.quiz.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+        params.draft.questions.map((e) => QuestionDto.fromEntity(e)).toList();
 
     questions.removeAt(params.index);
 
-    final dto = DraftDto(
-      questions: questions,
-      title: params.quiz.title,
-      isPublic: params.quiz.isPublic,
-      creatorId: params.quiz.creatorId,
-      imageUrl: params.quiz.imageUrl,
-      id: params.quiz.id,
-    );
+    final dto =
+        DraftDto.fromEntity(params.draft).copyWith(questions: questions);
     draftsBox.put(dto.id, dto);
     return dto.toEntity();
   }
@@ -87,14 +80,9 @@ class QuizLocalDataSourceIMPL implements QuizLocalDataSource {
 
     questions.insert(params.index, QuestionDto.fromEntity(params.question));
 
-    final dto = DraftDto(
-      questions: questions,
-      title: params.draft.title,
-      isPublic: params.draft.isPublic,
-      creatorId: params.draft.creatorId,
-      imageUrl: params.draft.imageUrl,
-      id: params.draft.id,
-    );
+    final dto =
+        DraftDto.fromEntity(params.draft).copyWith(questions: questions);
+
     draftsBox.put(dto.id, dto);
     return dto.toEntity();
   }

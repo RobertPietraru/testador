@@ -30,7 +30,11 @@ class QuizDto with HiveObjectMixin {
   @HiveField(5)
   final List<QuestionDto>? questions;
 
+  @HiveField(6)
+  final String? lesson;
+
   QuizDto({
+    required this.lesson,
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -45,9 +49,11 @@ class QuizDto with HiveObjectMixin {
   static const imageField = 'image';
   static const idField = 'id';
   static const questionsField = 'questions';
+  static const lessonField = 'lesson';
 
   Map<dynamic, dynamic> toMap() {
     return {
+      lessonField: lesson,
       titleField: title,
       isPublicField: isPublic,
       creatorField: creatorId,
@@ -59,6 +65,7 @@ class QuizDto with HiveObjectMixin {
 
   QuizEntity toEntity() {
     return QuizEntity(
+        lesson: lesson,
         questions: (questions ?? []).map((e) => e.toEntity()).toList(),
         title: title,
         isPublic: isPublic,
@@ -73,6 +80,7 @@ class QuizDto with HiveObjectMixin {
     final z = y.toList();
 
     return QuizDto(
+      lesson: map[lessonField],
       questions: z,
       title: map[titleField],
       isPublic: map[isPublicField],
@@ -84,6 +92,7 @@ class QuizDto with HiveObjectMixin {
 
   factory QuizDto.fromEntity(QuizEntity entity) {
     return QuizDto(
+      lesson: entity.lesson,
       creatorId: entity.creatorId,
       id: entity.id,
       imageUrl: entity.imageUrl,

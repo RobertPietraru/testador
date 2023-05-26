@@ -9,8 +9,10 @@ class QuizEntity extends Equatable {
   final String creatorId;
   final String? imageUrl;
   final List<QuestionEntity> questions;
+  final String? lesson;
 
   const QuizEntity({
+    required this.lesson,
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -24,19 +26,21 @@ class QuizEntity extends Equatable {
       [id, title, isPublic, creatorId, imageUrl, ...questions];
   QuizEntity copyWith({
     String? id,
-    String? title = mockValueForDefault,
+    String? title = DefaultValues.forStrings,
     bool? isPublic,
     String? creatorId,
-    String? imageUrl = mockValueForDefault,
+    String? imageUrl = DefaultValues.forStrings,
     List<QuestionEntity>? questions,
+    String? lesson,
   }) {
     return QuizEntity(
+      lesson: lesson ?? this.lesson,
       questions: questions ?? this.questions,
       isPublic: isPublic ?? this.isPublic,
       creatorId: creatorId ?? this.creatorId,
       id: id ?? this.id,
-      title: title == mockValueForDefault ? this.title : title,
-      imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
+      title: title == DefaultValues.forStrings ? this.title : title,
+      imageUrl: imageUrl == DefaultValues.forStrings ? this.imageUrl : imageUrl,
     );
   }
 }

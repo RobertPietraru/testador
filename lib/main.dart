@@ -1,3 +1,4 @@
+import 'package:dart_openai/openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -15,6 +16,7 @@ import '../injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  OpenAI.apiKey = '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';
   await Hive.initFlutter();
   Hive.registerAdapter(QuizDtoAdapter());
   Hive.registerAdapter(DraftDtoAdapter());

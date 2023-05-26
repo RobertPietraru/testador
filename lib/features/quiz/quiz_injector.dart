@@ -40,5 +40,8 @@ void quizInject() {
     ..registerSingleton(ShowPodiumUsecase(locator()))
     ..registerSingleton(ShowQuestionResultsUsecase(locator()))
     ..registerSingleton(ShowLeaderboardUsecase(locator()))
+    ..registerSingleton(SuggestQuestionAndOptionsUsecase(locator()))
+    ..registerSingleton(SuggestOptionsUsecase(locator()))
+    ..registerSingleton(SuggestEntireQuizUsecase(locator()))
     ..registerSingleton(SubscribeToSessionUsecase(locator()));
 }

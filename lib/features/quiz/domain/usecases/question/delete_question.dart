@@ -15,9 +15,9 @@ class DeleteQuestionUsecase
 }
 
 class DeleteQuestionUsecaseParams extends Params {
-  final DraftEntity quiz;
+  final DraftEntity draft;
   final int index;
-  const DeleteQuestionUsecaseParams({required this.quiz, required this.index});
+  const DeleteQuestionUsecaseParams({required this.draft, required this.index});
 }
 
 class DeleteQuestionUsecaseResult extends Response {

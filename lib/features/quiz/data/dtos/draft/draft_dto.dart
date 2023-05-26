@@ -31,7 +31,11 @@ class DraftDto with HiveObjectMixin {
   @HiveField(5)
   final List<QuestionDto> questions;
 
+  @HiveField(6)
+  final String? lesson;
+
   DraftDto({
+    required this.lesson,
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -46,7 +50,7 @@ class DraftDto with HiveObjectMixin {
   static const imageField = 'image';
   static const idField = 'id';
   static const questionsField = 'questions';
-
+  static const lessonField = 'lesson';
   Map<dynamic, dynamic> toMap() {
     return {
       titleField: title,
@@ -71,6 +75,7 @@ class DraftDto with HiveObjectMixin {
 
   DraftEntity toEntity() {
     return DraftEntity(
+        lesson: lesson,
         questions: questions.map((e) => e.toEntity()).toList(),
         title: title,
         isPublic: isPublic,
@@ -81,6 +86,7 @@ class DraftDto with HiveObjectMixin {
 
   factory DraftDto.fromMap(Map<dynamic, dynamic> map) {
     return DraftDto(
+      lesson: map[lessonField],
       questions: (map[questionsField] as List<Map<dynamic, dynamic>>)
           .map((e) => QuestionDto.fromMap(map[questionsField]))
           .toList(),
@@ -94,6 +100,7 @@ class DraftDto with HiveObjectMixin {
 
   factory DraftDto.fromEntity(DraftEntity entity) {
     return DraftDto(
+      lesson: entity.lesson,
       creatorId: entity.creatorId,
       id: entity.id,
       imageUrl: entity.imageUrl,
@@ -106,19 +113,21 @@ class DraftDto with HiveObjectMixin {
 
   DraftDto copyWith({
     String? id,
-    String? title = mockValueForDefault,
+    String? title = DefaultValues.forStrings,
     bool? isPublic,
     String? creatorId,
-    String? imageUrl = mockValueForDefault,
+    String? imageUrl = DefaultValues.forStrings,
     List<QuestionDto>? questions,
+    String? lesson,
   }) {
     return DraftDto(
+      lesson: lesson ?? this.lesson,
       questions: questions ?? this.questions,
       isPublic: isPublic ?? this.isPublic,
       creatorId: creatorId ?? this.creatorId,
       id: id ?? this.id,
-      title: title == mockValueForDefault ? this.title : title,
-      imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
+      title: title == DefaultValues.forStrings ? this.title : title,
+      imageUrl: imageUrl == DefaultValues.forStrings ? this.imageUrl : imageUrl,
     );
   }
 }

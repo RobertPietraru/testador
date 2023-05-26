@@ -1,4 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:testador/features/quiz/domain/usecases/ai/suggest_entire_quiz.dart';
+import 'package:testador/features/quiz/domain/usecases/ai/suggest_options.dart';
+import 'package:testador/features/quiz/domain/usecases/ai/suggest_question_and_answers.dart';
 import 'package:testador/features/quiz/domain/usecases/draft/delete_draft_by_id.dart';
 import 'package:testador/features/quiz/domain/usecases/session/delete_session.dart';
 import 'package:testador/features/quiz/domain/usecases/session/show_leaderboard.dart';
@@ -70,6 +73,13 @@ abstract class QuizRepository {
 
   Future<Either<QuizFailure, ShowLeaderboardUsecaseResult>> showLeaderboard(
       ShowLeaderboardUsecaseParams params);
+
+  Future<Either<QuizFailure, SuggestOptionsUsecaseResult>> suggestOptions(
+      SuggestOptionsUsecaseParams params);
+  Future<Either<QuizFailure, SuggestEntireQuizUsecaseResult>> suggestEntireQuiz(
+      SuggestEntireQuizUsecaseParams params);
+  Future<Either<QuizFailure, SuggestQuestionAndOptionsUsecaseResult>>
+      suggestQuestionAndOptions(SuggestQuestionAndOptionsUsecaseParams params);
 }
 
 // create session (generates code and all that)

@@ -10,8 +10,10 @@ class DraftEntity extends Equatable {
   final String creatorId;
   final String? imageUrl;
   final List<QuestionEntity> questions;
+  final String? lesson;
 
   const DraftEntity({
+    required this.lesson,
     required this.questions,
     required this.title,
     required this.isPublic,
@@ -22,6 +24,7 @@ class DraftEntity extends Equatable {
 
   factory DraftEntity.fromEntity(QuizEntity quiz) {
     return DraftEntity(
+      lesson: quiz.lesson,
       questions: quiz.questions,
       title: quiz.title,
       isPublic: quiz.isPublic,
@@ -35,24 +38,27 @@ class DraftEntity extends Equatable {
       [id, title, isPublic, creatorId, imageUrl, ...questions];
   DraftEntity copyWith({
     String? id,
-    String? title = mockValueForDefault,
+    String? title = DefaultValues.forStrings,
     bool? isPublic,
     String? creatorId,
-    String? imageUrl = mockValueForDefault,
+    String? imageUrl = DefaultValues.forStrings,
     List<QuestionEntity>? questions,
+    String? lesson,
   }) {
     return DraftEntity(
+      lesson: lesson ?? this.lesson,
       questions: questions ?? this.questions,
       isPublic: isPublic ?? this.isPublic,
       creatorId: creatorId ?? this.creatorId,
       id: id ?? this.id,
-      title: title == mockValueForDefault ? this.title : title,
-      imageUrl: imageUrl == mockValueForDefault ? this.imageUrl : imageUrl,
+      title: title == DefaultValues.forStrings ? this.title : title,
+      imageUrl: imageUrl == DefaultValues.forStrings ? this.imageUrl : imageUrl,
     );
   }
 
   QuizEntity toQuiz() {
     return QuizEntity(
+      lesson: lesson,
       questions: questions,
       title: title,
       isPublic: isPublic,

@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_openai/openai.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:testador/features/quiz/data/dtos/draft/draft_dto.dart';
+import 'package:testador/features/quiz/data/dtos/question/question_dto.dart';
 import 'package:testador/features/quiz/data/dtos/quiz/quiz_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/player_dto.dart';
 import 'package:testador/features/quiz/data/dtos/session/session_dto.dart';
@@ -50,6 +54,13 @@ abstract class QuizRemoteDataSource {
 
   Future<ShowLeaderboardUsecaseResult> showLeaderboard(
       ShowLeaderboardUsecaseParams params);
+
+  Future<SuggestEntireQuizUsecaseResult> suggestEntireQuiz(
+      SuggestEntireQuizUsecaseParams params);
+  Future<SuggestOptionsUsecaseResult> suggestOptions(
+      SuggestOptionsUsecaseParams params);
+  Future<SuggestQuestionAndOptionsUsecaseResult> suggestQuestionAndOptions(
+      SuggestQuestionAndOptionsUsecaseParams params);
 }
 
 class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
@@ -360,5 +371,49 @@ class QuizRemoteDataSourceIMPL implements QuizRemoteDataSource {
     await ref.child('sessions').child(newSession.id).set(newSession.toMap());
 
     return ShowLeaderboardUsecaseResult(session: newSession.toEntity());
+  }
+
+  @override
+  Future<SuggestEntireQuizUsecaseResult> suggestEntireQuiz(
+      SuggestEntireQuizUsecaseParams params) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<SuggestOptionsUsecaseResult> suggestOptions(
+      SuggestOptionsUsecaseParams params) async {
+    final questions =
+        params.draft.questions.map((e) => QuestionDto.fromEntity(e)).toList();
+
+    final question = questions[params.questionIndex];
+
+    OpenAIChatCompletionModel chatCompletion =
+        await OpenAI.instance.chat.create(
+      model: "gpt-3.5-turbo",
+      messages: [
+        OpenAIChatCompletionChoiceMessageModel(
+          content:
+              'Provide 4 multiple choice options for the question "${question.text}". I want the result to be in json format, a list of objects with text field, index field and isCorrect field. Also, the values should be different. Answer in the language of the question, unless mentioned otherwise in the question. Don\'t provide any other explanation',
+          role: OpenAIChatMessageRole.user,
+        ),
+      ],
+    );
+
+    final data = (jsonDecode(chatCompletion.choices.first.message.content)
+        .cast<Map<String, dynamic>>()) as List<Map<String, dynamic>>;
+    questions[params.questionIndex] = question.copyWith(
+      options: data.map((e) => MultipleChoiceOptionDto.fromMap(e)).toList(),
+    );
+
+    return SuggestOptionsUsecaseResult(
+        draft: params.draft
+            .copyWith(questions: questions.map((e) => e.toEntity()).toList()));
+  }
+
+  @override
+  Future<SuggestQuestionAndOptionsUsecaseResult> suggestQuestionAndOptions(
+      SuggestQuestionAndOptionsUsecaseParams params) {
+    // TODO: implement suggestQuestionAndOptions
+    throw UnimplementedError();
   }
 }

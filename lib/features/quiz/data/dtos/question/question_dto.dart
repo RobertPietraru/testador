@@ -97,15 +97,15 @@ class QuestionDto {
   QuestionDto copyWith({
     String? id,
     String? quizId,
-    String? image = mockValueForDefault,
-    String? text = mockValueForDefault,
+    String? image = DefaultValues.forStrings,
+    String? text = DefaultValues.forStrings,
     List<MultipleChoiceOptionDto>? options,
   }) {
     return QuestionDto(
       options: options ?? this.options,
       quizId: quizId ?? this.quizId,
-      text: text == mockValueForDefault ? this.text : text,
-      image: image == mockValueForDefault ? this.image : image,
+      text: text == DefaultValues.forStrings ? this.text : text,
+      image: image == DefaultValues.forStrings ? this.image : image,
       id: id ?? this.id,
     );
   }

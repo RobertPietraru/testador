@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:testador/features/quiz/domain/entities/draft_entity.dart';
@@ -26,6 +27,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
   final UpdateQuizUsecase editQuizUsecase;
   final SyncQuizUsecase syncQuizUsecase;
   final DeleteDraftByIdUsecase deleteDraftByIdUsecase;
+  final SuggestOptionsUsecase suggestOptionsUsecase;
 
   final QuizListCubit? quizListCubit;
 
@@ -38,7 +40,8 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     this.moveQuestionUsecase,
     this.updateQuizImageUsecase,
     this.editQuizUsecase,
-    this.deleteDraftByIdUsecase, {
+    this.deleteDraftByIdUsecase,
+    this.suggestOptionsUsecase, {
     required QuizEntity initialQuiz,
     DraftEntity? initialDraft,
     required this.quizListCubit,
@@ -201,7 +204,7 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
 
     emit(state.copyWith(status: QuizEditorStatus.loading, failure: null));
     final response = await deleteQuestionUsecase
-        .call(DeleteQuestionUsecaseParams(quiz: state.draft, index: index));
+        .call(DeleteQuestionUsecaseParams(draft: state.draft, index: index));
     response.fold(
       (l) => emit(state.copyWith(
         failure: l,
@@ -392,5 +395,30 @@ class QuizEditorCubit extends Cubit<QuizEditorState> {
     await deleteDraftByIdUsecase
         .call(DeleteDraftByIdUsecaseParams(draftId: state.draft.id));
     quizListCubit?.removeDraft(state.draft);
+  }
+
+  Future<void> suggestOptions(BuildContext context) async {
+    if (state.currentQuestion.text == null) return;
+
+    emit(state.copyWith(
+      failure: null,
+      status: QuizEditorStatus.loading,
+      updateError: true,
+    ));
+    Navigator.pop(context);
+    final response = await suggestOptionsUsecase.call(
+      SuggestOptionsUsecaseParams(
+          questionIndex: state.currentQuestionIndex, draft: state.draft),
+    );
+    response.fold((l) {
+      emit(state.copyWith(
+          failure: l, updateError: true, status: QuizEditorStatus.failed));
+    }, (r) {
+      emit(state.copyWith(
+          failure: null,
+          draft: r.draft,
+          updateError: true,
+          status: QuizEditorStatus.loaded));
+    });
   }
 }
