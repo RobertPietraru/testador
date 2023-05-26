@@ -75,5 +75,6 @@
   "selectALanguage": "Selectează o limbă",
   "theresNobodyElse": "Nu mai este nimeni altcineva",
   "emailNotFound": "Contul nu a fost găsit",
+"language": "Limba",
 "wrongPassword": "Parola este greșită"
 }

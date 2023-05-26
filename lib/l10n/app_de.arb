@@ -74,5 +74,6 @@
   "selectALanguage": "Sprache auswählen",
   "theresNobodyElse": "Es ist niemand sonst da",
   "emailNotFound": "Konto nicht gefunden",
+ "language": "Sprache",
   "wrongPassword": "Das Passwort ist falsch"
 }

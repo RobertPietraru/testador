@@ -67,7 +67,7 @@ class _QuizListScreen extends StatelessWidget {
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
                                 return Text(
-                                  '${translator.welcome},',
+                                  '${translator.welcome}!',
                                   style: TextStyle(
                                     color: theme.secondaryColor,
                                     fontWeight: FontWeight.w600,

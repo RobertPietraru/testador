@@ -79,7 +79,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     "Magyar": 'hu',
                     'Русский': 'ru',
                     "Română": 'ro',
-                    'українська': 'uk',
+                    'Українська': 'uk',
                   },
                   onChanged: (newValue) {
                     if (newValue == null) return;
@@ -135,6 +135,7 @@ class LanguagePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.language),
+      tooltip: context.translator.language,
       onSelected: onChanged,
       itemBuilder: (BuildContext context) {
         return languages.keys.map((String choice) {

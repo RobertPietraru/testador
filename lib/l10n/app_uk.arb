@@ -75,5 +75,6 @@
   "selectALanguage": "Виберіть мову",
   "theresNobodyElse": "Нікого більше немає",
   "emailNotFound": "Обліковий запис не знайдено",
+  "language": "Мова",
   "wrongPassword": "Невірний пароль"
 }

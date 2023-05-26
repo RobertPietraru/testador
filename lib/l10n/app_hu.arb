@@ -74,5 +74,6 @@
   "selectALanguage": "Válassz nyelvet",
   "theresNobodyElse": "Nincs más senki",
   "emailNotFound": "Fiók nem található",
+"language": "Nyelv",
 "wrongPassword": "Hibás jelszó"
 }
