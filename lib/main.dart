@@ -1,6 +1,7 @@
 import 'package:dart_openai/openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:testador/core/language_cubit/language_cubit.dart';
 import 'package:testador/core/routing/app_router.dart';
@@ -16,7 +17,8 @@ import '../injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  OpenAI.apiKey = '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';
+  await dotenv.load(fileName: ".env");
+  OpenAI.apiKey = dotenv.env['OPEN_AI_API_KEY']!;
   await Hive.initFlutter();
   Hive.registerAdapter(QuizDtoAdapter());
   Hive.registerAdapter(DraftDtoAdapter());

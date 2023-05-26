@@ -64,6 +64,7 @@ class DraftDto with HiveObjectMixin {
 
   Map<String, dynamic> toStringMap() {
     return {
+      lessonField: lesson,
       titleField: title,
       isPublicField: isPublic,
       creatorField: creatorId,
