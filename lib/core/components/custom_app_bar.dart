@@ -67,7 +67,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
                 child: Text(context.translator.play,
                     style: theme.actionTextStyle)),
-            SizedBox(width: theme.spacing.small),
             BlocBuilder<LanguageCubit, LanguageState>(
               builder: (context, state) {
                 return LanguagePicker(
