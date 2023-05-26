@@ -8,11 +8,13 @@ class CustomDialog extends StatelessWidget {
     this.radius = 20,
     required this.child,
     this.fitContent = false,
+    this.width,
   });
 
   final double radius;
   final Widget child;
   final bool fitContent;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,7 @@ class CustomDialog extends StatelessWidget {
       child: Container(
         width: fitContent
             ? null
-            : DeviceSize.isDesktopMode
-                ? 50.widthPercent
-                : null,
+            : width ?? (DeviceSize.isDesktopMode ? 50.widthPercent : null),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius),
           color: theme.defaultBackgroundColor,
