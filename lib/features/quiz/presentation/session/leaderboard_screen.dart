@@ -35,7 +35,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           title: SessionCodeWidget(sessionId: widget.session.id),
           trailing: [
             if (widget.onContinue != null)
-              AppBarButton(text: context.translator.continueText, onPressed: widget.onContinue!)
+              AppBarButton(
+                  text: context.translator.continueText,
+                  onPressed: widget.onContinue!)
           ]),
       body: NestedScrollView(
         controller: controller,
@@ -63,6 +65,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       padding:
                           theme.standardPadding.copyWith(top: 0, bottom: 0),
                       child: ListTile(
+                        leading: Text("${index + 1}"),
                         trailing:
                             Text(sortedPlayers[index].score.toInt().toString()),
                         tileColor: theme.secondaryColor.withOpacity(0.5),
